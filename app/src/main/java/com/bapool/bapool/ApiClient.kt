@@ -8,24 +8,26 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import com.google.gson.annotations.SerializedName
+import com.kakao.sdk.auth.model.OAuthToken
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Query
 
-interface ItemListAPI {
-    @GET("user")
-    fun getItemList(
-    ): Call<List<ItemListResponseData>>
+interface kakaoUser {
+    @GET("users/kakao")
+    fun gettoken(
+        @Header("kakoToken") kakoToken: OAuthToken?
+    ): Call<accessToken>
 }
 
-class ItemListResponseData {
+data class accessToken (
     @SerializedName("userToken")
-    private var userToken = 0
+    var userToken: String,
 
-    @SerializedName("refreshToken")
-    private var refreshToken = 0
-}
+    @SerializedName("firstLogin")
+    var firstLogin: Int
+)
+
 
 object ApiClient {
     private const val BASE_URL = "(your url)"
