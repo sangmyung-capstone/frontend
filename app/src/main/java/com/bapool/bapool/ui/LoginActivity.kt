@@ -1,4 +1,4 @@
-package com.bapool.bapool
+package com.bapool.bapool.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
+import com.bapool.bapool.R
+import com.bapool.bapool.kakaoUser
+import com.bapool.bapool.retrofit.data.accessToken
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause.*
@@ -102,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 })
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, LogoutActivity::class.java)
+                val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
             }

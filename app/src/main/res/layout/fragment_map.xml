@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.MapFragment">
+
+    <com.naver.maps.map.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/fragment_map"
+                android:text="map"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+            <Button
+                android:id="@+id/fragment_group"
+                android:text="group"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+            <Button
+                android:id="@+id/fragment_mypage"
+                android:text="mypage"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

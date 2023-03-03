@@ -1,6 +1,9 @@
 package com.bapool.bapool
+// 정리 필요
+// 싱글톤으로 레트로핏 객채 생성 및 인터페이스 정리
 
 
+import com.bapool.bapool.retrofit.data.accessToken
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -19,15 +22,6 @@ interface kakaoUser {
         @Header("kakoToken") kakoToken: OAuthToken?
     ): Call<accessToken>
 }
-
-data class accessToken (
-    @SerializedName("userToken")
-    var userToken: String,
-
-    @SerializedName("firstLogin")
-    var firstLogin: Int
-)
-
 
 object ApiClient {
     private const val BASE_URL = "(your url)"
