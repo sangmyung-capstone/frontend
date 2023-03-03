@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
                 val retrofit =
                     Retrofit.Builder()
-                        .baseUrl("https://3f3d350f-d05b-4d84-beac-c607b2c4b6e1.mock.pstmn.io/")//baseurl
+                        .baseUrl("https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io")//baseurl
                         .addConverterFactory(GsonConverterFactory.create()).build()
                 val service = retrofit.create(kakaoUser::class.java)
 
