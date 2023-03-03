@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Bapool"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +37,7 @@
                     android:scheme="kakaob880bb2ce5431b600ab47061e4bc4c16" />
             </intent-filter>
         </activity>
-        <activity android:name=".SecondActivity" />
+        <activity android:name=".LogoutActivity" />
     </application>
 
 </manifest>
