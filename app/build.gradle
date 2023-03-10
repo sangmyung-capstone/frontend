@@ -54,4 +54,10 @@ dependencies {
     implementation "com.kakao.sdk:v2-friend:2.12.1" // 카카오톡 소셜 피커, 리소스 번들 파일 포함
 
     implementation "com.naver.maps:map-sdk:3.16.2" // 네이버 지도 SDK
+
+    implementation "com.google.android.gms:play-services-location:16.0.0" // 구글 위치 반환 구현체 FusedLocationSource
+
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0' // Ted Permission - RxJava3 // 권한 요청 라이브러리
+
+    implementation 'com.github.mancj:MaterialSearchBar:0.7.1' // custom search view 라이브러리
 }
