@@ -26,7 +26,7 @@
                 app:mt_speechMode="false"
                 app:theme="@style/AppTheme.PopupOverlay" />
 
-<!---
+            <!---
             <ListView
                 android:id="@+id/mListView"
                 android:layout_width="match_parent"
@@ -42,10 +42,10 @@
                 android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchBar">
+                app:layout_constraintTop_toBottomOf="@id/searchBar">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/floatingActionButton"
@@ -57,69 +57,71 @@
                     android:src="?android:attr/actionModeWebSearchDrawable" />
             </FrameLayout>
 
-                    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_above="@+id/navigation"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="bottom">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/main"
-                android:layout_weight="1" />
+                android:layout_height="3dp"
+                app:layout_constraintBottom_toTopOf="@+id/navigation">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/main" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1" />
 
-        <LinearLayout
-            android:id="@+id/navigation"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:weightSum="3">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
-            <android.widget.Button
-                android:id="@+id/fragment_map"
-                android:text="map"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:background="@color/white"
+            <LinearLayout
+                android:id="@+id/navigation"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <android.widget.Button
-                android:id="@+id/fragment_group"
-                android:text="group"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <android.widget.Button
-                android:id="@+id/fragment_mypage"
-                android:text="mypage"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
+                android:layout_height="70dp"
+                android:weightSum="3"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <android.widget.Button
+                    android:id="@+id/fragment_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:text="map"
+                    android:textColor="@color/black" />
+
+                <android.widget.Button
+                    android:id="@+id/fragment_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:text="group"
+                    android:textColor="@color/black" />
+
+                <android.widget.Button
+                    android:id="@+id/fragment_mypage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:text="mypage"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
