@@ -1,19 +1,19 @@
 package com.bapool.bapool.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageButton
 import android.widget.Toast
-import com.bapool.bapool.R
+import androidx.appcompat.app.AppCompatActivity
+import com.bapool.bapool.databinding.ActivityLoginBinding
 import com.bapool.bapool.kakaoUser
 import com.bapool.bapool.retrofit.data.accessToken
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause.*
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.OAuthLoginCallback
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,11 +22,24 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class LoginActivity : AppCompatActivity() {
+
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //카카오 초기화
         KakaoSdk.init(this, "b880bb2ce5431b600ab47061e4bc4c16")
-        setContentView(R.layout.activity_login)
 
+        //네이버 초기화
+        NaverIdLoginSDK.initialize(this, "CPpXcHZnKRPcbCvNR8i3", "PzO2ERMkZz", "bapool")
+        //setContentView(R.layout.activity_login)
+        //바인딩
+        _binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root);
+
+
+        /*
         // 로그인 정보 확인
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
@@ -41,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         val keyHash = Utility.getKeyHash(this)
-        Log.d("Hash", keyHash)
+        Log.d("Hash", keyHash)*/
 
 
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -64,7 +77,11 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this, "유효하지 않은 scope ID", Toast.LENGTH_SHORT).show()
                     }
                     error.toString() == Misconfigured.toString() -> {
-                        Toast.makeText(this, "설정이 올바르지 않음(android key hash)", Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            this,
+                            "설정이 올바르지 않음(android key hash)",
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                     }
                     error.toString() == ServerError.toString() -> {
@@ -112,10 +129,33 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        //네이버 로그인 코드
+        val oauthLoginCallback = object : OAuthLoginCallback {
+            override fun onSuccess() {
+                val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+            }
 
-        val kakao_login_button = findViewById<ImageButton>(R.id.kakao_login_button) // 로그인 버튼
+            override fun onFailure(httpStatus: Int, message: String) {
+                val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                Toast.makeText(
+                    this@LoginActivity,
+                    "errorCode:$errorCode, errorDesc:$errorDescription",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
 
-        kakao_login_button.setOnClickListener {
+            override fun onError(errorCode: Int, message: String) {
+                onFailure(errorCode, message)
+            }
+        }
+
+
+
+
+        binding.kakaoLoginButton.setOnClickListener {
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
                 UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
 
@@ -124,5 +164,10 @@ class LoginActivity : AppCompatActivity() {
                 UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
             }
         }
+        binding.naverLoginButton.setOnClickListener {
+            NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
+        }
+
+
     }
 }

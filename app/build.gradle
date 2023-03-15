@@ -60,4 +60,6 @@ dependencies {
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0' // Ted Permission - RxJava3 // 권한 요청 라이브러리
 
     implementation 'com.github.mancj:MaterialSearchBar:0.7.1' // custom search view 라이브러리
+
+    implementation 'com.navercorp.nid:oauth:5.4.0' //  네이버 로그인 jdk 11
 }
