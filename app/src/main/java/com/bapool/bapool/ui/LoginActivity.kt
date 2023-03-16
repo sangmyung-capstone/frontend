@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_login)
         //바인딩
         _binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root);
+        setContentView(binding.root)
 
 
         /*
@@ -96,11 +96,14 @@ class LoginActivity : AppCompatActivity() {
                 }
             } else if (token != null) {
                 Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
+                //여기서부터 retrofit
+                var token = token.toString()
                 val retrofit =
                     Retrofit.Builder()
                         .baseUrl("https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io")//baseurl
                         .addConverterFactory(GsonConverterFactory.create()).build()
                 val service = retrofit.create(kakaoUser::class.java)
+
 
                 service.gettoken(token).enqueue(object : Callback<accessToken> {
                     override fun onResponse(
@@ -108,40 +111,98 @@ class LoginActivity : AppCompatActivity() {
                         response: Response<accessToken>
                     ) {
                         if (response.isSuccessful) {
-                            // 정상적으로 통신이 성고된 경우
+                            // 정상적으로 통신이 성공된 경우
                             var result: accessToken? = response.body()
-                            Log.d("YMC", "onResponse 성공: " + result?.toString());
-                            if (result != null) {
+                            Log.d("bap", "onRequest 성공: $token")
+                            Log.d("bap", "onResponse 성공: " + result?.toString())
+                            if (result != null) {//처음 로그인시 가입화면으로 넘어감.
                                 if (result.firstLogin) {
                                     val intent =
                                         Intent(this@LoginActivity, RegisterActivity::class.java)
                                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                    finish()
+                                } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        "로그인에 성공하였습니다.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    val intent =
+                                        Intent(this@LoginActivity, HomeActivity::class.java)
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                    finish()
                                 }
                             }
                         } else {
                             // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                            Log.d("YMC", "onResponse 실패")
+                            Log.d("bap", "onResponse 실패")
                         }
                     }
 
                     override fun onFailure(call: Call<accessToken>, t: Throwable) {
                         // 통신 실패 (인터넷 끊킴, 예외 발생 등 시스템적인 이유)
-                        Log.d("YMC", "onFailure 에러: " + t.message.toString());
+                        Log.d("bap", "onFailure 에러: " + t.message.toString())
                     }
                 })
-                Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                finish()
+                //여기까지 retrofit
+
             }
         }
 
         //네이버 로그인 코드
         val oauthLoginCallback = object : OAuthLoginCallback {
             override fun onSuccess() {
-                val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+                var token = NaverIdLoginSDK.getAccessToken()
+                //여기서부터 retrofit
+                val retrofit =
+                    Retrofit.Builder()
+                        .baseUrl("https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io")//baseurl
+                        .addConverterFactory(GsonConverterFactory.create()).build()
+                val service = retrofit.create(kakaoUser::class.java)
+
+
+                service.gettoken(token).enqueue(object : Callback<accessToken> {
+                    override fun onResponse(
+                        call: Call<accessToken>,
+                        response: Response<accessToken>
+                    ) {
+                        if (response.isSuccessful) {
+                            // 정상적으로 통신이 성공된 경우
+                            var result: accessToken? = response.body()
+                            Log.d("bap", "onRequest 성공: $token")
+                            Log.d("bap", "onResponse 성공: " + result?.toString())
+                            if (result != null) {//처음 로그인시 가입화면으로 넘어감.
+                                if (result.firstLogin) {
+                                    val intent =
+                                        Intent(this@LoginActivity, RegisterActivity::class.java)
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                    finish()
+                                } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        "로그인에 성공하였습니다.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    val intent =
+                                        Intent(this@LoginActivity, HomeActivity::class.java)
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                    finish()
+                                }
+                            }
+                        } else {
+                            // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                            Log.d("bap", "onResponse 실패")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<accessToken>, t: Throwable) {
+                        // 통신 실패 (인터넷 끊킴, 예외 발생 등 시스템적인 이유)
+                        Log.d("bap", "onFailure 에러: " + t.message.toString())
+                    }
+                })
+                //여기까지 retrofit
+
             }
 
             override fun onFailure(httpStatus: Int, message: String) {
@@ -159,9 +220,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-
-
-
+        //카카오 로그인 버튼
         binding.kakaoLoginButton.setOnClickListener {
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
                 UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
@@ -171,6 +230,7 @@ class LoginActivity : AppCompatActivity() {
                 UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
             }
         }
+        //네이버 로그인 버튼
         binding.naverLoginButton.setOnClickListener {
             NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
         }

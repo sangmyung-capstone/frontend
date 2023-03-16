@@ -9,18 +9,16 @@ import com.bapool.bapool.retrofit.data.accessToken
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import com.google.gson.annotations.SerializedName
-import com.kakao.sdk.auth.model.OAuthToken
-import retrofit2.Call
 import retrofit2.http.*
+import java.io.IOException
 
 interface kakaoUser {
     @GET("users/kakao")
     fun gettoken(
-        @Header("kakoToken") kakoToken: OAuthToken?
+        @Header("kakoToken") kakoToken: String?
     ): Call<accessToken>
 }
 

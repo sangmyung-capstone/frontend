@@ -9,29 +9,30 @@
 
     <ImageButton
         android:id="@+id/kakao_login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="200dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="196dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/kakao_login_medium_wide"
+        android:scaleType="centerCrop"
+        android:src="@drawable/kakao_login_circle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.24"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
     <ImageButton
         android:id="@+id/naver_login_button"
         android:layout_width="100dp"
-        android:layout_height="97dp"
+        android:layout_height="100dp"
         android:background="@android:color/transparent"
         android:scaleType="centerCrop"
         android:src="@drawable/naver_login_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.639"
+        app:layout_constraintHorizontal_bias="0.758"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.594" />
+        app:layout_constraintVertical_bias="0.689" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
