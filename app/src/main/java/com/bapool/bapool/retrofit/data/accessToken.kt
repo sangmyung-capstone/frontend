@@ -7,5 +7,5 @@ data class accessToken(
     var userToken: String,
 
     @SerializedName("firstLogin")
-    var firstLogin: Int
+    var firstLogin: Boolean
 )

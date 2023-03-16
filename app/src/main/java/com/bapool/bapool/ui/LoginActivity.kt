@@ -111,6 +111,13 @@ class LoginActivity : AppCompatActivity() {
                             // 정상적으로 통신이 성고된 경우
                             var result: accessToken? = response.body()
                             Log.d("YMC", "onResponse 성공: " + result?.toString());
+                            if (result != null) {
+                                if (result.firstLogin) {
+                                    val intent =
+                                        Intent(this@LoginActivity, RegisterActivity::class.java)
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                }
+                            }
                         } else {
                             // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                             Log.d("YMC", "onResponse 실패")
