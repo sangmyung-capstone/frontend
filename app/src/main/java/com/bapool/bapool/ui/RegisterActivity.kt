@@ -9,15 +9,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.R
-import com.bapool.bapool.UserService
+import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityRegisterBinding
-import com.bapool.bapool.retrofit.data.UserInfoRequest
-import com.bapool.bapool.retrofit.data.UserInfoResponse
+import com.bapool.bapool.retrofit.data.PostRegisterRequest
+import com.bapool.bapool.retrofit.data.PostRegisterResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+
 
 class RegisterActivity : AppCompatActivity() {
     private var _binding: ActivityRegisterBinding? = null
@@ -51,21 +50,18 @@ class RegisterActivity : AppCompatActivity() {
         //완료 버튼 리스너
         binding.finish.setOnClickListener {
             var nickname: String = textInputEditText.text.toString()
-            var userInfo = UserInfoRequest(nickname, count)
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            var userInfo = PostRegisterRequest(nickname, count)
 
-            val userService = retrofit.create(UserService::class.java)
-            userService.setUserInfo("accessToken", 1, userInfo)
-                .enqueue(object : Callback<UserInfoResponse> {
+            val retro = RetrofitService.create()
+
+            retro.setUserInfo("accessToken", 1, userInfo)
+                .enqueue(object : Callback<PostRegisterResponse> {
                     override fun onResponse(
-                        call: Call<UserInfoResponse>,
-                        response: Response<UserInfoResponse>
+                        call: Call<PostRegisterResponse>,
+                        response: Response<PostRegisterResponse>
                     ) {
                         if (response.isSuccessful) {
-                            var result: UserInfoResponse? = response.body()
+                            var result: PostRegisterResponse? = response.body()
                             Log.d("bap", "onRequest 성공: $userInfo");
                             Log.d("bap", "onResponse 성공: " + result?.toString());
                             // handle successful response
@@ -99,7 +95,7 @@ class RegisterActivity : AppCompatActivity() {
                             // handle error response
                         }
                     }
-                    override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<PostRegisterResponse>, t: Throwable) {
                         // handle network or unexpected error
                     }
                 })

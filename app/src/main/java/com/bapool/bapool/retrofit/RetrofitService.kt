@@ -3,8 +3,7 @@ package com.bapool.bapool
 // 싱글톤으로 레트로핏 객채 생성 및 인터페이스 정리
 
 
-import com.bapool.bapool.retrofit.data.GetRestaurantsResult
-import com.bapool.bapool.retrofit.data.accessToken
+import com.bapool.bapool.retrofit.data.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -16,18 +15,31 @@ import java.io.IOException
 import com.google.gson.annotations.SerializedName
 import com.kakao.sdk.auth.model.OAuthToken
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.net.CookieManager
 
 interface RetrofitService {
 
+    // 정연수
     @GET("/users/kakao")
     fun gettoken(
-        @Header("kakoToken") kakoToken: OAuthToken?
+        @Header("kakoToken") kakoToken: String
     ): Call<accessToken>
 
+    @POST("/users/info/{user-id}")
+    fun setUserInfo(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long,
+        @Body request: PostRegisterRequest
+    ): Call<PostRegisterResponse>
+//--------------------------------------------------------------------------
+    // 손승현
+    @GET("groups/1")
+    fun getResGrpList(
+//        @Query("resGrpList") resGrpListApi: ArrayList<ResGrpListModel>
+    ): Call<GetResGroupListResponse>
+//--------------------------------------------------------------------------
+    // 이현제
     @GET("/restaurants")
     fun getRestaurants(
         @Query("res_x") res_x: Double?,
