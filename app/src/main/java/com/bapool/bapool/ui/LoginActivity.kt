@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
 import com.bapool.bapool.R
-import com.bapool.bapool.kakaoUser
+import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.retrofit.data.accessToken
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
@@ -83,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
                     Retrofit.Builder()
                         .baseUrl("https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io")//baseurl
                         .addConverterFactory(GsonConverterFactory.create()).build()
-                val service = retrofit.create(kakaoUser::class.java)
+                val service = retrofit.create(RetrofitService::class.java)
 
                 service.gettoken(token).enqueue(object : Callback<accessToken> {
                     override fun onResponse(
