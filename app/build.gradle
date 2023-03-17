@@ -60,4 +60,9 @@ dependencies {
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0' // Ted Permission - RxJava3 // 권한 요청 라이브러리
 
     implementation 'com.github.mancj:MaterialSearchBar:0.7.1' // custom search view 라이브러리
+
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 }

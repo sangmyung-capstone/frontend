@@ -3,6 +3,8 @@ package com.bapool.bapool
 // 싱글톤으로 레트로핏 객채 생성 및 인터페이스 정리
 
 
+import com.bapool.bapool.retrofit.data.ResGrpListModel
+import com.bapool.bapool.retrofit.data.ResGrpModel
 import com.bapool.bapool.retrofit.data.accessToken
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -15,12 +17,18 @@ import com.kakao.sdk.auth.model.OAuthToken
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Query
 
 interface kakaoUser {
     @GET("users/kakao")
     fun gettoken(
         @Header("kakoToken") kakoToken: OAuthToken?
     ): Call<accessToken>
+
+    @GET("groups/1")
+    fun getResGrpList(
+//        @Query("resGrpList") resGrpListApi: ArrayList<ResGrpListModel>
+    ): Call<ResGrpModel>
 }
 
 object ApiClient {
