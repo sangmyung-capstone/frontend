@@ -6,15 +6,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.databinding.MygrplistItemsBinding
-import com.bapool.bapool.retrofit.data.MyGroupListModel
+import com.bapool.bapool.retrofit.data.MyGrpListModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class MyGroupListAdapter(
+class MyGrpListAdapter(
     val context: Context,
-    private val myGroupList: ArrayList<MyGroupListModel>
+    private val myGroupList: ArrayList<MyGrpListModel>
 ) :
-    RecyclerView.Adapter<MyGroupListAdapter.ViewHolder>() {
+    RecyclerView.Adapter<MyGrpListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -34,10 +34,12 @@ class MyGroupListAdapter(
 
     inner class ViewHolder(private val binding: MygrplistItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindItem(item: MyGroupListModel) {
+        fun bindItem(item: MyGrpListModel) {
 
-            val allNum = partiNum(item.participantNum, item.deadlineNum)
+            val allNum = partiNum(item.participants, item.max_people)
             val allDate = dateRange(item.startDate, item.endDate)
+
+
             binding.resName.text = item.resName
             binding.grpName.text = item.grpName
             binding.lastChat.text = item.lastChat
@@ -50,11 +52,12 @@ class MyGroupListAdapter(
 
     //localdatetime을 범위로 만드는 작업
     fun dateRange(startDate: LocalDateTime, endDate: LocalDateTime): String {
-        val formatter = DateTimeFormatter.ofPattern("MMM d일, h:mm a")
-        Log.d("datestart",startDate.format(formatter))
-        Log.d("datend",endDate.format(formatter))
+        val formatterStart = DateTimeFormatter.ofPattern("MMM d일, H:mm")
+        val formatterEnd = DateTimeFormatter.ofPattern("H:mm")
+        Log.d("datestart", startDate.format(formatterStart))
+        Log.d("datend", endDate.format(formatterEnd))
         val range: String =
-            "${startDate.format(formatter)} - ${endDate.format(formatter)}"
+            "${startDate.format(formatterStart)} - ${endDate.format(formatterEnd)}"
         return range
 
     }
@@ -64,5 +67,7 @@ class MyGroupListAdapter(
         var allNum: String = "${participantsNum} / ${deadlineNum}"
         return allNum
     }
+
+
 }
 

@@ -6,7 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.databinding.ActivityLoginBinding
-import com.bapool.bapool.kakaoUser
+import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.retrofit.data.accessToken
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
@@ -17,14 +17,15 @@ import com.navercorp.nid.oauth.OAuthLoginCallback
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+
 
 
 class LoginActivity : AppCompatActivity() {
 
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
+
+    val retro = RetrofitService.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,14 +99,8 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
                 //여기서부터 retrofit
                 var token = token.toString()
-                val retrofit =
-                    Retrofit.Builder()
-                        .baseUrl("https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io")//baseurl
-                        .addConverterFactory(GsonConverterFactory.create()).build()
-                val service = retrofit.create(kakaoUser::class.java)
 
-
-                service.gettoken(token).enqueue(object : Callback<accessToken> {
+                retro.gettoken(token).enqueue(object : Callback<accessToken> {
                     override fun onResponse(
                         call: Call<accessToken>,
                         response: Response<accessToken>
@@ -153,16 +148,9 @@ class LoginActivity : AppCompatActivity() {
         val oauthLoginCallback = object : OAuthLoginCallback {
             override fun onSuccess() {
                 // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
-                var token = NaverIdLoginSDK.getAccessToken()
+                var token = NaverIdLoginSDK.getAccessToken().toString()
                 //여기서부터 retrofit
-                val retrofit =
-                    Retrofit.Builder()
-                        .baseUrl("https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io")//baseurl
-                        .addConverterFactory(GsonConverterFactory.create()).build()
-                val service = retrofit.create(kakaoUser::class.java)
-
-
-                service.gettoken(token).enqueue(object : Callback<accessToken> {
+                retro.gettoken(token).enqueue(object : Callback<accessToken> {
                     override fun onResponse(
                         call: Call<accessToken>,
                         response: Response<accessToken>

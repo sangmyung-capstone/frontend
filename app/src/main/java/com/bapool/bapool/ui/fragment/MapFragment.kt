@@ -1,6 +1,7 @@
 package com.bapool.bapool.ui.fragment
 
 import android.Manifest
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,10 +12,14 @@ import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.bapool.bapool.R
+import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.FragmentMapBinding
+import com.bapool.bapool.retrofit.data.GetRestaurantsResult
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
@@ -22,6 +27,9 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -31,9 +39,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
     private lateinit var cameraPosition: CameraPosition
+    private lateinit var bounds: LatLngBounds
+    private var radius: Int = 0
+
+    val retro = RetrofitService.create()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
     }
 
@@ -43,16 +57,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
 
+        binding.floatingActionButton.hide()
+
+        // 현 위치에서 검색 터치 시 // FAB
         binding.floatingActionButton.setOnClickListener {
-            cameraPosition = naverMap.cameraPosition
-
-            Log.i("MYTAG", "now camera : $cameraPosition")
-
-            Toast.makeText(
-                context,
-                cameraPosition.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
+            markerInit()
+            binding.floatingActionButton.hide()
         }
 
         /******************************************************************************************/
@@ -172,6 +182,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 실행된 네이버 지도에 locationSource 연결
         naverMap.locationSource = locationSource
 
+
+        naverMap.addOnCameraChangeListener { reason, animated ->
+            // 지도가 이동될 때마다 호출되는 코드
+            binding.floatingActionButton.show()
+        }
+
+        markerInit()
+
+        /*
         // 마커 추가 테스트
         val marker = Marker()
         marker.position = LatLng(37.5670135, 126.9783740)
@@ -188,8 +207,63 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         marker2.width = Marker.SIZE_AUTO
         marker2.height = Marker.SIZE_AUTO
         marker2.captionText = "테스트용 2"
+         */
 
 
+
+    }
+
+    private fun markerInit() {
+        cameraPosition = naverMap.cameraPosition
+
+        bounds = naverMap.contentBounds
+        radius = ((bounds.northWest).distanceTo(bounds.southEast).toInt()) / 2
+        Log.i("MYTAG", "radius : $radius m")
+        Log.d("MYTAG", "now bounds : ${naverMap.contentBounds}")
+        Log.d("MYTAG", "now camera : $cameraPosition")
+        //------------------------------------
+        retro.getRestaurants(
+            cameraPosition.target.longitude,
+            cameraPosition.target.latitude,
+            100
+        ).enqueue(object : Callback<GetRestaurantsResult> {
+            override fun onResponse(
+                call: Call<GetRestaurantsResult>,
+                response: Response<GetRestaurantsResult>
+            ) {
+                //Log.d("MYTAG", response.body().toString())
+                /*
+//                    Log.d(
+//                        "MYTAG",
+//                        "받은 body 리스트의 개수 : " + response.body()!!.body.size.toString()
+//                    )
+//                    Log.d(
+//                        "MYTAG",
+//                        "해당 식당의 존재 그룹 개수 :" + response.body()!!.body[0].num_of_group.toString()
+//                    )
+                // 받은 result 이용 지도에 마커 띄우기
+//                    val num_of_marker = response.body()!!.body.size
+                 */
+                val markerList: ArrayList<Marker> = arrayListOf<Marker>()
+                for (i in 0 until response.body()!!.body.size) {
+                    markerList.add(i, Marker())
+                    markerList[i].position =
+                        LatLng(response.body()!!.body[i].res_y, response.body()!!.body[i].res_x)
+                    markerList[i].map = naverMap
+                    markerList[i].width = Marker.SIZE_AUTO
+                    markerList[i].height = Marker.SIZE_AUTO
+                    markerList[i].captionText = "테스트용 ${i + 1}"
+                    if (response.body()!!.body[i].num_of_group != 0)
+                        markerList[i].icon = MarkerIcons.YELLOW
+                }
+            }
+
+            override fun onFailure(call: Call<GetRestaurantsResult>, t: Throwable) {
+                Log.d("MYTAG", t.message.toString())
+                Log.d("MYTAG", "FAIL")
+            }
+
+        })
     }
 
     // 위치 권한 획득 위함
