@@ -5,17 +5,43 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.GroupFragment">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/partiGroup"
+            android:text="참여한 그룹"
+            android:layout_marginLeft="12dp"
+            android:textSize="25sp"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"/>
+        <TextView
+            android:id="@+id/textLine"
+            android:layout_below="@+id/partiGroup"
+            android:layout_width="match_parent"
+            android:background="#EEEEEE"
+            android:layout_height="3dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myGroupListRv"
-            android:layout_marginBottom="82dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/textLine"
+            android:layout_marginBottom="82dp" />
 
-
+        <Button
+            android:id="@+id/goToResGrp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/linear1"
+            android:layout_alignParentEnd="true"
+            android:text="식당그룹리스트로 가자" />
         <LinearLayout
+            android:id="@+id/linear1"
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_above="@+id/navigation"

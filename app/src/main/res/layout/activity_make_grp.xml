@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MakeGrpActivity">
+
+
+    <TextView
+        android:id="@+id/resName"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginLeft="12dp"
+        android:gravity="center_vertical"
+        android:text="식당이름"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="에 그룹생성"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/resName"
+        app:layout_constraintStart_toEndOf="@+id/resName"
+        app:layout_constraintTop_toTopOf="@+id/resName" />
+
+    <TextView
+        android:id="@+id/textLine"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@+id/resName" />
+
+    <android.widget.Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="취소"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/grpName"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/textLine">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:fontFamily="@font/custom_font_family"
+            android:hint="그룹명(대표메뉴)" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/menu"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/grpName">
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:fontFamily="@font/custom_font_family"
+            android:hint="상세메뉴" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/menu">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/detail"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:fontFamily="@font/custom_font_family"
+            android:hint="그룹 설명"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <LinearLayout
+        android:id="@+id/hashtagVisible"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:weightSum="5"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+        <ImageView
+            android:id="@+id/hash1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:src="@drawable/hashtag1"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/hash2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/hashtag2"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/hash1"
+            app:layout_constraintStart_toEndOf="@+id/hash1"
+            app:layout_constraintTop_toTopOf="@+id/hash1" />
+
+        <ImageView
+            android:id="@+id/hash3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/hashtag3"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/hash2"
+            app:layout_constraintStart_toEndOf="@+id/hash2"
+            app:layout_constraintTop_toTopOf="@+id/hash2" />
+
+        <ImageView
+            android:id="@+id/hash4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/hashtag4"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/hash3"
+            app:layout_constraintStart_toEndOf="@+id/hash3"
+            app:layout_constraintTop_toTopOf="@+id/hash3" />
+
+        <ImageView
+            android:id="@+id/hash5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/hashtag5"
+            android:layout_margin="10dp"
+            android:background="@drawable/custom_img_bg_pressed"
+            app:layout_constraintBottom_toBottomOf="@+id/hash4"
+            app:layout_constraintStart_toEndOf="@+id/hash4"
+            app:layout_constraintTop_toTopOf="@+id/hash4" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
