@@ -3,24 +3,32 @@ package com.bapool.bapool
 // 싱글톤으로 레트로핏 객채 생성 및 인터페이스 정리
 
 
+import com.bapool.bapool.retrofit.data.UserInfoRequest
+import com.bapool.bapool.retrofit.data.UserInfoResponse
 import com.bapool.bapool.retrofit.data.accessToken
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.*
 import java.io.IOException
-import com.google.gson.annotations.SerializedName
-import com.kakao.sdk.auth.model.OAuthToken
-import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
 
 interface kakaoUser {
     @GET("users/kakao")
     fun gettoken(
-        @Header("kakoToken") kakoToken: OAuthToken?
+        @Header("kakoToken") kakoToken: String?
     ): Call<accessToken>
+}
+
+interface UserService {
+    @POST("/users/info/{user-id}")
+    fun setUserInfo(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long,
+        @Body request: UserInfoRequest
+    ): Call<UserInfoResponse>
 }
 
 object ApiClient {
