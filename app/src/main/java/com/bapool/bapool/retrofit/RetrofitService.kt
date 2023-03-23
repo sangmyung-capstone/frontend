@@ -42,9 +42,7 @@ interface RetrofitService {
     // 이현제
     @GET("/restaurants")
     fun getRestaurants(
-        @Query("res_x") res_x: Double?,
-        @Query("res_y") res_y: Double?,
-        @Query("radius") radius: Int?
+        @Query("rect") rect: String?
     ): Call<GetRestaurantsResult>
 
     //-----------------------------------------------------------------------------

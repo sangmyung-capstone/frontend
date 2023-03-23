@@ -40,15 +40,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var naverMap: NaverMap
     private lateinit var cameraPosition: CameraPosition
     private lateinit var bounds: LatLngBounds
-    private var radius: Int = 0
+    private lateinit var rect: String
 
     val retro = RetrofitService.create()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
@@ -210,23 +208,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
          */
 
 
-
     }
 
     private fun markerInit() {
         cameraPosition = naverMap.cameraPosition
 
-        bounds = naverMap.contentBounds
-        radius = ((bounds.northWest).distanceTo(bounds.southEast).toInt()) / 2
-        Log.i("MYTAG", "radius : $radius m")
+        rect =
+            "${naverMap.contentBounds.southWest.longitude},${naverMap.contentBounds.southWest.latitude},${naverMap.contentBounds.northEast.longitude},${naverMap.contentBounds.northEast.latitude}"
+
+        Log.d("MYTAG", "rect : $rect")
         Log.d("MYTAG", "now bounds : ${naverMap.contentBounds}")
         Log.d("MYTAG", "now camera : $cameraPosition")
         //------------------------------------
-        retro.getRestaurants(
-            cameraPosition.target.longitude,
-            cameraPosition.target.latitude,
-            100
-        ).enqueue(object : Callback<GetRestaurantsResult> {
+        retro.getRestaurants(rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
                 response: Response<GetRestaurantsResult>
@@ -247,14 +241,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 val markerList: ArrayList<Marker> = arrayListOf<Marker>()
                 for (i in 0 until response.body()!!.body.size) {
                     markerList.add(i, Marker())
+                    markerList[i].isHideCollidedSymbols = true
                     markerList[i].position =
-                        LatLng(response.body()!!.body[i].res_y, response.body()!!.body[i].res_x)
+                        LatLng(response.body()!!.body[i].y.toDouble(), response.body()!!.body[i].x.toDouble())
                     markerList[i].map = naverMap
                     markerList[i].width = Marker.SIZE_AUTO
                     markerList[i].height = Marker.SIZE_AUTO
-                    markerList[i].captionText = "테스트용 ${i + 1}"
-                    if (response.body()!!.body[i].num_of_group != 0)
-                        markerList[i].icon = MarkerIcons.YELLOW
+                    markerList[i].captionText = response.body()!!.body[i].place_name
+//                    if (response.body()!!.body[i].num_of_group != 0)
+//                        markerList[i].icon = MarkerIcons.YELLOW
+
+
                 }
             }
 
