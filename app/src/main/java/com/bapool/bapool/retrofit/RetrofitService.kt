@@ -32,13 +32,34 @@ interface RetrofitService {
         @Path("user-id") userId: Long,
         @Body request: PostRegisterRequest
     ): Call<PostRegisterResponse>
-//--------------------------------------------------------------------------
+
+    @GET("users/mypage/{user-id}")
+    fun getMyPage(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long
+    ): Call<GetMypageResponse>
+
+    @PATCH("/users/info/{user-id}")
+    fun ChangeUserInfo(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long,
+        @Body request: PatchChangeProfileRequest
+    ): Call<PatchChangeProfileResponse>
+
+    @DELETE("/users/{user-id}")
+    fun DeleteUser(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long
+    ):Call<DeleteUserResponse>
+
+    //--------------------------------------------------------------------------
     // 손승현
     @GET("groups/1")
     fun getResGrpList(
 //        @Query("resGrpList") resGrpListApi: ArrayList<ResGrpListModel>
     ): Call<GetResGroupListResponse>
-//--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     // 이현제
     @GET("/restaurants")
     fun getRestaurants(
@@ -51,7 +72,7 @@ interface RetrofitService {
 
     // 싱글톤 객체 생성
     companion object {
-//        private const val BASE_URL = "(your url)"
+        //        private const val BASE_URL = "(your url)"
         private const val BASE_URL = "https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io"
 
 
@@ -61,7 +82,7 @@ interface RetrofitService {
 
         fun create(): RetrofitService {
 
-            val gson : Gson = GsonBuilder().setLenient().create()
+            val gson: Gson = GsonBuilder().setLenient().create()
 
             return Retrofit.Builder()
                 .client(client)

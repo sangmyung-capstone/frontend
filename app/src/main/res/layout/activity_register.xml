@@ -27,70 +27,106 @@
 
     <GridLayout
         android:id="@+id/gridLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="331dp"
+        android:layout_width="match_parent"
+        android:layout_height="246dp"
+        android:layout_marginBottom="232dp"
         android:alignmentMode="alignMargins"
-        android:columnCount="3"
+        android:columnCount="4"
         android:columnOrderPreserved="false"
         android:rowCount="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <ImageButton
             android:id="@+id/button1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Button" />
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/image1" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Button" />
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/image2" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Button" />
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/image3" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Button" />
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/image4" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Button" />
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/image5" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Button" />
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/image6" />
+
+        <ImageButton
+            android:id="@+id/button7"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/image7" />
+
+        <ImageButton
+            android:id="@+id/button8"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:src="@drawable/image8" />
+
 
     </GridLayout>
 
