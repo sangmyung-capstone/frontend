@@ -4,6 +4,7 @@ package com.bapool.bapool
 
 
 import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.ui.MakeGrpActivity
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
@@ -23,35 +24,43 @@ interface RetrofitService {
     // 정연수
     @GET("/users/kakao")
     fun gettoken(
-        @Header("kakoToken") kakoToken: String
+        @Header("kakoToken") kakoToken: String,
     ): Call<accessToken>
 
     @POST("/users/info/{user-id}")
     fun setUserInfo(
         @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
-        @Body request: PostRegisterRequest
+        @Body request: PostRegisterRequest,
     ): Call<PostRegisterResponse>
-//--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     // 손승현
-    @GET("groups/1")
+    @GET("groups/{user_id}/{restaurant_id}")
     fun getResGrpList(
-//        @Query("resGrpList") resGrpListApi: ArrayList<ResGrpListModel>
+        @Path("user_id") userId: Long,
+        @Path("restaurant_id") restaurantId: Long
     ): Call<GetResGroupListResponse>
+
+    @POST("groups/{user_id}")
+    fun makeGrp(
+        @Path("user_id") userId: Long,
+        @Body request: PostMakeGrpRequest
+    ): Call<PostMakeGrpResponse>
 //--------------------------------------------------------------------------
     // 이현제
     @GET("/restaurants")
     fun getRestaurants(
         @Query("res_x") res_x: Double?,
         @Query("res_y") res_y: Double?,
-        @Query("radius") radius: Int?
+        @Query("radius") radius: Int?,
     ): Call<GetRestaurantsResult>
 
     //-----------------------------------------------------------------------------
 
     // 싱글톤 객체 생성
     companion object {
-//        private const val BASE_URL = "(your url)"
+        //        private const val BASE_URL = "(your url)"
         private const val BASE_URL = "https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io"
 
 
@@ -61,7 +70,7 @@ interface RetrofitService {
 
         fun create(): RetrofitService {
 
-            val gson : Gson = GsonBuilder().setLenient().create()
+            val gson: Gson = GsonBuilder().setLenient().create()
 
             return Retrofit.Builder()
                 .client(client)

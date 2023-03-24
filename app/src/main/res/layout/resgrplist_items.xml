@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/grpName"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="17dp"
         android:text="그룸이름(대표메뉴)"
@@ -43,10 +43,10 @@
         android:id="@+id/hashtagVisible"
         android:layout_width="120dp"
         android:layout_height="20dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@+id/grpName"
-        app:layout_constraintTop_toBottomOf="@+id/grpName"
->
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/grpName"
+        app:layout_constraintStart_toEndOf="@+id/grpName"
+        app:layout_constraintTop_toTopOf="@+id/grpName">
 
         <ImageView
             android:id="@+id/hash1"
@@ -96,28 +96,55 @@
             app:layout_constraintTop_toTopOf="@+id/hash4" />
 
     </LinearLayout>
-    <TextView
-        android:id="@+id/date"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="만나는 날짜 시간 범위로"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@+id/hashtagVisible"
-        app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
 
     <TextView
-        android:id="@+id/detail"
-        android:layout_width="300dp"
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
+        android:text="만나는 날짜 시간 범위로"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@+id/grpName"
+        app:layout_constraintTop_toBottomOf="@+id/grpName" />
+
+    <TextView
+        android:id="@+id/detail_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="디테일"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="@+id/date"
         app:layout_constraintTop_toBottomOf="@+id/date" />
+
+    <TextView
+        android:id="@+id/detail"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_text"
+        app:layout_constraintStart_toEndOf="@+id/detail_text"
+        app:layout_constraintTop_toTopOf="@+id/detail_text" />
+
+    <TextView
+        android:id="@+id/menu_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="메뉴"
+        app:layout_constraintStart_toStartOf="@+id/detail_text"
+        app:layout_constraintTop_toBottomOf="@+id/detail_text" />
+
+    <TextView
+        android:id="@+id/menu"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/menu_text"
+        app:layout_constraintStart_toEndOf="@+id/menu_text"
+        app:layout_constraintTop_toTopOf="@+id/menu_text" />
 
     <TextView
         android:layout_width="match_parent"

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.databinding.ResgrplistItemsBinding
 import com.bapool.bapool.retrofit.data.ResGroupList
@@ -16,6 +17,11 @@ class ResGrpListAdapter(val context: Context) :
     var resName: String = ""
     var resGroup = listOf<ResGroupList>()
 
+//    interface ItemClick {
+//        fun onClick(view: View, position: Int)
+//    }
+//
+//    var itemClick: ItemClick? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -26,7 +32,12 @@ class ResGrpListAdapter(val context: Context) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        //item click listener
+//        if (itemClick != null) {
+//            holder.itemView.setOnClickListener { v ->
+//                itemClick?.onClick(v, position)
+//            }
+//        }
 
         holder.bindItem(resGroup[position])
     }
@@ -44,14 +55,17 @@ class ResGrpListAdapter(val context: Context) :
                 binding.ban.visibility = View.VISIBLE
             }
             //hashtag 보이게하기
-            val hashtagList: ArrayList<String> = item.hashtag
-            for (item in hashtagList) {
-                when (item) {
-                    "1" -> binding.hash1.visibility = View.VISIBLE
-                    "2" -> binding.hash2.visibility = View.VISIBLE
-                    "3" -> binding.hash3.visibility = View.VISIBLE
-                    "4" -> binding.hash4.visibility = View.VISIBLE
-                    "5" -> binding.hash5.visibility = View.VISIBLE
+            val hashtagList: ArrayList<Int> = item.hashtag
+            if (hashtagList.isNotEmpty()) {
+                binding.hashtagVisible.visibility = View.VISIBLE
+                for (item in hashtagList) {
+                    when (item) {
+                        1 -> binding.hash1.visibility = View.VISIBLE
+                        2 -> binding.hash2.visibility = View.VISIBLE
+                        3 -> binding.hash3.visibility = View.VISIBLE
+                        4 -> binding.hash4.visibility = View.VISIBLE
+                        5 -> binding.hash5.visibility = View.VISIBLE
+                    }
                 }
             }
 
@@ -59,10 +73,10 @@ class ResGrpListAdapter(val context: Context) :
             val allNum = partiNum(item.participants, item.max_people)
             val allDate = dateRange(item.start_date, item.end_date)
 
-
+            binding.menu.text = item.menu
             binding.date.text = allDate
             binding.participantsNum.text = allNum
-            binding.grpName.text = item.menu
+            binding.grpName.text = item.group_name
             binding.detail.text = item.detail
             binding.rating.text = item.rating.toString()
 
