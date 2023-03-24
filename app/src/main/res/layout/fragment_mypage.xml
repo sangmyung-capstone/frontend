@@ -82,9 +82,11 @@
 
             <ImageView
                 android:id="@+id/profileimg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:src="@tools:sample/avatars" />
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                tools:src="@tools:sample/avatars"
+                android:scaleType="centerInside"/>
 
             <TextView
                 android:id="@+id/nickname"
