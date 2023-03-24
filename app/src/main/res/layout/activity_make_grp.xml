@@ -191,7 +191,6 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:text="시작날짜"
-        android:theme="@style/Theme.Picker"
         app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
 
     <TextView
@@ -200,7 +199,6 @@
         android:layout_height="wrap_content"
         android:text="시작시간"
         android:textSize="20sp"
-        android:theme="@style/Theme.Picker"
         app:layout_constraintTop_toBottomOf="@+id/start_date"/>
 
 

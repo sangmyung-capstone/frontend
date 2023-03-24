@@ -19,6 +19,7 @@ import com.bapool.bapool.retrofit.data.GetMypageResponse
 import com.bapool.bapool.retrofit.data.PostRegisterResponse
 import com.bapool.bapool.ui.ChangeProfileActivity
 import com.bapool.bapool.ui.HomeActivity
+import com.bapool.bapool.ui.LoginActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -87,7 +88,7 @@ class MypageFragment : Fragment() {
             it.findNavController().navigate(R.id.action_mypageFragment_to_mapFragment)
         }
         binding.logout.setOnClickListener {
-            val intent = Intent(requireContext(), HomeActivity::class.java)
+            val intent = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
         binding.changeProfile.setOnClickListener {
