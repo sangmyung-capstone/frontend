@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Bapool" parent="Theme.AppCompat.Light.NoActionBar">
+<!--    extended FAB 사용 위해 appcompat에서 material로 변경-->
+    <style name="Theme.Bapool" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main</item>
         <item name="colorPrimaryVariant">@color/main</item>

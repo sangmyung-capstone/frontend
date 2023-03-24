@@ -1,7 +1,7 @@
 package com.bapool.bapool.ui.fragment
 
 import android.Manifest
-import android.graphics.Color
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,18 +15,16 @@ import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.FragmentMapBinding
 import com.bapool.bapool.retrofit.data.GetRestaurantsResult
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
-import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.*
 import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.PolylineOverlay
 import com.naver.maps.map.util.FusedLocationSource
-import com.naver.maps.map.util.MarkerIcons
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,15 +38,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var naverMap: NaverMap
     private lateinit var cameraPosition: CameraPosition
     private lateinit var bounds: LatLngBounds
-    private var radius: Int = 0
+    private lateinit var rect: String
 
     val retro = RetrofitService.create()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
@@ -57,12 +52,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
 
-        binding.floatingActionButton.hide()
+        // 위치 권한 요청
+        requestPermissions()
 
         // 현 위치에서 검색 터치 시 // FAB
-        binding.floatingActionButton.setOnClickListener {
+        binding.extendedFAB.setOnClickListener {
             markerInit()
-            binding.floatingActionButton.hide()
+            binding.extendedFAB.hide()
         }
 
         /******************************************************************************************/
@@ -150,20 +146,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
          */
         /******************************************************************************************/
 
-        // Framelayout에 네이버 지도 띄우기
-        val fm = childFragmentManager
-        val mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
-            ?: MapFragment.newInstance().also {
-                fm.beginTransaction().add(R.id.map, it).commit()
-            }
-        mapFragment.getMapAsync(this)
-
-        // 현위치 반환 구현체 locationSource 선언
-        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-
-        // 위치 권한 요청
-        requestPermissions()
-
         // 네비게이션 바 간 스위칭 관련 리스너
         listener()
 
@@ -177,84 +159,105 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         uiSettings.isCompassEnabled = true
         uiSettings.isZoomControlEnabled = false
         uiSettings.isLocationButtonEnabled = true
+        // 최대 줌 레벨 설정
+        naverMap.maxZoom = 19.0
 
         this.naverMap = naverMap
         // 실행된 네이버 지도에 locationSource 연결
         naverMap.locationSource = locationSource
+        // 현 위치로 맵 시작
+        naverMap.locationTrackingMode = LocationTrackingMode.Follow
 
 
-        naverMap.addOnCameraChangeListener { reason, animated ->
-            // 지도가 이동될 때마다 호출되는 코드
-            binding.floatingActionButton.show()
+        naverMap.addOnCameraChangeListener { reason, _ ->
+            // 지도가 이동 상태 시 콜백함수
+            if (reason == -1) binding.extendedFAB.show()   // 사용자 움직임 시 reason == -1
+        }
+
+        naverMap.addOnCameraIdleListener {
+            // 지도가 이동 후 대기 상태 시 콜백함수
         }
 
         markerInit()
+    }
 
-        /*
-        // 마커 추가 테스트
-        val marker = Marker()
-        marker.position = LatLng(37.5670135, 126.9783740)
-        marker.map = naverMap
-        marker.width = Marker.SIZE_AUTO
-        marker.height = Marker.SIZE_AUTO
-        marker.captionText = "테스트용 1"
+    private fun mapInit() {
+        // Framelayout에 네이버 지도 띄우기
+        val fm = childFragmentManager
+        val mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
+            ?: MapFragment.newInstance().also {
+                fm.beginTransaction().add(R.id.map, it).commit()
+            }
+        mapFragment.getMapAsync(this)
 
-        val marker2 = Marker()
-        marker2.position = LatLng(37.4447533294745, 126.702653350562)
-        marker2.map = naverMap
-        marker2.icon = MarkerIcons.YELLOW
-//        marker2.iconTintColor = Color.YELLOW
-        marker2.width = Marker.SIZE_AUTO
-        marker2.height = Marker.SIZE_AUTO
-        marker2.captionText = "테스트용 2"
-         */
-
-
-
+        // 현위치 반환 구현체 locationSource 선언
+        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
     private fun markerInit() {
         cameraPosition = naverMap.cameraPosition
 
-        bounds = naverMap.contentBounds
-        radius = ((bounds.northWest).distanceTo(bounds.southEast).toInt()) / 2
-        Log.i("MYTAG", "radius : $radius m")
+        rect =
+            "${naverMap.contentBounds.southWest.longitude},${naverMap.contentBounds.southWest.latitude},${naverMap.contentBounds.northEast.longitude},${naverMap.contentBounds.northEast.latitude}"
+
+        /*
+        val polyline = PolylineOverlay()
+        polyline.coords = listOf(
+            naverMap.contentBounds.southWest,
+            naverMap.contentBounds.northEast
+        )
+        polyline.map = naverMap
+         */
+
+        Log.d("MYTAG", "rect : $rect")
         Log.d("MYTAG", "now bounds : ${naverMap.contentBounds}")
         Log.d("MYTAG", "now camera : $cameraPosition")
         //------------------------------------
-        retro.getRestaurants(
-            cameraPosition.target.longitude,
-            cameraPosition.target.latitude,
-            100
-        ).enqueue(object : Callback<GetRestaurantsResult> {
+        retro.getRestaurants(rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
                 response: Response<GetRestaurantsResult>
             ) {
                 //Log.d("MYTAG", response.body().toString())
-                /*
-//                    Log.d(
-//                        "MYTAG",
-//                        "받은 body 리스트의 개수 : " + response.body()!!.body.size.toString()
-//                    )
-//                    Log.d(
-//                        "MYTAG",
-//                        "해당 식당의 존재 그룹 개수 :" + response.body()!!.body[0].num_of_group.toString()
-//                    )
-                // 받은 result 이용 지도에 마커 띄우기
-//                    val num_of_marker = response.body()!!.body.size
-                 */
                 val markerList: ArrayList<Marker> = arrayListOf<Marker>()
                 for (i in 0 until response.body()!!.body.size) {
                     markerList.add(i, Marker())
+                    markerList[i].isHideCollidedSymbols = true
                     markerList[i].position =
-                        LatLng(response.body()!!.body[i].res_y, response.body()!!.body[i].res_x)
+                        LatLng(
+                            response.body()!!.body[i].y.toDouble(),
+                            response.body()!!.body[i].x.toDouble()
+                        )
                     markerList[i].map = naverMap
                     markerList[i].width = Marker.SIZE_AUTO
                     markerList[i].height = Marker.SIZE_AUTO
-                    markerList[i].captionText = "테스트용 ${i + 1}"
+                    markerList[i].captionText = response.body()!!.body[i].place_name
+                    /*
+                    //group이 있는 마커 표현
                     if (response.body()!!.body[i].num_of_group != 0)
-                        markerList[i].icon = MarkerIcons.YELLOW
+                    markerList[i].icon = MarkerIcons.YELLOW
+                     */
+                    markerList[i].setOnClickListener {
+//                        val bottomSheetDialog = BottomSheetDialog.
+                        /*
+                        // 마커를 1.5배 크게 만드는 애니메이션
+                        val animator = ValueAnimator.ofFloat(1f, 3.0f)
+                        animator.duration = 1500
+                        animator.addUpdateListener { valueAnimator ->
+                            val value = valueAnimator.animatedValue as Float
+                            markerList[i].width = (markerList[i].width * value).toInt()
+                            markerList[i].height = (markerList[i].height * value).toInt()
+                        }
+                        animator.start()
+                         */
+
+                        // 해당 마커 위치로 지도 이동
+                        val cameraUpdate: CameraUpdate =
+//                            CameraUpdate.fitBounds(markerList[i].map!!.contentBounds)     // 추가 작업 필요
+                            CameraUpdate.scrollAndZoomTo(markerList[i].position, 15.0)
+                        naverMap.moveCamera(cameraUpdate)
+                        true
+                    }
                 }
             }
 
@@ -262,7 +265,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Log.d("MYTAG", t.message.toString())
                 Log.d("MYTAG", "FAIL")
             }
-
         })
     }
 
@@ -272,19 +274,21 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val permissionlistener: PermissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
                 Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+                mapInit()
             }
 
             override fun onPermissionDenied(deniedPermissions: List<String>) {
                 Toast.makeText(context, "Permission Denied\n$deniedPermissions", Toast.LENGTH_SHORT)
                     .show()
+                /* 예외 처리 필요 */
             }
         }
 
         // TedPermission 라이브러리 // 위치 권한 요청
         TedPermission.create()
             .setPermissionListener(permissionlistener)
-            .setRationaleTitle("위치권한 요청!")
-            .setRationaleMessage("현재 위치로 이동하기 위해 위치권한이 필요해요!!")
+//            .setRationaleTitle("위치권한 요청")
+//            .setRationaleMessage("현재 위치로 이동하기 위해 위치권한이 필요해요!!")
             .setPermissions(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION

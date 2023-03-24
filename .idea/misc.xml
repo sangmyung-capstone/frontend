@@ -5,7 +5,8 @@
       <map>
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_home.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_main.xml" value="0.8333333333333334" />
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_map.xml" value="0.1" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_bottom_sheet_dialog.xml" value="0.1" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_map.xml" value="0.33204633204633205" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_mypage.xml" value="0.17916666666666667" />
       </map>
     </option>
