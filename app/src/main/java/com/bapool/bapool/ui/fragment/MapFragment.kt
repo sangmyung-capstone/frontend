@@ -1,6 +1,7 @@
 package com.bapool.bapool.ui.fragment
 
 import android.Manifest
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.FragmentMapBinding
 import com.bapool.bapool.retrofit.data.GetRestaurantsResult
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.naver.maps.geometry.LatLng
@@ -21,6 +23,7 @@ import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.PolylineOverlay
 import com.naver.maps.map.util.FusedLocationSource
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,9 +56,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         requestPermissions()
 
         // 현 위치에서 검색 터치 시 // FAB
-        binding.floatingActionButton.setOnClickListener {
+        binding.extendedFAB.setOnClickListener {
             markerInit()
-            binding.floatingActionButton.hide()
+            binding.extendedFAB.hide()
         }
 
         /******************************************************************************************/
@@ -168,7 +171,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         naverMap.addOnCameraChangeListener { reason, _ ->
             // 지도가 이동 상태 시 콜백함수
-            if (reason == -1) binding.floatingActionButton.show()   // 사용자 움직임 시 reason == -1
+            if (reason == -1) binding.extendedFAB.show()   // 사용자 움직임 시 reason == -1
         }
 
         naverMap.addOnCameraIdleListener {
@@ -197,6 +200,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         rect =
             "${naverMap.contentBounds.southWest.longitude},${naverMap.contentBounds.southWest.latitude},${naverMap.contentBounds.northEast.longitude},${naverMap.contentBounds.northEast.latitude}"
 
+        /*
+        val polyline = PolylineOverlay()
+        polyline.coords = listOf(
+            naverMap.contentBounds.southWest,
+            naverMap.contentBounds.northEast
+        )
+        polyline.map = naverMap
+         */
+
         Log.d("MYTAG", "rect : $rect")
         Log.d("MYTAG", "now bounds : ${naverMap.contentBounds}")
         Log.d("MYTAG", "now camera : $cameraPosition")
@@ -220,9 +232,32 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     markerList[i].width = Marker.SIZE_AUTO
                     markerList[i].height = Marker.SIZE_AUTO
                     markerList[i].captionText = response.body()!!.body[i].place_name
-//                    //group이 있는 마커 표현
-//                    if (response.body()!!.body[i].num_of_group != 0)
-//                        markerList[i].icon = MarkerIcons.YELLOW
+                    /*
+                    //group이 있는 마커 표현
+                    if (response.body()!!.body[i].num_of_group != 0)
+                    markerList[i].icon = MarkerIcons.YELLOW
+                     */
+                    markerList[i].setOnClickListener {
+//                        val bottomSheetDialog = BottomSheetDialog.
+                        /*
+                        // 마커를 1.5배 크게 만드는 애니메이션
+                        val animator = ValueAnimator.ofFloat(1f, 3.0f)
+                        animator.duration = 1500
+                        animator.addUpdateListener { valueAnimator ->
+                            val value = valueAnimator.animatedValue as Float
+                            markerList[i].width = (markerList[i].width * value).toInt()
+                            markerList[i].height = (markerList[i].height * value).toInt()
+                        }
+                        animator.start()
+                         */
+
+                        // 해당 마커 위치로 지도 이동
+                        val cameraUpdate: CameraUpdate =
+//                            CameraUpdate.fitBounds(markerList[i].map!!.contentBounds)     // 추가 작업 필요
+                            CameraUpdate.scrollAndZoomTo(markerList[i].position, 15.0)
+                        naverMap.moveCamera(cameraUpdate)
+                        true
+                    }
                 }
             }
 
