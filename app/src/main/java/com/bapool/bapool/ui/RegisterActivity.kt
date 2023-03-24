@@ -41,7 +41,7 @@ class RegisterActivity : AppCompatActivity() {
         )
 
         //버튼 선택 이벤트 부여
-        for ((index,button) in buttons.withIndex()) {
+        for ((index, button) in buttons.withIndex()) {
             button.setOnClickListener {
                 selectButton(button, buttons)
                 count = index
@@ -58,7 +58,7 @@ class RegisterActivity : AppCompatActivity() {
                 .enqueue(object : Callback<PostRegisterResponse> {
                     override fun onResponse(
                         call: Call<PostRegisterResponse>,
-                        response: Response<PostRegisterResponse>
+                        response: Response<PostRegisterResponse>,
                     ) {
                         if (response.isSuccessful) {
                             var result: PostRegisterResponse? = response.body()
@@ -95,6 +95,7 @@ class RegisterActivity : AppCompatActivity() {
                             // handle error response
                         }
                     }
+
                     override fun onFailure(call: Call<PostRegisterResponse>, t: Throwable) {
                         // handle network or unexpected error
                     }
