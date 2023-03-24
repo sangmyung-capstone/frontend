@@ -152,7 +152,7 @@
         android:background="#EEEEEE"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <android.widget.Button
+    <Button
         android:id="@+id/joinGrp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

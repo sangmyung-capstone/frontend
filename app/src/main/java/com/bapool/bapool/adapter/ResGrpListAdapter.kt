@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.databinding.ResgrplistItemsBinding
@@ -40,6 +42,9 @@ class ResGrpListAdapter(val context: Context) :
 //        }
 
         holder.bindItem(resGroup[position])
+        holder.joinButton.setOnClickListener {
+            Toast.makeText(context,"joinbtn clicklistener",Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -49,6 +54,7 @@ class ResGrpListAdapter(val context: Context) :
 
     inner class ViewHolder(private val binding: ResgrplistItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        val joinButton: Button = binding.joinGrp
         fun bindItem(item: ResGroupList) {
             //차단유저 보이게하기
             if (item.has_block_user) {

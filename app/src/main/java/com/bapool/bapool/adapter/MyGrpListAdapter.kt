@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.databinding.MygrplistItemsBinding
 import com.bapool.bapool.retrofit.data.MyGrpListModel
@@ -25,6 +26,7 @@ class MyGrpListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItem(myGroupList[position])
+
     }
 
     override fun getItemCount(): Int {
@@ -34,11 +36,10 @@ class MyGrpListAdapter(
 
     inner class ViewHolder(private val binding: MygrplistItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindItem(item: MyGrpListModel) {
 
+        fun bindItem(item: MyGrpListModel) {
             val allNum = partiNum(item.participants, item.max_people)
             val allDate = dateRange(item.startDate, item.endDate)
-
 
             binding.resName.text = item.resName
             binding.grpName.text = item.grpName
@@ -46,7 +47,6 @@ class MyGrpListAdapter(
             binding.notReadChat.text = item.notReadChat.toString()
             binding.participantsNum.text = allNum
             binding.date.text = allDate
-
         }
     }
 
