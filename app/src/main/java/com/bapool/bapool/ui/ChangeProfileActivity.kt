@@ -11,16 +11,17 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityRegisterBinding
-import com.bapool.bapool.retrofit.data.PostRegisterRequest
-import com.bapool.bapool.retrofit.data.PostRegisterResponse
+import com.bapool.bapool.retrofit.data.PatchChangeProfileRequest
+import com.bapool.bapool.retrofit.data.PatchChangeProfileResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class RegisterActivity : AppCompatActivity() {
+class ChangeProfileActivity : AppCompatActivity() {
     private var _binding: ActivityRegisterBinding? = null
     private val binding get() = _binding!!
     var selectedButton: Button? = null // initially no button is selected
@@ -54,18 +55,18 @@ class RegisterActivity : AppCompatActivity() {
         //완료 버튼 리스너
         binding.finish.setOnClickListener {
             var nickname: String = textInputEditText.text.toString()
-            var userInfo = PostRegisterRequest(nickname, count)
+            var userInfo = PatchChangeProfileRequest(nickname, count)
 
             val retro = RetrofitService.create()
 
-            retro.setUserInfo("accessToken", 1, userInfo)
-                .enqueue(object : Callback<PostRegisterResponse> {
+            retro.ChangeUserInfo("accessToken", 1, userInfo)
+                .enqueue(object : Callback<PatchChangeProfileResponse> {
                     override fun onResponse(
-                        call: Call<PostRegisterResponse>,
-                        response: Response<PostRegisterResponse>,
+                        call: Call<PatchChangeProfileResponse>,
+                        response: Response<PatchChangeProfileResponse>
                     ) {
                         if (response.isSuccessful) {
-                            var result: PostRegisterResponse? = response.body()
+                            var result: PatchChangeProfileResponse? = response.body()
                             Log.d("bap", "onRequest 성공: $userInfo");
                             Log.d("bap", "onResponse 성공: " + result?.toString());
                             // handle successful response
@@ -73,13 +74,13 @@ class RegisterActivity : AppCompatActivity() {
                                 //중복인 경우
                                 if (result.is_duplicate) {
                                     val builder =//닉네임이 중복된다는 다이얼로그 출력
-                                        AlertDialog.Builder(this@RegisterActivity).setTitle("")
+                                        AlertDialog.Builder(this@ChangeProfileActivity).setTitle("")
                                             .setMessage("닉네임이 중복됩니다.")
                                             .setPositiveButton(
                                                 "확인",
                                                 DialogInterface.OnClickListener { dialog, which ->
                                                     Toast.makeText(
-                                                        this@RegisterActivity,
+                                                        this@ChangeProfileActivity,
                                                         "확인",
                                                         Toast.LENGTH_SHORT
                                                     )
@@ -90,7 +91,7 @@ class RegisterActivity : AppCompatActivity() {
                                 //중복이 아닌경우 홈화면으로 넘어감
                                 else {
                                     val intent =
-                                        Intent(this@RegisterActivity, HomeActivity::class.java)
+                                        Intent(this@ChangeProfileActivity, HomeActivity::class.java)
                                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                 }
 
@@ -100,7 +101,7 @@ class RegisterActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<PostRegisterResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<PatchChangeProfileResponse>, t: Throwable) {
                         // handle network or unexpected error
                     }
                 })
@@ -113,7 +114,7 @@ class RegisterActivity : AppCompatActivity() {
             if (button == selectedButton) {
                 button.setColorFilter(Color.parseColor("#ffff0000"), PorterDuff.Mode.MULTIPLY);
             } else {
-                button.setColorFilter(null)
+                button.setColorFilter(null);
             }
         }
     }

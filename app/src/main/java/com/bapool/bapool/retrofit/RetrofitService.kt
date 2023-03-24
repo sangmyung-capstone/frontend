@@ -34,6 +34,26 @@ interface RetrofitService {
         @Body request: PostRegisterRequest,
     ): Call<PostRegisterResponse>
 
+
+    @GET("users/mypage/{user-id}")
+    fun getMyPage(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long
+    ): Call<GetMypageResponse>
+
+    @PATCH("/users/info/{user-id}")
+    fun ChangeUserInfo(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long,
+        @Body request: PatchChangeProfileRequest
+    ): Call<PatchChangeProfileResponse>
+
+    @DELETE("/users/{user-id}")
+    fun DeleteUser(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long
+    ):Call<DeleteUserResponse>
+
     //--------------------------------------------------------------------------
     // 손승현
     @GET("groups/{user_id}/{restaurant_id}")
@@ -47,7 +67,8 @@ interface RetrofitService {
         @Path("user_id") userId: Long,
         @Body request: PostMakeGrpRequest
     ): Call<PostMakeGrpResponse>
-//--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     // 이현제
     @GET("/restaurants")
     fun getRestaurants(

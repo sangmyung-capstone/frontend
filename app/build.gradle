@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.bapool.bapool"
@@ -42,6 +42,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation 'androidx.core:core-ktx:+'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -57,5 +58,4 @@ dependencies {
     implementation 'com.github.mancj:MaterialSearchBar:0.7.1' // custom search view 라이브러리
 
     implementation 'com.navercorp.nid:oauth:5.4.0' //  네이버 로그인 jdk 11
-
 }
