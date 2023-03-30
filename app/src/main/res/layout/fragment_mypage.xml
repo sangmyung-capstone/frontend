@@ -13,7 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:layout_above="@+id/navigation"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom">
@@ -41,38 +41,6 @@
                 android:layout_weight="1" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/navigation"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:weightSum="3">
-
-            <android.widget.Button
-                android:id="@+id/fragment_map"
-                android:text="map"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <android.widget.Button
-                android:id="@+id/fragment_group"
-                android:text="group"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <android.widget.Button
-                android:id="@+id/fragment_mypage"
-                android:text="mypage"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

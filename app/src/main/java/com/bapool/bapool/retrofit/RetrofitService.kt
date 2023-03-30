@@ -56,13 +56,13 @@ interface RetrofitService {
 
     //--------------------------------------------------------------------------
     // 손승현
-    @GET("groups/{user_id}/{restaurant_id}")
+    @GET("party/{user_id}/{restaurant_id}")
     fun getResGrpList(
         @Path("user_id") userId: Long,
         @Path("restaurant_id") restaurantId: Long
     ): Call<GetResGroupListResponse>
 
-    @POST("groups/{user_id}")
+    @POST("party/{user_id}")
     fun makeGrp(
         @Path("user_id") userId: Long,
         @Body request: PostMakeGrpRequest
@@ -80,7 +80,7 @@ interface RetrofitService {
     // 싱글톤 객체 생성
     companion object {
         //        private const val BASE_URL = "(your url)"
-        private const val BASE_URL = "https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io"
+        private const val BASE_URL = "https://ba1bf9f9-5ec8-4b25-8e94-d2564bb78fdc.mock.pstmn.io"
 
 
         val client = OkHttpClient.Builder()

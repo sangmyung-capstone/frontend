@@ -1,5 +1,6 @@
 package com.bapool.bapool.adapter
 
+import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bapool.bapool.databinding.JoinpartyCustomDialogBinding
 import com.bapool.bapool.databinding.ResgrplistItemsBinding
 import com.bapool.bapool.retrofit.data.ResGroupList
 import java.time.LocalDateTime
@@ -19,11 +20,6 @@ class ResGrpListAdapter(val context: Context) :
     var resName: String = ""
     var resGroup = listOf<ResGroupList>()
 
-//    interface ItemClick {
-//        fun onClick(view: View, position: Int)
-//    }
-//
-//    var itemClick: ItemClick? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -34,16 +30,23 @@ class ResGrpListAdapter(val context: Context) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //item click listener
-//        if (itemClick != null) {
-//            holder.itemView.setOnClickListener { v ->
-//                itemClick?.onClick(v, position)
-//            }
-//        }
-
         holder.bindItem(resGroup[position])
+
         holder.joinButton.setOnClickListener {
-            Toast.makeText(context,"joinbtn clicklistener",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "joinbtn clicklistener", Toast.LENGTH_SHORT).show()
+            val resGroupDialog = resGroup[position]
+            val joinPartyDialog = JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(context))
+
+            dialogBinding(resGroupDialog, joinPartyDialog)
+
+
+            val mBuilder = AlertDialog.Builder(context)
+                .setView(joinPartyDialog.root)
+                .setTitle(resGroup[position].group_name)
+
+
+
+            mBuilder.show()
         }
     }
 
@@ -113,5 +116,38 @@ class ResGrpListAdapter(val context: Context) :
         return allNum
     }
 
+    fun dialogBinding(item: ResGroupList, binding: JoinpartyCustomDialogBinding) {
+        //차단유저 보이게하기
+        if (item.has_block_user) {
+            binding.ban.visibility = View.VISIBLE
+        }
+        //hashtag 보이게하기
+        val hashtagList: ArrayList<Int> = item.hashtag
+        if (hashtagList.isNotEmpty()) {
+            binding.hashtagVisible.visibility = View.VISIBLE
+            for (item in hashtagList) {
+                when (item) {
+                    1 -> binding.hash1.visibility = View.VISIBLE
+                    2 -> binding.hash2.visibility = View.VISIBLE
+                    3 -> binding.hash3.visibility = View.VISIBLE
+                    4 -> binding.hash4.visibility = View.VISIBLE
+                    5 -> binding.hash5.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        val allNum = partiNum(item.participants, item.max_people)
+        val allDate = dateRange(item.start_date, item.end_date)
+
+        binding.menu.text = item.menu
+        binding.date.text = allDate
+        binding.participantsNum.text = allNum
+        binding.detail.text = item.detail
+        binding.rating.text = item.rating.toString()
+        binding.gotoChattingGrp.setOnClickListener {
+
+        }
+
+    }
 }
 

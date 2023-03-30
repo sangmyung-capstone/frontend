@@ -81,12 +81,7 @@ class MypageFragment : Fragment() {
 
     //리스너 호출
     fun listener() {
-        binding.fragmentGroup.setOnClickListener {
-            it.findNavController().navigate(R.id.action_mypageFragment_to_groupFragment)
-        }
-        binding.fragmentMap.setOnClickListener {
-            it.findNavController().navigate(R.id.action_mypageFragment_to_mapFragment)
-        }
+
         binding.logout.setOnClickListener {
             val intent = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
