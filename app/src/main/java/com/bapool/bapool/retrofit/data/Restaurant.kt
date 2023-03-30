@@ -28,3 +28,25 @@ data class Restaurant(
     val x: String,
     val y: String
 )
+
+data class GetRestaurantLogResponse(
+    val code: Int,
+    val message: String,
+    val result: Result
+){
+    data class Result(
+        val parties: List<Party>
+    )
+
+    data class Party(
+        val party_id: Int,
+        val party_name: String,
+        val restaurant_name: String,
+        val imgUrl: String,
+        val restaurant_address: String,
+        val category: String
+    )
+}
+
+
+
