@@ -20,7 +20,6 @@
         <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle</item>
         <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
 
-        <item name="android:datePickerStyle">@style/MyDatePicker</item>
-        <item name="android:timePickerStyle">@style/MyTimePickerTheme</item>
+
     </style>
 </resources>
