@@ -6,18 +6,4 @@
         <item name="android:textColorPrimary">@color/black</item>
     </style>
 
-
-
-    <style name="MyDatePicker" parent="android:Widget.Material.DatePicker">
-        <item name="android:datePickerMode">spinner</item>
-        <item name="android:textColorPrimary">@color/black</item>
-    </style>
-
-
-    <style name="MyTimePickerTheme" parent="android:Widget.Material.TimePicker">
-        <item name="android:timePickerMode">spinner</item>
-        <item name="android:textColorPrimary">@color/black</item>
-
-    </style>
-
 </resources>

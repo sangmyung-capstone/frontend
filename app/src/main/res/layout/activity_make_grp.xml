@@ -211,15 +211,15 @@
         android:text="끝나는날짜"
         app:layout_constraintTop_toBottomOf="@+id/start_time" />
 
+
     <TextView
         android:id="@+id/end_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="끝나는시간"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/end_date"/>
-
-
+        app:layout_constraintTop_toBottomOf="@+id/end_date"
+        tools:layout_editor_absoluteX="16dp" />
 
     <TextView
         android:id="@+id/makeGrpButton"

@@ -3,25 +3,26 @@ package com.bapool.bapool.ui
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.DatePicker
+import android.view.LayoutInflater
 import android.widget.NumberPicker
 import android.widget.Toast
 import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityMakeGrpBinding
+import com.bapool.bapool.databinding.CustomDatepickerBinding
+import com.bapool.bapool.databinding.CustomTimepickerBinding
 import com.bapool.bapool.retrofit.data.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.LocalTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
-import kotlin.math.max
 
 
 class MakeGrpActivity : AppCompatActivity() {
@@ -122,83 +123,32 @@ class MakeGrpActivity : AppCompatActivity() {
         }
         //모임시작 날짜 정하기
         binding.startDate.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            datePickerDialogCustom(System.currentTimeMillis(), 1)
 
-            val datePickerDialog =
-                DatePickerDialog(this, { view, selectedYear, selectedMonth, selectedDay ->
-
-                    val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
-
-
-                    //시작시간 정할때 끝나는 날짜까지 지정해줌
-                    binding.startDate.setText(selectedDate)
-                    binding.endDate.setText(selectedDate)
-                }, year, month, day)
-            //오늘부터 최대 1년 뒤까지 날짜 설정 가능
-            val datePicker = datePickerDialog.datePicker
-            datePicker.minDate = System.currentTimeMillis()
-            datePicker.maxDate =
-                System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365)
-            datePickerDialog.show()
         }
         //모임 시작 시간 정하기
         binding.startTime.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val hour = calendar.get(Calendar.HOUR_OF_DAY)
-            val minute = calendar.get(Calendar.MINUTE)
-
-            val timePickerDialog = TimePickerDialog(this, { view, selectedHour, selectedMinute ->
-                val selectedTime = String.format("%02d : %02d", selectedHour, selectedMinute)
-
-                //시작시간 정할때 끝시간 +2시간으로 지정해줌
-                binding.startTime.setText(selectedTime)
-                binding.endTime.setText(
-                    String.format("%02d : %02d", (selectedHour + 2) % 24, selectedMinute))
-            }, hour, minute, true)
-            timePickerDialog.show()
+            timePickerDialogCustom(1)
         }
+
+
         //모임 끝나는 날짜 정하기
         binding.endDate.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
-            //모임 끝나는 날짜가 시작날짜보다 뒤로 나와야함.
-            //모임 시작날짜를 정한 이후 클릭이 가능하도록 만들어야함.
-//            val dateFormat =
-//                SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-//            val minDate = dateFormat.parse(binding.startDate.text.toString())
+            if (binding.startDate.text.toString() == "시작날짜") {
+                alterDialog("시작날짜를 정해주세요.")
+            } else {
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+                val minDate = dateFormat.parse("${binding.startDate.text}")
+                val customDatePickerBinding =
+                    CustomDatepickerBinding.inflate(LayoutInflater.from(baseContext))
+                datePickerDialogCustom(minDate.time, 0)
 
-            val datePickerDialog =
-                DatePickerDialog(this, { view, selectedYear, selectedMonth, selectedDay ->
-                    // Do something with the selected date
-                    val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
-                    Log.d("hastagList", "Selected date: $selectedDate")
-                    binding.endDate.setText(selectedDate.toString())
-                }, year, month, day)
-            //오늘부터 최대 1년 뒤까지 날짜 설정 가능
-            val datePicker = datePickerDialog.datePicker
+            }
 
-            datePicker.minDate = System.currentTimeMillis()
-            datePicker.maxDate =
-                System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365)
-            datePickerDialog.show()
         }
         //모임 끝나는 시간 정하기
         binding.endTime.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val hour = calendar.get(Calendar.HOUR_OF_DAY)
-            val minute = calendar.get(Calendar.MINUTE)
-            //모임 끝나는 시간이 모임 시작시간보다 뒤로 있어야함
-            val timePickerDialog = TimePickerDialog(this, { view, selectedHour, selectedMinute ->
-                val selectedTime = String.format("%02d : %02d", selectedHour, selectedMinute)
-                binding.endTime.setText(selectedTime)
-            }, hour, minute, true)
-
-            timePickerDialog.show()
+            timePickerDialogCustom(0)
         }
 
 
@@ -215,44 +165,22 @@ class MakeGrpActivity : AppCompatActivity() {
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
             if (binding.grpNameText.text.isNullOrBlank()) {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("그룹명 비어있음")
-                builder.setMessage("그룹명이 비어있다구")
-                builder.setPositiveButton("확인") { dialog, which ->
-                }
-                val dialog = builder.create()
-                dialog.show()
-                Log.d("AlertDialog", "그룹명")
+                alterDialog("그룹명을 입력해주세요.")
 
             } else if (binding.menuText.text.isNullOrBlank()) {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("상세메뉴 비어있음")
-                builder.setMessage("상세메뉴 비어있다구")
-                builder.setPositiveButton("확인") { dialog, which ->
-                }
-                val dialog = builder.create()
-                dialog.show()
-                Log.d("AlertDialog", "상세메뉴")
+                alterDialog("상세메뉴를 입력해주세요.")
 
             } else if (binding.startDate.text.toString() == "시작날짜") {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("시작날짜 비어있음")
-                builder.setMessage("시작날짜 비어있다구")
-                builder.setPositiveButton("확인") { dialog, which ->
-                }
-                val dialog = builder.create()
-                dialog.show()
-                Log.d("AlertDialog", "시작날짜")
+                alterDialog("시작날짜를 입력해주세요.")
 
             } else if (binding.startTime.text.toString() == "시작시간") {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("시작시간 비어있음")
-                builder.setMessage("시작시간 비어있다구")
-                builder.setPositiveButton("확인") { dialog, which ->
-                }
-                val dialog = builder.create()
-                dialog.show()
-                Log.d("AlertDialog", "시작시간")
+                alterDialog("시작시간을 입력해주세요.")
+            } else if (compareTime(binding.startDate.text.toString(),
+                    binding.endDate.text.toString(),
+                    binding.startTime.text.toString(),
+                    binding.endTime.text.toString())
+            ) {
+                alterDialog("끝나는 시간이 시작 시간보다 작습니다.")
             } else {
                 val makeGrpInstance =
                     PostMakeGrpRequest(retaurantId,
@@ -299,5 +227,123 @@ class MakeGrpActivity : AppCompatActivity() {
 
     }
 
+    //DatePickerDialog
+    fun datePickerDialogCustom(
+        minDate: Long,
+        startOrEnd: Int,
+    ) {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val customDatePickerBinding =
+            CustomDatepickerBinding.inflate(LayoutInflater.from(baseContext))
 
+        val datePickerDialog =
+            DatePickerDialog(this, { _, _, _, _ ->
+                val selectedYear = customDatePickerBinding.datePicker.year
+                val selectedMonth = customDatePickerBinding.datePicker.month
+                val selectedDay = customDatePickerBinding.datePicker.dayOfMonth
+                val selectedDate =
+                    String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+                if (startOrEnd == 1) {
+                    binding.startDate.setText(selectedDate)
+                    binding.endDate.setText(selectedDate)
+                } else if (startOrEnd == 0) {
+                    binding.endDate.setText(selectedDate)
+                }
+
+            }, year, month, day)
+        //오늘부터 최대 1년 뒤까지 날짜 설정 가능
+        datePickerDialog.setView(customDatePickerBinding.root)
+        customDatePickerBinding.datePicker.minDate = minDate
+        customDatePickerBinding.datePicker.maxDate =
+            System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365)
+
+        datePickerDialog.show()
+    }
+
+    //TimePickerDialog
+    fun timePickerDialogCustom(startOrEnd: Int) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        val customTimePickerBinding =
+            CustomTimepickerBinding.inflate(LayoutInflater.from(baseContext))
+
+        val timePickerDialog = TimePickerDialog(this, { _, _, _ ->
+            val selectedHour = customTimePickerBinding.timePicker.hour
+            val selectedMinute = customTimePickerBinding.timePicker.minute
+            val selectedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
+            //시작시간 정할때 끝시간 +2시간으로 지정해줌
+            if (startOrEnd == 1) {
+                binding.startTime.setText(selectedTime)
+                binding.endTime.setText(
+                    String.format("%02d:%02d", (selectedHour + 2) % 24, selectedMinute))
+            } else if (startOrEnd == 0) {
+                binding.endTime.setText(selectedTime)
+            }
+
+        }, hour, minute, true)
+        timePickerDialog.setView(customTimePickerBinding.root)
+        customTimePickerBinding.timePicker.setIs24HourView(true)
+        timePickerDialog.show()
+
+    }
+
+    //dialog 양식
+    fun alterDialog(exceptionalString: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(exceptionalString)
+        builder.setPositiveButton("확인") { dialog, which ->
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+
+    private fun compareTime(
+        startDate: String,
+        endDate: String,
+        startTimeUnit: String,
+        endTimeUnit: String,
+    ): Boolean {
+        if (startDate == endDate) {
+            val resultNum = chageTimeForm(
+                startTimeUnit,
+                endTimeUnit
+            )
+            when {
+                resultNum < 0 -> {
+                    return false
+                }
+                resultNum > 0 -> {
+                    return true
+                }
+                else -> {
+                    return false
+                }
+            }
+        } else {
+            return false
+        }
+        return false
+    }
+
+    fun chageTimeForm(startTimeUnit: String, endTimeUnit: String): Int {
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
+        val calendar1 = Calendar.getInstance()
+        val calendar2 = Calendar.getInstance()
+
+        calendar1.time = timeFormat.parse(startTimeUnit)
+        calendar2.time = timeFormat.parse(endTimeUnit)
+
+        Log.d("timesetting", calendar1.toString())
+        Log.d("timesetting", calendar1.toString())
+        Log.d("timesetting", calendar1.before(calendar2).toString())
+
+        val cmp = calendar1.compareTo(calendar2)
+        return cmp
+
+    }
 }
