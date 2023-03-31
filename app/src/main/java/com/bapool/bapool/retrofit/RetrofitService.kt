@@ -1,7 +1,4 @@
 package com.bapool.bapool
-// 정리 필요
-// 싱글톤으로 레트로핏 객채 생성 및 인터페이스 정리
-
 
 import com.bapool.bapool.retrofit.data.*
 import com.google.gson.Gson
@@ -92,7 +89,7 @@ interface RetrofitService {
     // 싱글톤 객체 생성
     companion object {
         //        private const val BASE_URL = "(your url)"
-        private const val BASE_URL = "https://9fb7b236-3104-4cad-9089-5184e71056f7.mock.pstmn.io"
+        private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
 
 
         val client = OkHttpClient.Builder()
