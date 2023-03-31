@@ -12,18 +12,35 @@ import retrofit2.http.*
 interface RetrofitService {
 
     // 정연수
-    @GET("/users/kakao")
-    fun gettoken(
-        @Header("kakoToken") kakoToken: String,
-    ): Call<accessToken>
+    @POST("/auth/naver/signin/already")
+    fun PostNaverLoginCheck(
+        @Body request: PostNaverLoginCheckRequest
+    ): Call<PostNaverLoginCheckResponse>
 
-    @POST("/users/info/{user-id}")
-    fun setUserInfo(
-        @Header("Authorization") accessToken: String,
-        @Path("user-id") userId: Long,
-        @Body request: PostRegisterRequest,
-    ): Call<PostRegisterResponse>
+    @POST("/auth/naver/signup")
+    fun PostNaverSignup(
+        @Body request: PostNaverSignupRequest
+    ): Call<PostNaverSignupResponse>
 
+    @POST("/auth/naver/signin")
+    fun PostNaverSingin(
+        @Body request: PostNaverSigninRequest
+    ): Call<PostNaverSigninResponse>
+
+    @POST("/auth/kakao/signin/already")
+    fun PostKakaoLoginCheck(
+        @Body request: PostkakaoLoginCheckRequest
+    ): Call<PostKakaoLoginCheckResponse>
+
+    @POST("/auth/kakao/signup")
+    fun PostKakaoSignup(
+        @Body request: PostKakaoSignupRequest
+    ): Call<PostKakaoSignupResponse>
+
+    @POST("/auth/kakao/signin")
+    fun PostKakaoSingin(
+        @Body request: PostkakaoSigninRequest
+    ): Call<PostKakaoSigninResponse>
 
     @GET("users/mypage/{user-id}")
     fun getMyPage(
@@ -90,6 +107,7 @@ interface RetrofitService {
     companion object {
         //        private const val BASE_URL = "(your url)"
         private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
+        private const val Mock_BASE_URL = "https://myfirstdomain.store"
 
 
         val client = OkHttpClient.Builder()
@@ -109,5 +127,6 @@ interface RetrofitService {
                 .create(RetrofitService::class.java)
 
         }
+
     }
 }
