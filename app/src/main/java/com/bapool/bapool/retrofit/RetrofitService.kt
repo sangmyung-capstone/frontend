@@ -4,20 +4,13 @@ package com.bapool.bapool
 
 
 import com.bapool.bapool.retrofit.data.*
-import com.bapool.bapool.ui.MakeGrpActivity
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import com.google.gson.annotations.SerializedName
-import com.kakao.sdk.auth.model.OAuthToken
 import retrofit2.Call
 import retrofit2.http.*
-import java.net.CookieManager
 
 interface RetrofitService {
 
@@ -54,6 +47,25 @@ interface RetrofitService {
         @Path("user-id") userId: Long
     ):Call<DeleteUserResponse>
 
+    @GET("/users/block/{user-id}")
+    fun GetBlockUser(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long
+    ): Call<GetBlockUserResponse>
+
+    @POST("/users/block/{user-id}")
+    fun DelteBlockUser(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long,
+        @Body request: DeleteBlockUserRequest
+    ): Call<DeleteBlockUserResponse>
+
+    @GET("/restaurants/log/{user-id}")
+    fun GetrestaurantsLog(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long
+    ): Call<GetRestaurantLogResponse>
+
     //--------------------------------------------------------------------------
     // 손승현
     @GET("groups/{user_id}/{restaurant_id}")
@@ -80,7 +92,7 @@ interface RetrofitService {
     // 싱글톤 객체 생성
     companion object {
         //        private const val BASE_URL = "(your url)"
-        private const val BASE_URL = "https://655c8626-5f5d-4846-b60c-20c52d2ea0da.mock.pstmn.io"
+        private const val BASE_URL = "https://9fb7b236-3104-4cad-9089-5184e71056f7.mock.pstmn.io"
 
 
         val client = OkHttpClient.Builder()

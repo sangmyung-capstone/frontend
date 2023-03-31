@@ -7,7 +7,6 @@
     </style>
 
 
-
     <style name="MyDatePicker" parent="android:Widget.Material.DatePicker">
         <item name="android:datePickerMode">spinner</item>
         <item name="android:textColorPrimary">@color/black</item>

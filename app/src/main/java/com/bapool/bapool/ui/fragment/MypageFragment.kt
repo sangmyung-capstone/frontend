@@ -17,9 +17,8 @@ import com.bapool.bapool.databinding.FragmentMypageBinding
 import com.bapool.bapool.retrofit.data.DeleteUserResponse
 import com.bapool.bapool.retrofit.data.GetMypageResponse
 import com.bapool.bapool.retrofit.data.PostRegisterResponse
-import com.bapool.bapool.ui.ChangeProfileActivity
-import com.bapool.bapool.ui.HomeActivity
-import com.bapool.bapool.ui.LoginActivity
+import com.bapool.bapool.retrofit.data.Restaurant
+import com.bapool.bapool.ui.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -120,6 +119,14 @@ class MypageFragment : Fragment() {
                 })
             //통신과정
 
+        }
+        binding.block.setOnClickListener {
+            val intent = Intent(requireContext(), BlockListActivity::class.java)
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        }
+        binding.restarurantlog.setOnClickListener {
+            val intent = Intent(requireContext(), RestaurantLogActivity::class.java)
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
     }
 
