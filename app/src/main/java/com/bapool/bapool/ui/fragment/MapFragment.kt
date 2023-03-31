@@ -147,7 +147,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         /******************************************************************************************/
 
         // 네비게이션 바 간 스위칭 관련 리스너
-        listener()
+//        listener()
 
         return binding.root
     }
@@ -297,14 +297,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     // 네비게이션 바 간 스위칭 관련 리스너
-    fun listener() {
-        binding.fragmentGroup.setOnClickListener {
-            it.findNavController().navigate(R.id.action_mapFragment_to_groupFragment)
-        }
-        binding.fragmentMypage.setOnClickListener {
-            it.findNavController().navigate(R.id.action_mapFragment_to_mypageFragment)
-        }
-    }
+//    fun listener() {
+//
+//    }
 
     //뷰바인딩 생명주기 관리
     override fun onDestroyView() {

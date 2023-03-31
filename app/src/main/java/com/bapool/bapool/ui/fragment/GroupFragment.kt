@@ -51,12 +51,6 @@ class GroupFragment : Fragment() {
 
     //리스너 호출
     fun listener() {
-        binding.fragmentMypage.setOnClickListener {
-            it.findNavController().navigate(R.id.action_groupFragment_to_mypageFragment)
-        }
-        binding.fragmentMap.setOnClickListener {
-            it.findNavController().navigate(R.id.action_groupFragment_to_mapFragment)
-        }
         binding.goToResGrp.setOnClickListener {
             val intent = Intent(requireContext(), ResGrpActivity::class.java)
             startActivity(intent)
@@ -71,6 +65,7 @@ class GroupFragment : Fragment() {
 
     //retrofit 연결 전 dummydata
     fun dummyData() {
+        myGrpListModel.clear()
         myGrpListModel.add(
             MyGrpListModel(
                 123,

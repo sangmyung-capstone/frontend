@@ -3,42 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_nav"
-    app:startDestination="@id/mapFragment">
+    app:startDestination="@id/groupFragment">
 
     <fragment
         android:id="@+id/groupFragment"
         android:name="com.bapool.bapool.ui.fragment.GroupFragment"
         android:label="fragment_group"
-        tools:layout="@layout/fragment_group" >
-        <action
-            android:id="@+id/action_groupFragment_to_mypageFragment"
-            app:destination="@id/mypageFragment" />
-        <action
-            android:id="@+id/action_groupFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_group"/>
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.bapool.bapool.ui.fragment.MapFragment"
         android:label="fragment_map"
-        tools:layout="@layout/fragment_map" >
-        <action
-            android:id="@+id/action_mapFragment_to_groupFragment"
-            app:destination="@id/groupFragment" />
-        <action
-            android:id="@+id/action_mapFragment_to_mypageFragment"
-            app:destination="@id/mypageFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_map"/>
     <fragment
         android:id="@+id/mypageFragment"
         android:name="com.bapool.bapool.ui.fragment.MypageFragment"
         android:label="fragment_mypage"
-        tools:layout="@layout/fragment_mypage" >
-        <action
-            android:id="@+id/action_mypageFragment_to_groupFragment"
-            app:destination="@id/groupFragment" />
-        <action
-            android:id="@+id/action_mypageFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_mypage"/>
 </navigation>

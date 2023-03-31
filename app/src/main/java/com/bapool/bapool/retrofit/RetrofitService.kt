@@ -31,60 +31,60 @@ interface RetrofitService {
     @GET("users/mypage/{user-id}")
     fun getMyPage(
         @Header("Authorization") accessToken: String,
-        @Path("user-id") userId: Long
+        @Path("user-id") userId: Long,
     ): Call<GetMypageResponse>
 
     @PATCH("/users/info/{user-id}")
     fun ChangeUserInfo(
         @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
-        @Body request: PatchChangeProfileRequest
+        @Body request: PatchChangeProfileRequest,
     ): Call<PatchChangeProfileResponse>
 
     @DELETE("/users/{user-id}")
     fun DeleteUser(
         @Header("Authorization") accessToken: String,
-        @Path("user-id") userId: Long
-    ):Call<DeleteUserResponse>
+        @Path("user-id") userId: Long,
+    ): Call<DeleteUserResponse>
 
     @GET("/users/block/{user-id}")
     fun GetBlockUser(
         @Header("Authorization") accessToken: String,
-        @Path("user-id") userId: Long
+        @Path("user-id") userId: Long,
     ): Call<GetBlockUserResponse>
 
     @POST("/users/block/{user-id}")
     fun DelteBlockUser(
         @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
-        @Body request: DeleteBlockUserRequest
+        @Body request: DeleteBlockUserRequest,
     ): Call<DeleteBlockUserResponse>
 
     @GET("/restaurants/log/{user-id}")
     fun GetrestaurantsLog(
         @Header("Authorization") accessToken: String,
-        @Path("user-id") userId: Long
+        @Path("user-id") userId: Long,
     ): Call<GetRestaurantLogResponse>
 
     //--------------------------------------------------------------------------
     // 손승현
-    @GET("groups/{user_id}/{restaurant_id}")
+    @GET("party/{user_id}/{restaurant_id}")
     fun getResGrpList(
         @Path("user_id") userId: Long,
-        @Path("restaurant_id") restaurantId: Long
+        @Path("restaurant_id") restaurantId: Long,
     ): Call<GetResGroupListResponse>
 
-    @POST("groups/{user_id}")
+    @POST("party/{user_id}")
     fun makeGrp(
         @Path("user_id") userId: Long,
-        @Body request: PostMakeGrpRequest
+        @Body request: PostMakeGrpRequest,
     ): Call<PostMakeGrpResponse>
 
     //--------------------------------------------------------------------------
     // 이현제
     @GET("/restaurants")
     fun getRestaurants(
-        @Query("rect") rect: String?
+        @Query("rect") rect: String?,
     ): Call<GetRestaurantsResult>
 
     //-----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ interface RetrofitService {
     // 싱글톤 객체 생성
     companion object {
         //        private const val BASE_URL = "(your url)"
-        private const val BASE_URL = "https://9fb7b236-3104-4cad-9089-5184e71056f7.mock.pstmn.io"
+        private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
 
 
         val client = OkHttpClient.Builder()

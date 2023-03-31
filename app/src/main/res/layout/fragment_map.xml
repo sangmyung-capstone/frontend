@@ -85,7 +85,7 @@
                 android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
-                app:layout_constraintBottom_toTopOf="@+id/navigation">
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -110,40 +110,6 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/navigation"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:weightSum="3"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <android.widget.Button
-                    android:id="@+id/fragment_map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:text="map"
-                    android:textColor="@color/black" />
-
-                <android.widget.Button
-                    android:id="@+id/fragment_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:text="group"
-                    android:textColor="@color/black" />
-
-                <android.widget.Button
-                    android:id="@+id/fragment_mypage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:text="mypage"
-                    android:textColor="@color/black" />
-            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
