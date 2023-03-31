@@ -92,7 +92,7 @@ interface RetrofitService {
     // 싱글톤 객체 생성
     companion object {
         //        private const val BASE_URL = "(your url)"
-        private const val BASE_URL = "https://29696102-697c-48a4-ba31-d0470971cc8a.mock.pstmn.io"
+        private const val BASE_URL = "https://9fb7b236-3104-4cad-9089-5184e71056f7.mock.pstmn.io"
 
 
         val client = OkHttpClient.Builder()
