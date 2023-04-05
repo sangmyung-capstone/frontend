@@ -1,40 +1,52 @@
 package com.bapool.bapool.retrofit.data
 
+//data class GetRestaurantsResult(
+//    val code: String,
+//    val message: String,
+//    val result: List<Restaurant>
+//)
+//data class Restaurant(
+//    val address_name: String,
+//    val category_group_code: String,
+//    val category_group_name: String,
+//    val category_name: String,
+//    val distance: String,
+//    val id: String,
+//    val phone: String,
+//    val place_name: String,
+//    val place_url: String,
+//    val road_address_name: String,
+//    val x: String,
+//    val y: String
+//)
+
+
 data class GetRestaurantsResult(
     val code: String,
     val message: String,
-    val body: List<Restaurant>
+    val result: RestaurantsResult
+)
+data class RestaurantsResult(
+    val restaurants: List<Restaurant>
+)
+data class Restaurant(
+    val restaurant_id: Int,
+    val restaurant_name: String,
+    val restaurant_address: String,
+    val category: String,
+    val imgUrl: String,
+    val num_of_party: Int,
+    val restaurant_longitude: Double,
+    val restaurant_latitude: Double
 )
 
-data class Restaurant(
-//    val id: Int,
-//    val name: String,
-//    val address: String,
-//    val category: String,
-//    val imgUrl: String,
-//    val num_of_group: Int,
-//    val res_x: Double,
-//    val res_y: Double
-    val address_name: String,
-    val category_group_code: String,
-    val category_group_name: String,
-    val category_name: String,
-    val distance: String,
-    val id: String,
-    val phone: String,
-    val place_name: String,
-    val place_url: String,
-    val road_address_name: String,
-    val x: String,
-    val y: String
-)
 
 data class GetRestaurantLogResponse(
     val code: Int,
     val message: String,
-    val result: Result
+    val result: LogResult
 ){
-    data class Result(
+    data class LogResult(
         val parties: List<Party>
     )
 

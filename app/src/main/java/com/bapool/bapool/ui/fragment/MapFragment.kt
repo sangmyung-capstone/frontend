@@ -1,21 +1,20 @@
 package com.bapool.bapool.ui.fragment
 
 import android.Manifest
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.FragmentMapBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.GetRestaurantsResult
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.naver.maps.geometry.LatLng
@@ -23,8 +22,8 @@ import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.PolylineOverlay
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,7 +39,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var bounds: LatLngBounds
     private lateinit var rect: String
 
-    val retro = RetrofitService.create()
+    //        val retro = RetrofitService.create()
+    val retro = ServerRetrofit.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +57,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 현 위치에서 검색 터치 시 // FAB
         binding.extendedFAB.setOnClickListener {
+
             markerInit()
-            binding.extendedFAB.hide()
+            binding.extendedFAB.animate()
+                .scaleX(0f)
+                .scaleY(0f)
+                .alpha(0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .setDuration(400) // 0.4초로 변경
+                .withEndAction {
+                    binding.extendedFAB.hide()
+                }
         }
 
         /******************************************************************************************/
@@ -178,7 +187,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             // 지도가 이동 후 대기 상태 시 콜백함수
         }
 
-        markerInit()
+        // 시작하자마자 내 위치 주변에서 마커 필요
+//        markerInit()
     }
 
     private fun mapInit() {
@@ -198,58 +208,41 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         cameraPosition = naverMap.cameraPosition
 
         rect =
-            "${naverMap.contentBounds.southWest.longitude},${naverMap.contentBounds.southWest.latitude},${naverMap.contentBounds.northEast.longitude},${naverMap.contentBounds.northEast.latitude}"
-
-        /*
-        val polyline = PolylineOverlay()
-        polyline.coords = listOf(
-            naverMap.contentBounds.southWest,
-            naverMap.contentBounds.northEast
-        )
-        polyline.map = naverMap
-         */
+            "${naverMap.contentBounds.northWest.longitude},${naverMap.contentBounds.northWest.latitude},${naverMap.contentBounds.southEast.longitude},${naverMap.contentBounds.southEast.latitude}"
 
         Log.d("MYTAG", "rect : $rect")
         Log.d("MYTAG", "now bounds : ${naverMap.contentBounds}")
         Log.d("MYTAG", "now camera : $cameraPosition")
         //------------------------------------
-        retro.getRestaurants(rect).enqueue(object : Callback<GetRestaurantsResult> {
+        retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
                 response: Response<GetRestaurantsResult>
             ) {
-                //Log.d("MYTAG", response.body().toString())
+
+                Log.d("MYTAG", "body : ${response.body().toString()}")
+                // 기존 마커 삭제 필요!!!
                 val markerList: ArrayList<Marker> = arrayListOf<Marker>()
-                for (i in 0 until response.body()!!.body.size) {
+                for (i in 0 until response.body()!!.result.restaurants.size) {
                     markerList.add(i, Marker())
                     markerList[i].isHideCollidedSymbols = true
                     markerList[i].position =
                         LatLng(
-                            response.body()!!.body[i].y.toDouble(),
-                            response.body()!!.body[i].x.toDouble()
+                            response.body()!!.result.restaurants[i].restaurant_latitude,
+                            response.body()!!.result.restaurants[i].restaurant_longitude
                         )
                     markerList[i].map = naverMap
                     markerList[i].width = Marker.SIZE_AUTO
                     markerList[i].height = Marker.SIZE_AUTO
-                    markerList[i].captionText = response.body()!!.body[i].place_name
-                    /*
-                    //group이 있는 마커 표현
-                    if (response.body()!!.body[i].num_of_group != 0)
-                    markerList[i].icon = MarkerIcons.YELLOW
-                     */
+                    markerList[i].captionText =
+                        response.body()!!.result.restaurants[i].restaurant_name
+
+                    // group이 있는 마커 표현
+                    if (response.body()!!.result.restaurants[i].num_of_party != 0)
+                        markerList[i].icon = MarkerIcons.YELLOW
+
                     markerList[i].setOnClickListener {
-//                        val bottomSheetDialog = BottomSheetDialog.
-                        /*
-                        // 마커를 1.5배 크게 만드는 애니메이션
-                        val animator = ValueAnimator.ofFloat(1f, 3.0f)
-                        animator.duration = 1500
-                        animator.addUpdateListener { valueAnimator ->
-                            val value = valueAnimator.animatedValue as Float
-                            markerList[i].width = (markerList[i].width * value).toInt()
-                            markerList[i].height = (markerList[i].height * value).toInt()
-                        }
-                        animator.start()
-                         */
+//                        val bottomSheetDialog = BottomSheetDialog
 
                         // 해당 마커 위치로 지도 이동
                         val cameraUpdate: CameraUpdate =
