@@ -65,7 +65,7 @@ data class FirebaseGroupInfo(
     val max_people: Int,
     val start_date: String,
     val end_date: String,
-    val hashtag: List<Int> = listOf()
+    val hashtag: List<Int> = listOf(),
 )
 
 data class FirebaseGroupMessage(
@@ -76,15 +76,11 @@ data class FirebaseGroupMessage(
 )
 
 data class FirebaseGroupUsers(
-    val userUid: Map<String, Boolean>? = HashMap()
-)
-
-data class FirebaseGroups(
-    val group_id: FirebaseGroup
+    val userUid: Map<String, Boolean>? = HashMap(),
 )
 
 data class FirebaseGroup(
     val group_info: FirebaseGroupInfo,
-    val messsages: FirebaseGroupMessage,
-    val group_users: FirebaseGroupUsers
+    val messsages: FirebaseGroupMessage? = null,
+    val group_users: Map<String, Boolean> = HashMap(),
 )

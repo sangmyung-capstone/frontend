@@ -78,15 +78,10 @@ data class DeleteBlockUserRequest(
     val user_id: Long,
 )
 
-
-data class FirebaseUsers(
-    val user_id: FirebaseUserInfo
-)
-
 data class FirebaseUserInfo(
     val imageUrl: String = "",
     val nickname: String = "",
-    val banned_users: List<String> = listOf()
+    val banned_users: List<String>? = null
 )
 
 
