@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chatting_nav"
+    app:startDestination="@id/chattingFragment">
+
+    <fragment
+        android:id="@+id/chattingFragment"
+        android:name="com.bapool.bapool.ui.fragment.ChattingFragment"
+        android:label="fragment_chatting"
+        tools:layout="@layout/fragment_chatting" >
+        <action
+            android:id="@+id/action_chattingFragment_to_groupInfoGragment"
+            app:destination="@id/groupInfoGragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupInfoGragment"
+        android:name="com.bapool.bapool.ui.fragment.GroupInfoFragment"
+        android:label="fragment_group_info_gragment"
+        tools:layout="@layout/fragment_group_info_fragment" >
+        <action
+            android:id="@+id/action_groupInfoGragment_to_chattingFragment"
+            app:destination="@id/chattingFragment" />
+    </fragment>
+</navigation>

@@ -3,6 +3,7 @@ package com.bapool.bapool.ui
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -192,7 +193,8 @@ class MakeGrpActivity : AppCompatActivity() {
                         imgUrl,
                         hastagList,
                         binding.detail.text.toString())
-
+                val intent = Intent(this,ChattingAndPartyInfoActivity::class.java)
+                startActivity(intent)
                 retrofit(makeGrpInstance)
             }
 

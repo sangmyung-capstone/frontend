@@ -48,11 +48,43 @@ data class PostMakeGrpRequest(
 
 
 data class Result(
-    val group_id: Int
+    val group_id: Int,
 )
 
 data class PostMakeGrpResponse(
     val code: Int,
     val message: String,
-    val result: Result
+    val result: Result,
+)
+
+data class FirebaseGroupInfo(
+    val group_name: String = "",
+    val menu: String = "",
+    val detail: String = "",
+    val people: Int,
+    val max_people: Int,
+    val start_date: String,
+    val end_date: String,
+    val hashtag: List<Int> = listOf()
+)
+
+data class FirebaseGroupMessage(
+    var senderUid: String = "",
+    var sended_date: String = "",
+    var content: String = "",
+    var confirmed: String = "",
+)
+
+data class FirebaseGroupUsers(
+    val userUid: Map<String, Boolean>? = HashMap()
+)
+
+data class FirebaseGroups(
+    val group_id: FirebaseGroup
+)
+
+data class FirebaseGroup(
+    val group_info: FirebaseGroupInfo,
+    val messsages: FirebaseGroupMessage,
+    val group_users: FirebaseGroupUsers
 )

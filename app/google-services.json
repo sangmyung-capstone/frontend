@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "288723052926",
+    "project_id": "bappol",
+    "storage_bucket": "bappol.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288723052926:android:d3c99a843635843754eb2f",
+        "android_client_info": {
+          "package_name": "com.bapool.bapool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "288723052926-tii6hoq2iddub1odjnjt1hn13a7roumk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqZ6WWNdYHGo5SvbK_q7BLDkx06I3cFFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "288723052926-tii6hoq2iddub1odjnjt1hn13a7roumk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.ChattingFragment">
+
+    <LinearLayout
+        android:id="@+id/changeFragmentButton"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FBFBF5"
+        android:weightSum="2">
+        <Button
+            android:id="@+id/chatFragment"
+            android:text="채팅"
+            android:layout_margin="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/groupFragment"
+            android:text="그룹 정보"
+            android:layout_margin="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:background="#FBFBF5"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chattingRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/chatitem_my"
+                tools:itemCount="20"/>
+        </ScrollView>
+
+        <LinearLayout
+            android:background="@color/white"
+            android:id="@+id/chattingInputZone"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:weightSum="100">
+            <EditText
+                android:id="@+id/sendMessage"
+                android:paddingStart="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="120"/>
+
+            <androidx.constraintlayout.utils.widget.ImageFilterButton
+                android:id="@+id/sendIcon"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:src="@drawable/send_chat_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>
