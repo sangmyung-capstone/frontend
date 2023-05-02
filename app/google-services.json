@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "288723052926",
+    "firebase_url": "https://bappol-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "bappol",
     "storage_bucket": "bappol.appspot.com"
   },

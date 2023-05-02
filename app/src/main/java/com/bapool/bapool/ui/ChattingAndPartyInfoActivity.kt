@@ -30,8 +30,10 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
     fun listener() {
         binding.cancelButton.setOnClickListener {
             Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
-            database = Firebase.database.reference
-            database.child("test").setValue("hi")
+            val database = Firebase.database
+            val myRef = database.getReference("message")
+
+            myRef.push().setValue("Hello, World!")
 
 
         }
