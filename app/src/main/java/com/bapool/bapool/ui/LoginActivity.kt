@@ -119,6 +119,7 @@ class LoginActivity : AppCompatActivity() {
                                             "token",
                                             token.accessToken
                                         )
+                                        intent.putExtra("company", "kakao")
                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                         finish()
                                     } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
@@ -205,6 +206,7 @@ class LoginActivity : AppCompatActivity() {
                                             "token",
                                             NaverIdLoginSDK.getAccessToken().toString()
                                         )
+                                        intent.putExtra("company", "naver")
                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                         finish()
                                     } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
@@ -293,7 +295,5 @@ class LoginActivity : AppCompatActivity() {
         binding.naverLoginButton.setOnClickListener {
             NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
         }
-
-
     }
 }

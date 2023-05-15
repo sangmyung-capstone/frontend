@@ -52,94 +52,196 @@ class RegisterActivity : AppCompatActivity() {
         }
         //완료 버튼 리스너
         binding.finish.setOnClickListener {
-            var nickname: String = textInputEditText.text.toString()
-            var userInfo =
-                PostNaverSignupRequest(intent.getStringExtra("token").toString(), nickname, count)
-            Log.d("bap", "OnRequest 정보 $userInfo")
+            if (intent.getStringExtra("company").equals("naver")) {
+                var nickname: String = textInputEditText.text.toString()
+                var userInfo =
+                    PostNaverSignupRequest(
+                        intent.getStringExtra("token").toString(),
+                        nickname,
+                        count
+                    )
+                Log.d("bap", "OnRequest 정보 $userInfo")
 
-            val retro = RetrofitService.create()
+                val retro = RetrofitService.create()
 
-            retro.PostNaverSignup(userInfo)
-                .enqueue(object : Callback<PostNaverSignupResponse> {
-                    override fun onResponse(
-                        call: Call<PostNaverSignupResponse>,
-                        response: Response<PostNaverSignupResponse>,
-                    ) {
-                        if (response.isSuccessful) {
-                            var result: PostNaverSignupResponse? = response.body()
-                            Log.d("bap", "onRequest 성공: $userInfo");
-                            Log.d("bap", "onResponse 성공: " + result?.toString());
-                            // handle successful response
-                            if (result != null) {
-                                //중복인 경우
-                                if (result.code == 300) {
-                                    val builder =//닉네임이 중복된다는 다이얼로그 출력
-                                        AlertDialog.Builder(this@RegisterActivity).setTitle("")
-                                            .setMessage("닉네임이 중복됩니다.")
-                                            .setPositiveButton(
-                                                "확인",
-                                                DialogInterface.OnClickListener { dialog, which ->
-                                                    Toast.makeText(
-                                                        this@RegisterActivity,
-                                                        "확인",
-                                                        Toast.LENGTH_SHORT
-                                                    )
-                                                        .show()
-                                                })
-                                    builder.show()
-                                }
-                                //중복이 아닌경우 홈화면으로 넘어감
-                                else {
-                                    val token = PostNaverSigninRequest(
-                                        intent.getStringExtra("token").toString()
-                                    )
-
-                                    retro.PostNaverSingin(token)
-                                        .enqueue(object : Callback<PostNaverSigninResponse> {
-                                            override fun onResponse(
-                                                call: Call<PostNaverSigninResponse>,
-                                                response: Response<PostNaverSigninResponse>,
-                                            ) {
-                                                if (response.isSuccessful) {
-                                                    var result: PostNaverSigninResponse? =
-                                                        response.body()
-                                                    Log.d("bap", "onRequest 성공: $userInfo");
-                                                    Log.d(
-                                                        "bap",
-                                                        "onResponse 성공: " + result?.toString()
-                                                    );
-                                                    // handle successful response
-                                                    val intent =
-                                                        Intent(
+                retro.PostNaverSignup(userInfo)
+                    .enqueue(object : Callback<PostNaverSignupResponse> {
+                        override fun onResponse(
+                            call: Call<PostNaverSignupResponse>,
+                            response: Response<PostNaverSignupResponse>,
+                        ) {
+                            if (response.isSuccessful) {
+                                var result: PostNaverSignupResponse? = response.body()
+                                Log.d("bap", "onRequest 성공: $userInfo");
+                                Log.d("bap", "onResponse 성공: " + result?.toString());
+                                // handle successful response
+                                if (result != null) {
+                                    //중복인 경우
+                                    if (result.code == 300) {
+                                        val builder =//닉네임이 중복된다는 다이얼로그 출력
+                                            AlertDialog.Builder(this@RegisterActivity).setTitle("")
+                                                .setMessage("닉네임이 중복됩니다.")
+                                                .setPositiveButton(
+                                                    "확인",
+                                                    DialogInterface.OnClickListener { dialog, which ->
+                                                        Toast.makeText(
                                                             this@RegisterActivity,
-                                                            HomeActivity::class.java
+                                                            "확인",
+                                                            Toast.LENGTH_SHORT
                                                         )
-                                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                                                    finish()
-                                                } else {
-                                                    // handle error response
+                                                            .show()
+                                                    })
+                                        builder.show()
+                                    }
+                                    //중복이 아닌경우 홈화면으로 넘어감
+                                    else {
+                                        val token = PostNaverSigninRequest(
+                                            intent.getStringExtra("token").toString()
+                                        )
+
+                                        retro.PostNaverSingin(token)
+                                            .enqueue(object : Callback<PostNaverSigninResponse> {
+                                                override fun onResponse(
+                                                    call: Call<PostNaverSigninResponse>,
+                                                    response: Response<PostNaverSigninResponse>,
+                                                ) {
+                                                    if (response.isSuccessful) {
+                                                        var result: PostNaverSigninResponse? =
+                                                            response.body()
+                                                        Log.d("bap", "onRequest 성공: $userInfo");
+                                                        Log.d(
+                                                            "bap",
+                                                            "onResponse 성공: " + result?.toString()
+                                                        );
+                                                        // handle successful response
+                                                        val intent =
+                                                            Intent(
+                                                                this@RegisterActivity,
+                                                                HomeActivity::class.java
+                                                            )
+                                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                        finish()
+                                                    } else {
+                                                        // handle error response
+                                                    }
                                                 }
-                                            }
 
-                                            override fun onFailure(
-                                                call: Call<PostNaverSigninResponse>,
-                                                t: Throwable
-                                            ) {
-                                                // handle network or unexpected error
-                                            }
-                                        })
+                                                override fun onFailure(
+                                                    call: Call<PostNaverSigninResponse>,
+                                                    t: Throwable
+                                                ) {
+                                                    // handle network or unexpected error
+                                                }
+                                            })
+                                    }
+
                                 }
-
+                            } else {
+                                // handle error response
                             }
-                        } else {
-                            // handle error response
                         }
-                    }
 
-                    override fun onFailure(call: Call<PostNaverSignupResponse>, t: Throwable) {
-                        // handle network or unexpected error
-                    }
-                })
+                        override fun onFailure(call: Call<PostNaverSignupResponse>, t: Throwable) {
+                            // handle network or unexpected error
+                        }
+                    })
+            } else if (intent.getStringExtra("company").equals("kakao")) {
+
+                var nickname: String = textInputEditText.text.toString()
+                var userInfo =
+                    PostKakaoSignupRequest(
+                        intent.getStringExtra("token").toString(),
+                        nickname,
+                        count
+                    )
+                Log.d("bap", "OnRequest 정보 $userInfo")
+
+                val retro = RetrofitService.create()
+
+                retro.PostKakaoSignup(userInfo)
+                    .enqueue(object : Callback<PostKakaoSignupResponse> {
+                        override fun onResponse(
+                            call: Call<PostKakaoSignupResponse>,
+                            response: Response<PostKakaoSignupResponse>,
+                        ) {
+                            if (response.isSuccessful) {
+                                var result: PostKakaoSignupResponse? = response.body()
+                                Log.d("bap", "onRequest 성공: $userInfo");
+                                Log.d("bap", "onResponse 성공: " + result?.toString());
+                                // handle successful response
+                                if (result != null) {
+                                    //중복인 경우
+                                    if (result.code == 300) {
+                                        val builder =//닉네임이 중복된다는 다이얼로그 출력
+                                            AlertDialog.Builder(this@RegisterActivity).setTitle("")
+                                                .setMessage("닉네임이 중복됩니다.")
+                                                .setPositiveButton(
+                                                    "확인",
+                                                    DialogInterface.OnClickListener { dialog, which ->
+                                                        Toast.makeText(
+                                                            this@RegisterActivity,
+                                                            "확인",
+                                                            Toast.LENGTH_SHORT
+                                                        )
+                                                            .show()
+                                                    })
+                                        builder.show()
+                                    }
+                                    //중복이 아닌경우 홈화면으로 넘어감
+                                    else {
+                                        val token = PostkakaoSigninRequest(
+                                            intent.getStringExtra("token").toString()
+                                        )
+
+                                        retro.PostKakaoSingin(token)
+                                            .enqueue(object : Callback<PostKakaoSigninResponse> {
+                                                override fun onResponse(
+                                                    call: Call<PostKakaoSigninResponse>,
+                                                    response: Response<PostKakaoSigninResponse>,
+                                                ) {
+                                                    if (response.isSuccessful) {
+                                                        var result: PostKakaoSigninResponse? =
+                                                            response.body()
+                                                        Log.d("bap", "onRequest 성공: $userInfo");
+                                                        Log.d(
+                                                            "bap",
+                                                            "onResponse 성공: " + result?.toString()
+                                                        );
+                                                        // handle successful response
+                                                        val intent =
+                                                            Intent(
+                                                                this@RegisterActivity,
+                                                                HomeActivity::class.java
+                                                            )
+                                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                        finish()
+                                                    } else {
+                                                        // handle error response
+                                                    }
+                                                }
+
+                                                override fun onFailure(
+                                                    call: Call<PostKakaoSigninResponse>,
+                                                    t: Throwable
+                                                ) {
+                                                    // handle network or unexpected error
+                                                }
+                                            })
+                                    }
+
+                                }
+                            } else {
+                                // handle error response
+                            }
+                        }
+
+                        override fun onFailure(call: Call<PostKakaoSignupResponse>, t: Throwable) {
+                            // handle network or unexpected error
+                        }
+                    })
+
+            }
+
 
         }
     }
