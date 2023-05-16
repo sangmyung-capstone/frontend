@@ -66,12 +66,12 @@ data class GetBlockUserResponse(
     )
 }
 
-data class DeleteBlockUserResponse(
+data class BlockUserResponse(
     val code: Int,
     val message: String
 )
 
-data class DeleteBlockUserRequest(
+data class BlockUserRequest(
     val user_id: Long,
 )
 

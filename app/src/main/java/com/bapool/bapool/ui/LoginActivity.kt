@@ -21,6 +21,11 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
+    companion object {
+        var UserToken: String? = ""
+        var UserId: Int? = null
+    }
+
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
 

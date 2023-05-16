@@ -68,11 +68,11 @@ interface RetrofitService {
     ): Call<GetBlockUserResponse>
 
     @POST("/users/block/{user-id}")
-    fun DelteBlockUser(
+    fun BlockUser(
         @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
-        @Body request: DeleteBlockUserRequest,
-    ): Call<DeleteBlockUserResponse>
+        @Body request: BlockUserRequest,
+    ): Call<BlockUserResponse>
 
     @GET("/restaurants/log/{user-id}")
     fun GetrestaurantsLog(
