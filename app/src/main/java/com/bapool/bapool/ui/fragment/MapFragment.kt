@@ -48,8 +48,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val bapoolImg = OverlayImage.fromResource(R.drawable.bapool_circle) // by lazy
     val bapoolImgRed = OverlayImage.fromResource(R.drawable.bapool_circle_red)
 
-    //        val retro = RetrofitService.create()  // MOCK SERVER
-    val retro = ServerRetrofit.create()
+    val retro = RetrofitService.create()  // MOCK SERVER
+//    val retro = ServerRetrofit.create()
 
 
     override fun onCreateView(
@@ -228,7 +228,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("MYTAG", "now bounds : ${naverMap.contentBounds}")
         Log.d("MYTAG", "now camera : $cameraPosition")
         //------------------------------------
-        retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
+//        retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
+        retro.getRestaurants(rect).enqueue(object : Callback<GetRestaurantsResult> {    // Mock
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
                 response: Response<GetRestaurantsResult>

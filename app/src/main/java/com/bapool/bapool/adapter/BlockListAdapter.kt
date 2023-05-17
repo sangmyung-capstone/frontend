@@ -33,7 +33,7 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
         binding.Blocnickname.text = blockedUser.nickname
         binding.Blockdate.text = blockedUser.block_date
 
-        binding.button9.setOnClickListener {
+        binding.blockbutton.setOnClickListener {
             // Handle the button click event
             val retro = RetrofitService.create()
             var userInfo = BlockUserRequest(15)
