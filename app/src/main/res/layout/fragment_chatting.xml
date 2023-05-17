@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.ChattingFragment">
+    tools:context=".ui.fragment.ChattingFragment"
+>
 
     <LinearLayout
         android:id="@+id/changeFragmentButton"
@@ -27,47 +29,61 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
     </LinearLayout>
-    <RelativeLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:background="#FBFBF5"
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ScrollView
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chattingRv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="60dp">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/chattingRv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="@layout/chatitem_my"
-                tools:itemCount="20"/>
-        </ScrollView>
+            app:layout_constraintBottom_toBottomOf="@id/chattingInputZone"
+           android:layout_marginBottom="60dp"
+            android:paddingBottom="10dp"
+            tools:itemCount="20"
+            tools:listitem="@layout/chatitem_my" />
+
 
         <LinearLayout
-            android:background="@color/white"
             android:id="@+id/chattingInputZone"
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="@color/white"
             android:orientation="horizontal"
-            android:weightSum="100">
+            android:weightSum="100"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageButton
+                android:id="@+id/sendImgBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@color/white"
+                android:src="@drawable/plus_img_btn"
+                />
+
             <EditText
                 android:id="@+id/sendMessage"
-                android:paddingStart="15dp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="120"/>
+                android:layout_weight="90"
+                android:paddingStart="15dp" />
 
-            <androidx.constraintlayout.utils.widget.ImageFilterButton
+            <ImageButton
                 android:id="@+id/sendIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_weight="10"
                 android:layout_gravity="center"
                 android:background="@color/white"
-                android:src="@drawable/send_chat_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:src="@drawable/send_chat_icon" />
         </LinearLayout>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

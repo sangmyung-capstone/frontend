@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/groupFragment"
-        android:name="com.bapool.bapool.ui.fragment.GroupFragment"
+        android:name="com.bapool.bapool.ui.fragment.PartyFragment"
         android:label="fragment_group"
-        tools:layout="@layout/fragment_group"/>
+        tools:layout="@layout/fragment_party"/>
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.bapool.bapool.ui.fragment.MapFragment"

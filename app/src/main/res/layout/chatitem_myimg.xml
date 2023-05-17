@@ -4,14 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/myContent"
+    <ImageView
+        android:id="@+id/myImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/chatitem_roundbackground_my"
-        android:maxWidth="270dp"
-        android:padding="10dp"
-
+        android:padding="8dp"
         android:textColor="@color/black"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
@@ -23,11 +21,10 @@
         android:id="@+id/myTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:textSize="9sp"
         android:layout_marginRight="7dp"
-        app:layout_constraintBottom_toBottomOf="@+id/myContent"
-        app:layout_constraintEnd_toStartOf="@+id/myContent" />
+        app:layout_constraintBottom_toBottomOf="@+id/myImg"
+        app:layout_constraintEnd_toStartOf="@+id/myImg" />
 
     <TextView
         android:layout_marginRight="5dp"

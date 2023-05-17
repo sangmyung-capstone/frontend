@@ -16,9 +16,9 @@
     </fragment>
     <fragment
         android:id="@+id/groupInfoGragment"
-        android:name="com.bapool.bapool.ui.fragment.GroupInfoFragment"
+        android:name="com.bapool.bapool.ui.fragment.PartyInfoFragment"
         android:label="fragment_group_info_gragment"
-        tools:layout="@layout/fragment_group_info_fragment" >
+        tools:layout="@layout/fragment_party_info_fragment" >
         <action
             android:id="@+id/action_groupInfoGragment_to_chattingFragment"
             app:destination="@id/chattingFragment" />

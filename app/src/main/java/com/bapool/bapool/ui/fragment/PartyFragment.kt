@@ -6,23 +6,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bapool.bapool.R
 import com.bapool.bapool.adapter.MyGrpListAdapter
-import com.bapool.bapool.databinding.FragmentGroupBinding
-import com.bapool.bapool.retrofit.data.MyGrpListModel
-import com.bapool.bapool.ui.ResGrpActivity
+import com.bapool.bapool.databinding.FragmentPartyBinding
+import com.bapool.bapool.retrofit.data.MyPartyListModel
+import com.bapool.bapool.ui.RestaurantPartyActivity
 import java.time.LocalDateTime
 
 
-class GroupFragment : Fragment() {
-    private var _binding: FragmentGroupBinding? = null
+class PartyFragment : Fragment() {
+    private var _binding: FragmentPartyBinding? = null
     private val binding get() = _binding!!
     private lateinit var myGroupAdapter: MyGrpListAdapter
     lateinit var myGroupRv: RecyclerView
-    var myGrpListModel = arrayListOf<MyGrpListModel>()
+    var myGrpListModel = arrayListOf<MyPartyListModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -32,7 +30,7 @@ class GroupFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentGroupBinding.inflate(inflater, container, false)
+        _binding = FragmentPartyBinding.inflate(inflater, container, false)
 
         dummyData()
         initializeVari()
@@ -52,7 +50,7 @@ class GroupFragment : Fragment() {
     //리스너 호출
     fun listener() {
         binding.goToResGrp.setOnClickListener {
-            val intent = Intent(requireContext(), ResGrpActivity::class.java)
+            val intent = Intent(requireContext(), RestaurantPartyActivity::class.java)
             startActivity(intent)
         }
     }
@@ -67,7 +65,7 @@ class GroupFragment : Fragment() {
     fun dummyData() {
         myGrpListModel.clear()
         myGrpListModel.add(
-            MyGrpListModel(
+            MyPartyListModel(
                 123,
                 "학식",
                 "학식같이먹을사람!",
@@ -80,7 +78,7 @@ class GroupFragment : Fragment() {
             )
         )
         myGrpListModel.add(
-            MyGrpListModel(
+            MyPartyListModel(
                 12, "학식", "학식같이먹을사람!", 2, 10,
                 LocalDateTime.of(2023, 3, 10, 11, 10, 40),
                 LocalDateTime.of(2023, 3, 10, 15, 59, 10), "두번째 그룹 dummyData", 10

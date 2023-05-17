@@ -74,8 +74,8 @@ interface RetrofitService {
     @POST("party/{user_id}")
     fun makeGrp(
         @Path("user_id") userId: Long,
-        @Body request: PostMakeGrpRequest,
-    ): Call<PostMakeGrpResponse>
+        @Body request: PostMakePartyRequest,
+    ): Call<PostMakePartyResponse>
 
     //--------------------------------------------------------------------------
     // 이현제

@@ -9,8 +9,8 @@
         android:id="@+id/cardView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,51 +23,43 @@
 
     <TextView
         android:id="@+id/opponentId"
-        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="5dp"
-        android:text=""
+        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toTopOf="@+id/cardView" />
 
-    <TextView
-        android:id="@+id/opponentContent"
+    <ImageView
+        android:id="@+id/opponent_chat_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="15dp"
         android:background="@drawable/chatitem_roundbackground_opponent"
-        android:padding="10dp"
-        android:maxWidth="270dp"
+        android:padding="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="5dp"
         android:textColor="@color/black"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/opponentId"
-        app:layout_constraintVertical_bias="0.153" />
+        app:layout_constraintTop_toBottomOf="@+id/opponentId" />
 
-<!--    android:maxLines="100"-->
+    <!--    android:maxLines="100"-->
 
     <TextView
         android:id="@+id/opponentTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:textSize="9sp"
         android:layout_marginLeft="7dp"
-        app:layout_constraintBottom_toBottomOf="@+id/opponentContent"
-        app:layout_constraintStart_toEndOf="@+id/opponentContent" />
+        android:textSize="9sp"
+        app:layout_constraintBottom_toBottomOf="@+id/opponent_chat_img"
+        app:layout_constraintStart_toEndOf="@+id/opponent_chat_img" />
 
     <TextView
         android:id="@+id/opponentConfirmed"
-        android:layout_marginLeft="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:textColor="#323232"
         android:textSize="9sp"
         app:layout_constraintBottom_toBottomOf="@+id/opponentTime"

@@ -79,9 +79,9 @@ data class DeleteBlockUserRequest(
 )
 
 data class FirebaseUserInfo(
-    val imageUrl: String = "",
-    val nickname: String = "",
-    val banned_users: List<String>? = null
+    val imgUrl: String = "",
+    val nickName: String = "",
+    val bannedUser: List<String>? = null
 )
 
 
