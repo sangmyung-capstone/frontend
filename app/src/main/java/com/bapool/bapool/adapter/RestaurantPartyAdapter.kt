@@ -23,7 +23,9 @@ class RestaurantPartyAdapter(val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            RestaurantpartylistItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            RestaurantpartylistItemsBinding.inflate(LayoutInflater.from(parent.context),
+                parent,
+                false)
 
         return ViewHolder(binding)
 
@@ -42,7 +44,7 @@ class RestaurantPartyAdapter(val context: Context) :
 
             val mBuilder = AlertDialog.Builder(context)
                 .setView(joinPartyDialog.root)
-                .setTitle(resGroup[position].group_name)
+                .setTitle(resGroup[position].party_name)
 
 
 
@@ -64,7 +66,7 @@ class RestaurantPartyAdapter(val context: Context) :
                 binding.ban.visibility = View.VISIBLE
             }
             //hashtag 보이게하기
-            val hashtagList: ArrayList<Int> = item.hashtag
+            val hashtagList: List<Int> = item.hashtag
             if (hashtagList.isNotEmpty()) {
                 binding.hashtagVisible.visibility = View.VISIBLE
                 for (item in hashtagList) {
@@ -85,7 +87,7 @@ class RestaurantPartyAdapter(val context: Context) :
             binding.menu.text = item.menu
             binding.date.text = allDate
             binding.participantsNum.text = allNum
-            binding.grpName.text = item.group_name
+            binding.grpName.text = item.party_name
             binding.detail.text = item.detail
             binding.rating.text = item.rating.toString()
 
@@ -95,10 +97,8 @@ class RestaurantPartyAdapter(val context: Context) :
 
     //날짜 변환 함수
     fun dateRange(startDate: String, endDate: String): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        val start_date = LocalDateTime.parse(startDate, formatter)
-        val end_date = LocalDateTime.parse(startDate, formatter)
-
+        val start_date = LocalDateTime.parse(startDate)
+        val end_date = LocalDateTime.parse(endDate)
 
         val formatterStart = DateTimeFormatter.ofPattern("MMM d일, H:mm")
         val formatterEnd = DateTimeFormatter.ofPattern("H:mm")
@@ -109,6 +109,8 @@ class RestaurantPartyAdapter(val context: Context) :
         return range
 
     }
+
+
 
     //참여인원, 정원 String으로 한줄 만들기
     fun partiNum(participants: Int, max_people: Int): String {
@@ -122,7 +124,7 @@ class RestaurantPartyAdapter(val context: Context) :
             binding.ban.visibility = View.VISIBLE
         }
         //hashtag 보이게하기
-        val hashtagList: ArrayList<Int> = item.hashtag
+        val hashtagList: List<Int> = item.hashtag
         if (hashtagList.isNotEmpty()) {
             binding.hashtagVisible.visibility = View.VISIBLE
             for (item in hashtagList) {

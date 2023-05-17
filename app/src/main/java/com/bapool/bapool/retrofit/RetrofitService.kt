@@ -83,12 +83,12 @@ interface RetrofitService {
 
     //--------------------------------------------------------------------------
     // 손승현
-    @GET("party/{user_id}/{restaurant_id}")
+    @GET("test/parties/{user_id}/{restaurant_id}")
     fun getResGrpList(
         @Path("user_id") userId: Long,
         @Path("restaurant_id") restaurantId: Long,
     ): Call<GetResGroupListResponse>
-
+    //http://dev.scrap-j2kb.shop/test/parties/1/1470337852
     @POST("party/{user_id}")
     fun makeGrp(
         @Path("user_id") userId: Long,

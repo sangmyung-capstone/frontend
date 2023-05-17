@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.adapter.RestaurantPartyAdapter
 import com.bapool.bapool.databinding.ActivityRestaurantPartyBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.GetResGroupListResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,10 +20,10 @@ class RestaurantPartyActivity : AppCompatActivity() {
     private lateinit var resGrpAdapter: RestaurantPartyAdapter
     lateinit var resGrpRv: RecyclerView
     var resNameIntent: String = ""
-    val userId: Long = 2
-    val restaurantId: Long = 10
+    val userId: Long = 1
+    val restaurantId: Long = 1470337852
 
-    val retro = RetrofitService.create()
+    val retro = ServerRetrofit.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,21 +75,26 @@ class RestaurantPartyActivity : AppCompatActivity() {
                     call: Call<GetResGroupListResponse>,
                     response: Response<GetResGroupListResponse>,
                 ) {
+                    Log.d("shRetrofitSE", response.body().toString())
+
                     if (response.isSuccessful) {
                         // 정상적으로 통신이 성공된 경우
                         response.body()?.let { result ->
-                            resNameIntent = result.restaurant_name
-                            resGrpAdapter.resName = result.restaurant_name
-                            binding.resName.setText(result.restaurant_name)
-                            resGrpAdapter.resGroup = result.groups
+//                            resNameIntent = result.restaurant_name
+//                            resGrpAdapter.resName = result.restaurant_name
+//                            binding.resName.setText(result.restaurant_name)
+//                            resGrpAdapter.resGroup = result.groups
+                            val partyResult = result.result
+                            resNameIntent = partyResult.restaurant_name
+                            resGrpAdapter.resName = partyResult.restaurant_name
+                            binding.resName.setText(partyResult.restaurant_name)
+                            resGrpAdapter.resGroup = partyResult.parties
+                            Log.d("shRetrofitSE", partyResult.toString())
                             adapter()
                         }
-
-                        Log.d("shRetrofitN", "onResponse 성공: " + resGrpAdapter.resName.toString());
-                        Log.d("shRetrofitG", "onResponse 성공: " + resGrpAdapter.resGroup.toString());
                     } else {
                         // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                        Log.d("shRetrofitSE", "onResponse 실패")
+                        Log.d("shRetrofitSE", "onResponse 실패100")
                     }
                 }
 

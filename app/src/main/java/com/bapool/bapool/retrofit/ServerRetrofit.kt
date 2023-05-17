@@ -1,5 +1,6 @@
 package com.bapool.bapool.retrofit
 
+import com.bapool.bapool.retrofit.data.GetResGroupListResponse
 import com.bapool.bapool.retrofit.data.GetRestaurantsResult
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -21,12 +22,19 @@ interface ServerRetrofit {
         @Path("user-id") userId: Long?,
         @Query("rect") rect: String?,
     ): Call<GetRestaurantsResult>
-
+    //손승현
+    @GET("test/parties/{user_id}/{restaurant_id}")
+    fun getResGrpList(
+        @Path("user_id") userId: Long,
+        @Path("restaurant_id") restaurantId: Long,
+    ): Call<GetResGroupListResponse>
     //-----------------------------------------------------------------------------
 
     // 싱글톤 객체 생성
     companion object {
-        private const val BASE_URL = "https://myfirstdomain.store"
+//        private const val BASE_URL = "https://myfirstdomain.store"
+//        private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
+        private const val BASE_URL = "http://dev.scrap-j2kb.shop/"
 
 
         val client = OkHttpClient.Builder()
