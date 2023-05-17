@@ -36,13 +36,13 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
         binding.button9.setOnClickListener {
             // Handle the button click event
             val retro = RetrofitService.create()
-            var userInfo = DeleteBlockUserRequest(15)
+            var userInfo = BlockUserRequest(15)
 
-            retro.DelteBlockUser("accessToken", 1, userInfo)
-                .enqueue(object : Callback<DeleteBlockUserResponse> {
+            retro.BlockUser("accessToken", 1, userInfo)
+                .enqueue(object : Callback<BlockUserResponse> {
                     override fun onResponse(
-                        call: Call<DeleteBlockUserResponse>,
-                        response: Response<DeleteBlockUserResponse>
+                        call: Call<BlockUserResponse>,
+                        response: Response<BlockUserResponse>
                     ) {
                         if (response.isSuccessful) {
                             val result = response.body()
@@ -52,7 +52,7 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
                         }
                     }
 
-                    override fun onFailure(call: Call<DeleteBlockUserResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<BlockUserResponse>, t: Throwable) {
                         // handle network or unexpected error
                     }
                 })

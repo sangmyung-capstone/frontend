@@ -16,7 +16,6 @@ import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.FragmentMypageBinding
 import com.bapool.bapool.retrofit.data.DeleteUserResponse
 import com.bapool.bapool.retrofit.data.GetMypageResponse
-import com.bapool.bapool.retrofit.data.PostRegisterResponse
 import com.bapool.bapool.retrofit.data.Restaurant
 import com.bapool.bapool.ui.*
 import retrofit2.Call

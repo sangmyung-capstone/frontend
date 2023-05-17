@@ -13,18 +13,35 @@ import retrofit2.http.*
 interface RetrofitService {
 
     // 정연수
-    @GET("/users/kakao")
-    fun gettoken(
-        @Header("kakoToken") kakoToken: String,
-    ): Call<accessToken>
+    @POST("/auth/naver/signin/already")
+    fun PostNaverLoginCheck(
+        @Body request: PostNaverLoginCheckRequest
+    ): Call<PostNaverLoginCheckResponse>
 
-    @POST("/users/info/{user-id}")
-    fun setUserInfo(
-        @Header("Authorization") accessToken: String,
-        @Path("user-id") userId: Long,
-        @Body request: PostRegisterRequest,
-    ): Call<PostRegisterResponse>
+    @POST("/auth/naver/signup")
+    fun PostNaverSignup(
+        @Body request: PostNaverSignupRequest
+    ): Call<PostNaverSignupResponse>
 
+    @POST("/auth/naver/signin")
+    fun PostNaverSingin(
+        @Body request: PostNaverSigninRequest
+    ): Call<PostNaverSigninResponse>
+
+    @POST("/auth/kakao/signin/already")
+    fun PostKakaoLoginCheck(
+        @Body request: PostkakaoLoginCheckRequest
+    ): Call<PostKakaoLoginCheckResponse>
+
+    @POST("/auth/kakao/signup")
+    fun PostKakaoSignup(
+        @Body request: PostKakaoSignupRequest
+    ): Call<PostKakaoSignupResponse>
+
+    @POST("/auth/kakao/signin")
+    fun PostKakaoSingin(
+        @Body request: PostkakaoSigninRequest
+    ): Call<PostKakaoSigninResponse>
 
     @GET("users/mypage/{user-id}")
     fun getMyPage(
@@ -52,11 +69,11 @@ interface RetrofitService {
     ): Call<GetBlockUserResponse>
 
     @POST("/users/block/{user-id}")
-    fun DelteBlockUser(
+    fun BlockUser(
         @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
-        @Body request: DeleteBlockUserRequest,
-    ): Call<DeleteBlockUserResponse>
+        @Body request: BlockUserRequest,
+    ): Call<BlockUserResponse>
 
     @GET("/restaurants/log/{user-id}")
     fun GetrestaurantsLog(
@@ -87,10 +104,9 @@ interface RetrofitService {
 
     //-----------------------------------------------------------------------------
 
-    // 싱글톤 객체 생성
+    // 싱글톤 객체 생
     companion object {
         private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
-
 
         val client = OkHttpClient.Builder()
 //            .cookieJar(JavaNetCookieJar(CookieManager())) //쿠키매니저 연결
@@ -109,5 +125,6 @@ interface RetrofitService {
                 .create(RetrofitService::class.java)
 
         }
+
     }
 }

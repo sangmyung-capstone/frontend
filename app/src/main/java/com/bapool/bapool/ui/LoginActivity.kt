@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.databinding.ActivityLoginBinding
 import com.bapool.bapool.RetrofitService
-import com.bapool.bapool.retrofit.data.accessToken
+import com.bapool.bapool.retrofit.data.*
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause.*
@@ -19,8 +19,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-
 class LoginActivity : AppCompatActivity() {
+
+    companion object {
+        var UserToken: String? = ""
+        var UserId: Int? = null
+    }
 
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
@@ -98,48 +102,84 @@ class LoginActivity : AppCompatActivity() {
             } else if (token != null) {
                 Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
                 //여기서부터 retrofit
-                var token = token.toString()
+                Log.d("bap", "토큰 정보 : ${token.accessToken}")
 
-                retro.gettoken(token).enqueue(object : Callback<accessToken> {
-                    override fun onResponse(
-                        call: Call<accessToken>,
-                        response: Response<accessToken>
-                    ) {
-                        if (response.isSuccessful) {
-                            // 정상적으로 통신이 성공된 경우
-                            var result: accessToken? = response.body()
-                            Log.d("bap", "onRequest 성공: $token")
-                            Log.d("bap", "onResponse 성공: " + result?.toString())
-                            if (result != null) {//처음 로그인시 가입화면으로 넘어감.
-                                if (result.firstLogin) {
-                                    val intent =
-                                        Intent(this@LoginActivity, RegisterActivity::class.java)
-                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                                    finish()
-                                } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
-                                    Toast.makeText(
-                                        this@LoginActivity,
-                                        "로그인에 성공하였습니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    val intent =
-                                        Intent(this@LoginActivity, HomeActivity::class.java)
-                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                                    finish()
-                                }
-                            }
-                        } else {
-                            // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                            Log.d("bap", "onResponse 실패")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<accessToken>, t: Throwable) {
-                        // 통신 실패 (인터넷 끊킴, 예외 발생 등 시스템적인 이유)
-                        Log.d("bap", "onFailure 에러: " + t.message.toString())
-                    }
-                })
                 //여기까지 retrofit
+                retro.PostKakaoLoginCheck(PostkakaoLoginCheckRequest(token.accessToken))
+                    .enqueue(object : Callback<PostKakaoLoginCheckResponse> {
+                        override fun onResponse(
+                            call: Call<PostKakaoLoginCheckResponse>,
+                            response: Response<PostKakaoLoginCheckResponse>
+                        ) {
+                            if (response.isSuccessful) {
+                                // 정상적으로 통신이 성공된 경우
+                                var result: PostKakaoLoginCheckResponse? = response.body()
+                                Log.d("bap", "onRequest 성공: $token")
+                                Log.d("bap", "onResponse 성공: " + result?.toString())
+                                if (result != null) {//처음 로그인시 가입화면으로 넘어감.
+                                    if (!result.result) {
+                                        val intent =
+                                            Intent(this@LoginActivity, RegisterActivity::class.java)
+                                        intent.putExtra(
+                                            "token",
+                                            token.accessToken
+                                        )
+                                        intent.putExtra("company", "kakao")
+                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                        finish()
+                                    } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
+                                        retro.PostKakaoSingin(PostkakaoSigninRequest(token.accessToken))
+                                            .enqueue(object : Callback<PostKakaoSigninResponse> {
+                                                override fun onResponse(
+                                                    call: Call<PostKakaoSigninResponse>,
+                                                    response: Response<PostKakaoSigninResponse>,
+                                                ) {
+                                                    if (response.isSuccessful) {
+                                                        var result: PostKakaoSigninResponse? =
+                                                            response.body()
+                                                        Log.d("bap", "onRequest 성공: $token");
+                                                        Log.d(
+                                                            "bap",
+                                                            "onResponse 성공: " + result?.toString()
+                                                        );
+                                                        // handle successful response
+                                                        val intent =
+                                                            Intent(
+                                                                this@LoginActivity,
+                                                                HomeActivity::class.java
+                                                            )
+                                                        intent.putExtra("token", token.accessToken)
+                                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                    } else {
+                                                        // handle error response
+                                                    }
+                                                }
+
+                                                override fun onFailure(
+                                                    call: Call<PostKakaoSigninResponse>,
+                                                    t: Throwable
+                                                ) {
+                                                    // handle network or unexpected error
+                                                }
+                                            })
+                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                        finish()
+                                    }
+                                }
+                            } else {
+                                // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                                Log.d("bap", "onResponse 실패")
+                            }
+                        }
+
+                        override fun onFailure(
+                            call: Call<PostKakaoLoginCheckResponse>,
+                            t: Throwable
+                        ) {
+                            // 통신 실패 (인터넷 끊킴, 예외 발생 등 시스템적인 이유)
+                            Log.d("bap", "onFailure 에러: " + t.message.toString())
+                        }
+                    })
 
             }
         }
@@ -148,47 +188,85 @@ class LoginActivity : AppCompatActivity() {
         val oauthLoginCallback = object : OAuthLoginCallback {
             override fun onSuccess() {
                 // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
-                var token = NaverIdLoginSDK.getAccessToken().toString()
-                //여기서부터 retrofit
-                retro.gettoken(token).enqueue(object : Callback<accessToken> {
-                    override fun onResponse(
-                        call: Call<accessToken>,
-                        response: Response<accessToken>
-                    ) {
-                        if (response.isSuccessful) {
-                            // 정상적으로 통신이 성공된 경우
-                            var result: accessToken? = response.body()
-                            Log.d("bap", "onRequest 성공: $token")
-                            Log.d("bap", "onResponse 성공: " + result?.toString())
-                            if (result != null) {//처음 로그인시 가입화면으로 넘어감.
-                                if (result.firstLogin) {
-                                    val intent =
-                                        Intent(this@LoginActivity, RegisterActivity::class.java)
-                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                                    finish()
-                                } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
-                                    Toast.makeText(
-                                        this@LoginActivity,
-                                        "로그인에 성공하였습니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    val intent =
-                                        Intent(this@LoginActivity, HomeActivity::class.java)
-                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                                    finish()
-                                }
-                            }
-                        } else {
-                            // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                            Log.d("bap", "onResponse 실패")
-                        }
-                    }
+                var token = PostNaverLoginCheckRequest(NaverIdLoginSDK.getAccessToken().toString())
+                Log.d("bap", "OnRequest : $token")
 
-                    override fun onFailure(call: Call<accessToken>, t: Throwable) {
-                        // 통신 실패 (인터넷 끊킴, 예외 발생 등 시스템적인 이유)
-                        Log.d("bap", "onFailure 에러: " + t.message.toString())
-                    }
-                })
+                //여기서부터 retrofit
+                retro.PostNaverLoginCheck(token)
+                    .enqueue(object : Callback<PostNaverLoginCheckResponse> {
+                        override fun onResponse(
+                            call: Call<PostNaverLoginCheckResponse>,
+                            response: Response<PostNaverLoginCheckResponse>
+                        ) {
+                            if (response.isSuccessful) {
+                                // 정상적으로 통신이 성공된 경우
+                                var result: PostNaverLoginCheckResponse? = response.body()
+                                Log.d("bap", "onRequest 성공: $token")
+                                Log.d("bap", "onResponse 성공: " + result?.toString())
+                                if (result != null) {//처음 로그인시 가입화면으로 넘어감.
+                                    if (!result.result) {
+                                        val intent =
+                                            Intent(this@LoginActivity, RegisterActivity::class.java)
+                                        intent.putExtra(
+                                            "token",
+                                            NaverIdLoginSDK.getAccessToken().toString()
+                                        )
+                                        intent.putExtra("company", "naver")
+                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                        finish()
+                                    } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
+                                        retro.PostNaverSingin(PostNaverSigninRequest(token.toString()))
+                                            .enqueue(object : Callback<PostNaverSigninResponse> {
+                                                override fun onResponse(
+                                                    call: Call<PostNaverSigninResponse>,
+                                                    response: Response<PostNaverSigninResponse>,
+                                                ) {
+                                                    if (response.isSuccessful) {
+                                                        var result: PostNaverSigninResponse? =
+                                                            response.body()
+                                                        Log.d("bap", "onRequest 성공: $token");
+                                                        Log.d(
+                                                            "bap",
+                                                            "onResponse 성공: " + result?.toString()
+                                                        );
+                                                        // handle successful response
+                                                        val intent =
+                                                            Intent(
+                                                                this@LoginActivity,
+                                                                HomeActivity::class.java
+                                                            )
+                                                        intent.putExtra("token", "$token")
+                                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                    } else {
+                                                        // handle error response
+                                                    }
+                                                }
+
+                                                override fun onFailure(
+                                                    call: Call<PostNaverSigninResponse>,
+                                                    t: Throwable
+                                                ) {
+                                                    // handle network or unexpected error
+                                                }
+                                            })
+                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                        finish()
+                                    }
+                                }
+                            } else {
+                                // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                                Log.d("bap", "onResponse 실패")
+                            }
+                        }
+
+                        override fun onFailure(
+                            call: Call<PostNaverLoginCheckResponse>,
+                            t: Throwable
+                        ) {
+                            // 통신 실패 (인터넷 끊킴, 예외 발생 등 시스템적인 이유)
+                            Log.d("bap", "onFailure 에러: " + t.message.toString())
+                        }
+                    })
                 //여기까지 retrofit
 
             }
@@ -222,7 +300,5 @@ class LoginActivity : AppCompatActivity() {
         binding.naverLoginButton.setOnClickListener {
             NaverIdLoginSDK.authenticate(this, oauthLoginCallback)
         }
-
-
     }
 }
