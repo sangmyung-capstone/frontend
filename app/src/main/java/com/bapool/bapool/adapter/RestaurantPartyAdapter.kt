@@ -10,20 +10,20 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.databinding.JoinpartyCustomDialogBinding
-import com.bapool.bapool.databinding.ResgrplistItemsBinding
-import com.bapool.bapool.retrofit.data.ResGroupList
+import com.bapool.bapool.databinding.RestaurantpartylistItemsBinding
+import com.bapool.bapool.retrofit.data.ResPartyList
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class ResGrpListAdapter(val context: Context) :
-    RecyclerView.Adapter<ResGrpListAdapter.ViewHolder>() {
+class RestaurantPartyAdapter(val context: Context) :
+    RecyclerView.Adapter<RestaurantPartyAdapter.ViewHolder>() {
     var resName: String = ""
-    var resGroup = listOf<ResGroupList>()
+    var resGroup = listOf<ResPartyList>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            ResgrplistItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            RestaurantpartylistItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolder(binding)
 
@@ -55,10 +55,10 @@ class ResGrpListAdapter(val context: Context) :
     }
 
 
-    inner class ViewHolder(private val binding: ResgrplistItemsBinding) :
+    inner class ViewHolder(private val binding: RestaurantpartylistItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val joinButton: Button = binding.joinGrp
-        fun bindItem(item: ResGroupList) {
+        fun bindItem(item: ResPartyList) {
             //차단유저 보이게하기
             if (item.has_block_user) {
                 binding.ban.visibility = View.VISIBLE
@@ -116,7 +116,7 @@ class ResGrpListAdapter(val context: Context) :
         return allNum
     }
 
-    fun dialogBinding(item: ResGroupList, binding: JoinpartyCustomDialogBinding) {
+    fun dialogBinding(item: ResPartyList, binding: JoinpartyCustomDialogBinding) {
         //차단유저 보이게하기
         if (item.has_block_user) {
             binding.ban.visibility = View.VISIBLE

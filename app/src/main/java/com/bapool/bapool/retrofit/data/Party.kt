@@ -1,14 +1,13 @@
 package com.bapool.bapool.retrofit.data
 
-import retrofit2.http.Url
 import java.time.LocalDateTime
 
 data class GetResGroupListResponse(
     val restaurant_name: String,
-    val groups: List<ResGroupList>,
+    val groups: List<ResPartyList>,
 )
 
-data class MyGrpListModel(
+data class MyPartyListModel(
     val grpId: Long,
     val resName: String = "",
     val grpName: String = "",
@@ -20,7 +19,7 @@ data class MyGrpListModel(
     val notReadChat: Int,
 )
 
-data class ResGroupList(
+data class ResPartyList(
     val group_id: Int,
     val group_name: String,
     val participants: Int,
@@ -34,7 +33,7 @@ data class ResGroupList(
     val rating: ArrayList<Double>,
 )
 
-data class PostMakeGrpRequest(
+data class PostMakePartyRequest(
     val restaurant_id: Int,
     val group_name: String,
     val max_people: Int,
@@ -48,11 +47,40 @@ data class PostMakeGrpRequest(
 
 
 data class Result(
-    val group_id: Int
+    val group_id: Int,
 )
 
-data class PostMakeGrpResponse(
+data class PostMakePartyResponse(
     val code: Int,
     val message: String,
-    val result: Result
+    val result: Result,
 )
+
+data class FirebasePartyInfo(
+    val groupName: String = "",
+    val groupMenu: String = "",
+    val groupDetail: String = "",
+    val curNumberOfPeople: Int = 0,
+    val maxNumberOfPeople: Int = 0,
+    val startDate: String = "",
+    val endDate: String = "",
+    val hashTag: List<Int> = listOf(),
+)
+
+data class FirebasePartyMessage(
+    var senderId: String = "",
+    var sendedDate: String = "",
+    var content: String = "",
+    var type: Int = 0,
+    var downloadUrl : String = "",
+    var confirmed: MutableMap<String, Boolean> = HashMap(),
+
+)
+
+
+data class FirebaseParty(
+    val groupInfo: FirebasePartyInfo,
+    val groupUsers: Map<String, Boolean> = HashMap(),
+)
+
+
