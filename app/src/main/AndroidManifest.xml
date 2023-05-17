@@ -36,7 +36,13 @@
         </activity>
         <activity
             android:name=".ui.ChattingAndPartyInfoActivity"
-            android:exported="false">
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -49,14 +55,15 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.MakeGrpActivity"
+            android:name=".ui.MakePartyActivity"
             android:exported="false">
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.ResGrpActivity"
+            android:name=".ui.RestaurantPartyActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -78,11 +85,11 @@
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <activity

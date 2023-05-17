@@ -6,4 +6,139 @@
     android:layout_height="match_parent"
     tools:context=".ui.ChattingAndPartyInfoActivity">
 
+    <TextView
+        android:id="@+id/GrpName"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:text=""
+        android:maxWidth="200dp"
+        android:maxLines="1"
+        android:textColor="@color/black"
+        android:layout_marginLeft="12dp"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/hashtagVisible"
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:weightSum="5"
+        android:layout_marginLeft="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/GrpName"
+        app:layout_constraintStart_toEndOf="@+id/GrpName"
+        app:layout_constraintTop_toTopOf="@+id/GrpName">
+
+        <ImageView
+            android:id="@+id/hash1"
+            android:layout_margin="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:background="@drawable/custom_pressed"
+            android:src="@drawable/hashtag1" />
+
+        <ImageView
+            android:id="@+id/hash2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:background="@drawable/custom_pressed"
+            android:src="@drawable/hashtag2"
+            app:layout_constraintBottom_toBottomOf="@+id/hash1"
+            app:layout_constraintStart_toEndOf="@+id/hash1"
+            app:layout_constraintTop_toTopOf="@+id/hash1" />
+
+        <ImageView
+            android:id="@+id/hash3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:background="@drawable/custom_pressed"
+            android:src="@drawable/hashtag3"
+            app:layout_constraintBottom_toBottomOf="@+id/hash2"
+            app:layout_constraintStart_toEndOf="@+id/hash2"
+            app:layout_constraintTop_toTopOf="@+id/hash2" />
+
+        <ImageView
+            android:id="@+id/hash4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:background="@drawable/custom_pressed"
+            android:src="@drawable/hashtag4"
+            app:layout_constraintBottom_toBottomOf="@+id/hash3"
+            app:layout_constraintStart_toEndOf="@+id/hash3"
+            app:layout_constraintTop_toTopOf="@+id/hash3" />
+
+        <ImageView
+            android:id="@+id/hash5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:background="@drawable/custom_pressed"
+            android:src="@drawable/hashtag5"
+            app:layout_constraintBottom_toBottomOf="@+id/hash4"
+            app:layout_constraintStart_toEndOf="@+id/hash4"
+            app:layout_constraintTop_toTopOf="@+id/hash4" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textLine"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#EEEEEE"
+        app:layout_constraintTop_toBottomOf="@+id/GrpName" />
+
+    <android.widget.Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="취소"
+        app:layout_constraintBottom_toTopOf="@+id/userRv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userRv"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLine"
+        android:orientation="horizontal"
+        tools:itemCount="3"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/chatting_and_party_user_item"/>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_marginTop="143dp"
+        android:id="@+id/fragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userRv"
+        app:navGraph="@navigation/chatting_nav">
+
+    </androidx.fragment.app.FragmentContainerView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

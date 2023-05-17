@@ -4,23 +4,19 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.RetrofitService
-import com.bapool.bapool.adapter.ResGrpListAdapter
-import com.bapool.bapool.databinding.ActivityResGrpBinding
+import com.bapool.bapool.adapter.RestaurantPartyAdapter
+import com.bapool.bapool.databinding.ActivityRestaurantPartyBinding
 import com.bapool.bapool.retrofit.data.GetResGroupListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class ResGrpActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityResGrpBinding
-    private lateinit var resGrpAdapter: ResGrpListAdapter
+class RestaurantPartyActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRestaurantPartyBinding
+    private lateinit var resGrpAdapter: RestaurantPartyAdapter
     lateinit var resGrpRv: RecyclerView
     var resNameIntent: String = ""
     val userId: Long = 2
@@ -30,7 +26,7 @@ class ResGrpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityResGrpBinding.inflate(layoutInflater)
+        binding = ActivityRestaurantPartyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
@@ -44,14 +40,14 @@ class ResGrpActivity : AppCompatActivity() {
     //버튼초기화
     fun initializeVari() {
         resGrpRv = binding.resGrpRv
-        resGrpAdapter = ResGrpListAdapter(this)
+        resGrpAdapter = RestaurantPartyAdapter(this)
 
     }
 
     //버튼 listener
     fun listener() {
         binding.goToMakeGrp.setOnClickListener {
-            val intent = Intent(this, MakeGrpActivity::class.java)
+            val intent = Intent(this, MakePartyActivity::class.java)
             intent.putExtra("resName", resNameIntent)
             startActivity(intent)
         }
