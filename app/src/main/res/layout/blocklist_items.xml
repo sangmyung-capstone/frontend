@@ -31,7 +31,7 @@
             android:text="차단한 날짜" />
 
         <Button
-            android:id="@+id/button9"
+            android:id="@+id/blockbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"

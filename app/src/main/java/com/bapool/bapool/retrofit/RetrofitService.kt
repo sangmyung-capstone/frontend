@@ -13,32 +13,32 @@ import retrofit2.http.*
 interface RetrofitService {
 
     // 정연수
-    @POST("/auth/naver/signin/already")
+    @POST("/users/naver/signin/already")
     fun PostNaverLoginCheck(
         @Body request: PostNaverLoginCheckRequest
     ): Call<PostNaverLoginCheckResponse>
 
-    @POST("/auth/naver/signup")
+    @POST("/users/naver/signup")
     fun PostNaverSignup(
         @Body request: PostNaverSignupRequest
     ): Call<PostNaverSignupResponse>
 
-    @POST("/auth/naver/signin")
+    @POST("/users/naver/signin")
     fun PostNaverSingin(
         @Body request: PostNaverSigninRequest
     ): Call<PostNaverSigninResponse>
 
-    @POST("/auth/kakao/signin/already")
+    @POST("/users/kakao/signin/already")
     fun PostKakaoLoginCheck(
         @Body request: PostkakaoLoginCheckRequest
     ): Call<PostKakaoLoginCheckResponse>
 
-    @POST("/auth/kakao/signup")
+    @POST("/users/kakao/signup")
     fun PostKakaoSignup(
         @Body request: PostKakaoSignupRequest
     ): Call<PostKakaoSignupResponse>
 
-    @POST("/auth/kakao/signin")
+    @POST("/users/kakao/signin")
     fun PostKakaoSingin(
         @Body request: PostkakaoSigninRequest
     ): Call<PostKakaoSigninResponse>

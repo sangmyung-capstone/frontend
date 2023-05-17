@@ -22,7 +22,7 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     companion object {
-        var UserToken: String? = ""
+        var UserToken: String? = null
         var UserId: Int? = null
     }
 
@@ -204,7 +204,7 @@ class LoginActivity : AppCompatActivity() {
                                 Log.d("bap", "onRequest 성공: $token")
                                 Log.d("bap", "onResponse 성공: " + result?.toString())
                                 if (result != null) {//처음 로그인시 가입화면으로 넘어감.
-                                    if (!result.result) {
+                                    if (!result.result) {//result가 true가 아니면
                                         val intent =
                                             Intent(this@LoginActivity, RegisterActivity::class.java)
                                         intent.putExtra(
