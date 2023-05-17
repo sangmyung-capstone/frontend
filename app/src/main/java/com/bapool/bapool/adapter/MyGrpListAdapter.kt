@@ -4,22 +4,21 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
-import com.bapool.bapool.databinding.MygrplistItemsBinding
-import com.bapool.bapool.retrofit.data.MyGrpListModel
+import com.bapool.bapool.databinding.MypartylistItemsBinding
+import com.bapool.bapool.retrofit.data.MyPartyListModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class MyGrpListAdapter(
     val context: Context,
-    private val myGroupList: ArrayList<MyGrpListModel>
+    private val myGroupList: ArrayList<MyPartyListModel>
 ) :
     RecyclerView.Adapter<MyGrpListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            MygrplistItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            MypartylistItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolder(binding)
     }
@@ -34,10 +33,10 @@ class MyGrpListAdapter(
     }
 
 
-    inner class ViewHolder(private val binding: MygrplistItemsBinding) :
+    inner class ViewHolder(private val binding: MypartylistItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bindItem(item: MyGrpListModel) {
+        fun bindItem(item: MyPartyListModel) {
             val allNum = partiNum(item.participants, item.max_people)
             val allDate = dateRange(item.startDate, item.endDate)
 

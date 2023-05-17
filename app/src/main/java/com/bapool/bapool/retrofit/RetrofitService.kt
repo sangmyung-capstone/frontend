@@ -9,6 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Call
 import retrofit2.http.*
 
+/*** !!! MOCK SERVER !!! ***/
 interface RetrofitService {
 
     // 정연수
@@ -91,8 +92,8 @@ interface RetrofitService {
     @POST("party/{user_id}")
     fun makeGrp(
         @Path("user_id") userId: Long,
-        @Body request: PostMakeGrpRequest,
-    ): Call<PostMakeGrpResponse>
+        @Body request: PostMakePartyRequest,
+    ): Call<PostMakePartyResponse>
 
     //--------------------------------------------------------------------------
     // 이현제
@@ -103,12 +104,9 @@ interface RetrofitService {
 
     //-----------------------------------------------------------------------------
 
-    // 싱글톤 객체 생성
+    // 싱글톤 객체 생
     companion object {
-        //        private const val BASE_URL = "(your url)"
-        private const val BASE_URL = "https://myfirstdomain.store"
-        private const val Mock_BASE_URL = "https://myfirstdomain.store"
-
+        private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
 
         val client = OkHttpClient.Builder()
 //            .cookieJar(JavaNetCookieJar(CookieManager())) //쿠키매니저 연결

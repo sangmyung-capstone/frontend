@@ -1,33 +1,38 @@
 package com.bapool.bapool.ui.fragment
 
 import android.Manifest
-import android.animation.ValueAnimator
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.FragmentMapBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.GetRestaurantsResult
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
 import com.naver.maps.map.MapFragment
+import com.naver.maps.map.overlay.Align
 import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.PolylineOverlay
+import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -37,14 +42,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
     private lateinit var cameraPosition: CameraPosition
-    private lateinit var bounds: LatLngBounds
     private lateinit var rect: String
+    val markerList: ArrayList<Marker> = arrayListOf() // 배열 생성
 
-    val retro = RetrofitService.create()
+    val bapoolImg = OverlayImage.fromResource(R.drawable.bapool_circle) // by lazy
+    val bapoolImgRed = OverlayImage.fromResource(R.drawable.bapool_circle_red)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    //        val retro = RetrofitService.create()  // MOCK SERVER
+    val retro = ServerRetrofit.create()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,8 +63,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 현 위치에서 검색 터치 시 // FAB
         binding.extendedFAB.setOnClickListener {
+
             markerInit()
-            binding.extendedFAB.hide()
+            binding.extendedFAB.animate()
+                .scaleX(0f)
+                .scaleY(0f)
+                .alpha(0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .setDuration(400) // 0.4초로 변경
+                .withEndAction {
+                    binding.extendedFAB.hide()
+                }
         }
 
         /******************************************************************************************/
@@ -146,28 +161,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
          */
         /******************************************************************************************/
 
-        // 네비게이션 바 간 스위칭 관련 리스너
-//        listener()
-
         return binding.root
     }
 
     @UiThread
     override fun onMapReady(naverMap: NaverMap) {
-        // ui setting
-        val uiSettings = naverMap.uiSettings
-        uiSettings.isCompassEnabled = true
-        uiSettings.isZoomControlEnabled = false
-        uiSettings.isLocationButtonEnabled = true
-        // 최대 줌 레벨 설정
-        naverMap.maxZoom = 19.0
-
         this.naverMap = naverMap
-        // 실행된 네이버 지도에 locationSource 연결
-        naverMap.locationSource = locationSource
-        // 현 위치로 맵 시작
-        naverMap.locationTrackingMode = LocationTrackingMode.Follow
+        naverMap.locationSource = locationSource // 실행된 네이버 지도에 locationSource 연결
 
+        naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현 위치로 맵 시작
 
         naverMap.addOnCameraChangeListener { reason, _ ->
             // 지도가 이동 상태 시 콜백함수
@@ -176,16 +178,38 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         naverMap.addOnCameraIdleListener {
             // 지도가 이동 후 대기 상태 시 콜백함수
+            Log.d("MYTAG", "now camera : ${naverMap.cameraPosition}")
         }
 
-        markerInit()
+//        markerInit()
+        Handler(Looper.getMainLooper()).postDelayed({
+            val cameraUpdate = CameraUpdate.zoomTo(16.0)
+            naverMap.moveCamera(cameraUpdate)
+            markerInit()
+        }, 1500)
     }
 
     private fun mapInit() {
+
+
+        // 초기 지도 옵션
+        val options = NaverMapOptions()
+//            .maxZoom(19.0)
+            .compassEnabled(true)
+            .zoomControlEnabled(false)
+            .locationButtonEnabled(true)
+//            .indoorEnabled(true) // 테스트 필요
+//            .camera( // 현 위치 구하는 중...
+//                CameraPosition(
+//                    LatLng(37.4924505, 126.724422),
+//                    19.0
+//                )
+//            )
+
         // Framelayout에 네이버 지도 띄우기
         val fm = childFragmentManager
         val mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
-            ?: MapFragment.newInstance().also {
+            ?: MapFragment.newInstance(options).also {
                 fm.beginTransaction().add(R.id.map, it).commit()
             }
         mapFragment.getMapAsync(this)
@@ -198,66 +222,54 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         cameraPosition = naverMap.cameraPosition
 
         rect =
-            "${naverMap.contentBounds.southWest.longitude},${naverMap.contentBounds.southWest.latitude},${naverMap.contentBounds.northEast.longitude},${naverMap.contentBounds.northEast.latitude}"
-
-        /*
-        val polyline = PolylineOverlay()
-        polyline.coords = listOf(
-            naverMap.contentBounds.southWest,
-            naverMap.contentBounds.northEast
-        )
-        polyline.map = naverMap
-         */
+            "${naverMap.contentBounds.northWest.longitude},${naverMap.contentBounds.northWest.latitude},${naverMap.contentBounds.southEast.longitude},${naverMap.contentBounds.southEast.latitude}"
 
         Log.d("MYTAG", "rect : $rect")
         Log.d("MYTAG", "now bounds : ${naverMap.contentBounds}")
         Log.d("MYTAG", "now camera : $cameraPosition")
         //------------------------------------
-        retro.getRestaurants(rect).enqueue(object : Callback<GetRestaurantsResult> {
+        retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
                 response: Response<GetRestaurantsResult>
             ) {
-                //Log.d("MYTAG", response.body().toString())
-                val markerList: ArrayList<Marker> = arrayListOf<Marker>()
-                for (i in 0 until response.body()!!.body.size) {
-                    markerList.add(i, Marker())
+                // 기존 마커 존재 시 전부 삭제
+                if (markerList.size != 0) {
+                    Log.d("MYTAG", "marker clear!!!")
+                    for (i in 0 until markerList.size) markerList[i].map = null
+                    markerList.clear()
+                }
+                // 마커 생성
+                for (i in 0 until response.body()!!.result.restaurants.size) { // 리스폰스로 받은 사이즈 만큼
+                    markerList.add(i, Marker()) // 마커 할당
+                    if (response.body()!!.result.restaurants[i].num_of_party != 0) // group이 있는 마커 표현
+                        markerList[i].icon = bapoolImg
+                    else
+                        markerList[i].icon = bapoolImgRed
                     markerList[i].isHideCollidedSymbols = true
-                    markerList[i].position =
+                    markerList[i].isHideCollidedCaptions = true
+                    markerList[i].position = // 마커 위치 할당
                         LatLng(
-                            response.body()!!.body[i].y.toDouble(),
-                            response.body()!!.body[i].x.toDouble()
+                            response.body()!!.result.restaurants[i].restaurant_latitude,
+                            response.body()!!.result.restaurants[i].restaurant_longitude
                         )
-                    markerList[i].map = naverMap
-                    markerList[i].width = Marker.SIZE_AUTO
-                    markerList[i].height = Marker.SIZE_AUTO
-                    markerList[i].captionText = response.body()!!.body[i].place_name
-                    /*
-                    //group이 있는 마커 표현
-                    if (response.body()!!.body[i].num_of_group != 0)
-                    markerList[i].icon = MarkerIcons.YELLOW
-                     */
-                    markerList[i].setOnClickListener {
-//                        val bottomSheetDialog = BottomSheetDialog.
-                        /*
-                        // 마커를 1.5배 크게 만드는 애니메이션
-                        val animator = ValueAnimator.ofFloat(1f, 3.0f)
-                        animator.duration = 1500
-                        animator.addUpdateListener { valueAnimator ->
-                            val value = valueAnimator.animatedValue as Float
-                            markerList[i].width = (markerList[i].width * value).toInt()
-                            markerList[i].height = (markerList[i].height * value).toInt()
-                        }
-                        animator.start()
-                         */
+                    markerList[i].map = naverMap    // 생성 마커들 지도에 출력
+                    markerList[i].width = 75
+                    markerList[i].height = 75
+                    markerList[i].captionText =
+                        response.body()!!.result.restaurants[i].restaurant_name
+                    markerList[i].setCaptionAligns(
+                        Align.Bottom,
+                        Align.Left,
+                        Align.Right,
+                        Align.Top,
+                        Align.Center
+                    )
 
-                        // 해당 마커 위치로 지도 이동
-                        val cameraUpdate: CameraUpdate =
-//                            CameraUpdate.fitBounds(markerList[i].map!!.contentBounds)     // 추가 작업 필요
-                            CameraUpdate.scrollAndZoomTo(markerList[i].position, 15.0)
-                        naverMap.moveCamera(cameraUpdate)
-                        true
-                    }
+
+                    // 해당 마커 클릭 이벤트
+                    markerClickEvent(markerList[i])
+//                    }
                 }
             }
 
@@ -266,6 +278,21 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Log.d("MYTAG", "FAIL")
             }
         })
+    }
+
+    private fun markerClickEvent(marker: Marker) {
+        marker.setOnClickListener {
+            // 해당 마커 위치로 지도 이동
+            val cameraUpdate: CameraUpdate =
+                CameraUpdate.scrollAndZoomTo(marker.position, 20.0)
+            naverMap.moveCamera(cameraUpdate)
+
+            // 마커 크기 변경 // 애니메이션 추가
+            marker.width = 100
+            marker.height = 100
+
+            true
+        }
     }
 
     // 위치 권한 획득 위함
@@ -296,10 +323,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .check()
     }
 
-    // 네비게이션 바 간 스위칭 관련 리스너
-//    fun listener() {
-//
-//    }
 
     //뷰바인딩 생명주기 관리
     override fun onDestroyView() {

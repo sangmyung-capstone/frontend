@@ -36,6 +36,7 @@
         </activity>
         <activity
             android:name=".ui.ChattingAndPartyInfoActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -49,14 +50,15 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.MakeGrpActivity"
+            android:name=".ui.MakePartyActivity"
             android:exported="false">
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.ResGrpActivity"
+            android:name=".ui.RestaurantPartyActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -65,9 +67,11 @@
         <activity
             android:name=".ui.HomeActivity"
             android:exported="false" >
+        <!--            android:exported="false" >-->
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
         </activity>
         <activity
             android:name=".ui.LoginActivity"

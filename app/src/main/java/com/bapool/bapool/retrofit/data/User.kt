@@ -16,19 +16,19 @@ import com.google.gson.annotations.SerializedName
 
 data class PostRegisterRequest(
     var nickname: String,
-    var profileImg: Int
+    var profileImg: Int,
 )
 
 data class PatchChangeProfileRequest(
     var nickname: String,
-    var profileImg: Int
+    var profileImg: Int,
 )
 
 data class PatchChangeProfileResponse(
     val code: Int,
     val message: String,
     @SerializedName("is_duplicate")
-    var is_duplicate: Boolean
+    var is_duplicate: Boolean,
 )
 
 data class GetMypageResponse(
@@ -40,35 +40,35 @@ data class GetMypageResponse(
         val nickname: String,
         val profileImg: Int,
         val rating: Double,
-        val hashtag: List<Int>
+        val hashtag: List<Int>,
     )
 }
 
 
 data class DeleteUserResponse(
     var code: Int,
-    var message: String
+    var message: String,
 )
 
 data class GetBlockUserResponse(
     val code: Int,
     val message: String,
-    val result: Result
+    val result: Result,
 ) {
     data class Result(
-        val users: List<BlockedUser>
+        val users: List<BlockedUser>,
     )
 
     data class BlockedUser(
         val user_id: Long,
         val nickname: String,
-        val block_date: String
+        val block_date: String,
     )
 }
 
 data class BlockUserResponse(
     val code: Int,
-    val message: String
+    val message: String,
 )
 
 data class BlockUserRequest(
@@ -169,6 +169,11 @@ data class PostKakaoSigninResponse(
     )
 }
 
+data class FirebaseUserInfo(
+    val imgUrl: String = "",
+    val nickName: String = "",
+    val bannedUser: List<String>? = null
+)
 
 
 

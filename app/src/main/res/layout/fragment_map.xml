@@ -45,38 +45,13 @@
                 app:layout_constraintStart_toStartOf="@+id/map"
                 app:layout_constraintTop_toTopOf="@+id/map" />
 
-            <com.mancj.materialsearchbar.MaterialSearchBar
-                android:id="@+id/searchBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:mt_hint="진행 중..."
-                app:mt_maxSuggestionsCount="5"
-                app:mt_speechMode="false"
-                app:theme="@style/AppTheme.PopupOverlay" />
-
-            <!---
-            <ListView
-                android:id="@+id/mListView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchBar" />
--->
-
 
             <FrameLayout
                 android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchBar">
+                app:layout_constraintTop_toTopOf="parent">
 
             </FrameLayout>
 
@@ -109,7 +84,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_weight="1" />
             </LinearLayout>
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
