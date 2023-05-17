@@ -26,7 +26,7 @@
         android:layout_height="25dp"
         android:weightSum="5"
         android:layout_marginLeft="8dp"
-        android:visibility="gone"
+
         app:layout_constraintBottom_toBottomOf="@+id/GrpName"
         app:layout_constraintStart_toEndOf="@+id/GrpName"
         app:layout_constraintTop_toTopOf="@+id/GrpName">

@@ -32,8 +32,6 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
     var groupUserInfo: ArrayList<Map<String, FirebaseUserInfo>> = arrayListOf()
     var groupOnerId: String = ""
 
-    //viewModel
-    private lateinit var partyInfoViewModel: PartyInfoViewModel
 
     //임시 userId,groupId
     val currentUserId = "userId1"
@@ -51,13 +49,11 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
 
     fun initializeVari() {
         database = Firebase.database.reference
-        //viewModel
-        partyInfoViewModel = ViewModelProvider(this).get(PartyInfoViewModel::class.java)
+
         //그룹 이름 지정
         initGroupName()
         //사진, 닉네임 지정
         initImgName()
-
 
 
     }
@@ -85,9 +81,10 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
 //                1, 4, getTime(), getTime(), hashtaglist)
 //            val groupUsers = mapOf("userId3" to false)
 //            val Group3 = FirebaseParty(groupInfo, groupUsers)
-//
+
 //            myRef.child("groupId1").setValue(Group3)
-//            myRef.child("groupId1").child("groupUsers").updateChildren(groupUsers)
+//            myRef.child("groupId1").child("groupInfo").setValue(groupInfo)
+
 //            Users 더미데이터 추가
 //            val database = Firebase.database
 //            val myRef = database.getReference("Users")
@@ -106,23 +103,28 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
         database.child("Groups").child(groupId).child("groupInfo")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val item = snapshot.getValue(FirebasePartyInfo::class.java)
-                    partyInfoViewModel.liveData(item)
+                    val item = snapshot.getValue(FirebasePartyInfo::class.java)!!
                     binding.GrpName.setText(item.groupName)
+
                     val hashtagList = item.hashTag
-                    val liveData = partyInfoViewModel.liveData.value
-                    Log.d("initGroupName", liveData.toString())
-                    binding.hashtagVisible.visibility = View.VISIBLE
-                    for (item in hashtagList) {
-                        when (item) {
-                            1 -> binding.hash1.visibility = View.VISIBLE
-                            2 -> binding.hash2.visibility = View.VISIBLE
-                            3 -> binding.hash3.visibility = View.VISIBLE
-                            4 -> binding.hash4.visibility = View.VISIBLE
-                            5 -> binding.hash5.visibility = View.VISIBLE
+                    if (!hashtagList.isNullOrEmpty()) {
+                        binding.hashtagVisible.visibility = View.VISIBLE
+                        for (item in hashtagList) {
+                            Log.d("HashtagConfirmed",item.toString())
+                            if(item == 4) binding.hash4.visibility = View.VISIBLE
+                            if(item == 3) binding.hash3.visibility= View.VISIBLE
+
+//                            when (item) {
+//                                1 -> binding.hash1.visibility = View.VISIBLE
+//                                2 -> binding.hash2.visibility = View.VISIBLE
+//                                3 -> binding.hash3.visibility = View.VISIBLE
+//                                4 -> binding.hash4.visibility = View.VISIBLE
+//                                5 -> binding.hash5.visibility = View.VISIBLE
+//                            }
                         }
                     }
                 }
+
 
                 override fun onCancelled(error: DatabaseError) {
 
@@ -204,15 +206,4 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
 
 }
 
-class PartyInfoViewModel : ViewModel() {
-    private val _liveData = MutableLiveData<FirebasePartyInfo>()
-    val liveData: LiveData<FirebasePartyInfo> get() = _liveData
 
-    fun loadData(item: FirebasePartyInfo){
-        _liveData.value = item
-    }
-    fun getData() : MutableLiveData<FirebasePartyInfo> {
-        return _liveData
-    }
-
-}
