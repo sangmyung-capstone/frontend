@@ -47,7 +47,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="그룹이름 text"
             app:layout_constraintBottom_toBottomOf="@+id/groupName"
             app:layout_constraintStart_toEndOf="@+id/groupName"
             app:layout_constraintTop_toTopOf="@+id/groupName" />
@@ -94,7 +93,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="현재인원 text"
             app:layout_constraintBottom_toBottomOf="@+id/groupPeople"
             app:layout_constraintStart_toEndOf="@+id/groupPeople"
             app:layout_constraintTop_toTopOf="@+id/groupPeople"
@@ -105,7 +103,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="detail text"
             app:layout_constraintBottom_toBottomOf="@+id/groupDetail"
             app:layout_constraintStart_toEndOf="@+id/groupDetail"
             app:layout_constraintTop_toTopOf="@+id/groupDetail" />
@@ -115,7 +112,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="menu text"
             app:layout_constraintBottom_toBottomOf="@+id/groupMenu"
             app:layout_constraintStart_toEndOf="@+id/groupMenu"
             app:layout_constraintTop_toTopOf="@+id/groupMenu" />
@@ -125,7 +121,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="정원 text"
             app:layout_constraintBottom_toBottomOf="@+id/groupMaxPeople"
             app:layout_constraintStart_toEndOf="@+id/groupMaxPeople"
             app:layout_constraintTop_toTopOf="@+id/groupMaxPeople" />
@@ -135,7 +130,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="만나는 날짜 text"
             app:layout_constraintBottom_toBottomOf="@+id/groupDate"
             app:layout_constraintStart_toEndOf="@+id/groupDate"
             app:layout_constraintTop_toTopOf="@+id/groupDate" />
@@ -145,7 +139,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="만나는 시간 text"
             app:layout_constraintBottom_toBottomOf="@+id/groupTime"
             app:layout_constraintStart_toEndOf="@+id/groupTime"
             app:layout_constraintTop_toTopOf="@+id/groupTime" />
@@ -155,7 +148,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="만나는 날짜"
             app:layout_constraintStart_toStartOf="@+id/groupPeople"
             app:layout_constraintTop_toBottomOf="@+id/groupPeople" />
 
