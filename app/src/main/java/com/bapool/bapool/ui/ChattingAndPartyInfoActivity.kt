@@ -110,9 +110,9 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
                     if (!hashtagList.isNullOrEmpty()) {
                         binding.hashtagVisible.visibility = View.VISIBLE
                         for (item in hashtagList) {
-                            Log.d("HashtagConfirmed",item.toString())
-                            if(item == 4) binding.hash4.visibility = View.VISIBLE
-                            if(item == 3) binding.hash3.visibility= View.VISIBLE
+                            Log.d("HashtagConfirmed", item.toString())
+                            if (item == 4) binding.hash4.visibility = View.VISIBLE
+                            if (item == 3) binding.hash3.visibility = View.VISIBLE
 
 //                            when (item) {
 //                                1 -> binding.hash1.visibility = View.VISIBLE
