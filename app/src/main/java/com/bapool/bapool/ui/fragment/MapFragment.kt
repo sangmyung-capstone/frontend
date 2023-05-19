@@ -48,8 +48,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val bapoolImg = OverlayImage.fromResource(R.drawable.bapool_circle) // by lazy
     val bapoolImgRed = OverlayImage.fromResource(R.drawable.bapool_circle_red)
 
-    val retro = RetrofitService.create()  // MOCK SERVER
-//    val retro = ServerRetrofit.create()
+//    val retro = RetrofitService.create()  // MOCK SERVER
+    val retro = ServerRetrofit.create()
 
 
     override fun onCreateView(
@@ -75,92 +75,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     binding.extendedFAB.hide()
                 }
         }
-
-        /******************************************************************************************/
-        /*
-        /*** 상단 검색 바 ***/
-        //View - 변수 연결
-        val lv = binding.mListView
-        val searchBar = binding.searchBar
-        searchBar.setHint("Search")
-        //음성검색모드 끄기
-        searchBar.setSpeechMode(false)
-        //검색어 목록 넣기
-        var galaxies = arrayOf(
-            "Sombrero",
-            "Cartwheel",
-            "Pinwheel",
-            "StarBust",
-            "Whirlpool",
-            "Ring Nebular",
-            "Own Nebular",
-            "Centaurus A",
-            "Virgo Stellar Stream",
-            "Canis Majos Overdensity",
-            "Mayall's Object",
-            "Leo",
-            "Milky Way",
-            "IC 1011",
-            "Messier 81",
-            "Andromeda",
-            "Messier 87"
-        )
-
-        val adapter =
-            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, galaxies)
-        //리스트뷰 초기에 안보이게 설정
-        lv.visibility = View.INVISIBLE
-        //SearchBar와 ListView 연동
-        lv.adapter = adapter
-        searchBar.setOnSearchActionListener(object : MaterialSearchBar.OnSearchActionListener {
-            override fun onButtonClicked(buttonCode: Int) {
-                TODO("Not yet implemented")
-            }
-
-            //검색창 누른 상태 여부 확인
-            override fun onSearchStateChanged(enabled: Boolean) {
-                //맞으면 리스트뷰 보이게 설정
-                if (enabled) {
-                    lv.visibility = View.VISIBLE
-                } else { //아니면 안 보이게
-                    lv.visibility = View.INVISIBLE
-                }
-            }
-
-            override fun onSearchConfirmed(text: CharSequence?) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
-        searchBar.addTextChangeListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            //검색어 변경하면 ListView 내용 변경
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                adapter.filter.filter(s)
-            }
-
-        })
-
-        //ListView 내의 아이템 누르면 Toast 발생
-        lv.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
-                Toast.makeText(
-                    context,
-                    adapter.getItem(position)!!.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-         */
-        /******************************************************************************************/
-
         return binding.root
     }
 
@@ -228,8 +142,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("MYTAG", "now bounds : ${naverMap.contentBounds}")
         Log.d("MYTAG", "now camera : $cameraPosition")
         //------------------------------------
-//        retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
-        retro.getRestaurants(rect).enqueue(object : Callback<GetRestaurantsResult> {    // Mock
+        retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
                 response: Response<GetRestaurantsResult>
