@@ -7,10 +7,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.databinding.ActivityLoginBinding
 import com.bapool.bapool.RetrofitService
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause.*
+import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
@@ -29,7 +31,8 @@ class LoginActivity : AppCompatActivity() {
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
 
-    val retro = RetrofitService.create()
+//    val retro = RetrofitService.create()    // Mock Server
+    val retro = ServerRetrofit.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -215,7 +218,11 @@ class LoginActivity : AppCompatActivity() {
                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                         finish()
                                     } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
-                                        retro.PostNaverSingin(PostNaverSigninRequest(token.toString()))
+                                        retro.PostNaverSingin(
+                                            PostNaverSigninRequest(
+                                                NaverIdLoginSDK.getAccessToken().toString()
+                                            )
+                                        )
                                             .enqueue(object : Callback<PostNaverSigninResponse> {
                                                 override fun onResponse(
                                                     call: Call<PostNaverSigninResponse>,
