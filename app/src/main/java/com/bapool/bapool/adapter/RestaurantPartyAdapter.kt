@@ -80,7 +80,7 @@ class RestaurantPartyAdapter(val context: Context) :
                 }
             }
             //만약 참여중인 그룹이라면 button을 다르게 표시
-            if (!item.is_participate) {
+            if (item.is_participate) {
                 Log.d("is_participate", (!item.is_participate).toString())
                 binding.joinGrp.isEnabled = false
             }
