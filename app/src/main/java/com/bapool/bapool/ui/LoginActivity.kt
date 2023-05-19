@@ -11,7 +11,6 @@ import com.bapool.bapool.retrofit.data.*
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause.*
-import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
@@ -216,11 +215,7 @@ class LoginActivity : AppCompatActivity() {
                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                         finish()
                                     } else {//처음 로그인 아니면 바로 홈 화면으로 넘어감
-                                        retro.PostNaverSingin(
-                                            PostNaverSigninRequest(
-                                                NaverIdLoginSDK.getAccessToken().toString()
-                                            )
-                                        )
+                                        retro.PostNaverSingin(PostNaverSigninRequest(token.toString()))
                                             .enqueue(object : Callback<PostNaverSigninResponse> {
                                                 override fun onResponse(
                                                     call: Call<PostNaverSigninResponse>,
@@ -295,6 +290,7 @@ class LoginActivity : AppCompatActivity() {
         binding.kakaoLoginButton.setOnClickListener {
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
                 UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
+
 
             } else {
                 UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
