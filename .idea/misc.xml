@@ -3,20 +3,29 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_block_list.xml" value="0.1764102564102564" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/blocklist_border.xml" value="0.164" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/font/custom_font_family.xml" value="0.209375" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_block_list.xml" value="0.22" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_chatting_and_party_info.xml" value="0.22" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_evaluateuser.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_home.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_login.xml" value="0.1764102564102564" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_logout.xml" value="0.1764102564102564" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_main.xml" value="0.8333333333333334" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_make_grp.xml" value="0.17916666666666667" />
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_register.xml" value="0.1764102564102564" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_make_party.xml" value="0.22" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_register.xml" value="0.22" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_restaurant_log.xml" value="0.17916666666666667" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_restaurant_party.xml" value="0.17916666666666667" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/blocklist_items.xml" value="0.3333333333333333" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/bottom_sheet.xml" value="0.1764102564102564" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/custom_timepicker.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_bottom_sheet_dialog.xml" value="0.1" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_chatting.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_group.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_map.xml" value="0.16666666666666666" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_mypage.xml" value="0.17916666666666667" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/menu/home_menu.xml" value="0.22" />
       </map>
     </option>
   </component>

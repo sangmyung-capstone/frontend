@@ -105,8 +105,9 @@ interface RetrofitService {
 
     //--------------------------------------------------------------------------
     // 이현제
-    @GET("/restaurants")
+    @GET("/restaurants/{user-id}")
     fun getRestaurants(
+        @Path("user-id") userId: Long?,
         @Query("rect") rect: String?,
     ): Call<GetRestaurantsResult>
 
