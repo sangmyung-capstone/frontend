@@ -81,6 +81,13 @@ interface RetrofitService {
         @Path("user-id") userId: Long,
     ): Call<GetRestaurantLogResponse>
 
+    @GET("/users/evaluate/{user-id}")
+    fun GetEvaluateUser(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long,
+        @Query("party-id") partyId: Long
+    ): Call<GetEvaluateUserResponse>
+
     //--------------------------------------------------------------------------
     // 손승현
     @GET("party/{user_id}/{restaurant_id}")
@@ -106,7 +113,7 @@ interface RetrofitService {
 
     // 싱글톤 객체 생
     companion object {
-        private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
+        private const val BASE_URL = "https://myfirstdomain.store"
 
         val client = OkHttpClient.Builder()
 //            .cookieJar(JavaNetCookieJar(CookieManager())) //쿠키매니저 연결
