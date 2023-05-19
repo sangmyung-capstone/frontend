@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bapool.bapool.adapter.PartyUserInfoAdapter
@@ -32,6 +33,8 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
     var groupUserInfo: ArrayList<Map<String, FirebaseUserInfo>> = arrayListOf()
     var groupOnerId: String = ""
 
+    //viewModel
+    private val partyInfoViewModel: PartyInfoViewModel by viewModels()
 
     //임시 userId,groupId
     val currentUserId = "userId1"
@@ -105,14 +108,13 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val item = snapshot.getValue(FirebasePartyInfo::class.java)!!
                     binding.GrpName.setText(item.groupName)
-
+                    partyInfoViewModel.setObjectInfo(item)
                     val hashtagList = item.hashTag
                     if (!hashtagList.isNullOrEmpty()) {
                         binding.hashtagVisible.visibility = View.VISIBLE
                         for (item in hashtagList) {
-                            Log.d("HashtagConfirmed", item.toString())
-                            if (item == 4) binding.hash4.visibility = View.VISIBLE
-                            if (item == 3) binding.hash3.visibility = View.VISIBLE
+                            if(item == 4) binding.hash4.visibility = View.VISIBLE
+                            if(item == 3) binding.hash3.visibility= View.VISIBLE
 
 //                            when (item) {
 //                                1 -> binding.hash1.visibility = View.VISIBLE
