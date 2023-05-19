@@ -165,6 +165,8 @@ class ChattingFragment : Fragment() {
         }
     }
 
+
+
 //    override fun onAttach(context: Context) {
 //        super.onAttach(context)
 //        Log.d("생명주기","onAttach")

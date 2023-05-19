@@ -43,16 +43,15 @@ class PartyChattingAdapter(
     val context: Context,
     val currentUserId: String,
     val groupId: String,
+    var messages: ArrayList<FirebasePartyMessage> = arrayListOf(),
+    var messageKey: ArrayList<String> = arrayListOf()
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var messages: ArrayList<FirebasePartyMessage> = arrayListOf()
-    var messageKey: ArrayList<String> = arrayListOf()
 
     var databaseReference: DatabaseReference
     var valueEventListener: ValueEventListener?
 
-    //    lateinit var chatRoomkeyWhat: String
     var peopleCount = 0
     val testUserId = "userId3"
     private var currentPage = 0
@@ -62,7 +61,7 @@ class PartyChattingAdapter(
     init {
         recyclerView.postDelayed({
             recyclerView.layoutManager?.scrollToPosition(messages.size - 1)
-        }, 1000)
+        }, 1500)
         //diffUtil Version
         databaseReference = FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
             .child("groupMessages")
@@ -80,6 +79,7 @@ class PartyChattingAdapter(
                     val messageObject_modify: FirebasePartyMessage =
                         data.getValue<FirebasePartyMessage>()!!
                     val messageKeyObject = data.key.toString()
+
 
                     messageKey.add(messageKeyObject)
                     messageObject_modify.confirmed.put(currentUserId, true)
@@ -116,10 +116,10 @@ class PartyChattingAdapter(
                             .child(groupId).child("groupMessages")
                             .updateChildren(readUsers as Map<String, FirebasePartyMessage>)
                             .addOnCompleteListener {
-                                scrollToBottom()
+                                recyclerView.scrollToPosition(messages.size-1)
                             }
                     } else {
-                        scrollToBottom()
+                        recyclerView.scrollToPosition(messages.size-1)
                     }
                 }
                 diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)
@@ -130,36 +130,34 @@ class PartyChattingAdapter(
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        Log.d("recyclerviewScroll",1.toString())
+
+        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             1 -> {            //메시지가 내 메시지인 경우
-                val binding = ChatitemMyBinding.inflate(LayoutInflater.from(parent.context),
-                    parent,
-                    false)
+                val binding = ChatitemMyBinding.inflate(inflater, parent, false)
 
                 return MyMessageViewHolder(binding)
             }
             2 -> {
-                val binding = ChatitemMyimgBinding.inflate(LayoutInflater.from(parent.context),
-                    parent,
-                    false)
+                val binding = ChatitemMyimgBinding.inflate(inflater, parent, false)
 
                 return MyImgViewHolder(binding)
 
             }
             3 -> {
-                val binding = ChatitemOpponetBinding.inflate(LayoutInflater.from(parent.context),
-                    parent,
-                    false)
+                val binding = ChatitemOpponetBinding.inflate(inflater, parent, false)
+
                 return OtherMessageViewHolder(binding)
 
             }
             else -> {      //메시지가 상대 메시지인 경우
                 val binding =
-                    ChatitemOpponentimgBinding.inflate(LayoutInflater.from(parent.context),
-                        parent,
-                        false)
+                    ChatitemOpponentimgBinding.inflate(inflater, parent, false)
+
                 return OtherImgViewHolder(binding)
             }
         }
@@ -186,18 +184,12 @@ class PartyChattingAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        if (messages[position].senderId.equals(currentUserId)) {       //레이아웃 항목 초기화
-            if (messages[position].type == 0) {
-                (holder as MyMessageViewHolder).bind(messages[position])
-            } else {
-                (holder as MyImgViewHolder).bind(messages[position], position)
-            }
-        } else {
-            if (messages[position].type == 0) {
-                (holder as OtherMessageViewHolder).bind(messages[position], position)
-            } else {
-                (holder as OtherImgViewHolder).bind(messages[position], position)
-            }
+
+        when (holder.itemViewType) {
+            1 -> (holder as MyMessageViewHolder).bind(messages[position])
+            2 -> (holder as MyImgViewHolder).bind(messages[position], position)
+            3 -> (holder as OtherMessageViewHolder).bind(messages[position], position)
+            else -> (holder as OtherImgViewHolder).bind(messages[position], position)
         }
     }
 
@@ -209,6 +201,7 @@ class PartyChattingAdapter(
     inner class MyMessageViewHolder(private val binding: ChatitemMyBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FirebasePartyMessage) {
+
             binding.myContent.text = item.content
             binding.myTime.text = changeTimeFormat(item.sendedDate)
             readCount(item, binding.myConfirmed)
@@ -250,7 +243,6 @@ class PartyChattingAdapter(
             binding.opponentTime.text = changeTimeFormat(item.sendedDate)
             readCount(item, binding.opponentConfirmed)
             setNickNameImg(position, binding.opponentId, binding.opponentImage)
-
             binding.opponentChatImg.setOnClickListener {
                 makeDialog(messageKey[position], item.downloadUrl)
             }
@@ -297,6 +289,10 @@ class PartyChattingAdapter(
 
     }
 
+    override fun getItemId(position: Int): Long {
+        // Return a unique identifier for the item at the given position
+        return messages[position].hashCode().toLong()
+    }
     //이미지, 닉네임 배치
     fun setNickNameImg(position: Int, opponentId: TextView, opponentImage: ImageView) {
         var opponentUserId = messages[position].senderId
@@ -348,7 +344,7 @@ class PartyChattingAdapter(
                     .load(task.result)
                     .override(700, 700)
                     .into(imageView)
-
+//                recyclerView.scrollToPosition(messages.size-1)
             } else {
                 Log.d("sdfsdfkey", "실패")
 
@@ -366,11 +362,14 @@ class PartyChattingAdapter(
                     .load(task.result)
                     .override(950, 1500)
                     .into(imageView)
+
+
             } else {
                 Log.d("sdfsdfkey", "실패")
 
             }
         })
+
     }
 
     //url 로 이미지 다운로드
@@ -404,12 +403,6 @@ class PartyChattingAdapter(
     }
 
     //아이템 맨 밑으로 이동
-    fun scrollToBottom() {
-        recyclerView.post {
-            recyclerView.layoutManager?.scrollToPosition(messages.size - 1)
-        }
-    }
-
 
 }
 

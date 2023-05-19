@@ -83,6 +83,7 @@ class RestaurantPartyAdapter(val context: Context) :
             if (item.is_participate) {
                 Log.d("is_participate", (!item.is_participate).toString())
                 binding.joinGrp.isEnabled = false
+                binding.joinGrp.text = "참여중"
             }
 
             val allNum = partiNum(item.participants, item.max_people)
