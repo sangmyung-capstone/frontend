@@ -83,7 +83,7 @@ interface RetrofitService {
 
     //--------------------------------------------------------------------------
     // 손승현
-    @GET("test/parties/{user_id}/{restaurant_id}")
+    @GET("parties/{user_id}/{restaurant_id}")
     fun getResGrpList(
         @Path("user_id") userId: Long,
         @Path("restaurant_id") restaurantId: Long,

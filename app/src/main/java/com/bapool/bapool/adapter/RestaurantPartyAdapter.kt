@@ -79,7 +79,11 @@ class RestaurantPartyAdapter(val context: Context) :
                     }
                 }
             }
-
+            //만약 참여중인 그룹이라면 button을 다르게 표시
+            if (!item.is_participate) {
+                Log.d("is_participate", (!item.is_participate).toString())
+                binding.joinGrp.isEnabled = false
+            }
 
             val allNum = partiNum(item.participants, item.max_people)
             val allDate = dateRange(item.start_date, item.end_date)
@@ -109,7 +113,6 @@ class RestaurantPartyAdapter(val context: Context) :
         return range
 
     }
-
 
 
     //참여인원, 정원 String으로 한줄 만들기

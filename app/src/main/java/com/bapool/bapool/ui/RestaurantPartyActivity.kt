@@ -23,7 +23,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     val userId: Long = 1
     val restaurantId: Long = 1470337852
 
-    val retro = ServerRetrofit.create()
+    val retro = RetrofitService.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +52,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
             intent.putExtra("resName", resNameIntent)
             startActivity(intent)
         }
-//        resGrpAdapter.itemClick = object : ResGrpListAdapter.ItemClick {
-//            override fun onClick(view: View, position: Int) {
-//                Toast.makeText(baseContext,)
-//            }
-//
-//        }
     }
 
     //recyclerview 연결
@@ -80,10 +74,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         // 정상적으로 통신이 성공된 경우
                         response.body()?.let { result ->
-//                            resNameIntent = result.restaurant_name
-//                            resGrpAdapter.resName = result.restaurant_name
-//                            binding.resName.setText(result.restaurant_name)
-//                            resGrpAdapter.resGroup = result.groups
                             val partyResult = result.result
                             resNameIntent = partyResult.restaurant_name
                             resGrpAdapter.resName = partyResult.restaurant_name

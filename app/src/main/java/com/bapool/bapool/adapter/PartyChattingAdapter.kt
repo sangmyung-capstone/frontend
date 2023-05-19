@@ -14,9 +14,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bapool.bapool.retrofit.data.FirebasePartyMessage
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
@@ -54,127 +55,19 @@ class PartyChattingAdapter(
     //    lateinit var chatRoomkeyWhat: String
     var peopleCount = 0
     val testUserId = "userId3"
+    private var currentPage = 0
+    private val itemsPerPage = 100
+
 
     init {
-//
-//        databaseReference =
-//            FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
-//                .child("groupMessages")
-//        valueEventListener = databaseReference.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                messages.clear()
-//                Log.d("chatRoomMessage", "입문")
-//                var readUsers: MutableMap<String, FirebasePartyMessage> = HashMap()
-//                for (data in dataSnapshot.children) {
-//                    var messageObject: FirebasePartyMessage =
-//                        data.getValue<FirebasePartyMessage>()!!
-//                    var messageObject_modify: FirebasePartyMessage =
-//                        data.getValue<FirebasePartyMessage>()!!
-//                    var messageKeyObject = data.key.toString()
-//
-//                    messageKey.add(messageKeyObject)
-//                    messageObject_modify.confirmed.put(currentUserId, true)
-//                    readUsers.put(messageKeyObject, messageObject_modify)
-//                    messages.add(messageObject)
-//                }
-//
-//                if (messages.size == 0) {
-//                    notifyDataSetChanged()          //화면 업데이트
-//                    recyclerView.scrollToPosition(messages.size - 1)
-//
-//                } else {
-//                    if (!messages.get(messages.size - 1).confirmed.containsKey(currentUserId)) {
-//                        FirebaseDatabase.getInstance().getReference("Groups")
-//                            .child(groupId).child("groupMessages")
-//                            .updateChildren(readUsers as Map<String, FirebasePartyMessage>)
-//                            .addOnCompleteListener {
-//                                notifyDataSetChanged()          //화면 업데이트
-//                                recyclerView.scrollToPosition(messages.size - 1)
-//                            }
-//                    } else {
-//                        notifyDataSetChanged()          //화면 업데이트
-//                        recyclerView.scrollToPosition(messages.size - 1)
-//                    }
-//                }
-//
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//            }
-//        })
-//        //diffUtil Version
-//        databaseReference = FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
-//            .child("groupMessages")
-//
-//        valueEventListener = databaseReference.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                val oldMessages = ArrayList(messages)
-//                val oldMessageKeys = ArrayList(messageKey)
-//                messages.clear()
-//                Log.d("chatRoomMessage", "입문")
-//                val readUsers: MutableMap<String, FirebasePartyMessage> = HashMap()
-//                for (data in dataSnapshot.children) {
-//                    val messageObject: FirebasePartyMessage =
-//                        data.getValue<FirebasePartyMessage>()!!
-//                    val messageObject_modify: FirebasePartyMessage =
-//                        data.getValue<FirebasePartyMessage>()!!
-//                    val messageKeyObject = data.key.toString()
-//
-//                    messageKey.add(messageKeyObject)
-//                    messageObject_modify.confirmed.put(currentUserId, true)
-//                    readUsers.put(messageKeyObject, messageObject_modify)
-//                    messages.add(messageObject)
-//                }
-//
-//                val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-//                    override fun getOldListSize(): Int {
-//                        return oldMessages.size
-//                    }
-//
-//                    override fun getNewListSize(): Int {
-//                        return messages.size
-//                    }
-//
-//                    override fun areItemsTheSame(
-//                        oldItemPosition: Int,
-//                        newItemPosition: Int,
-//                    ): Boolean {
-//                        return oldMessageKeys[oldItemPosition] == messageKey[newItemPosition]
-//                    }
-//
-//                    override fun areContentsTheSame(
-//                        oldItemPosition: Int,
-//                        newItemPosition: Int,
-//                    ): Boolean {
-//                        return oldMessages[oldItemPosition] == messages[newItemPosition]
-//                    }
-//                })
-//
-//
-//                if (messages.size > 0) {
-//                    if (!messages[messages.size - 1].confirmed.containsKey(currentUserId)) {
-//                        FirebaseDatabase.getInstance().getReference("Groups")
-//                            .child(groupId).child("groupMessages")
-//                            .updateChildren(readUsers as Map<String, FirebasePartyMessage>)
-//                            .addOnCompleteListener {
-//                                recyclerView.scrollToPosition(messages.size - 1)
-//                            }
-//                    } else {
-//                        recyclerView.scrollToPosition(messages.size - 1)
-//                    }
-//                }
-//                diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)
-//
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {}
-//        })
-
-
+        recyclerView.postDelayed({
+            recyclerView.layoutManager?.scrollToPosition(messages.size - 1)
+        }, 1000)
         //diffUtil Version
         databaseReference = FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
             .child("groupMessages")
-        valueEventListener = databaseReference.addValueEventListener(object : ValueEventListener {
+        val query = databaseReference
+        valueEventListener = query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val oldMessages = ArrayList(messages)
                 val oldMessageKeys = ArrayList(messageKey)
@@ -193,7 +86,6 @@ class PartyChattingAdapter(
                     readUsers.put(messageKeyObject, messageObject_modify)
                     messages.add(messageObject)
                 }
-
                 val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                     override fun getOldListSize(): Int {
                         return oldMessages.size
@@ -216,31 +108,30 @@ class PartyChattingAdapter(
                     ): Boolean {
                         return oldMessages[oldItemPosition] == messages[newItemPosition]
                     }
+
                 })
-
-
                 if (messages.size > 0) {
-
                     if (!messages[messages.size - 1].confirmed.containsKey(currentUserId)) {
                         FirebaseDatabase.getInstance().getReference("Groups")
                             .child(groupId).child("groupMessages")
                             .updateChildren(readUsers as Map<String, FirebasePartyMessage>)
                             .addOnCompleteListener {
-                                recyclerView.scrollToPosition(messages.size - 1)
+                                scrollToBottom()
                             }
                     } else {
-                        recyclerView.smoothScrollToPosition(messages.size - 1)
+                        scrollToBottom()
                     }
                 }
                 diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)
-
             }
 
             override fun onCancelled(error: DatabaseError) {}
         })
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
         return when (viewType) {
             1 -> {            //메시지가 내 메시지인 경우
                 val binding = ChatitemMyBinding.inflate(LayoutInflater.from(parent.context),
@@ -274,21 +165,21 @@ class PartyChattingAdapter(
         }
     }
 
-    override fun getItemViewType(position: Int): Int {               //메시지의 id에 따라 내 메시지/상대 메시지 구분
+
+    override fun getItemViewType(position: Int): Int {               //메시지의 id에 따라 내 메시지/상대 메시지
+
         if (messages[position].senderId.equals(currentUserId)) {       //레이아웃 항목 초기화
             if (messages[position].type == 0) {
                 return 1
             } else {
                 return 2
             }
-
         } else {
             if (messages[position].type == 0) {
                 return 3
             } else {
                 return 4
             }
-
         }
     }
 
@@ -299,17 +190,14 @@ class PartyChattingAdapter(
             if (messages[position].type == 0) {
                 (holder as MyMessageViewHolder).bind(messages[position])
             } else {
-
                 (holder as MyImgViewHolder).bind(messages[position], position)
             }
-
         } else {
             if (messages[position].type == 0) {
                 (holder as OtherMessageViewHolder).bind(messages[position], position)
             } else {
                 (holder as OtherImgViewHolder).bind(messages[position], position)
             }
-
         }
     }
 
@@ -453,13 +341,13 @@ class PartyChattingAdapter(
     fun getImageData(ImgKey: String, Img: ImageView) {
         val storageReference = Firebase.storage.reference.child(ImgKey)
         val imageView = Img
+
         storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
             if (task.isSuccessful) {
                 Glide.with(context)
                     .load(task.result)
                     .override(700, 700)
                     .into(imageView)
-                recyclerView.scrollToPosition(messages.size - 1)
 
             } else {
                 Log.d("sdfsdfkey", "실패")
@@ -467,6 +355,7 @@ class PartyChattingAdapter(
             }
         })
     }
+
     //dialog에 띄우는 이미지, 더 크게
     fun getImageDataDialog(ImgKey: String, Img: ImageView) {
         val storageReference = Firebase.storage.reference.child(ImgKey)
@@ -515,9 +404,9 @@ class PartyChattingAdapter(
     }
 
     //아이템 맨 밑으로 이동
-    private fun scrollToBottom() {
+    fun scrollToBottom() {
         recyclerView.post {
-            recyclerView.layoutManager?.smoothScrollToPosition(recyclerView, null, messages.size - 1)
+            recyclerView.layoutManager?.scrollToPosition(messages.size - 1)
         }
     }
 

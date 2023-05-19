@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 data class GetResGroupListResponse(
     val code: Int,
     val message: String,
-    val result: GetRestaurantPartiesListResult
+    val result: GetRestaurantPartiesListResult,
 )
 
 data class MyPartyListModel(
@@ -31,7 +31,8 @@ data class ResPartyList(
     val party_id: Int,
     val party_name: String,
     val rating: List<Double>,
-    val start_date: String
+    val start_date: String,
+    val is_participate: Boolean,
 )
 
 data class PostMakePartyRequest(
@@ -73,10 +74,10 @@ data class FirebasePartyMessage(
     var sendedDate: String = "",
     var content: String = "",
     var type: Int = 0,
-    var downloadUrl : String = "",
+    var downloadUrl: String = "",
     var confirmed: MutableMap<String, Boolean> = HashMap(),
 
-)
+    )
 
 
 data class FirebaseParty(
@@ -85,8 +86,7 @@ data class FirebaseParty(
 )
 
 
-
 data class GetRestaurantPartiesListResult(
     val parties: List<ResPartyList>,
-    val restaurant_name: String
+    val restaurant_name: String,
 )
