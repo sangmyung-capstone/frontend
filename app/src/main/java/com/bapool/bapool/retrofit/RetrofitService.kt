@@ -81,6 +81,14 @@ interface RetrofitService {
         @Path("user-id") userId: Long,
     ): Call<GetRestaurantLogResponse>
 
+    @GET("/users/evaluate/{user-id}")
+    fun GetEvaluateUser(
+        @Header("Authorization") accessToken: String,
+        @Path("user-id") userId: Long,
+        @Query("party-id") partyId: Long
+    ): Call<GetEvaluateUserResponse>
+
+
     //--------------------------------------------------------------------------
     // 손승현
     @GET("parties/{user_id}/{restaurant_id}")
