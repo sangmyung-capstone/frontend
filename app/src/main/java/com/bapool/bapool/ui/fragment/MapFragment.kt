@@ -1,6 +1,7 @@
 package com.bapool.bapool.ui.fragment
 
 import android.Manifest
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -10,8 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.annotation.UiThread
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
@@ -61,6 +64,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 위치 권한 요청
         requestPermissions()
 
+        // bottomSheet에 식당바텀리스트 레이아웃 할당
+        layoutInflater.inflate(R.layout.bottom_party_list, binding.bottomSheet, true)
+
         // 현 위치에서 검색 터치 시 // FAB
         binding.extendedFAB.setOnClickListener {
 
@@ -104,7 +110,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun mapInit() {
-
 
         // 초기 지도 옵션
         val options = NaverMapOptions()
@@ -198,7 +203,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun markerClickEvent(marker: Marker) {
+
         marker.setOnClickListener {
+            layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
+
             // 해당 마커 위치로 지도 이동
             val cameraUpdate: CameraUpdate =
                 CameraUpdate.scrollAndZoomTo(marker.position, 20.0)
