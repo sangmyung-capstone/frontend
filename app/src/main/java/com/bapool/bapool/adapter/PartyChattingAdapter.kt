@@ -43,11 +43,13 @@ class PartyChattingAdapter(
     val context: Context,
     val currentUserId: String,
     val groupId: String,
-    var messages: ArrayList<FirebasePartyMessage> = arrayListOf(),
-    var messageKey: ArrayList<String> = arrayListOf()
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    var messages: ArrayList<FirebasePartyMessage> = arrayListOf()
+    var messageKey: ArrayList<String> = arrayListOf()
+    var nickNames: ArrayList<String> = arrayListOf()
+    var resourceIds: ArrayList<String> = arrayListOf()
 
     var databaseReference: DatabaseReference
     var valueEventListener: ValueEventListener?
@@ -116,10 +118,8 @@ class PartyChattingAdapter(
                             .child(groupId).child("groupMessages")
                             .updateChildren(readUsers as Map<String, FirebasePartyMessage>)
                             .addOnCompleteListener {
-                                recyclerView.scrollToPosition(messages.size-1)
                             }
                     } else {
-                        recyclerView.scrollToPosition(messages.size-1)
                     }
                 }
                 diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)

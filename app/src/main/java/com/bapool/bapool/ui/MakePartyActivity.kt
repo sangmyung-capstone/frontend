@@ -134,11 +134,11 @@ class MakePartyActivity : AppCompatActivity() {
 
         //모임 끝나는 날짜 정하기
         binding.endDate.setOnClickListener {
-            if (binding.startDate.text.toString() == "시작날짜") {
+            if (binding.startDateText.text.toString() == "시작날짜") {
                 alterDialog("시작날짜를 정해주세요.")
             } else {
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-                val minDate = dateFormat.parse("${binding.startDate.text}")
+                val minDate = dateFormat.parse("${binding.startDateText.text}")
                 val customDatePickerBinding =
                     CustomDatepickerBinding.inflate(LayoutInflater.from(baseContext))
                 datePickerDialogCustom(minDate.time, 0)
@@ -159,7 +159,6 @@ class MakePartyActivity : AppCompatActivity() {
             Log.d("hastagList", binding.grpNameText.text.toString())
             Log.d("hastagList", binding.detail.text.toString())
             Log.d("hastagList", binding.menuText.text.toString())
-            Log.d("dateString", binding.startDate.text.toString())
         }
 
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
@@ -170,15 +169,15 @@ class MakePartyActivity : AppCompatActivity() {
             } else if (binding.menuText.text.isNullOrBlank()) {
                 alterDialog("상세메뉴를 입력해주세요.")
 
-            } else if (binding.startDate.text.toString() == "시작날짜") {
+            } else if (binding.startDateText.text.toString() == "시작날짜") {
                 alterDialog("시작날짜를 입력해주세요.")
 
-            } else if (binding.startTime.text.toString() == "시작시간") {
+            } else if (binding.startTimeText.text.toString() == "시작시간") {
                 alterDialog("시작시간을 입력해주세요.")
-            } else if (compareTime(binding.startDate.text.toString(),
-                    binding.endDate.text.toString(),
-                    binding.startTime.text.toString(),
-                    binding.endTime.text.toString())
+            } else if (compareTime(binding.startDateText.text.toString(),
+                    binding.endDateText.text.toString(),
+                    binding.startTimeText.text.toString(),
+                    binding.endTimeText.text.toString())
             ) {
                 alterDialog("끝나는 시간이 시작 시간보다 작습니다.")
             } else {
@@ -186,8 +185,8 @@ class MakePartyActivity : AppCompatActivity() {
                     PostMakePartyRequest(retaurantId,
                         binding.grpNameText.text.toString(),
                         maxPeople.value,
-                        binding.startDate.text.toString(),
-                        binding.endDate.text.toString(),
+                        binding.startDateText.text.toString(),
+                        binding.endDateText.text.toString(),
                         binding.menuText.text.toString(),
                         imgUrl,
                         hastagList,
@@ -248,10 +247,10 @@ class MakePartyActivity : AppCompatActivity() {
                 val selectedDate =
                     String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                 if (startOrEnd == 1) {
-                    binding.startDate.setText(selectedDate)
-                    binding.endDate.setText(selectedDate)
+                    binding.startDateText.setText(selectedDate)
+                    binding.endDateText.setText(selectedDate)
                 } else if (startOrEnd == 0) {
-                    binding.endDate.setText(selectedDate)
+                    binding.endDateText.setText(selectedDate)
                 }
 
             }, year, month, day)
@@ -278,11 +277,11 @@ class MakePartyActivity : AppCompatActivity() {
             val selectedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
             //시작시간 정할때 끝시간 +2시간으로 지정해줌
             if (startOrEnd == 1) {
-                binding.startTime.setText(selectedTime)
-                binding.endTime.setText(
+                binding.startTimeText.setText(selectedTime)
+                binding.endTimeText.setText(
                     String.format("%02d:%02d", (selectedHour + 2) % 24, selectedMinute))
             } else if (startOrEnd == 0) {
-                binding.endTime.setText(selectedTime)
+                binding.endTimeText.setText(selectedTime)
             }
 
         }, hour, minute, true)

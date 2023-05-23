@@ -79,6 +79,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
                             resGrpAdapter.resName = partyResult.restaurant_name
                             binding.resName.setText(partyResult.restaurant_name)
                             resGrpAdapter.resGroup = partyResult.parties
+                            binding.restaurantName.setText(partyResult.restaurant_name)
                             Log.d("shRetrofitSE", partyResult.toString())
                             adapter()
                         }

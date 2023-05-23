@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="160dp">
+    android:layout_height="210dp"
+    android:layout_margin="10dp"
+    android:layout_marginBottom="0dp"
+    android:background="@drawable/restaurant_partylist_item_corner">
 
     <TextView
         android:id="@+id/grpName"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="17dp"
+        android:layout_marginTop="5dp"
         android:text="그룸이름(대표메뉴)"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/textView"
-        android:layout_width="17dp"
-        android:layout_height="17dp"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/usershape"
-        android:text="참여인원/정원"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/date"
-        app:layout_constraintStart_toEndOf="@+id/date"
-        app:layout_constraintTop_toTopOf="@+id/date" />
-
     <TextView
         android:id="@+id/participantsNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="10dp"
         android:text="참여인원/정원"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인원"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/menu"
+        app:layout_constraintStart_toEndOf="@+id/menu"
+        app:layout_constraintTop_toTopOf="@+id/menu" />
 
     <LinearLayout
         android:id="@+id/hashtagVisible"
@@ -97,35 +101,33 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="시작 시간"
+        app:layout_constraintStart_toStartOf="@+id/menu_text"
+        app:layout_constraintTop_toBottomOf="@+id/menu_text" />
+
+    <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:text="만나는 날짜 시간 범위로"
         android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@+id/grpName"
-        app:layout_constraintTop_toBottomOf="@+id/grpName" />
-
-    <TextView
-        android:id="@+id/detail_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="디테일"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/date"
-        app:layout_constraintTop_toBottomOf="@+id/date" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView8"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/detail"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/detail_text"
-        app:layout_constraintStart_toEndOf="@+id/detail_text"
-        app:layout_constraintTop_toTopOf="@+id/detail_text" />
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:text="detail"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/menu_text"
@@ -133,34 +135,28 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="메뉴"
-        app:layout_constraintStart_toStartOf="@+id/detail_text"
-        app:layout_constraintTop_toBottomOf="@+id/detail_text" />
+        app:layout_constraintStart_toStartOf="@+id/grpName"
+        app:layout_constraintTop_toBottomOf="@+id/grpName" />
 
     <TextView
         android:id="@+id/menu"
-        android:layout_width="260dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="menu"
         app:layout_constraintBottom_toBottomOf="@+id/menu_text"
         app:layout_constraintStart_toEndOf="@+id/menu_text"
         app:layout_constraintTop_toTopOf="@+id/menu_text" />
 
-    <TextView
-        android:layout_width="match_parent"
-
-        android:layout_height="2dp"
-        android:background="#EEEEEE"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
     <Button
         android:id="@+id/joinGrp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="false"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
         android:text="참여"
+        android:textColor="@color/black"
+        android:textSize="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/ban"
@@ -170,28 +166,40 @@
         android:text="* 차단한 사용자가 포함되어 있습니다. *"
         android:textColor="#FF0000"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/detail"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="17dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
         android:text="참여인원 평점:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+
+        android:maxWidth="130dp"
         android:text="3.8 / 4.5"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+
+    <TextView
+        android:id="@+id/textLine"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#EEEEEE"
+        app:layout_constraintBottom_toTopOf="@+id/detail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

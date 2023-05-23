@@ -76,14 +76,15 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
 //            Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
 ////            그룹 더미데이터 추가
 //            val database = Firebase.database
-//            val myRef = database.getReference("Groups")
+//            val myRef = database.getReference("test").child("Groups")
 //            val hashtaglist = mutableListOf<Int>()
 //            hashtaglist.add(4)
 //            hashtaglist.add(3)
 //            val groupInfo = FirebasePartyInfo("그룹이름1", "메뉴1", "상세메뉴1",
 //                1, 4, getTime(), getTime(), hashtaglist)
-//            val groupUsers = mapOf("userId3" to false)
+//            val groupUsers = mapOf("4" to false)
 //            val Group3 = FirebaseParty(groupInfo, groupUsers)
+//            myRef.child("3").child("groupUsers").updateChildren(groupUsers)
 
 //            myRef.child("groupId1").setValue(Group3)
 //            myRef.child("groupId1").child("groupInfo").setValue(groupInfo)

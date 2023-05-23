@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.RestaurantPartyActivity">
 
+
     <TextView
         android:id="@+id/resName"
         android:layout_width="wrap_content"
@@ -35,18 +36,55 @@
         android:background="#EEEEEE"
         app:layout_constraintTop_toBottomOf="@+id/resName" />
 
+
+    <TextView
+        android:id="@+id/textLine2"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:background="#EEEEEE"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantLocation" />
+
+    <TextView
+        android:id="@+id/restaurantName"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="식당 이름"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLine" />
+
+    <TextView
+        android:id="@+id/restaurantLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="15sp"
+        android:text="식당 주소"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantName" />
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="5dp"
+        android:background="#EEEEEE"
         android:id="@+id/resGrpRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/textLine"/>
+        app:layout_constraintTop_toBottomOf="@+id/textLine2"
+        tools:layout_editor_absoluteX="0dp" />
 
     <android.widget.Button
         android:id="@+id/goToMakeGrp"
-        android:text="그룹생성"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:text="그룹생성"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
