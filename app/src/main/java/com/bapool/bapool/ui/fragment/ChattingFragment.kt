@@ -31,7 +31,7 @@ class ChattingFragment : Fragment() {
     private val binding get() = _binding!!
 
     //임시 userId,groupId
-    val currentUserId = "userId2"
+    val currentUserId = "userId3"
     val groupId = "groupId1"
 
     //firebase database
@@ -118,7 +118,6 @@ class ChattingFragment : Fragment() {
             PartyChattingAdapter(chattingRecyclerView, requireContext(), currentUserId, groupId)
         chattingRecyclerView.adapter = chattingRVA
         chattingRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-
     }
 
     //뷰바인딩 생명주기 관리
@@ -166,31 +165,6 @@ class ChattingFragment : Fragment() {
         }
     }
 
-
-//    fun writeImage(){
-//        val imageBtn = binding.putImageBtn
-//        val storage = Firebase.storage
-//
-//        val storageRef = storage.reference
-//
-//        val mountainsRef = storageRef.child(key+".jpg")
-//
-//        imageBtn.isDrawingCacheEnabled = true
-//        imageBtn.buildDrawingCache()
-//        val bitmap = (imageBtn.drawable as BitmapDrawable).bitmap
-//        val baos = ByteArrayOutputStream()
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-//        val data = baos.toByteArray()
-//
-//        var uploadTask = mountainsRef.putBytes(data)
-//        uploadTask.addOnFailureListener {
-//            // Handle unsuccessful uploads
-//        }.addOnSuccessListener { taskSnapshot ->
-//            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-//            // ...
-//        }
-//
-//    }
 
 
 //    override fun onAttach(context: Context) {
