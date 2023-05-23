@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityRegisterBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,7 +23,10 @@ import retrofit2.Response
 class RegisterActivity : AppCompatActivity() {
     private var _binding: ActivityRegisterBinding? = null
     private val binding get() = _binding!!
+
     var selectedButton: Button? = null // initially no button is selected
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -62,7 +66,8 @@ class RegisterActivity : AppCompatActivity() {
                     )
                 Log.d("bap", "OnRequest 정보 $userInfo")
 
-                val retro = RetrofitService.create()
+                //    val retro = RetrofitService.create()    // Mock Server
+                val retro = ServerRetrofit.create()
 
                 retro.PostNaverSignup(userInfo)
                     .enqueue(object : Callback<PostNaverSignupResponse> {
@@ -156,7 +161,8 @@ class RegisterActivity : AppCompatActivity() {
                     )
                 Log.d("bap", "OnRequest 정보 $userInfo")
 
-                val retro = RetrofitService.create()
+//                val retro = RetrofitService.create()    // Mock Server
+                val retro = ServerRetrofit.create()
 
                 retro.PostKakaoSignup(userInfo)
                     .enqueue(object : Callback<PostKakaoSignupResponse> {
