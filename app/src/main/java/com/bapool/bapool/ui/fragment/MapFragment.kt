@@ -1,6 +1,7 @@
 package com.bapool.bapool.ui.fragment
 
 import android.Manifest
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -10,8 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.annotation.UiThread
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
@@ -48,8 +51,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val bapoolImg = OverlayImage.fromResource(R.drawable.bapool_circle) // by lazy
     val bapoolImgRed = OverlayImage.fromResource(R.drawable.bapool_circle_red)
 
-//    val retro = RetrofitService.create()  // MOCK SERVER
-    val retro = ServerRetrofit.create()
+    val retro = RetrofitService.create()  // MOCK SERVER
+//    val retro = ServerRetrofit.create()
 
 
     override fun onCreateView(
@@ -60,6 +63,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 위치 권한 요청
         requestPermissions()
+
+        // bottomSheet에 식당바텀리스트 레이아웃 할당
+        layoutInflater.inflate(R.layout.bottom_party_list, binding.bottomSheet, true)
 
         // 현 위치에서 검색 터치 시 // FAB
         binding.extendedFAB.setOnClickListener {
@@ -105,7 +111,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun mapInit() {
 
-
         // 초기 지도 옵션
         val options = NaverMapOptions()
 //            .maxZoom(19.0)
@@ -147,43 +152,46 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 call: Call<GetRestaurantsResult>,
                 response: Response<GetRestaurantsResult>
             ) {
-                // 기존 마커 존재 시 전부 삭제
-                if (markerList.size != 0) {
-                    Log.d("MYTAG", "marker clear!!!")
-                    for (i in 0 until markerList.size) markerList[i].map = null
-                    markerList.clear()
-                }
-                // 마커 생성
-                for (i in 0 until response.body()!!.result.restaurants.size) { // 리스폰스로 받은 사이즈 만큼
-                    markerList.add(i, Marker()) // 마커 할당
-                    if (response.body()!!.result.restaurants[i].num_of_party != 0) // group이 있는 마커 표현
-                        markerList[i].icon = bapoolImg
-                    else
-                        markerList[i].icon = bapoolImgRed
-                    markerList[i].isHideCollidedSymbols = true
-                    markerList[i].isHideCollidedCaptions = true
-                    markerList[i].position = // 마커 위치 할당
-                        LatLng(
-                            response.body()!!.result.restaurants[i].restaurant_latitude,
-                            response.body()!!.result.restaurants[i].restaurant_longitude
+                if (response.isSuccessful) {
+                    // 기존 마커 존재 시 전부 삭제
+                    if (markerList.size != 0) {
+                        Log.d("MYTAG", "marker clear!!!")
+                        for (i in 0 until markerList.size) markerList[i].map = null
+                        markerList.clear()
+                    }
+                    // 마커 생성
+                    for (i in 0 until response.body()!!.result.restaurants.size) { // 리스폰스로 받은 사이즈 만큼
+                        markerList.add(i, Marker()) // 마커 할당
+                        if (response.body()!!.result.restaurants[i].num_of_party != 0) // group이 있는 마커 표현
+                            markerList[i].icon = bapoolImg
+                        else
+                            markerList[i].icon = bapoolImgRed
+                        markerList[i].isHideCollidedSymbols = true
+                        markerList[i].isHideCollidedCaptions = true
+                        markerList[i].position = // 마커 위치 할당
+                            LatLng(
+                                response.body()!!.result.restaurants[i].restaurant_latitude,
+                                response.body()!!.result.restaurants[i].restaurant_longitude
+                            )
+                        markerList[i].map = naverMap    // 생성 마커들 지도에 출력
+                        markerList[i].width = 75
+                        markerList[i].height = 75
+                        markerList[i].captionText =
+                            response.body()!!.result.restaurants[i].restaurant_name
+                        markerList[i].setCaptionAligns(
+                            Align.Bottom,
+                            Align.Left,
+                            Align.Right,
+                            Align.Top,
+                            Align.Center
                         )
-                    markerList[i].map = naverMap    // 생성 마커들 지도에 출력
-                    markerList[i].width = 75
-                    markerList[i].height = 75
-                    markerList[i].captionText =
-                        response.body()!!.result.restaurants[i].restaurant_name
-                    markerList[i].setCaptionAligns(
-                        Align.Bottom,
-                        Align.Left,
-                        Align.Right,
-                        Align.Top,
-                        Align.Center
-                    )
 
-
-                    // 해당 마커 클릭 이벤트
-                    markerClickEvent(markerList[i])
-//                    }
+                        // 해당 마커 클릭 이벤트
+                        markerClickEvent(markerList[i])
+                    }
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    Log.d("MYTAG", "onResponse 실패")
                 }
             }
 
@@ -195,7 +203,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun markerClickEvent(marker: Marker) {
+
         marker.setOnClickListener {
+            layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
+
             // 해당 마커 위치로 지도 이동
             val cameraUpdate: CameraUpdate =
                 CameraUpdate.scrollAndZoomTo(marker.position, 20.0)
@@ -219,7 +230,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
 
             override fun onPermissionDenied(deniedPermissions: List<String>) {
-                Toast.makeText(context, "Permission Denied\n$deniedPermissions", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    context,
+                    "Permission Denied\n$deniedPermissions",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
                 /* 예외 처리 필요 */
             }
