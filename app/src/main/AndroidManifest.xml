@@ -40,8 +40,8 @@
         </activity>
         <activity
             android:name=".ui.ChattingAndPartyInfoActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -62,7 +62,7 @@
         </activity>
         <activity
             android:name=".ui.RestaurantPartyActivity"
-            android:exported="false" >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

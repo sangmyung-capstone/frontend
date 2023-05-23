@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bapool.bapool.adapter.MyGrpListAdapter
+import com.bapool.bapool.adapter.MyPartyListAdapter
 import com.bapool.bapool.databinding.FragmentPartyBinding
 import com.bapool.bapool.retrofit.data.MyPartyListModel
 import com.bapool.bapool.ui.RestaurantPartyActivity
@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 class PartyFragment : Fragment() {
     private var _binding: FragmentPartyBinding? = null
     private val binding get() = _binding!!
-    private lateinit var myGroupAdapter: MyGrpListAdapter
+    private lateinit var myGroupAdapter: MyPartyListAdapter
     lateinit var myGroupRv: RecyclerView
     var myGrpListModel = arrayListOf<MyPartyListModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class PartyFragment : Fragment() {
     //변수 초기화
     fun initializeVari() {
         myGroupRv = binding.myGroupListRv
-        myGroupAdapter = MyGrpListAdapter(requireContext(), myGrpListModel)
+        myGroupAdapter = MyPartyListAdapter(requireContext(), myGrpListModel)
 
     }
 
