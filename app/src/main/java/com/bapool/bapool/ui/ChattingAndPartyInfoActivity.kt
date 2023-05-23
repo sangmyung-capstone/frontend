@@ -37,7 +37,7 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
     private val partyInfoViewModel: PartyInfoViewModel by viewModels()
 
     //임시 userId,groupId
-    val currentUserId = "userId1"
+    val currentUserId = "userId3"
     val groupId = "groupId1"
 
     override fun onCreate(savedInstanceState: Bundle?) {

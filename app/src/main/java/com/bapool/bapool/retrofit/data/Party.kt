@@ -3,8 +3,9 @@ package com.bapool.bapool.retrofit.data
 import java.time.LocalDateTime
 
 data class GetResGroupListResponse(
-    val restaurant_name: String,
-    val groups: List<ResPartyList>,
+    val code: Int,
+    val message: String,
+    val result: GetRestaurantPartiesListResult,
 )
 
 data class MyPartyListModel(
@@ -20,17 +21,18 @@ data class MyPartyListModel(
 )
 
 data class ResPartyList(
-    val group_id: Int,
-    val group_name: String,
-    val participants: Int,
-    val max_people: Int,
-    val start_date: String,
-    val end_date: String,
-    val menu: String,
-    val hashtag: ArrayList<Int>,
     val detail: String,
+    val end_date: String,
     val has_block_user: Boolean,
-    val rating: ArrayList<Double>,
+    val hashtag: List<Int>,
+    val max_people: Int,
+    val menu: String,
+    val participants: Int,
+    val party_id: Int,
+    val party_name: String,
+    val rating: List<Double>,
+    val start_date: String,
+    val is_participate: Boolean,
 )
 
 data class PostMakePartyRequest(
@@ -72,10 +74,10 @@ data class FirebasePartyMessage(
     var sendedDate: String = "",
     var content: String = "",
     var type: Int = 0,
-    var downloadUrl : String = "",
+    var downloadUrl: String = "",
     var confirmed: MutableMap<String, Boolean> = HashMap(),
 
-)
+    )
 
 
 data class FirebaseParty(
@@ -84,3 +86,7 @@ data class FirebaseParty(
 )
 
 
+data class GetRestaurantPartiesListResult(
+    val parties: List<ResPartyList>,
+    val restaurant_name: String,
+)
