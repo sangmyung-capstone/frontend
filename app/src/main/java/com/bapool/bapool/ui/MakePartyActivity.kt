@@ -15,6 +15,7 @@ import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityMakePartyBinding
 import com.bapool.bapool.databinding.CustomDatepickerBinding
 import com.bapool.bapool.databinding.CustomTimepickerBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,9 +32,17 @@ class MakePartyActivity : AppCompatActivity() {
     lateinit var maxPeople: NumberPicker
     val retro = RetrofitService.create()
     val userId: Long = 2
-    val retaurantId = 1
-    val imgUrl = "ImageUrl"
-
+    val imageUrl = "https://example.com/image.jpg"
+    val makeParty =
+        PostMakePartyRequestRestaurantInfo(
+            "서울 동작구",
+            "육류 - 고기",
+            "https://example.com/image.jpg",
+            "밥꼬찖닭",
+            "010-111-111",
+            123,
+            "dsfkjasdklfj.com"
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -181,17 +190,28 @@ class MakePartyActivity : AppCompatActivity() {
             ) {
                 alterDialog("끝나는 시간이 시작 시간보다 작습니다.")
             } else {
+                val endDateLocal =
+                    binding.endDateText.text.toString() + " " + binding.endTimeText.text.toString()+":00"
+                val startDateLocal =
+                    binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString()+":00"
+
+                Log.d("LocalDateEndStart", endDateLocal)
+                Log.d("LocalDateEndStart", startDateLocal)
+
                 val makeGrpInstance =
-                    PostMakePartyRequest(retaurantId,
-                        binding.grpNameText.text.toString(),
-                        maxPeople.value,
-                        binding.startDateText.text.toString(),
-                        binding.endDateText.text.toString(),
-                        binding.menuText.text.toString(),
-                        imgUrl,
+                    PostMakePartyRequest(
+                        binding.detail.text.toString(),
+                        endDateLocal,
                         hastagList,
-                        binding.detail.text.toString())
-                val intent = Intent(this,ChattingAndPartyInfoActivity::class.java)
+                        imageUrl,
+                        maxPeople.value,
+                        binding.grpNameText.text.toString(),
+                        binding.menuText.text.toString(),
+                        makeParty,
+                        startDateLocal)
+                Log.d("MakePartyInfo", makeGrpInstance.toString())
+
+                val intent = Intent(this, ChattingAndPartyInfoActivity::class.java)
                 startActivity(intent)
                 retrofit(makeGrpInstance)
             }
@@ -207,6 +227,8 @@ class MakePartyActivity : AppCompatActivity() {
                 call: Call<PostMakePartyResponse>,
                 response: Response<PostMakePartyResponse>,
             ) {
+                Log.d("MKRetrofit", "onRequest 성공: $makeGrp")
+
                 if (response.isSuccessful) {
                     var result: PostMakePartyResponse? =
                         response.body()
@@ -215,7 +237,7 @@ class MakePartyActivity : AppCompatActivity() {
                     Toast.makeText(this@MakePartyActivity, "그룹생성", Toast.LENGTH_SHORT).show()
                     //group_id 넘겨줘야함 Intent할때
                 } else {
-                    Log.d("MKRetrofite", "onResponse 실패 :" + response.body().toString())
+                    Log.d("MKRetrofit", "onResponse 실패 :" + response.body().toString())
                 }
             }
 
@@ -337,10 +359,6 @@ class MakePartyActivity : AppCompatActivity() {
 
         calendar1.time = timeFormat.parse(startTimeUnit)
         calendar2.time = timeFormat.parse(endTimeUnit)
-
-        Log.d("timesetting", calendar1.toString())
-        Log.d("timesetting", calendar1.toString())
-        Log.d("timesetting", calendar1.before(calendar2).toString())
 
         val cmp = calendar1.compareTo(calendar2)
         return cmp

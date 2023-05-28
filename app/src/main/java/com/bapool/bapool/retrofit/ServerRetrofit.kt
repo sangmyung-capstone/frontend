@@ -78,6 +78,12 @@ interface ServerRetrofit {
         @Path("restaurant_id") restaurantId: Long,
     ): Call<GetResGroupListResponse>
 
+    @POST("test/parties/{user_id}")
+    fun makeGrp(
+        @Path("user_id") userId: Long,
+        @Body request: PostMakePartyRequest,
+    ): Call<PostMakePartyResponse>
+
     //-----------------------------------------------------------------------------
 
     // 싱글톤 객체 생성

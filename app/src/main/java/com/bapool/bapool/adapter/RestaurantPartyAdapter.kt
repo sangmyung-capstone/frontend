@@ -46,8 +46,6 @@ class RestaurantPartyAdapter(val context: Context) :
                 .setView(joinPartyDialog.root)
                 .setTitle(resGroup[position].party_name)
 
-
-
             mBuilder.show()
         }
     }
@@ -61,21 +59,24 @@ class RestaurantPartyAdapter(val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
         val joinButton: Button = binding.joinGrp
         fun bindItem(item: ResPartyList) {
+
             //차단유저 보이게하기
             if (item.has_block_user) {
                 binding.ban.visibility = View.VISIBLE
             }
             //hashtag 보이게하기
-            val hashtagList: List<Int> = item.hashtag
-            if (hashtagList.isNotEmpty()) {
-                binding.hashtagVisible.visibility = View.VISIBLE
-                for (item in hashtagList) {
-                    when (item) {
-                        1 -> binding.hash1.visibility = View.VISIBLE
-                        2 -> binding.hash2.visibility = View.VISIBLE
-                        3 -> binding.hash3.visibility = View.VISIBLE
-                        4 -> binding.hash4.visibility = View.VISIBLE
-                        5 -> binding.hash5.visibility = View.VISIBLE
+            val hashtagList: List<Int>? = item.hashtag
+            if (hashtagList != null) {
+                if (hashtagList.isNotEmpty()) {
+                    binding.hashtagVisible.visibility = View.VISIBLE
+                    for (item in hashtagList) {
+                        when (item) {
+                            1 -> binding.hash1.visibility = View.VISIBLE
+                            2 -> binding.hash2.visibility = View.VISIBLE
+                            3 -> binding.hash3.visibility = View.VISIBLE
+                            4 -> binding.hash4.visibility = View.VISIBLE
+                            5 -> binding.hash5.visibility = View.VISIBLE
+                        }
                     }
                 }
             }

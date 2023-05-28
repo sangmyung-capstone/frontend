@@ -23,16 +23,15 @@ class RestaurantPartyActivity : AppCompatActivity() {
     val userId: Long = 1
     val restaurantId: Long = 1470337852
 
-    val retro = RetrofitService.create()
+    val retro = ServerRetrofit.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRestaurantPartyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        retrofit()
         initializeVari()
+        retrofit()
         listener()
 
 
@@ -42,7 +41,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
     fun initializeVari() {
         resGrpRv = binding.resGrpRv
         resGrpAdapter = RestaurantPartyAdapter(this)
-
     }
 
     //버튼 listener
@@ -56,6 +54,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
     //recyclerview 연결
     fun adapter() {
+        Log.d("shRetrofitSE","dfkjdfk")
         resGrpRv.adapter = resGrpAdapter
         resGrpRv.layoutManager = LinearLayoutManager(this)
     }
@@ -85,7 +84,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         }
                     } else {
                         // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                        Log.d("shRetrofitSE", "onResponse 실패100")
+                        Log.d("shRetrofitE", "onResponse 실패100")
                     }
                 }
 

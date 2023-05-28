@@ -36,20 +36,31 @@ data class ResPartyList(
 )
 
 data class PostMakePartyRequest(
-    val restaurant_id: Int,
-    val group_name: String,
-    val max_people: Int,
-    val start_date: String,
-    val end_date: String,
-    val menu: String,
-    val imgUrl: String,
-    val hashtag: ArrayList<Int>,
+
     val detail: String,
+    val end_date: String,
+    val hashtag: List<Int>,
+    val imgUrl: String,
+    val max_people: Int,
+    val menu: String,
+    val party_name: String,
+    val restaurant_info: PostMakePartyRequestRestaurantInfo,
+    val start_date: String,
+)
+
+data class PostMakePartyRequestRestaurantInfo(
+    val address: String,
+    val category: String,
+    val img_url: String,
+    val name: String,
+    val phone: String,
+    val restaurant_id: Int,
+    val site_url: String,
 )
 
 
 data class Result(
-    val group_id: Int,
+    val party_id: Long,
 )
 
 data class PostMakePartyResponse(
