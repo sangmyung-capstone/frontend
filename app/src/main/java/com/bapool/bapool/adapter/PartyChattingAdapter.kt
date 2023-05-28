@@ -61,14 +61,10 @@ class PartyChattingAdapter(
 
 
     init {
-        recyclerView.postDelayed({
-            recyclerView.layoutManager?.scrollToPosition(messages.size - 1)
-        }, 1500)
         //diffUtil Version
         databaseReference = FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
             .child("groupMessages")
-        val query = databaseReference
-        valueEventListener = query.addValueEventListener(object : ValueEventListener {
+        valueEventListener = databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val oldMessages = ArrayList(messages)
                 val oldMessageKeys = ArrayList(messageKey)
@@ -118,11 +114,11 @@ class PartyChattingAdapter(
                             .child(groupId).child("groupMessages")
                             .updateChildren(readUsers as Map<String, FirebasePartyMessage>)
                             .addOnCompleteListener {
-                                recyclerView.scrollToPosition(messages.size-1)
+                                recyclerView.scrollToPosition(messages.size - 1)
                             }
                     } else {
 
-                        recyclerView.scrollToPosition(messages.size-1)
+                        recyclerView.scrollToPosition(messages.size - 1)
                     }
                 }
                 diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)
@@ -131,12 +127,13 @@ class PartyChattingAdapter(
             override fun onCancelled(error: DatabaseError) {}
         })
 
+
+
+
     }
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.d("recyclerviewScroll",1.toString())
 
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
@@ -186,8 +183,6 @@ class PartyChattingAdapter(
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-
         when (holder.itemViewType) {
             1 -> (holder as MyMessageViewHolder).bind(messages[position])
             2 -> (holder as MyImgViewHolder).bind(messages[position], position)
@@ -296,6 +291,7 @@ class PartyChattingAdapter(
         // Return a unique identifier for the item at the given position
         return messages[position].hashCode().toLong()
     }
+
     //이미지, 닉네임 배치
     fun setNickNameImg(position: Int, opponentId: TextView, opponentImage: ImageView) {
         var opponentUserId = messages[position].senderId
@@ -405,7 +401,6 @@ class PartyChattingAdapter(
         dialog.show()
     }
 
-    //아이템 맨 밑으로 이동
 
 }
 
