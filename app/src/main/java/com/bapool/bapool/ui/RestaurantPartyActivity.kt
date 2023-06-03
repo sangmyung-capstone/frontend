@@ -54,7 +54,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
     //recyclerview 연결
     fun adapter() {
-        Log.d("shRetrofitSE","dfkjdfk")
         resGrpRv.adapter = resGrpAdapter
         resGrpRv.layoutManager = LinearLayoutManager(this)
     }

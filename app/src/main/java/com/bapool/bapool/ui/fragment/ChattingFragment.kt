@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,8 @@ import com.bapool.bapool.R
 import com.bapool.bapool.adapter.PartyChattingAdapter
 import com.bapool.bapool.databinding.FragmentChattingBinding
 import com.bapool.bapool.retrofit.data.FirebasePartyMessage
-import com.google.firebase.database.DatabaseReference
+import com.bapool.bapool.retrofit.data.FirebaseUserInfo
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -36,9 +38,14 @@ class ChattingFragment : Fragment() {
 
     //firebase database
     private lateinit var database: DatabaseReference
+
     //RecyclerView adapter 연결
     private lateinit var chattingRVA: PartyChattingAdapter
     lateinit var chattingRecyclerView: RecyclerView
+    var partyUserInfo: MutableMap<String, FirebaseUserInfo> = HashMap()
+    var peopleCount: Int =0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,8 +58,8 @@ class ChattingFragment : Fragment() {
         _binding = FragmentChattingBinding.inflate(inflater, container, false)
 
         initializeVari()
+        getPartyUserInfo()
         listener()
-        adapter()
         return binding.root
     }
 
@@ -77,6 +84,7 @@ class ChattingFragment : Fragment() {
         binding.sendImgBtn.setOnClickListener {
             saveImg()
         }
+
     }
 
     //메시지 버튼 누르면 메시지가 데이터베이스에 저장
@@ -98,8 +106,6 @@ class ChattingFragment : Fragment() {
     fun saveImg() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(gallery, 100)
-
-
     }
 
 
@@ -115,17 +121,59 @@ class ChattingFragment : Fragment() {
     //recyclerview Adapter
     fun adapter() {
         chattingRVA =
-            PartyChattingAdapter(chattingRecyclerView, requireContext(), currentUserId, groupId)
+            PartyChattingAdapter(chattingRecyclerView,
+                requireContext(),
+                currentUserId,
+                groupId,
+                partyUserInfo,peopleCount)
         chattingRecyclerView.adapter = chattingRVA
         chattingRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+
+    }
+
+
+    fun getPartyUserInfo() {
+
+        FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+            .child("groupUsers").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    partyUserInfo.clear()
+                    peopleCount = 0
+                    for (data in snapshot.children) {
+                        val userId = data.key.toString()
+                        var userInfo: FirebaseUserInfo
+                        peopleCount++
+
+                            FirebaseDatabase.getInstance().getReference("Users")
+                            .child(userId)
+                            .addListenerForSingleValueEvent(
+                                object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        userInfo = snapshot.getValue(FirebaseUserInfo::class.java)!!
+                                        partyUserInfo[userId] = userInfo
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+
+                                    }
+                                }
+                            )
+                    }
+                    adapter()
+                    chattingRVA.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+
     }
 
     //뷰바인딩 생명주기 관리
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d("생명주기", "onDestroyView")
-        //채팅창 valueEventListener 파괴
-        chattingRVA.removeValueEventListener()
         _binding = null
     }
 
@@ -139,7 +187,7 @@ class ChattingFragment : Fragment() {
             val uid = ImgRef.key
 
             data?.data?.let { uri ->
-                val storageRef = Firebase.storage.reference.child("${uid}")
+                val storageRef = Firebase.storage.reference.child(groupId).child("${uid}")
                 val bitmap: Bitmap =
                     MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
                 val baos = ByteArrayOutputStream()
@@ -164,7 +212,6 @@ class ChattingFragment : Fragment() {
 
         }
     }
-
 
 
 //    override fun onAttach(context: Context) {

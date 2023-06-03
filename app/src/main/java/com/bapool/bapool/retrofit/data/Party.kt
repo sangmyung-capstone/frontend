@@ -1,5 +1,7 @@
 package com.bapool.bapool.retrofit.data
 
+import androidx.browser.browseractions.BrowserActionsIntent.BrowserActionsItemId
+import com.google.gson.annotations.SerializedName
 import java.time.LocalDateTime
 
 data class GetResGroupListResponse(
@@ -34,28 +36,45 @@ data class ResPartyList(
     val start_date: String,
     val is_participate: Boolean,
 )
+//
+//{
+//    "party_name": "파티이름",
+//    "max_people":3,
+//    "start_date" : "2022-03-02 02:10:24",
+//    "end_date": "2022-03-03 02:30:24",
+//    "menu": "닭",
+//    "hashtag": [1,2, 3, 4],
+//    "detail": null,
+//    "restaurant_info": {
+//    "restaurant_id": "2342424",
+//    "name": "name",
+//    "address": "서울 동작구",
+//    "img_url": "aaa.com",
+//    "site_url": "abc.com",
+//    "category": "육류-고기",
+//    "phone": "01031679364"
+//}
+
 
 data class PostMakePartyRequest(
-
-    val detail: String,
-    val end_date: String,
-    val hashtag: List<Int>,
-    val imgUrl: String,
-    val max_people: Int,
-    val menu: String,
     val party_name: String,
-    val restaurant_info: PostMakePartyRequestRestaurantInfo,
+    val max_people: Int,
     val start_date: String,
+    val end_date: String,
+    val menu: String,
+    val hashtag: List<Int>,
+    val detail: String,
+    val restaurant_info: PostMakePartyRequestRestaurantInfo,
 )
 
 data class PostMakePartyRequestRestaurantInfo(
-    val address: String,
-    val category: String,
-    val img_url: String,
-    val name: String,
-    val phone: String,
     val restaurant_id: Int,
+    val name: String,
+    val address: String,
+    val img_url: String,
     val site_url: String,
+    val category: String,
+    val phone: String,
 )
 
 
@@ -101,3 +120,4 @@ data class GetRestaurantPartiesListResult(
     val parties: List<ResPartyList>,
     val restaurant_name: String,
 )
+

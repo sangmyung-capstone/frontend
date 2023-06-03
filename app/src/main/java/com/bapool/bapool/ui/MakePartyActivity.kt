@@ -21,6 +21,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -30,19 +32,19 @@ class MakePartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMakePartyBinding
     val hastagList = ArrayList(Collections.nCopies(5, 0))
     lateinit var maxPeople: NumberPicker
-    val retro = RetrofitService.create()
+    val retro = ServerRetrofit.create()
     val userId: Long = 2
-    val imageUrl = "https://example.com/image.jpg"
-    val makeParty =
-        PostMakePartyRequestRestaurantInfo(
-            "서울 동작구",
-            "육류 - 고기",
-            "https://example.com/image.jpg",
-            "밥꼬찖닭",
-            "010-111-111",
-            123,
-            "dsfkjasdklfj.com"
-        )
+
+    val restaurantInfo = PostMakePartyRequestRestaurantInfo(
+        2,
+        "밥꼬찜닭",
+        "서울 동작구",
+        "wfwlifwfjl.com",
+        "wfjwilifajwfl.com",
+        "육류 고기",
+        "010-1111-2222"
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,12 +165,10 @@ class MakePartyActivity : AppCompatActivity() {
 
         //취소버튼 클릭
         binding.cancelButton.setOnClickListener {
-            Log.d("hastagList", hastagList.toString())
-            Log.d("hastagList", maxPeople.value.toString())
-            Log.d("hastagList", binding.grpNameText.text.toString())
-            Log.d("hastagList", binding.detail.text.toString())
-            Log.d("hastagList", binding.menuText.text.toString())
+
+
         }
+
 
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
@@ -191,28 +191,27 @@ class MakePartyActivity : AppCompatActivity() {
                 alterDialog("끝나는 시간이 시작 시간보다 작습니다.")
             } else {
                 val endDateLocal =
-                    binding.endDateText.text.toString() + " " + binding.endTimeText.text.toString()+":00"
+                    binding.endDateText.text.toString() + " " + binding.endTimeText.text.toString() + ":00"
                 val startDateLocal =
-                    binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString()+":00"
+                    binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
 
                 Log.d("LocalDateEndStart", endDateLocal)
                 Log.d("LocalDateEndStart", startDateLocal)
 
                 val makeGrpInstance =
                     PostMakePartyRequest(
-                        binding.detail.text.toString(),
-                        endDateLocal,
-                        hastagList,
-                        imageUrl,
-                        maxPeople.value,
                         binding.grpNameText.text.toString(),
+                        maxPeople.value,
+                        startDateLocal,
+                        endDateLocal,
                         binding.menuText.text.toString(),
-                        makeParty,
-                        startDateLocal)
+                        hastagList,
+                        binding.detail.text.toString(),
+                        restaurantInfo)
+
                 Log.d("MakePartyInfo", makeGrpInstance.toString())
 
-                val intent = Intent(this, ChattingAndPartyInfoActivity::class.java)
-                startActivity(intent)
+
                 retrofit(makeGrpInstance)
             }
 
@@ -222,24 +221,38 @@ class MakePartyActivity : AppCompatActivity() {
 
 
     fun retrofit(makeGrp: PostMakePartyRequest) {
+
+
         retro.makeGrp(userId, makeGrp).enqueue(object : Callback<PostMakePartyResponse> {
             override fun onResponse(
                 call: Call<PostMakePartyResponse>,
                 response: Response<PostMakePartyResponse>,
             ) {
-                Log.d("MKRetrofit", "onRequest 성공: $makeGrp")
 
                 if (response.isSuccessful) {
                     var result: PostMakePartyResponse? =
                         response.body()
                     Log.d("MKRetrofit", "onRequest 성공: $makeGrp")
                     Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
-                    Toast.makeText(this@MakePartyActivity, "그룹생성", Toast.LENGTH_SHORT).show()
+
+                    val intent =
+                        Intent(this@MakePartyActivity, ChattingAndPartyInfoActivity::class.java)
+                    startActivity(intent)
+
                     //group_id 넘겨줘야함 Intent할때
                 } else {
-                    Log.d("MKRetrofit", "onResponse 실패 :" + response.body().toString())
+//                    val responseCode = response.code()
+//                    val errorBody = response.errorBody()?.string()
+//                    Log.d("MKRetrofit", response.toString())
+//
+//                    // 실패한 응답 처리
+//                    Log.d("MKRetrofit", "응답 실패. 응답 코드: $responseCode, 에러 메시지: $errorBody")
+
+                    Toast.makeText(this@MakePartyActivity, "그룹 생성 오류", Toast.LENGTH_SHORT).show()
+
                 }
             }
+
 
             override fun onFailure(call: Call<PostMakePartyResponse>, t: Throwable) {
                 Log.d("MKRetrofit", "그룹생성 레트로핏 fail")

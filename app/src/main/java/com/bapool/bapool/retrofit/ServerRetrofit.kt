@@ -78,9 +78,9 @@ interface ServerRetrofit {
         @Path("restaurant_id") restaurantId: Long,
     ): Call<GetResGroupListResponse>
 
-    @POST("test/parties/{user_id}")
+    @POST("test/parties/{user-id}")
     fun makeGrp(
-        @Path("user_id") userId: Long,
+        @Path("user-id") userId: Long,
         @Body request: PostMakePartyRequest,
     ): Call<PostMakePartyResponse>
 
