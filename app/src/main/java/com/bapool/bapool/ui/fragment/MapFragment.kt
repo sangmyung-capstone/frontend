@@ -20,6 +20,7 @@ import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.FragmentMapBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
+import com.bapool.bapool.retrofit.data.GetRestaurantInfoResult
 import com.bapool.bapool.retrofit.data.GetRestaurantsResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.gun0912.tedpermission.PermissionListener
@@ -51,8 +52,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val bapoolImg = OverlayImage.fromResource(R.drawable.bapool_circle) // by lazy
     val bapoolImgRed = OverlayImage.fromResource(R.drawable.bapool_circle_red)
 
-    val retro = RetrofitService.create()  // MOCK SERVER
-//    val retro = ServerRetrofit.create()
+    //    val retro = RetrofitService.create()  // MOCK SERVER
+    val retro = ServerRetrofit.create()
 
 
     override fun onCreateView(
@@ -159,6 +160,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         for (i in 0 until markerList.size) markerList[i].map = null
                         markerList.clear()
                     }
+                    Log.d("MYTAG", response.body()!!.result.toString())
                     // 마커 생성
                     for (i in 0 until response.body()!!.result.restaurants.size) { // 리스폰스로 받은 사이즈 만큼
                         markerList.add(i, Marker()) // 마커 할당
@@ -187,11 +189,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         )
 
                         // 해당 마커 클릭 이벤트
-                        markerClickEvent(markerList[i])
+                        markerClickEvent(
+                            markerList[i],
+                            response.body()!!.result.restaurants[i].restaurant_id,
+                            response.body()!!.result.restaurants[i].restaurant_longitude,
+                            response.body()!!.result.restaurants[i].restaurant_latitude
+                        )
                     }
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                     Log.d("MYTAG", "onResponse 실패")
+                    Log.d("MYTAG", response.body().toString())
                 }
             }
 
@@ -202,9 +210,29 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
-    private fun markerClickEvent(marker: Marker) {
+    private fun markerClickEvent(marker: Marker, id: Long, long: Double, lati: Double) {
 
         marker.setOnClickListener {
+            retro.getRestaurantInfo(1, id, long, lati)
+                .enqueue(object : Callback<GetRestaurantInfoResult> {
+                    override fun onResponse(
+                        call: Call<GetRestaurantInfoResult>,
+                        response: Response<GetRestaurantInfoResult>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("MYTAG", response.body()?.result.toString())
+                        } else {
+                            // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                            Log.d("MYTAG", "onResponse 실패")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<GetRestaurantInfoResult>, t: Throwable) {
+                        Log.d("MYTAG", t.message.toString())
+                        Log.d("MYTAG", "FAIL")
+                    }
+                })
+
             layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
 
             // 해당 마커 위치로 지도 이동

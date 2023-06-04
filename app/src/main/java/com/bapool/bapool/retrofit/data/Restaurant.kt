@@ -1,26 +1,5 @@
 package com.bapool.bapool.retrofit.data
 
-//data class GetRestaurantsResult(
-//    val code: String,
-//    val message: String,
-//    val result: List<Restaurant>
-//)
-//data class Restaurant(
-//    val address_name: String,
-//    val category_group_code: String,
-//    val category_group_name: String,
-//    val category_name: String,
-//    val distance: String,
-//    val id: String,
-//    val phone: String,
-//    val place_name: String,
-//    val place_url: String,
-//    val road_address_name: String,
-//    val x: String,
-//    val y: String
-//)
-
-
 data class GetRestaurantsResult(
     val code: Int,
     val message: String,
@@ -59,6 +38,29 @@ data class GetRestaurantLogResponse(
         val category: String
     )
 }
+
+data class GetRestaurantInfoResult(
+    val code: Int,
+    val message: String,
+    val result: RestaurantInfo
+)
+data class RestaurantInfo(
+    val category: String,
+    val imgUrl: String,
+    val link: String,
+    val menu: List<Menu>,
+    val num_of_party: Int,
+    val phone: String,
+    val restaurant_address: String,
+    val restaurant_id: Long,
+    val restaurant_latitude: Double,
+    val restaurant_longitude: Double,
+    val restaurant_name: String
+)
+data class Menu(
+    val name: String,
+    val price: String
+)
 
 
 
