@@ -59,7 +59,7 @@ class ChangeProfileActivity : AppCompatActivity() {
 
             val retro = RetrofitService.create()
 
-            retro.ChangeUserInfo("accessToken", 1, userInfo)
+            retro.ChangeUserInfo(1, userInfo)
                 .enqueue(object : Callback<PatchChangeProfileResponse> {
                     override fun onResponse(
                         call: Call<PatchChangeProfileResponse>,

@@ -11,7 +11,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BlockListViewHolder(val binding: BlocklistItemsBinding) : RecyclerView.ViewHolder(binding.root)
+class BlockListViewHolder(val binding: BlocklistItemsBinding) :
+    RecyclerView.ViewHolder(binding.root)
 
 class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>) :
     RecyclerView.Adapter<BlockListViewHolder>() {
@@ -38,7 +39,7 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
             val retro = RetrofitService.create()
             var userInfo = BlockUserRequest(15)
 
-            retro.BlockUser("accessToken", 1, userInfo)
+            retro.BlockUser(1, userInfo)
                 .enqueue(object : Callback<BlockUserResponse> {
                     override fun onResponse(
                         call: Call<BlockUserResponse>,

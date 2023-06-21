@@ -45,45 +45,38 @@ interface RetrofitService {
 
     @GET("users/mypage/{user-id}")
     fun getMyPage(
-        @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
     ): Call<GetMypageResponse>
 
     @PATCH("/users/info/{user-id}")
     fun ChangeUserInfo(
-        @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
         @Body request: PatchChangeProfileRequest,
     ): Call<PatchChangeProfileResponse>
 
     @DELETE("/users/{user-id}")
     fun DeleteUser(
-        @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
     ): Call<DeleteUserResponse>
 
     @GET("/users/block/{user-id}")
     fun GetBlockUser(
-        @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
     ): Call<GetBlockUserResponse>
 
     @POST("/users/block/{user-id}")
     fun BlockUser(
-        @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
         @Body request: BlockUserRequest,
     ): Call<BlockUserResponse>
 
     @GET("/restaurants/log/{user-id}")
     fun GetrestaurantsLog(
-        @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
     ): Call<GetRestaurantLogResponse>
 
     @GET("/users/evaluate/{user-id}")
     fun GetEvaluateUser(
-        @Header("Authorization") accessToken: String,
         @Path("user-id") userId: Long,
         @Query("party-id") partyId: Long
     ): Call<GetEvaluateUserResponse>
@@ -96,6 +89,7 @@ interface RetrofitService {
         @Path("user_id") userId: Long,
         @Path("restaurant_id") restaurantId: Long,
     ): Call<GetResGroupListResponse>
+
     //http://dev.scrap-j2kb.shop/test/parties/1/1470337852
     @POST("party/{user_id}")
     fun makeGrp(
