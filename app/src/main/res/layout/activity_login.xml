@@ -37,7 +37,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/bottomTextName"
         android:layout_width="168dp"
         android:layout_height="0dp"
         android:layout_marginTop="89dp"

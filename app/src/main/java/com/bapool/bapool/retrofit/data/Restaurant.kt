@@ -45,17 +45,17 @@ data class GetRestaurantInfoResult(
     val result: RestaurantInfo
 )
 data class RestaurantInfo(
-    val category: String,
-    val imgUrl: String,
-    val link: String,
-    val menu: List<Menu>,
-    val num_of_party: Int,
-    val phone: String,
-    val restaurant_address: String,
     val restaurant_id: Long,
-    val restaurant_latitude: Double,
+    val restaurant_name: String,
     val restaurant_longitude: Double,
-    val restaurant_name: String
+    val restaurant_latitude: Double,
+    val restaurant_address: String,
+    val num_of_party: Int,
+    val category: String,
+    val link: String,
+    val phone: String,
+    val img_url: String,
+    val menu: List<Menu>
 )
 data class Menu(
     val name: String,
