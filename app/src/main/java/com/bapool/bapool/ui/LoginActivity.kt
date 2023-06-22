@@ -142,6 +142,7 @@ class LoginActivity : AppCompatActivity() {
                                                             response.body()
                                                         if (result != null) {
                                                             UserToken = result.result.access_token
+                                                            UserId = result.result.user_id
                                                         }
                                                         Toast.makeText(
                                                             this@LoginActivity,
@@ -242,6 +243,7 @@ class LoginActivity : AppCompatActivity() {
                                                             response.body()
                                                         if (result != null) {
                                                             UserToken = result.result.access_token
+                                                            UserId = result.result.user_id
                                                         }
                                                         Toast.makeText(
                                                             this@LoginActivity,

@@ -116,6 +116,7 @@ class RegisterActivity : AppCompatActivity() {
                                                             response.body()
                                                         if (result != null) {
                                                             UserToken = result.result.access_token
+                                                            LoginActivity.UserId = result.result.user_id
                                                         }
                                                         Log.d("bap", "onRequest 성공: $userInfo");
                                                         Log.d(
@@ -214,6 +215,7 @@ class RegisterActivity : AppCompatActivity() {
                                                             response.body()
                                                         if (result != null) {
                                                             UserToken = result.result.access_token
+                                                            LoginActivity.UserId = result.result.user_id
                                                         }
                                                         Log.d("bap", "onRequest 성공: $userInfo");
                                                         Log.d(
