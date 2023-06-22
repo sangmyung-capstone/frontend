@@ -43,7 +43,7 @@ class ChattingFragment : Fragment() {
     private lateinit var chattingRVA: PartyChattingAdapter
     lateinit var chattingRecyclerView: RecyclerView
     var partyUserInfo: MutableMap<String, FirebaseUserInfo> = HashMap()
-    var peopleCount: Int =0
+    var peopleCount: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,7 +125,7 @@ class ChattingFragment : Fragment() {
                 requireContext(),
                 currentUserId,
                 groupId,
-                partyUserInfo,peopleCount)
+                partyUserInfo, peopleCount)
         chattingRecyclerView.adapter = chattingRVA
         chattingRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -145,7 +145,7 @@ class ChattingFragment : Fragment() {
                         var userInfo: FirebaseUserInfo
                         peopleCount++
 
-                            FirebaseDatabase.getInstance().getReference("Users")
+                        FirebaseDatabase.getInstance().getReference("Users")
                             .child(userId)
                             .addListenerForSingleValueEvent(
                                 object : ValueEventListener {

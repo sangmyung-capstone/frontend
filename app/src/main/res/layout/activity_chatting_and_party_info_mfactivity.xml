@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerNavigationLayout"
+    android:layout_gravity="end"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ChattingAndPartyInfoMFActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/GrpName"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginLeft="12dp"
+            android:gravity="center_vertical"
+            android:maxWidth="200dp"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/textLine"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="#EEEEEE"
+            app:layout_constraintTop_toBottomOf="@+id/GrpName" />
+
+
+        <ImageView
+            android:id="@+id/menu_button"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:src="@drawable/chatting_menu_button"
+            android:layout_marginRight="10dp"
+            android:text="취소"
+            app:layout_constraintBottom_toTopOf="@+id/textLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="65dp"
+            android:id="@+id/chattingRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="@id/chattingInputZone"
+            android:layout_marginBottom="60dp"
+            android:paddingBottom="5dp"
+            tools:itemCount="20"
+            tools:listitem="@layout/chatitem_my" />
+
+
+        <LinearLayout
+            android:id="@+id/chattingInputZone"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageButton
+                android:id="@+id/sendImgBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@color/white"
+                android:src="@drawable/plus_img_btn"
+                />
+
+            <EditText
+                android:id="@+id/sendMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="90"
+                android:paddingStart="15dp" />
+
+            <ImageButton
+                android:id="@+id/sendIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_weight="10"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:src="@drawable/send_chat_icon" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/detailOnChattingBackground"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/chatting_detail_on_chatting_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textLine">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/chattingMenuNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="true">
+
+        <!-- LinearLayout 추가 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <!-- RecyclerView 추가 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/textLine2" />
+
+            <TextView
+                android:id="@+id/textLine2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#CDCDCD"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout2" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="#EDECEC"
+                android:gravity="right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/menuEditPartyInfo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/party_info_edit_item" />
+
+
+                <ImageView
+                    android:id="@+id/menuPartyOut"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/get_out_party_item" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>

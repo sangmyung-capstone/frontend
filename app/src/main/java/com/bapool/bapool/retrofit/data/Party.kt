@@ -1,37 +1,35 @@
 package com.bapool.bapool.retrofit.data
 
-import androidx.browser.browseractions.BrowserActionsIntent.BrowserActionsItemId
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDateTime
 
-data class GetResGroupListResponse(
+data class GetResPartyListResponse(
     val code: Int,
     val message: String,
     val result: GetRestaurantPartiesListResult,
 )
 
 data class MyPartyListModel(
-    val grpId: Long,
+    val grpId: String?,
     val resName: String = "",
     val grpName: String = "",
-    val participants: Int,
-    val max_people: Int,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
+    val participants: Any?,
     val lastChat: String = "",
     val notReadChat: Int,
+    val lastChatTime: String =""
 )
 
 data class ResPartyList(
     val detail: String,
     val end_date: String,
     val has_block_user: Boolean,
+    @SerializedName("party_hashtag")
     val hashtag: List<Int>,
     val max_people: Int,
     val menu: String,
     val participants: Int,
     val party_id: Int,
     val party_name: String,
+    @SerializedName("user_rating")
     val rating: List<Double>,
     val start_date: String,
     val is_participate: Boolean,
@@ -106,18 +104,19 @@ data class FirebasePartyMessage(
     var type: Int = 0,
     var downloadUrl: String = "",
     var confirmed: MutableMap<String, Boolean> = HashMap(),
-
     )
 
-
 data class FirebaseParty(
-    val groupInfo: FirebasePartyInfo,
-    val groupUsers: Map<String, Boolean> = HashMap(),
+    val groupInfo: FirebasePartyInfo = FirebasePartyInfo(),
+    val groupMessages: Map<String, FirebasePartyMessage>? = HashMap(),
+    val groupUsers: Map<String,Boolean>? = HashMap()
 )
-
 
 data class GetRestaurantPartiesListResult(
     val parties: List<ResPartyList>,
     val restaurant_name: String,
 )
+
+
+
 

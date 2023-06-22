@@ -44,6 +44,7 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChattingAndPartyInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         FirebaseApp.initializeApp(this)
         initializeVari()
         listener()
@@ -64,39 +65,6 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
 
     fun listener() {
         binding.cancelButton.setOnClickListener {
-//
-            // 채팅 더미데이터 추가
-//            val messageText = "Test2"
-//            val groupMessages =
-//                FirebasePartyMessage("userId3", getTime(), messageText)
-//            database.child("Groups").child("groupId1").child("groupMessages").push()
-//                .setValue(groupMessages)
-
-
-//            Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
-////            그룹 더미데이터 추가
-//            val database = Firebase.database
-//            val myRef = database.getReference("test").child("Groups")
-//            val hashtaglist = mutableListOf<Int>()
-//            hashtaglist.add(4)
-//            hashtaglist.add(3)
-//            val groupInfo = FirebasePartyInfo("그룹이름1", "메뉴1", "상세메뉴1",
-//                1, 4, getTime(), getTime(), hashtaglist)
-//            val groupUsers = mapOf("4" to false)
-//            val Group3 = FirebaseParty(groupInfo, groupUsers)
-//            myRef.child("3").child("groupUsers").updateChildren(groupUsers)
-
-//            myRef.child("groupId1").setValue(Group3)
-//            myRef.child("groupId1").child("groupInfo").setValue(groupInfo)
-
-//            Users 더미데이터 추가
-//            val database = Firebase.database
-//            val myRef = database.getReference("Users")
-//            val banUsers = mutableListOf<String>()
-//            banUsers.add("userId4")
-//            banUsers.add("userId7")
-//            val userInfo = FirebaseUserInfo("8", "3이에용", banUsers)
-//            myRef.child("userId3").setValue(userInfo)
 
         }
     }
@@ -184,9 +152,6 @@ class ChattingAndPartyInfoActivity : AppCompatActivity() {
     }
 
 
-    fun addGroupUserInfo(groupUserInfoOne: Map<String, FirebaseUserInfo>) {
-        groupUserInfo.add(groupUserInfoOne)
-    }
 
     //recyclerview 어댑터
     fun adapter(groupUserInfo: ArrayList<Map<String, FirebaseUserInfo>>, groupOnerId: String) {

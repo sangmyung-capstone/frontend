@@ -95,7 +95,7 @@ class RestaurantPartyAdapter(val context: Context) :
             binding.participantsNum.text = allNum
             binding.grpName.text = item.party_name
             binding.detail.text = item.detail
-            binding.rating.text = item.rating.toString()
+            binding.rating.text = item.rating?.toString()
 
         }
 

@@ -37,6 +37,7 @@ import com.bapool.bapool.R
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import okhttp3.internal.notify
 
 class PartyChattingAdapter(
     private val recyclerView: RecyclerView,
@@ -351,6 +352,7 @@ class PartyChattingAdapter(
                         } else {
                             readcount_text.visibility = View.GONE
                         }
+                        Log.d("dsafkjesfkjadshfkjasdhf",snapshot.value.toString())
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -407,6 +409,7 @@ class PartyChattingAdapter(
 
         val imageView = Img
         val taskResult = imageResource[ImgKey]
+        Log.d("이미지확인",taskResult.toString())
         Glide.with(context)
             .load(taskResult)
             .listener(object : RequestListener<Drawable> {
@@ -418,6 +421,7 @@ class PartyChattingAdapter(
                     isFirstResource: Boolean,
                 ): Boolean {
                     Log.d("이미지로드확인","이미지 로드 실패")
+
                     return false
                 }
 
@@ -428,12 +432,11 @@ class PartyChattingAdapter(
                     dataSource: com.bumptech.glide.load.DataSource?,
                     isFirstResource: Boolean,
                 ): Boolean {
-
+                    Log.d("이미지로드확인","이미지 로드 성공")
 
                     if (imageResourceBool) {
                         recyclerView.postDelayed({
                             recyclerView.scrollToPosition(messages.size - 1)
-
                         }, 1000)
 
                         imageResourceBool = false

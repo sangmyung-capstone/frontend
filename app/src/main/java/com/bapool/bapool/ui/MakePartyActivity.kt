@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.widget.NumberPicker
 import android.widget.Toast
 import com.bapool.bapool.R
-import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityMakePartyBinding
 import com.bapool.bapool.databinding.CustomDatepickerBinding
 import com.bapool.bapool.databinding.CustomTimepickerBinding
@@ -21,8 +20,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -236,7 +233,9 @@ class MakePartyActivity : AppCompatActivity() {
                     Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
 
                     val intent =
-                        Intent(this@MakePartyActivity, ChattingAndPartyInfoActivity::class.java)
+                        Intent(this@MakePartyActivity, ChattingAndPartyInfoMFActivity::class.java)
+                    intent.putExtra("currentUserId", "userId2")//현재 유저의 userId로 value값 교체
+                    intent.putExtra("partyId", "groupId2") // result 안의 party_id 값으로 value값 교체
                     startActivity(intent)
 
                     //group_id 넘겨줘야함 Intent할때
