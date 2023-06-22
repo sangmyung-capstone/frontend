@@ -78,6 +78,7 @@ class PartyFragment : Fragment() {
                             partyMessageMap!!.values
                         val sortedMessage = partyMessage.sortedBy { it.sendedDate }
 
+
                         val lastChatItem: FirebasePartyMessage =
                             if (sortedMessage.isNullOrEmpty()) {
                                 FirebasePartyMessage()
