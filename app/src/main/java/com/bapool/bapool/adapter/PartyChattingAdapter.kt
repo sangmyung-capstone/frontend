@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Context.DOWNLOAD_SERVICE
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
 import android.util.Log
@@ -14,13 +15,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bapool.bapool.retrofit.data.FirebasePartyMessage
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
 import com.bapool.bapool.databinding.ChatitemMyBinding
 import com.bapool.bapool.databinding.ChatitemMyimgBinding
 import com.bapool.bapool.databinding.ChatitemOpponentimgBinding
@@ -35,26 +34,27 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import com.bapool.bapool.R
-import com.google.firebase.storage.FirebaseStorage
-import kotlin.coroutines.coroutineContext
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import okhttp3.internal.notify
 
 class PartyChattingAdapter(
     private val recyclerView: RecyclerView,
     val context: Context,
     val currentUserId: String,
     val groupId: String,
+    var partyUserInfo: MutableMap<String, FirebaseUserInfo> = HashMap(),
+    var peopleCount: Int,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var messages: ArrayList<FirebasePartyMessage> = arrayListOf()
     var messageKey: ArrayList<String> = arrayListOf()
-    var nickNames: ArrayList<String> = arrayListOf()
-    var resourceIds: ArrayList<String> = arrayListOf()
+    var imageResource: MutableMap<String, Uri> = HashMap()
+    var imageResourceBool = true
 
-    var databaseReference: DatabaseReference
-    var valueEventListener: ValueEventListener?
 
-    var peopleCount = 0
     val testUserId = "userId3"
     private var currentPage = 0
     private val itemsPerPage = 100
@@ -62,78 +62,162 @@ class PartyChattingAdapter(
 
     init {
         recyclerView.postDelayed({
-            recyclerView.layoutManager?.scrollToPosition(messages.size - 1)
-        }, 1500)
-        //diffUtil Version
-        databaseReference = FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
-            .child("groupMessages")
-        val query = databaseReference
-        valueEventListener = query.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val oldMessages = ArrayList(messages)
-                val oldMessageKeys = ArrayList(messageKey)
-                messages.clear()
-                messageKey.clear()
-                val readUsers: MutableMap<String, FirebasePartyMessage> = HashMap()
-                for (data in dataSnapshot.children) {
-                    val messageObject: FirebasePartyMessage =
-                        data.getValue<FirebasePartyMessage>()!!
-                    val messageObject_modify: FirebasePartyMessage =
-                        data.getValue<FirebasePartyMessage>()!!
-                    val messageKeyObject = data.key.toString()
+            recyclerView.scrollToPosition(messages.size - 1)
 
+        }, 1000)
+
+        FirebaseDatabase.getInstance().getReference("Groups")
+            .child(groupId).child("groupMessages")
+            .addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+
+                    val oldMessages = ArrayList(messages)
+                    val oldMessageKeys = ArrayList(messageKey)
+                    val oldImageResource = imageResource
+
+                    val readUsers: MutableMap<String, FirebasePartyMessage> = HashMap()
+
+                    val diffResult2 = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                        override fun getOldListSize(): Int {
+                            return oldImageResource.size
+                        }
+
+                        override fun getNewListSize(): Int {
+                            return imageResource.size
+                        }
+
+                        override fun areItemsTheSame(
+                            oldItemPosition: Int,
+                            newItemPosition: Int,
+                        ): Boolean {
+                            val oldKey = oldImageResource.keys.elementAt(oldItemPosition)
+                            val newKey = imageResource.keys.elementAt(newItemPosition)
+                            return oldKey == newKey
+                        }
+
+                        override fun areContentsTheSame(
+                            oldItemPosition: Int,
+                            newItemPosition: Int,
+                        ): Boolean {
+                            val oldKey = oldImageResource.keys.elementAt(oldItemPosition)
+                            val oldValue = oldImageResource[oldKey]
+                            val newKey = imageResource.keys.elementAt(newItemPosition)
+                            val newValue = imageResource[newKey]
+
+                            // Compare the content of the map values here
+                            // Return true if the contents are the same, false otherwise
+                            return oldValue == newValue
+                        }
+
+                    })
+
+                    val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                        override fun getOldListSize(): Int {
+                            return oldMessages.size
+                        }
+
+                        override fun getNewListSize(): Int {
+                            return messages.size
+                        }
+
+                        override fun areItemsTheSame(
+                            oldItemPosition: Int,
+                            newItemPosition: Int,
+                        ): Boolean {
+                            return oldMessageKeys[oldItemPosition] == messageKey[newItemPosition]
+                        }
+
+                        override fun areContentsTheSame(
+                            oldItemPosition: Int,
+                            newItemPosition: Int,
+                        ): Boolean {
+                            return oldMessages[oldItemPosition] == messages[newItemPosition]
+                        }
+
+                    })
+                    val messageObject: FirebasePartyMessage =
+                        snapshot.getValue(FirebasePartyMessage::class.java)!!
+                    val messageObject_modify: FirebasePartyMessage =
+                        snapshot.getValue(FirebasePartyMessage::class.java)!!
+                    val messageKeyObject = snapshot.key.toString()
 
                     messageKey.add(messageKeyObject)
                     messageObject_modify.confirmed.put(currentUserId, true)
                     readUsers.put(messageKeyObject, messageObject_modify)
                     messages.add(messageObject)
-                }
-                val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                    override fun getOldListSize(): Int {
-                        return oldMessages.size
-                    }
 
-                    override fun getNewListSize(): Int {
-                        return messages.size
-                    }
+                    if (messageObject.type == 1) {
+                        val storageReference =
+                            Firebase.storage.reference.child(groupId).child(messageKeyObject)
 
-                    override fun areItemsTheSame(
-                        oldItemPosition: Int,
-                        newItemPosition: Int,
-                    ): Boolean {
-                        return oldMessageKeys[oldItemPosition] == messageKey[newItemPosition]
-                    }
-
-                    override fun areContentsTheSame(
-                        oldItemPosition: Int,
-                        newItemPosition: Int,
-                    ): Boolean {
-                        return oldMessages[oldItemPosition] == messages[newItemPosition]
-                    }
-
-                })
-                if (messages.size > 0) {
-                    if (!messages[messages.size - 1].confirmed.containsKey(currentUserId)) {
-                        FirebaseDatabase.getInstance().getReference("Groups")
-                            .child(groupId).child("groupMessages")
-                            .updateChildren(readUsers as Map<String, FirebasePartyMessage>)
-                            .addOnCompleteListener {
+                        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                imageResourceBool = true
+                                imageResource[messageKeyObject] = task.result
+                                notifyDataSetChanged()
+                            } else {
                             }
-                    } else {
-                    }
-                }
-                diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)
-            }
+                        })
 
-            override fun onCancelled(error: DatabaseError) {}
-        })
+                    }
+                    val testMap: Map<String, Boolean> = mapOf(currentUserId to true)
+                    if (messages.size > 0) {
+                        if (!messages[messages.size - 1].confirmed.containsKey(currentUserId)) {
+                            FirebaseDatabase.getInstance().getReference("Groups")
+                                .child(groupId).child("groupMessages").child(messageKeyObject).child("confirmed")
+                                .updateChildren(testMap)
+                                .addOnCompleteListener {
+                                    recyclerView.scrollToPosition(messageKey.size - 1)
+                                }
+                        } else {
+                            recyclerView.scrollToPosition(messageKey.size - 1)
+
+                        }
+                    }
+                    recyclerView.scrollToPosition(messageKey.size - 1)
+                    Log.d("들어와있는지확인후", messages.toString())
+
+                    diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)
+                    Log.d("onChildAdd`", messages[messages.size - 1].toString())
+                    Log.d("onChildAdd`", messageObject_modify.toString())
+
+
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+
+                    val changeMessageKey = snapshot.key.toString()
+                    val changeMessageObject =
+                        snapshot.getValue(FirebasePartyMessage::class.java)
+
+                    val messageIndex = messageKey.indexOf(changeMessageKey)
+                    if (changeMessageObject != null) {
+                        messages[messageIndex] = changeMessageObject
+                        notifyItemChanged(messageIndex)
+                    }
+
+                    Log.d("onChildChanged", changeMessageKey.toString())
+                    Log.d("onChildChanged", changeMessageObject.toString())
+                    Log.d("onChildChanged", messageIndex.toString())
+
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+            })
 
     }
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.d("recyclerviewScroll",1.toString())
 
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
@@ -161,6 +245,7 @@ class PartyChattingAdapter(
                 return OtherImgViewHolder(binding)
             }
         }
+
     }
 
 
@@ -183,8 +268,6 @@ class PartyChattingAdapter(
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-
         when (holder.itemViewType) {
             1 -> (holder as MyMessageViewHolder).bind(messages[position])
             2 -> (holder as MyImgViewHolder).bind(messages[position], position)
@@ -212,6 +295,7 @@ class PartyChattingAdapter(
     inner class MyImgViewHolder(private val binding: ChatitemMyimgBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FirebasePartyMessage, position: Int) {
+
             getImageData(messageKey[position], binding.myImg)
             binding.myTime.text = changeTimeFormat(item.sendedDate)
             readCount(item, binding.myConfirmed)
@@ -238,7 +322,8 @@ class PartyChattingAdapter(
     inner class OtherImgViewHolder(private val binding: ChatitemOpponentimgBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: FirebasePartyMessage, position: Int) {
+        fun bind(item: FirebasePartyMessage, position: Int) { //
+
             getImageData(messageKey[position], binding.opponentChatImg)
             binding.opponentTime.text = changeTimeFormat(item.sendedDate)
             readCount(item, binding.opponentConfirmed)
@@ -267,7 +352,7 @@ class PartyChattingAdapter(
                         } else {
                             readcount_text.visibility = View.GONE
                         }
-                        notifyDataSetChanged()
+                        Log.d("dsafkjesfkjadshfkjasdhf",snapshot.value.toString())
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -277,6 +362,9 @@ class PartyChattingAdapter(
         } else {
             var count: Int = peopleCount - items.confirmed.size
 
+            Log.d("dsakjfsadkjlfsdkj", peopleCount.toString())
+
+            Log.d("dsakjfsadkjlfsdkj", items.confirmed.size.toString())
             if (count > 0) {
                 readcount_text.setText(count.toString())
                 readcount_text.visibility = View.VISIBLE
@@ -289,31 +377,18 @@ class PartyChattingAdapter(
 
     }
 
-    override fun getItemId(position: Int): Long {
-        // Return a unique identifier for the item at the given position
-        return messages[position].hashCode().toLong()
-    }
     //이미지, 닉네임 배치
     fun setNickNameImg(position: Int, opponentId: TextView, opponentImage: ImageView) {
+
         var opponentUserId = messages[position].senderId
-        FirebaseDatabase.getInstance().getReference("Users").child(opponentUserId)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val user = snapshot.getValue(FirebaseUserInfo::class.java)
-                    opponentId.text = user?.nickName ?: ""
-                    val imageName = "image${user?.imgUrl}"
-                    val resourceId =
-                        context.resources.getIdentifier(imageName,
-                            "drawable",
-                            context.packageName)
-                    opponentImage.setImageResource(resourceId)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
+        var opponentUserInfo = partyUserInfo[opponentUserId]
+        opponentId.text = opponentUserInfo?.nickName ?: ""
+        val imageName = "image${opponentUserInfo?.imgUrl}"
+        val resourceId =
+            context.resources.getIdentifier(imageName,
+                "drawable",
+                context.packageName)
+        opponentImage.setImageResource(resourceId)
     }
 
     //시간 양식 변형
@@ -329,32 +404,55 @@ class PartyChattingAdapter(
     }
 
 
-    fun removeValueEventListener() {
-        databaseReference.removeEventListener(valueEventListener!!)
-    }
-
     //이미지 데이터 불러오기
     fun getImageData(ImgKey: String, Img: ImageView) {
-        val storageReference = Firebase.storage.reference.child(ImgKey)
+
         val imageView = Img
+        val taskResult = imageResource[ImgKey]
+        Log.d("이미지확인",taskResult.toString())
+        Glide.with(context)
+            .load(taskResult)
+            .listener(object : RequestListener<Drawable> {
 
-        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Glide.with(context)
-                    .load(task.result)
-                    .override(700, 700)
-                    .into(imageView)
-//                recyclerView.scrollToPosition(messages.size-1)
-            } else {
-                Log.d("sdfsdfkey", "실패")
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean,
+                ): Boolean {
+                    Log.d("이미지로드확인","이미지 로드 실패")
 
-            }
-        })
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: com.bumptech.glide.load.DataSource?,
+                    isFirstResource: Boolean,
+                ): Boolean {
+                    Log.d("이미지로드확인","이미지 로드 성공")
+
+                    if (imageResourceBool) {
+                        recyclerView.postDelayed({
+                            recyclerView.scrollToPosition(messages.size - 1)
+                        }, 1000)
+
+                        imageResourceBool = false
+                    }
+                    return false
+                }
+            })
+            .override(700, 700)
+            .into(imageView)
+
+
     }
 
     //dialog에 띄우는 이미지, 더 크게
     fun getImageDataDialog(ImgKey: String, Img: ImageView) {
-        val storageReference = Firebase.storage.reference.child(ImgKey)
+        val storageReference = Firebase.storage.reference.child(groupId).child(ImgKey)
         val imageView = Img
         storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -362,11 +460,7 @@ class PartyChattingAdapter(
                     .load(task.result)
                     .override(950, 1500)
                     .into(imageView)
-
-
             } else {
-                Log.d("sdfsdfkey", "실패")
-
             }
         })
 
@@ -402,7 +496,6 @@ class PartyChattingAdapter(
         dialog.show()
     }
 
-    //아이템 맨 밑으로 이동
 
 }
 

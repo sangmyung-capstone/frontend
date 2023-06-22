@@ -4,15 +4,11 @@ import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.LoginActivity.Companion.UserToken
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.annotations.SerializedName
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
-import java.io.IOException
 
 /*** !!! real server !!! ***/
 interface ServerRetrofit {
@@ -69,6 +65,13 @@ interface ServerRetrofit {
 //        @Path("user-id") userId: Long?,
 //        @Path("restaurant-id") restaurantId: Int?,
 //    )
+    @GET("/test/restaurants/{user-id}/{restaurant-id}")
+    fun getRestaurantInfo(
+        @Path("user-id") userId: Long?,
+        @Path("restaurant-id") restaurantId: Long?,
+        @Query("longitude") longitude: Double?,
+        @Query("latitude") latitude: Double?,
+    ): Call<GetRestaurantInfoResult>
 
     //--------------------------------------------------------------------------
 
@@ -77,7 +80,13 @@ interface ServerRetrofit {
     fun getResGrpList(
         @Path("user_id") userId: Long,
         @Path("restaurant_id") restaurantId: Long,
-    ): Call<GetResGroupListResponse>
+    ): Call<GetResPartyListResponse>
+
+    @POST("test/parties/{user-id}")
+    fun makeGrp(
+        @Path("user-id") userId: Long,
+        @Body request: PostMakePartyRequest,
+    ): Call<PostMakePartyResponse>
 
     //-----------------------------------------------------------------------------
 
