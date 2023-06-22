@@ -277,6 +277,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.d("MARKER_INFO", "lati: $lati long: $long")
             Log.d("MARKER_INFO", "Restaurant id : $id")
 
+            binding.imageView4.visibility = View.VISIBLE
+            Glide.with(this)
+                .load("https://t1.kakaocdn.net/thumb/T800x0.q80/?fname=http%3A%2F%2Ft1.daumcdn.net%2Fplace%2F4274A699F61A4D07BEF31567CBC14323")
+                .into(binding.imageView4.findViewById(R.id.imageView4))
+
+            Log.d("MARKER_INFO", "GLIDE FINISH")
+
+
             // 마커 클릭 시 하단 네비게이션바 제거
             val homeActivity = activity as HomeActivity
             homeActivity.hideBottomNavi(true)

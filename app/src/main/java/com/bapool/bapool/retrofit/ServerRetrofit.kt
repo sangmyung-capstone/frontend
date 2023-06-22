@@ -92,8 +92,7 @@ interface ServerRetrofit {
 
     // 싱글톤 객체 생성
     companion object {
-        //private const val BASE_URL = "https://myfirstdomain.store"
-        private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
+        private const val BASE_URL = "https://myfirstdomain.store"
 
         private val client = OkHttpClient.Builder()
             .addInterceptor { chain ->

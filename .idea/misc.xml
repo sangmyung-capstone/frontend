@@ -14,6 +14,7 @@
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_block_list.xml" value="0.22" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_chatting_and_party_info.xml" value="0.22" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_evaluateuser.xml" value="0.17916666666666667" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_finish.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_home.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_login.xml" value="0.1764102564102564" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_logout.xml" value="0.1764102564102564" />
@@ -32,7 +33,7 @@
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_bottomsheet.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_chatting.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_group.xml" value="0.17916666666666667" />
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_map.xml" value="0.16666666666666666" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_map.xml" value="0.1" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_mypage.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_party.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/mypartylist_items.xml" value="0.17916666666666667" />
