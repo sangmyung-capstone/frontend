@@ -19,7 +19,5 @@ class RatingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
-
     }
 }

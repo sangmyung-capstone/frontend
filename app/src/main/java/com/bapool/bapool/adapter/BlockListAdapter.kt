@@ -37,7 +37,7 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
         binding.blockbutton.setOnClickListener {
             // Handle the button click event
             val retro = RetrofitService.create()
-            var userInfo = BlockUserRequest(15)
+            var userInfo = BlockUserRequest(blockedUser.user_id)
 
             retro.BlockUser(1, userInfo)
                 .enqueue(object : Callback<BlockUserResponse> {

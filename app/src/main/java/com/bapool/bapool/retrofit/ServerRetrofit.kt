@@ -1,6 +1,7 @@
 package com.bapool.bapool.retrofit
 
 import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.ui.LoginActivity.Companion.UserToken
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
@@ -68,8 +69,8 @@ interface ServerRetrofit {
 //        @Path("user-id") userId: Long?,
 //        @Path("restaurant-id") restaurantId: Int?,
 //    )
-  
-  //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
 
     //손승현
     @GET("test/parties/{user_id}/{restaurant_id}")
@@ -82,28 +83,18 @@ interface ServerRetrofit {
 
     // 싱글톤 객체 생성
     companion object {
-        private const val BASE_URL = "https://myfirstdomain.store"
-//        private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
-
-
-//         헤더 추가
-//        private fun client(interceptor: AppInterceptor): OkHttpClient = OkHttpClient.Builder().run {
-//            addInterceptor(interceptor)
-//            build()
-//        }
-//
-//        class AppInterceptor : Interceptor {
-//            @Throws(IOException::class)
-//            override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
-//                val newRequest = request().newBuilder()
-//                    .addHeader("header key", "header value")
-//                    .build()
-//                proceed(newRequest)
-//            }
-//        }
+        //private const val BASE_URL = "https://myfirstdomain.store"
+        private const val BASE_URL = "https://2c0ecd2a-cbe7-48ce-ac13-4c0a1e451672.mock.pstmn.io"
 
         private val client = OkHttpClient.Builder()
-//            .cookieJar(JavaNetCookieJar(CookieManager())) //쿠키매니저 연결
+            .addInterceptor { chain ->
+                val originalRequest = chain.request()
+                val modifiedRequest = originalRequest.newBuilder()
+                    .header("access_token", UserToken.toString())
+                    .build()
+                chain.proceed(modifiedRequest)
+            }
+            // .cookieJar(JavaNetCookieJar(CookieManager())) // 쿠키매니저 연결
             .build()
 
         fun create(): ServerRetrofit {
@@ -111,11 +102,11 @@ interface ServerRetrofit {
             val gson: Gson = GsonBuilder().setLenient().create()
 
             return Retrofit.Builder()
-//                .client(client(AppInterceptor()))
+                // .client(client(AppInterceptor()))
                 .client(client)
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-//                .addConverterFactory(ScalarsConverterFactory.create())    // List가 아닌 response 사용 시
+                // .addConverterFactory(ScalarsConverterFactory.create())    // List가 아닌 response 사용 시
                 .build()
                 .create(ServerRetrofit::class.java)
         }
