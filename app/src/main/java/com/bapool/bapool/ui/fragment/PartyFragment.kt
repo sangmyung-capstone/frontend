@@ -2,6 +2,7 @@ package com.bapool.bapool.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,80 +11,127 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.adapter.MyPartyListAdapter
 import com.bapool.bapool.databinding.FragmentPartyBinding
-import com.bapool.bapool.retrofit.data.MyPartyListModel
+import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.RestaurantPartyActivity
-import java.time.LocalDateTime
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+
+import java.text.SimpleDateFormat
 
 
 class PartyFragment : Fragment() {
     private var _binding: FragmentPartyBinding? = null
     private val binding get() = _binding!!
-    private lateinit var myGroupAdapter: MyPartyListAdapter
-    lateinit var myGroupRv: RecyclerView
-    var myGrpListModel = arrayListOf<MyPartyListModel>()
+
+    private lateinit var myPartyAdapter: MyPartyListAdapter
+    lateinit var myPartyRv: RecyclerView
+
+    var myPartyListModel = arrayListOf<MyPartyListModel>()
+
+    var currentUserId = "userId1"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         _binding = FragmentPartyBinding.inflate(inflater, container, false)
-
-        dummyData()
+        getUserPartyData()
         initializeVari()
-        listener()
-        adapter()
 
         return binding.root
     }
 
     //변수 초기화
     fun initializeVari() {
-        myGroupRv = binding.myGroupListRv
-        myGroupAdapter = MyPartyListAdapter(requireContext(), myGrpListModel)
+        myPartyRv = binding.myGroupListRv
 
     }
 
-    //리스너 호출
-    fun listener() {
-        binding.goToResGrp.setOnClickListener {
-            val intent = Intent(requireContext(), RestaurantPartyActivity::class.java)
-            startActivity(intent)
-        }
-    }
 
     //recyclerView adapter
-    fun adapter() {
-        myGroupRv.adapter = myGroupAdapter
-        myGroupRv.layoutManager = LinearLayoutManager(requireContext())
+    fun adapter(list: List<MyPartyListModel>) {
+        myPartyAdapter = MyPartyListAdapter(requireContext(), list, currentUserId)
+        myPartyRv.adapter = myPartyAdapter
+        myPartyRv.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    //retrofit 연결 전 dummydata
-    fun dummyData() {
-        myGrpListModel.clear()
-        myGrpListModel.add(
-            MyPartyListModel(
-                123,
-                "학식",
-                "학식같이먹을사람!",
-                3,
-                4,
-                LocalDateTime.of(2023, 3, 10, 12, 10, 40),
-                LocalDateTime.of(2023, 3, 10, 12, 59, 10),
-                "첫번째 그룹 dㅌㅊㅍㅋㄴㅇㄶㄴㅇㄹ어러ㅠㅏ;ㅣㅓ아ㅣㅠㅗㅓ이ㅏㅗㅠㅓㅇ라ㅣㅓㅠㅏㅣㅇ러ㅚㅏㅇ러ㅣㅏㅇ러ㅚㅏ어ㅚㅏㅇ러ㅗㅇ러ㅚ어리ㅏㅗㅓㅇ리ㅏㅗㅇㄹummyData",
-                3
-            )
-        )
-        myGrpListModel.add(
-            MyPartyListModel(
-                12, "학식", "학식같이먹을사람!", 2, 10,
-                LocalDateTime.of(2023, 3, 10, 11, 10, 40),
-                LocalDateTime.of(2023, 3, 10, 15, 59, 10), "두번째 그룹 dummyData", 10
-            )
-        )
+    fun getUserPartyData() {
+        FirebaseDatabase.getInstance().getReference("Groups")
+            .orderByChild("groupUsers/$currentUserId")
+            .equalTo(true)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    myPartyListModel.clear()
+                    for (data in snapshot.children) {
+
+                        val partyData = data.getValue(FirebaseParty::class.java)
+                        val partyInfo = partyData?.groupInfo
+                        var partyMessageMap: Map<String, FirebasePartyMessage>? =
+                            partyData?.groupMessages
+                        val partyMessage: Collection<FirebasePartyMessage> =
+                            partyMessageMap!!.values
+                        val sortedMessage = partyMessage.sortedBy { it.sendedDate }
+
+
+                        val lastChatItem: FirebasePartyMessage =
+                            if (sortedMessage.isNullOrEmpty()) {
+                                FirebasePartyMessage()
+                            } else {
+                                sortedMessage[sortedMessage.lastIndex]
+                            }
+//                        val lastChatItem: FirebasePartyMessage =
+//                            sortedMessage[sortedMessage.lastIndex]
+                        var notReadChatNumber = 0
+
+                        Log.d("채팅방확인", partyInfo.toString())
+                        Log.d("채팅방확인", partyMessageMap.toString())
+
+                        Log.d("채팅방확인", sortedMessage.toString())
+
+
+                        for (data in sortedMessage) {
+                            if (!(currentUserId in data.confirmed))
+                                notReadChatNumber += 1
+                        }
+
+
+                        val grpId = data.key.toString()
+                        val resName: String = ""
+                        val grpName = partyInfo?.groupName ?: ""
+                        val participants = partyInfo?.curNumberOfPeople ?: 0
+                        val lastChat: String = if (lastChatItem.type == 1) {
+                            "사진"
+                        } else {
+                            lastChatItem.content
+                        }
+                        val lastChatTime: String = lastChatItem.sendedDate
+
+                        val dataModel = MyPartyListModel(grpId,
+                            resName,
+                            grpName, participants, lastChat, notReadChatNumber, lastChatTime)
+                        myPartyListModel.add(dataModel)
+
+
+                    }
+
+                    Log.d("채팅방확인소트전", myPartyListModel.toString())
+                    val sortedMyPartyListModel =
+                        myPartyListModel.sortedByDescending { it.lastChatTime }
+                    Log.d("채팅방확인소트후", sortedMyPartyListModel.toString())
+                    adapter(sortedMyPartyListModel)
+                    myPartyAdapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+
     }
 
     //뷰바인딩 생명주기 관리
@@ -92,4 +140,11 @@ class PartyFragment : Fragment() {
         _binding = null
     }
 
+    fun getTime(): String {
+        val currentTime = System.currentTimeMillis()
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS")
+        val date = sdf.format(currentTime)
+        return date.toString()
+    }
 }

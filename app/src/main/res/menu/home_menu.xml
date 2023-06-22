@@ -2,14 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/mapFragment"
+        android:icon="@drawable/mapicon"
         android:title="Map"
         />
+
     <item
         android:id="@+id/groupFragment"
-        android:title="Group"
+        android:icon="@drawable/partyicon"
+        android:title="Party"
         />
+
     <item
         android:id="@+id/mypageFragment"
+        android:icon="@drawable/mypageicon"
         android:title="MyPage"
         />
 

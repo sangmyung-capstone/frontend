@@ -95,9 +95,9 @@ interface RetrofitService {
     fun getResGrpList(
         @Path("user_id") userId: Long,
         @Path("restaurant_id") restaurantId: Long,
-    ): Call<GetResGroupListResponse>
+    ): Call<GetResPartyListResponse>
     //http://dev.scrap-j2kb.shop/test/parties/1/1470337852
-    @POST("party/{user_id}")
+    @POST("parties/{user_id}")
     fun makeGrp(
         @Path("user_id") userId: Long,
         @Body request: PostMakePartyRequest,
