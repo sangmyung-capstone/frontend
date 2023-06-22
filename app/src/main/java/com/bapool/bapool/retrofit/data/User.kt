@@ -183,6 +183,7 @@ data class GetEvaluateUserResponse(
     data class GetEvaluateUserResult(
         val User: GetEvaluateUserResultUser
     )
+
     data class GetEvaluateUserResultUser(
         val user_id: Long,
         val nickname: String

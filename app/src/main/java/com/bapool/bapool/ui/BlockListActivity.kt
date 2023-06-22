@@ -1,14 +1,15 @@
 package com.bapool.bapool.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.adapter.BlockListAdapter
 import com.bapool.bapool.databinding.ActivityBlockListBinding
 import com.bapool.bapool.retrofit.data.GetBlockUserResponse
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,7 +23,7 @@ class BlockListActivity : AppCompatActivity() {
         val retro = RetrofitService.create()
         val blockedUsersList = mutableListOf<GetBlockUserResponse.BlockedUser>()
 
-        retro.GetBlockUser("accessToken", 1)
+        retro.GetBlockUser(UserId!!)
             .enqueue(object : Callback<GetBlockUserResponse> {
                 override fun onResponse(
                     call: Call<GetBlockUserResponse>,

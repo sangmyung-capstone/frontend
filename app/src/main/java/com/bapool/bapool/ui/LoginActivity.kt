@@ -25,13 +25,13 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         var UserToken: String? = null
-        var UserId: Int? = null
+        var UserId: Long? = null
     }
 
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
 
-//    val retro = RetrofitService.create()    // Mock Server
+    //    val retro = RetrofitService.create()    // Mock Server
     val retro = ServerRetrofit.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,9 +103,9 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             } else if (token != null) {
-                Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
                 //여기서부터 retrofit
                 Log.d("bap", "토큰 정보 : ${token.accessToken}")
+                UserToken = token.accessToken
 
                 //여기까지 retrofit
                 retro.PostKakaoLoginCheck(PostkakaoLoginCheckRequest(token.accessToken))
@@ -117,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 // 정상적으로 통신이 성공된 경우
                                 var result: PostKakaoLoginCheckResponse? = response.body()
-                                Log.d("bap", "onRequest 성공: $token")
+                                Log.d("bap", "onRequest 성공: $UserToken")
                                 Log.d("bap", "onResponse 성공: " + result?.toString())
                                 if (result != null) {//처음 로그인시 가입화면으로 넘어감.
                                     if (!result.result) {
@@ -140,6 +140,14 @@ class LoginActivity : AppCompatActivity() {
                                                     if (response.isSuccessful) {
                                                         var result: PostKakaoSigninResponse? =
                                                             response.body()
+                                                        if (result != null) {
+                                                            UserToken = result.result.access_token
+                                                        }
+                                                        Toast.makeText(
+                                                            this@LoginActivity,
+                                                            "로그인 성공",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
                                                         Log.d("bap", "onRequest 성공: $token");
                                                         Log.d(
                                                             "bap",
@@ -193,6 +201,7 @@ class LoginActivity : AppCompatActivity() {
                 // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
                 var token = PostNaverLoginCheckRequest(NaverIdLoginSDK.getAccessToken().toString())
                 Log.d("bap", "OnRequest : $token")
+                UserToken = token.access_token
 
                 //여기서부터 retrofit
                 retro.PostNaverLoginCheck(token)
@@ -231,6 +240,14 @@ class LoginActivity : AppCompatActivity() {
                                                     if (response.isSuccessful) {
                                                         var result: PostNaverSigninResponse? =
                                                             response.body()
+                                                        if (result != null) {
+                                                            UserToken = result.result.access_token
+                                                        }
+                                                        Toast.makeText(
+                                                            this@LoginActivity,
+                                                            "로그인 성공",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
                                                         Log.d("bap", "onRequest 성공: $token");
                                                         Log.d(
                                                             "bap",

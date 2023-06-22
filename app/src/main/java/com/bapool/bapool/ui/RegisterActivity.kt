@@ -15,6 +15,7 @@ import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityRegisterBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.ui.LoginActivity.Companion.UserToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -113,6 +114,9 @@ class RegisterActivity : AppCompatActivity() {
                                                     if (response.isSuccessful) {
                                                         var result: PostNaverSigninResponse? =
                                                             response.body()
+                                                        if (result != null) {
+                                                            UserToken = result.result.access_token
+                                                        }
                                                         Log.d("bap", "onRequest 성공: $userInfo");
                                                         Log.d(
                                                             "bap",
@@ -122,7 +126,7 @@ class RegisterActivity : AppCompatActivity() {
                                                         val intent =
                                                             Intent(
                                                                 this@RegisterActivity,
-                                                                HomeActivity::class.java
+                                                                FinishActivity::class.java
                                                             )
                                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                                         finish()
@@ -208,6 +212,9 @@ class RegisterActivity : AppCompatActivity() {
                                                     if (response.isSuccessful) {
                                                         var result: PostKakaoSigninResponse? =
                                                             response.body()
+                                                        if (result != null) {
+                                                            UserToken = result.result.access_token
+                                                        }
                                                         Log.d("bap", "onRequest 성공: $userInfo");
                                                         Log.d(
                                                             "bap",
@@ -217,7 +224,7 @@ class RegisterActivity : AppCompatActivity() {
                                                         val intent =
                                                             Intent(
                                                                 this@RegisterActivity,
-                                                                HomeActivity::class.java
+                                                                FinishActivity::class.java
                                                             )
                                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                                         finish()

@@ -9,6 +9,7 @@ import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.adapter.RestaurantLogAdapter
 import com.bapool.bapool.databinding.ActivityRestaurantLogBinding
 import com.bapool.bapool.retrofit.data.GetRestaurantLogResponse
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,7 +23,7 @@ class RestaurantLogActivity : AppCompatActivity() {
         val retro = RetrofitService.create()
         val RestaurantsLogList = mutableListOf<GetRestaurantLogResponse.Party>()
 
-        retro.GetrestaurantsLog("accessToken", 1)
+        retro.GetrestaurantsLog(UserId!!)
             .enqueue(object : Callback<GetRestaurantLogResponse> {
                 override fun onResponse(
                     call: Call<GetRestaurantLogResponse>,

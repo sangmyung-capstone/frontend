@@ -1,23 +1,21 @@
 package com.bapool.bapool.ui.fragment
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.FragmentMypageBinding
 import com.bapool.bapool.retrofit.data.DeleteUserResponse
 import com.bapool.bapool.retrofit.data.GetMypageResponse
-import com.bapool.bapool.retrofit.data.Restaurant
-import com.bapool.bapool.ui.*
+import com.bapool.bapool.ui.BlockListActivity
+import com.bapool.bapool.ui.ChangeProfileActivity
+import com.bapool.bapool.ui.LoginActivity
+import com.bapool.bapool.ui.RestaurantLogActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +34,7 @@ class MypageFragment : Fragment() {
         //통신과정
         val retro = RetrofitService.create()
 
-        retro.getMyPage("accessToken", 1)
+        retro.getMyPage( 1)
             .enqueue(object : Callback<GetMypageResponse> {
                 override fun onResponse(
                     call: Call<GetMypageResponse>,
@@ -91,7 +89,7 @@ class MypageFragment : Fragment() {
         binding.deleteUser.setOnClickListener {
             val retro = RetrofitService.create()
 
-            retro.DeleteUser("accessToken", 1)
+            retro.DeleteUser( 1)
                 .enqueue(object : Callback<DeleteUserResponse> {
                     override fun onResponse(
                         call: Call<DeleteUserResponse>,
