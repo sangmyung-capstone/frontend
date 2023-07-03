@@ -1,6 +1,7 @@
 package com.bapool.bapool.retrofit.data
 
 import com.google.gson.annotations.SerializedName
+import com.kakao.sdk.user.model.User
 
 //data class accessToken(
 //    @SerializedName("userToken")
@@ -181,7 +182,7 @@ data class GetRatingUserResponse(
     val result: GetRatingUserResult
 ) {
     data class GetRatingUserResult(
-        val User: GetRatingUserResultUser
+        val users: List<GetRatingUserResultUser>
     )
 
     data class GetRatingUserResultUser(
@@ -189,6 +190,16 @@ data class GetRatingUserResponse(
         val nickname: String
     )
 }
+
+data class PostRatingUserRequest(
+    val users: List<UserData>
+)
+
+data class UserData(
+    val user_id: Int,
+    val rating: Float,
+    val hashtag: List<Int>
+)
 
 
 
