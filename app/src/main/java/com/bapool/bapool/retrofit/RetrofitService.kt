@@ -75,11 +75,11 @@ interface RetrofitService {
         @Path("user-id") userId: Long,
     ): Call<GetRestaurantLogResponse>
 
-    @GET("/users/evaluate/{user-id}")
-    fun GetEvaluateUser(
+    @GET("/users/rating/{user-id}")
+    fun GetRatingUser(
         @Path("user-id") userId: Long,
         @Query("party-id") partyId: Long
-    ): Call<GetEvaluateUserResponse>
+    ): Call<GetRatingUserResponse>
 
 
     //--------------------------------------------------------------------------

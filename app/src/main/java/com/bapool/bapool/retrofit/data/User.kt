@@ -175,16 +175,16 @@ data class FirebaseUserInfo(
     val bannedUser: List<String>? = null
 )
 
-data class GetEvaluateUserResponse(
+data class GetRatingUserResponse(
     val code: Int,
     val message: String,
-    val result: GetEvaluateUserResult
+    val result: GetRatingUserResult
 ) {
-    data class GetEvaluateUserResult(
-        val User: GetEvaluateUserResultUser
+    data class GetRatingUserResult(
+        val User: GetRatingUserResultUser
     )
 
-    data class GetEvaluateUserResultUser(
+    data class GetRatingUserResultUser(
         val user_id: Long,
         val nickname: String
     )
