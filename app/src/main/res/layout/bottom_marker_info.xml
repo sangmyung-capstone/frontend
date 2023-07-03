@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:text="NAME"
         android:textSize="25dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,12 +32,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         android:text="ADDRESS"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomTextMenu" />
 
     <TextView
         android:id="@+id/bottomTextMenu"
@@ -45,9 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="32dp"
         android:text="MENU"
-        app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bottomTextCategory" />
 
@@ -55,24 +51,22 @@
         android:id="@+id/bottomTextPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="PHONE"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintStart_toEndOf="@+id/bottomTextAddress"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomTextMenu" />
 
     <TextView
         android:id="@+id/bottomTextCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:text="CATEGORY"
         android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/drag_handle" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomTextName" />
 
     <ImageView
         android:id="@+id/bottomImageMarkerInfo"
@@ -88,15 +82,13 @@
         android:id="@+id/bottomButtonParty"
         android:layout_width="70dp"
         android:layout_height="45dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:minWidth="0dp"
         android:minHeight="0dp"
         android:text="생성"
         android:textSize="11sp"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -104,17 +96,17 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginBottom="16dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/bottomTextAddress" />
 
     <View
         android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="32dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomTextAddress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
