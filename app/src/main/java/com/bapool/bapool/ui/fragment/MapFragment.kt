@@ -17,11 +17,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
+import com.bapool.bapool.adapter.RestaurantBottomAdapter
 import com.bapool.bapool.databinding.FragmentMapBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.GetRestaurantInfoResult
 import com.bapool.bapool.retrofit.data.GetRestaurantsResult
+import com.bapool.bapool.retrofit.data.Restaurant
 import com.bapool.bapool.retrofit.data.RestaurantInfo
 import com.bapool.bapool.ui.HomeActivity
 import com.bumptech.glide.Glide
@@ -59,6 +63,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val retro = ServerRetrofit.create()
 
     var cnt = 0
+    var cnt2 = 0
 
 
     override fun onCreateView(
@@ -68,11 +73,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
 
 
-        // 위치 권한 요청
+        // 위치 권한 요청 및 맵 초기화
         requestPermissions()
 
         // bottomSheet에 식당바텀리스트 레이아웃 할당
-        layoutInflater.inflate(R.layout.bottom_restaurant_list, binding.bottomSheet, true)
+//        layoutInflater.inflate(R.layout.bottom_restaurant_list, binding.bottomSheet, true)
+        // bottomSheet RecyclerView Adapter 연결
+        // 원래 시작하자마자 bottomSheet가 존재해야함!!
+//        Log.d("Bottom", result.toString())
+//        binding.bottomSheet.findViewById<RecyclerView>(R.id.restaurant_recyclerview).adapter =
+//            RestaurantBottomAdapter(result)
 
         // 현 위치에서 검색 터치 시 // FAB
         binding.extendedFAB.setOnClickListener {
@@ -91,40 +101,41 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val bottomBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         // behavior 속성
-        bottomBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        bottomBehavior.peekHeight = dpToPx(180f, context).toInt()    // dp -> px변환
+//        bottomBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 //        bottomBehavior.isFitToContents = false
-//        bottomBehavior.expandedOffset = dpToPx(250f, context).toInt()    // dp -> px변환
+//        bottomBehavior.peekHeight = dpToPx(180f, context).toInt()    // dp -> px변환
+//        bottomBehavior.expandedOffset = dpToPx(600f, context).toInt()    // dp -> px변환
 
 
-        bottomBehavior.apply {
-            addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    when (newState) {
-                        BottomSheetBehavior.STATE_COLLAPSED -> { //접힘
-//                            binding.bottomSheet.findViewById<TextView>(R.id.bottomTextPartyList).text =
-//                                "OPEN"
-                        }
-                        BottomSheetBehavior.STATE_EXPANDED -> {  //펼쳐짐
-//                            binding.bottomSheet.findViewById<TextView>(R.id.bottomTextPartyList).text =
-//                                "CLOSE"
-                        }
-                        BottomSheetBehavior.STATE_HIDDEN -> {}    //숨겨짐
-                        BottomSheetBehavior.STATE_HALF_EXPANDED -> {} //절반 펼쳐짐
-                        BottomSheetBehavior.STATE_DRAGGING -> {}  //드래그하는 중
-                        BottomSheetBehavior.STATE_SETTLING -> {}  //(움직이다가) 안정화되는 중
-                    }
-                }
 
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    //슬라이드 될때 offset / hide -1.0 ~ collapsed 0.0 ~ expended 1.0
-                    // 커스텀 위젯의 마진 동기화 작업 중...
-                    val layoutParams = binding.logoView.layoutParams as ViewGroup.MarginLayoutParams
-                    layoutParams.bottomMargin += (binding.bottomSheet.height * slideOffset).toInt()
-                    binding.logoView.layoutParams = layoutParams
-                }
-            })
-        }
+//        bottomBehavior.apply {
+//            addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+//                override fun onStateChanged(bottomSheet: View, newState: Int) {
+//                    when (newState) {
+//                        BottomSheetBehavior.STATE_COLLAPSED -> { //접힘
+////                            binding.bottomSheet.findViewById<TextView>(R.id.bottomTextPartyList).text =
+////                                "OPEN"
+//                        }
+//                        BottomSheetBehavior.STATE_EXPANDED -> {  //펼쳐짐
+////                            binding.bottomSheet.findViewById<TextView>(R.id.bottomTextPartyList).text =
+////                                "CLOSE"
+//                        }
+//                        BottomSheetBehavior.STATE_HIDDEN -> {}    //숨겨짐
+//                        BottomSheetBehavior.STATE_HALF_EXPANDED -> {} //절반 펼쳐짐
+//                        BottomSheetBehavior.STATE_DRAGGING -> {}  //드래그하는 중
+//                        BottomSheetBehavior.STATE_SETTLING -> {}  //(움직이다가) 안정화되는 중
+//                    }
+//                }
+//
+//                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+//                    //슬라이드 될때 offset / hide -1.0 ~ collapsed 0.0 ~ expended 1.0
+//                    // 커스텀 위젯의 마진 동기화 작업 중...
+//                    val layoutParams = binding.logoView.layoutParams as ViewGroup.MarginLayoutParams
+//                    layoutParams.bottomMargin += (binding.bottomSheet.height * slideOffset).toInt()
+//                    binding.logoView.layoutParams = layoutParams
+//                }
+//            })
+//        }
 
         binding.bottomSheet.setOnClickListener {
             bottomBehavior.state =
@@ -215,6 +226,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 response: Response<GetRestaurantsResult>
             ) {
                 if (response.isSuccessful) {
+                    // bottomSheet에 식당바텀리스트 레이아웃 할당
+                    if (cnt2 == 0) {     // cnt 방식이 아닌 뷰 교체 방식의 제대로된 방법 필요
+                        layoutInflater.inflate(
+                            R.layout.bottom_restaurant_list,
+                            binding.bottomSheet,
+                            true
+                        )
+                        cnt2++
+                    }
+
+                    // 식당바텀리스트 어댑터 바인딩
+                    binding.bottomSheet.findViewById<RecyclerView>(R.id.restaurant_recyclerview).adapter =
+                        RestaurantBottomAdapter(response.body()!!.result.restaurants)
+                    binding.bottomSheet.findViewById<RecyclerView>(R.id.restaurant_recyclerview).layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+
                     // 기존 마커 존재 시 전부 삭제
                     if (markerList.size != 0) {
                         Log.d("MARKER_INIT", "marker clear!!!")
@@ -277,14 +305,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.d("MARKER_INFO", "lati: $lati long: $long")
             Log.d("MARKER_INFO", "Restaurant id : $id")
 
-            binding.imageView4.visibility = View.VISIBLE
-            Glide.with(this)
-                .load("https://t1.kakaocdn.net/thumb/T800x0.q80/?fname=http%3A%2F%2Ft1.daumcdn.net%2Fplace%2F4274A699F61A4D07BEF31567CBC14323")
-                .into(binding.imageView4.findViewById(R.id.imageView4))
-
-            Log.d("MARKER_INFO", "GLIDE FINISH")
-
-
             // 마커 클릭 시 하단 네비게이션바 제거
             val homeActivity = activity as HomeActivity
             homeActivity.hideBottomNavi(true)
@@ -293,7 +313,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
                 cnt++
             }
-
 
             retro.getRestaurantInfo(1, id, long, lati)
                 .enqueue(object : Callback<GetRestaurantInfoResult> {
@@ -347,17 +366,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             result?.phone
         binding.bottomSheet.findViewById<TextView>(R.id.bottomTextCategory).text =
             result?.category
-        if (result?.menu != null) {
-            binding.bottomSheet.findViewById<TextView>(R.id.bottomTextMenu).text =
-                    // 사이즈 측정해서 for문 필요
-                    // resource string 필요!!!
-                "${result.menu[0].name} : ${result.menu[0].price}"
+        Log.d("MARKER_INFO", result?.menu.toString())
+        // size 0에서 정상작동 되지 않음 // 예외 처리 필요
+        if ((result?.menu != null) || (result?.menu?.size != 0)) {
+            if (result != null) {
+                var text = ""
+                for (idx in result.menu) {
+                    text += "${idx.name} : ${idx.price} \n"
+                }
+                text.substring(0, text.length - 1)
+                binding.bottomSheet.findViewById<TextView>(R.id.bottomTextMenu).text = text
+            }
         } else {
             binding.bottomSheet.findViewById<TextView>(R.id.bottomTextMenu).text =
                 "메뉴 미제공"
         }
         binding.bottomSheet.findViewById<Button>(R.id.bottomButtonParty).text =
             "${result?.num_of_party.toString()} 파티!"
+
         // view 부착
 //        binding.bottomSheet.addView(BottomMarkerInfoBinding.inflate(layoutInflater).root)
     }
