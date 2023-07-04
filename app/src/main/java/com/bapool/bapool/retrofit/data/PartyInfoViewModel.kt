@@ -12,8 +12,8 @@ class PartyInfoViewModel : ViewModel() {
         sharedObjectInfo.value = newObjectInfo
     }
 
-    fun getObjectInfo(): LiveData<FirebasePartyInfo> {
-        return sharedObjectInfo
+    fun getObjectInfo(): FirebasePartyInfo? {
+        return sharedObjectInfo.value
     }
 
 }

@@ -11,43 +11,33 @@ import android.view.LayoutInflater
 import android.widget.NumberPicker
 import android.widget.Toast
 import com.bapool.bapool.R
-import com.bapool.bapool.databinding.ActivityMakePartyBinding
+import com.bapool.bapool.databinding.ActivityEditPartyInfoBinding
 import com.bapool.bapool.databinding.CustomDatepickerBinding
 import com.bapool.bapool.databinding.CustomTimepickerBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
-import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.retrofit.data.PatchEditPartyInfoResponse
+import com.bapool.bapool.retrofit.data.PatchEditPartyInfoRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
+class EditPartyInfoActivity : AppCompatActivity() {
 
-class MakePartyActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMakePartyBinding
+    private lateinit var binding: ActivityEditPartyInfoBinding
     val hastagList = ArrayList(Collections.nCopies(5, 0))
     lateinit var maxPeople: NumberPicker
     val retro = ServerRetrofit.create()
     val userId: Long = 2
-
-    val restaurantInfo = PostMakePartyRequestRestaurantInfo(
-        2,
-        "밥꼬찜닭",
-        "서울 동작구",
-        "wfwlifwfjl.com",
-        "wfjwilifajwfl.com",
-        "육류 고기",
-        "010-1111-2222"
-    )
-
+    val partyId: Long = 23
+    val TAG = "EditPartyInfoActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMakePartyBinding.inflate(layoutInflater)
+        binding = ActivityEditPartyInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         var resName = intent.getStringExtra("resName")
         binding.resName.setText(resName)
@@ -55,7 +45,6 @@ class MakePartyActivity : AppCompatActivity() {
 
         initializeVari()
         listener()
-
     }
 
 
@@ -192,24 +181,19 @@ class MakePartyActivity : AppCompatActivity() {
                 val startDateLocal =
                     binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
 
-                Log.d("LocalDateEndStart", endDateLocal)
-                Log.d("LocalDateEndStart", startDateLocal)
-
-                val makeGrpInstance =
-                    PostMakePartyRequest(
+                val editPartyInstance =
+                    PatchEditPartyInfoRequest(
+                        partyId,
                         binding.grpNameText.text.toString(),
                         maxPeople.value,
                         startDateLocal,
                         endDateLocal,
                         binding.menuText.text.toString(),
-                        hastagList,
                         binding.detail.text.toString(),
-                        restaurantInfo)
+                    )
+                Log.d(TAG, editPartyInstance.toString())
 
-                Log.d("MakePartyInfo", makeGrpInstance.toString())
-
-
-                retrofit(makeGrpInstance)
+                retrofit(editPartyInstance)
             }
 
 
@@ -217,29 +201,40 @@ class MakePartyActivity : AppCompatActivity() {
     }
 
 
-    fun retrofit(makeParty: PostMakePartyRequest) {
+    fun retrofit(editParty: PatchEditPartyInfoRequest) {
 
-
-        retro.makeParty(userId, makeParty).enqueue(object : Callback<PostMakePartyResponse> {
+        retro.editParty(userId, editParty).enqueue(object : Callback<PatchEditPartyInfoResponse> {
             override fun onResponse(
-                call: Call<PostMakePartyResponse>,
-                response: Response<PostMakePartyResponse>,
+                call: Call<PatchEditPartyInfoResponse>,
+                response: Response<PatchEditPartyInfoResponse>,
             ) {
+                var result: PatchEditPartyInfoResponse? = response.body()
 
                 if (response.isSuccessful) {
-                    var result: PostMakePartyResponse? =
-                        response.body()
-                    Log.d("MKRetrofit", "onRequest 성공: $makeParty")
+                    Log.d("MKRetrofit", "onRequest 성공: $editParty")
                     Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
 
-                    val intent =
-                        Intent(this@MakePartyActivity, ChattingAndPartyInfoMFActivity::class.java)
-                    intent.putExtra("currentUserId", "userId2")//현재 유저의 userId로 value값 교체
-                    intent.putExtra("partyId", "groupId2") // result 안의 party_id 값으로 value값 교체
-                    startActivity(intent)
+//                    val intent =
+//                        Intent(this@EditPartyInfoActivity,
+//                            ChattingAndPartyInfoMFActivity::class.java)
+////                intent.putExtra("currentUserId", "userId2")//현재 유저의 userId로 value값 교체
+////                intent.putExtra("partyId", "groupId2") // result 안의 party_id 값으로 value값 교체
+//                    startActivity(intent)
 
-                    //group_id 넘겨줘야함 Intent할때
+
+
                 } else {
+                    Log.d("MKRetrofit", "onResponse 실패: " + response.errorBody().toString())
+
+                    Toast.makeText(this@EditPartyInfoActivity, "그룹 생성 오류 fail", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
 //                    val responseCode = response.code()
 //                    val errorBody = response.errorBody()?.string()
 //                    Log.d("MKRetrofit", response.toString())
@@ -247,15 +242,7 @@ class MakePartyActivity : AppCompatActivity() {
 //                    // 실패한 응답 처리
 //                    Log.d("MKRetrofit", "응답 실패. 응답 코드: $responseCode, 에러 메시지: $errorBody")
 
-                    Toast.makeText(this@MakePartyActivity, "그룹 생성 오류", Toast.LENGTH_SHORT).show()
-
-                }
-            }
-
-
-            override fun onFailure(call: Call<PostMakePartyResponse>, t: Throwable) {
-                Log.d("MKRetrofit", "그룹생성 레트로핏 fail")
-                Log.d("MKRetrofit", "onResponse 실패 :" + t.toString())
+                Toast.makeText(this@EditPartyInfoActivity, "그룹 생성 오류", Toast.LENGTH_SHORT).show()
             }
         })
 

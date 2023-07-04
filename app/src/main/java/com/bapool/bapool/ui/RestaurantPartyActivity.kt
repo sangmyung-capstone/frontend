@@ -45,10 +45,29 @@ class RestaurantPartyActivity : AppCompatActivity() {
     //버튼 listener
     fun listener() {
         binding.goToMakeGrp.setOnClickListener {
+
+//
+//            FirebaseMessaging.getInstance().token.addOnCompleteListener(
+//                OnCompleteListener { task ->
+//                    if (!task.isSuccessful) {
+//                        Log.e("dsksdfkjsfkj", "token.toString()")
+//
+//                        return@OnCompleteListener
+//                    }
+//
+//                    // Get new FCM registration token
+//                    val token = task.result
+//
+//                    // Log and toast
+//                    Log.e("dsksdfkjsfkj", token.toString())
+//
+//                })
+
             val intent = Intent(this, MakePartyActivity::class.java)
             intent.putExtra("resName", resNameIntent)
             startActivity(intent)
         }
+
     }
 
     //recyclerview 연결
@@ -60,7 +79,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     //retrofit
     fun retrofit() {
 
-        retro.getResGrpList(userId, restaurantId)
+        retro.getResPartyList(userId, restaurantId)
             .enqueue(object : Callback<GetResPartyListResponse> {
                 override fun onResponse(
                     call: Call<GetResPartyListResponse>,
