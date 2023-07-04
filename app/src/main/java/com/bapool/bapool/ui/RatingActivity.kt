@@ -9,11 +9,11 @@ import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.adapter.RatingUserAdapter
 import com.bapool.bapool.databinding.ActivityRatinguserBinding
 import com.bapool.bapool.retrofit.data.GetRatingUserResponse
+import com.bapool.bapool.retrofit.data.PostRatingUserRequest
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 
 class RatingActivity : AppCompatActivity() {
@@ -26,6 +26,7 @@ class RatingActivity : AppCompatActivity() {
 
         val retro = RetrofitService.create()
         val ratingUsersList = mutableListOf<GetRatingUserResponse.GetRatingUserResultUser>()
+        var ratingUserData = mutableListOf<PostRatingUserRequest>()
         var partyid: Long = 1
 
         retro.GetRatingUser(1, partyid)
