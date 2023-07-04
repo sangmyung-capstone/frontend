@@ -6,6 +6,7 @@ import com.bapool.bapool.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -15,15 +16,21 @@ import com.bapool.bapool.adapter.PartyChattingAdapter
 import com.bapool.bapool.adapter.PartyUserInfoAdapter
 import com.bapool.bapool.databinding.ActivityChattingAndPartyInfoMfactivityBinding
 import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.retrofit.fcm.NotiModel
+import com.bapool.bapool.retrofit.fcm.PushNotification
+import com.bapool.bapool.retrofit.fcm.RetrofitInstance
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
-import java.util.HashMap
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
@@ -40,6 +47,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     var groupUserInfo: ArrayList<Map<String, FirebaseUserInfo>> = arrayListOf()
     var groupOnerId: String = ""
 
+    //fcm에 들어갈 데이터
+    var fcmUserInfo: MutableMap<String, FirebaseUserInfo> = HashMap()
+
     //viewModel
     private val partyInfoViewModel: PartyInfoViewModel by viewModels()
 
@@ -50,8 +60,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     var peopleCount: Int = 0
 
     //임시 userId,groupId
-    var currentUserId:String = ""
-    var partyId:String = ""
+    var currentUserId: String = "userId2"
+    var partyId: String = "groupId1"
+    private lateinit var currentUserNickName: String
 
 //    //임시 userId,groupId
 //    val testCurrentUserId = "userId3"
@@ -66,6 +77,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         listener()
         getPartyUserInfo()
 
+
     }
 
 
@@ -74,9 +86,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         chattingRecyclerView = binding.chattingRv
         //intent로 받아올 userId랑 partyId
 
-        currentUserId = intent.getStringExtra("currentUserId").toString()
-        partyId = intent.getStringExtra("partyId").toString()
-
+//        currentUserId = intent.getStringExtra("currentUserId").toString()
+//        partyId = intent.getStringExtra("partyId").toString()
 
 
         //그룹 이름 지정
@@ -138,6 +149,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         //사진 채팅창에 등록 버튼
         binding.sendImgBtn.setOnClickListener {
             saveImg()
+
         }
 
         toggle = ActionBarDrawerToggle(this@ChattingAndPartyInfoMFActivity,
@@ -153,6 +165,19 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             binding.drawerNavigationLayout.openDrawer(GravityCompat.END)
         }
 
+        binding.menuEditPartyInfo.setOnClickListener {
+            editPartyInfo()
+        }
+        binding.detailOnChattingBackground.setOnClickListener {
+
+        }
+        binding.detailIcon.setOnClickListener {
+
+        }
+        binding.menuPartyOut.setOnClickListener {
+
+        }
+
 
     }
 
@@ -165,8 +190,13 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val item = snapshot.getValue(FirebasePartyInfo::class.java)!!
                     binding.GrpName.setText(item.groupName)
+                    binding.partyNameNv.setText(item.groupName)
+                    binding.partyMenuNv.setText(item.groupMenu)
+                    binding.startDateTextNv.setText(item.startDate)
+                    val currentMaxPeople = "${item.curNumberOfPeople} / ${item.maxNumberOfPeople}"
+                    binding.currentMaxPeople.setText(currentMaxPeople)
                     partyInfoViewModel.setObjectInfo(item)
-
+                    Log.d("sdajdfkj", partyInfoViewModel.getObjectInfo().toString())
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -199,6 +229,11 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                     val item =
                                         mapOf(userId to userInfo)
                                     groupUserInfo.add(item as Map<String, FirebaseUserInfo>)
+                                    if (!userId.equals(currentUserId)) {
+                                        fcmUserInfo.put(userId, userInfo!!)
+                                    } else {
+                                        currentUserNickName = userInfo?.nickName ?: ""
+                                    }
                                     completedCount++
 
                                     if (completedCount.toString() == expectedCount.toString()) {
@@ -272,9 +307,33 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     binding.sendMessage.text.clear()
                 }
+            for ((key, userInfo) in fcmUserInfo.entries) {
+                sendFcm(0, userInfo)
+            }
         }
 
 
+    }
+
+    private fun testPush(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+
+        RetrofitInstance.api.postNotification(notification)
+
+    }
+
+
+    fun sendFcm(messageType: Int, userInfo: FirebaseUserInfo) {
+        val getterToken = userInfo.token.toString()
+        val msgText: String = if (messageType == 1) {
+            "사진"
+        } else {
+            binding.sendMessage.text.toString()
+        }
+        val notiModel = NotiModel(currentUserNickName, msgText)
+
+        val pushModel = PushNotification(notiModel, getterToken)
+
+        testPush(pushModel)
     }
 
 
@@ -311,11 +370,14 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         val group_messages =
                             FirebasePartyMessage(currentUserId, getTime(), "", 1, downloadUrl)
                         ImgRef.setValue(group_messages)
+                        for ((key, userInfo) in fcmUserInfo.entries) {
+                            sendFcm(1, userInfo)
+                        }
                     }
                 }
+
+
             }
-
-
         }
     }
 
@@ -326,6 +388,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    fun editPartyInfo() {
+        val intent = Intent(this, EditPartyInfoActivity::class.java)
+
+        startActivity(intent)
     }
 
 

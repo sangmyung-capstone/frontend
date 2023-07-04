@@ -72,16 +72,22 @@ interface ServerRetrofit {
 
     //손승현
     @GET("test/parties/{user_id}/{restaurant_id}")
-    fun getResGrpList(
+    fun getResPartyList(
         @Path("user_id") userId: Long,
         @Path("restaurant_id") restaurantId: Long,
     ): Call<GetResPartyListResponse>
 
     @POST("test/parties/{user-id}")
-    fun makeGrp(
+    fun makeParty(
         @Path("user-id") userId: Long,
         @Body request: PostMakePartyRequest,
     ): Call<PostMakePartyResponse>
+
+    @PATCH("test/parties/{user-id}")
+    fun editParty(
+        @Path("user-id") userId: Long,
+        @Body request: PatchEditPartyInfoRequest,
+    ): Call<PatchEditPartyInfoResponse>
 
     //-----------------------------------------------------------------------------
 

@@ -15,7 +15,7 @@ data class MyPartyListModel(
     val participants: Any?,
     val lastChat: String = "",
     val notReadChat: Int,
-    val lastChatTime: String =""
+    val lastChatTime: String = "",
 )
 
 data class ResPartyList(
@@ -65,6 +65,23 @@ data class PostMakePartyRequest(
     val restaurant_info: PostMakePartyRequestRestaurantInfo,
 )
 
+data class PatchEditPartyInfoRequest(
+    val party_id: Long,
+    val party_name: String,
+    val max_people: Int,
+    val start_date: String,
+    val end_date: String,
+    val menu: String,
+    val detail: String,
+)
+
+data class PatchEditPartyInfoResponse(
+    val code: Int,
+    val message: String,
+)
+
+
+
 data class PostMakePartyRequestRestaurantInfo(
     val restaurant_id: Int,
     val name: String,
@@ -104,12 +121,12 @@ data class FirebasePartyMessage(
     var type: Int = 0,
     var downloadUrl: String = "",
     var confirmed: MutableMap<String, Boolean> = HashMap(),
-    )
+)
 
 data class FirebaseParty(
     val groupInfo: FirebasePartyInfo = FirebasePartyInfo(),
     val groupMessages: Map<String, FirebasePartyMessage>? = HashMap(),
-    val groupUsers: Map<String,Boolean>? = HashMap()
+    val groupUsers: Map<String, Boolean>? = HashMap(),
 )
 
 data class GetRestaurantPartiesListResult(

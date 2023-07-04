@@ -35,7 +35,7 @@ data class PatchChangeProfileResponse(
 data class GetMypageResponse(
     var code: Int,
     val message: String,
-    var result: MyPageResult
+    var result: MyPageResult,
 ) {
     data class MyPageResult(
         val nickname: String,
@@ -80,46 +80,46 @@ data class BlockUserRequest(
 data class PostNaverLoginCheckResponse(
     val code: Int,
     val message: String,
-    val result: Boolean
+    val result: Boolean,
 )
 
 data class PostNaverLoginCheckRequest(
-    val access_token: String
+    val access_token: String,
 )
 
 //네이버 회원가입 데이터 클래스
 data class PostNaverSignupRequest(
     val access_token: String,
     var nickname: String,
-    var profile_img_id: Int
+    var profile_img_id: Int,
 )
 
 data class PostNaverSignupResponse(
     val code: Int,
     val message: String,
-    val result: PostNaverSignupResponseResult
+    val result: PostNaverSignupResponseResult,
 ) {
     data class PostNaverSignupResponseResult(
         val user_id: Long,
         val access_token: String,
-        val refresh_token: String
+        val refresh_token: String,
     )
 }
 
 data class PostNaverSigninRequest(
-    val access_token: String
+    val access_token: String,
 )
 
 //네이버 로그인 데이터 클래스
 data class PostNaverSigninResponse(
     val code: Int,
     val message: String,
-    val result: PostNaverSigninResponseResult
+    val result: PostNaverSigninResponseResult,
 ) {
     data class PostNaverSigninResponseResult(
         val user_id: Long,
         val access_token: String,
-        val refresh_token: String
+        val refresh_token: String,
     )
 }
 
@@ -127,53 +127,54 @@ data class PostNaverSigninResponse(
 data class PostKakaoLoginCheckResponse(
     val code: Int,
     val message: String,
-    val result: Boolean
+    val result: Boolean,
 )
 
 data class PostkakaoLoginCheckRequest(
-    val access_token: String
+    val access_token: String,
 )
 
 //네이버 회원가입 데이터 클래스
 data class PostKakaoSignupRequest(
     val access_token: String,
     var nickname: String,
-    var profile_img_id: Int
+    var profile_img_id: Int,
 )
 
 data class PostKakaoSignupResponse(
     val code: Int,
     val message: String,
-    val result: PostKakaoSignupResponseResult
+    val result: PostKakaoSignupResponseResult,
 ) {
     data class PostKakaoSignupResponseResult(
         val user_id: Long,
         val access_token: String,
-        val refresh_token: String
+        val refresh_token: String,
     )
 }
 
 data class PostkakaoSigninRequest(
-    val access_token: String
+    val access_token: String,
 )
 
 //네이버 로그인 데이터 클래스
 data class PostKakaoSigninResponse(
     val code: Int,
     val message: String,
-    val result: PostKakaoSigninResponseResult
+    val result: PostKakaoSigninResponseResult,
 ) {
     data class PostKakaoSigninResponseResult(
         val user_id: Long,
         val access_token: String,
-        val refresh_token: String
+        val refresh_token: String,
     )
 }
 
 data class FirebaseUserInfo(
     val imgUrl: String = "",
     val nickName: String = "",
-    val bannedUser: List<String>? = null
+    val bannedUser: List<String>? = null,
+    val token: String? = null,
 )
 
 data class GetRatingUserResponse(
@@ -187,7 +188,7 @@ data class GetRatingUserResponse(
 
     data class GetRatingUserResultUser(
         val user_id: Long,
-        val nickname: String
+        val nickname: String,
     )
 }
 
