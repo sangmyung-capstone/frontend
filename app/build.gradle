@@ -73,10 +73,15 @@ dependencies {
     implementation "com.facebook.shimmer:shimmer:0.5.0"
 
     //Firebase
-    implementation platform('com.google.firebase:firebase-bom:31.4.0')
+    implementation platform('com.google.firebase:firebase-bom:32.1.0')
     implementation 'com.google.firebase:firebase-analytics'
     //Firebase Realtime Database
     implementation 'com.google.firebase:firebase-database-ktx'
     //Firebase storage
     implementation 'com.google.firebase:firebase-storage-ktx'
+    //Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+
 }

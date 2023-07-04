@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 위치 권한 설정 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +18,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bapool"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.EditPartyInfoActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <service
+            android:name=".retrofit.fcm.FirebaseService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".ui.RatingActivity"
             android:exported="false">
@@ -33,15 +50,8 @@
         </activity>
         <activity
             android:name=".ui.ChattingAndPartyInfoMFActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ui.MainActivity"
-            android:exported="false">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -70,15 +80,13 @@
         <activity
             android:name=".ui.MakePartyActivity"
             android:exported="false">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ui.RestaurantPartyActivity"
-            android:exported="false">
-
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -86,7 +94,6 @@
         <activity
             android:name=".ui.HomeActivity"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -94,13 +101,11 @@
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-
-
-                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.ChangeProfileActivity"

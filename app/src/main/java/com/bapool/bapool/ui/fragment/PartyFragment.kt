@@ -1,6 +1,6 @@
 package com.bapool.bapool.ui.fragment
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.adapter.MyPartyListAdapter
 import com.bapool.bapool.databinding.FragmentPartyBinding
 import com.bapool.bapool.retrofit.data.*
-import com.bapool.bapool.ui.RestaurantPartyActivity
+import com.bapool.bapool.retrofit.fcm.FirebaseService
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-
+import com.google.firebase.messaging.FirebaseMessaging
 import java.text.SimpleDateFormat
 
 
@@ -29,7 +30,9 @@ class PartyFragment : Fragment() {
 
     var myPartyListModel = arrayListOf<MyPartyListModel>()
 
-    var currentUserId = "userId1"
+    var currentUserId = "userId3"
+
+    var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +46,54 @@ class PartyFragment : Fragment() {
         _binding = FragmentPartyBinding.inflate(inflater, container, false)
         getUserPartyData()
         initializeVari()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("sadfasdfadsfsdTAG",
+                    "Fetching FCM registration token failed",
+                    task.exception)
+                return@OnCompleteListener
+            }
+            token = task.result
+
+            Log.d("sadfasdfadsfsdTAG", token)
+        })
+
+//
+//        binding.dummyBtn.setOnClickListener {
+//
+////             채팅 더미데이터 추가
+////            val messageText = "Test2"
+////            val groupMessages =
+////                FirebasePartyMessage("userId3", getTime(), messageText)
+////            database.child("Groups").child("groupId1").child("groupMessages").push()
+////                .setValue(groupMessages)
+//
+//
+////            Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
+//////            그룹 더미데이터 추가
+////            val database = Firebase.database
+////            val myRef = database.getReference("Groups")
+////            val hashtaglist = mutableListOf<Int>()
+////            hashtaglist.add(4)
+////            hashtaglist.add(3)
+////            val groupInfo = FirebasePartyInfo("그룹이름1", "메뉴1", "상세메뉴1",
+////                1, 4, getTime(), getTime(), hashtaglist)
+////            val groupUsers = mapOf("userId3" to false)
+////            val Group3 = FirebaseParty(groupInfo, groupUsers)
+//
+////            myRef.child("groupId1").setValue(Group3)
+////            myRef.child("groupId1").child("groupInfo").setValue(groupInfo)
+//
+////            Users 더미데이터 추가
+//            val database = Firebase.database
+//            val myRef = database.getReference("Users")
+//
+//            val banUsers = mutableListOf<String>()
+//            banUsers.add("userId4")
+//            banUsers.add("userId7")
+//            val userInfo = FirebaseUserInfo("8", "3이에용", banUsers,token)
+//            myRef.child("userId3").setValue(userInfo)
+//        }
 
         return binding.root
     }
@@ -55,10 +106,10 @@ class PartyFragment : Fragment() {
 
 
     //recyclerView adapter
-    fun adapter(list: List<MyPartyListModel>) {
-        myPartyAdapter = MyPartyListAdapter(requireContext(), list, currentUserId)
+    fun adapter(context: Context, list: List<MyPartyListModel>) {
+        myPartyAdapter = MyPartyListAdapter(context, list, currentUserId)
         myPartyRv.adapter = myPartyAdapter
-        myPartyRv.layoutManager = LinearLayoutManager(requireContext())
+        myPartyRv.layoutManager = LinearLayoutManager(context)
     }
 
     fun getUserPartyData() {
@@ -89,17 +140,10 @@ class PartyFragment : Fragment() {
 //                            sortedMessage[sortedMessage.lastIndex]
                         var notReadChatNumber = 0
 
-                        Log.d("채팅방확인", partyInfo.toString())
-                        Log.d("채팅방확인", partyMessageMap.toString())
-
-                        Log.d("채팅방확인", sortedMessage.toString())
-
-
                         for (data in sortedMessage) {
                             if (!(currentUserId in data.confirmed))
                                 notReadChatNumber += 1
                         }
-
 
                         val grpId = data.key.toString()
                         val resName: String = ""
@@ -124,7 +168,7 @@ class PartyFragment : Fragment() {
                     val sortedMyPartyListModel =
                         myPartyListModel.sortedByDescending { it.lastChatTime }
                     Log.d("채팅방확인소트후", sortedMyPartyListModel.toString())
-                    adapter(sortedMyPartyListModel)
+                    adapter(requireContext(), sortedMyPartyListModel)
                     myPartyAdapter.notifyDataSetChanged()
                 }
 
