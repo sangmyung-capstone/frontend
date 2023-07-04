@@ -19,6 +19,13 @@
         android:theme="@style/Theme.Bapool"
         tools:targetApi="31">
         <activity
+            android:name=".ui.RatingActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.EditPartyInfoActivity"
             android:exported="true">
             <meta-data

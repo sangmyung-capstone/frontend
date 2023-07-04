@@ -44,12 +44,7 @@ interface ServerRetrofit {
         @Body request: PostkakaoSigninRequest
     ): Call<PostKakaoSigninResponse>
 
-    @GET("/users/evaluate/{user-id}")
-    fun GetEvaluateUser(
-        @Header("Authorization") accessToken: String,
-        @Path("user-id") userId: Long,
-        @Query("party-id") partyId: Long
-    ): Call<GetEvaluateUserResponse>
+
 
     //--------------------------------------------------------------------------
 
@@ -104,7 +99,7 @@ interface ServerRetrofit {
             .addInterceptor { chain ->
                 val originalRequest = chain.request()
                 val modifiedRequest = originalRequest.newBuilder()
-                    .header("access_token", UserToken.toString())
+                    .header("ACCESS-TOKEN", UserToken.toString())
                     .build()
                 chain.proceed(modifiedRequest)
             }

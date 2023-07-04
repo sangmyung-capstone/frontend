@@ -25,7 +25,6 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
     override fun onBindViewHolder(holder: RestaurantLogViewHolder, position: Int) {
         val Loglist = datas[position]
         val binding = holder.binding
-
         // Set the data to the views
         binding.address.text = Loglist.restaurant_address
         binding.category.text = Loglist.category

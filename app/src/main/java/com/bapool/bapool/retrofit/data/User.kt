@@ -1,6 +1,7 @@
 package com.bapool.bapool.retrofit.data
 
 import com.google.gson.annotations.SerializedName
+import com.kakao.sdk.user.model.User
 
 //data class accessToken(
 //    @SerializedName("userToken")
@@ -176,20 +177,30 @@ data class FirebaseUserInfo(
     val token: String? = null,
 )
 
-data class GetEvaluateUserResponse(
+data class GetRatingUserResponse(
     val code: Int,
     val message: String,
-    val result: GetEvaluateUserResult,
+    val result: GetRatingUserResult
 ) {
-    data class GetEvaluateUserResult(
-        val User: GetEvaluateUserResultUser,
+    data class GetRatingUserResult(
+        val users: List<GetRatingUserResultUser>
     )
 
-    data class GetEvaluateUserResultUser(
+    data class GetRatingUserResultUser(
         val user_id: Long,
         val nickname: String,
     )
 }
+
+data class PostRatingUserRequest(
+    val users: List<UserData>
+)
+
+data class UserData(
+    val user_id: Int,
+    val rating: Float,
+    val hashtag: List<Int>
+)
 
 
 
