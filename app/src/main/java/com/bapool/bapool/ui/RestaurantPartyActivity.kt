@@ -46,6 +46,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     fun listener() {
         binding.goToMakeGrp.setOnClickListener {
 
+
 //
 //            FirebaseMessaging.getInstance().token.addOnCompleteListener(
 //                OnCompleteListener { task ->

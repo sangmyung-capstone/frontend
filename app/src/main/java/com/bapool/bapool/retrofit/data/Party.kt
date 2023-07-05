@@ -81,7 +81,6 @@ data class PatchEditPartyInfoResponse(
 )
 
 
-
 data class PostMakePartyRequestRestaurantInfo(
     val restaurant_id: Int,
     val name: String,
@@ -112,6 +111,8 @@ data class FirebasePartyInfo(
     val startDate: String = "",
     val endDate: String = "",
     val hashTag: List<Int> = listOf(),
+    val restaurantName: String = "",
+    val siteUrl: String = "",
 )
 
 data class FirebasePartyMessage(

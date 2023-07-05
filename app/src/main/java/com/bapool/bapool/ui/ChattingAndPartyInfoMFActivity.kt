@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.adapter.PartyChattingAdapter
 import com.bapool.bapool.adapter.PartyUserInfoAdapter
 import com.bapool.bapool.databinding.ActivityChattingAndPartyInfoMfactivityBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.retrofit.fcm.NotiModel
 import com.bapool.bapool.retrofit.fcm.PushNotification
@@ -27,6 +28,9 @@ import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import kotlin.collections.ArrayList
@@ -50,8 +54,13 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     //fcm에 들어갈 데이터
     var fcmUserInfo: MutableMap<String, FirebaseUserInfo> = HashMap()
 
-    //viewModel
-    private val partyInfoViewModel: PartyInfoViewModel by viewModels()
+
+    //retrofit
+    val retro = ServerRetrofit.create()
+
+    //Log TAG
+    val TAG = "ChattingAndPartyInfoMFActivity"
+
 
     //RecyclerView adapter 연결
     private lateinit var chattingRVA: PartyChattingAdapter
@@ -59,10 +68,14 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     var partyUserInfo: MutableMap<String, FirebaseUserInfo> = HashMap()
     var peopleCount: Int = 0
 
-    //임시 userId,groupId
-    var currentUserId: String = "userId2"
-    var partyId: String = "groupId1"
+    //임시 userId,groupId,deleteParty, deleteUserId
+    var currentUserId: Long = 1
+    var partyId: Long = 1
+    var deletePartyId: Long = 1
+    var deleteUserId: Long = 2
+    var currentPartyInfo: FirebasePartyInfo = FirebasePartyInfo()
     private lateinit var currentUserNickName: String
+
 
 //    //임시 userId,groupId
 //    val testCurrentUserId = "userId3"
@@ -102,7 +115,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     fun getPartyUserInfo() {
 
-        database.child("Groups").child(partyId)
+        database.child("Groups").child(partyId.toString())
             .child("groupUsers").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     partyUserInfo.clear()
@@ -175,7 +188,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
         }
         binding.menuPartyOut.setOnClickListener {
-
+            recessionParty()
         }
 
 
@@ -185,7 +198,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     //그룹 이름 데이터베이스에서 가져와서 넣기
     fun initGroupName() {
         //그룹 이름 가져오기
-        database.child("Groups").child(partyId).child("groupInfo")
+        database.child("Groups").child(partyId.toString()).child("groupInfo")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val item = snapshot.getValue(FirebasePartyInfo::class.java)!!
@@ -195,8 +208,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     binding.startDateTextNv.setText(item.startDate)
                     val currentMaxPeople = "${item.curNumberOfPeople} / ${item.maxNumberOfPeople}"
                     binding.currentMaxPeople.setText(currentMaxPeople)
-                    partyInfoViewModel.setObjectInfo(item)
-                    Log.d("sdajdfkj", partyInfoViewModel.getObjectInfo().toString())
+
+                    currentPartyInfo = item
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -208,51 +221,52 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
     fun initImgName() {
-        database.child("Groups").child(partyId).child("groupUsers").addValueEventListener(
-            object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    groupUserInfo.clear()
-                    val expectedCount = snapshot.childrenCount
-                    var completedCount = 0
+        database.child("Groups").child(partyId.toString()).child("groupUsers")
+            .addValueEventListener(
+                object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        groupUserInfo.clear()
+                        val expectedCount = snapshot.childrenCount
+                        var completedCount = 0
 
-                    for (data in snapshot.children) {
-                        if (data.value == true) {
-                            groupOnerId = data.key.toString()
+                        for (data in snapshot.children) {
+                            if (data.value == true) {
+                                groupOnerId = data.key.toString()
+                            }
+
+                            database.child("Users").child("${data.key}")
+                                .addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        val userId = snapshot.key.toString()
+                                        val userInfo =
+                                            snapshot.getValue(FirebaseUserInfo::class.java)
+                                        val item =
+                                            mapOf(userId to userInfo)
+                                        groupUserInfo.add(item as Map<String, FirebaseUserInfo>)
+                                        if (!userId.equals(currentUserId)) {
+                                            fcmUserInfo.put(userId, userInfo!!)
+                                        } else {
+                                            currentUserNickName = userInfo?.nickName ?: ""
+                                        }
+                                        completedCount++
+
+                                        if (completedCount.toString() == expectedCount.toString()) {
+                                            onGroupUserInfoLoaded()
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        completedCount++
+                                    }
+                                })
                         }
+                    }
 
-                        database.child("Users").child("${data.key}")
-                            .addValueEventListener(object : ValueEventListener {
-                                override fun onDataChange(snapshot: DataSnapshot) {
-                                    val userId = snapshot.key.toString()
-                                    val userInfo =
-                                        snapshot.getValue(FirebaseUserInfo::class.java)
-                                    val item =
-                                        mapOf(userId to userInfo)
-                                    groupUserInfo.add(item as Map<String, FirebaseUserInfo>)
-                                    if (!userId.equals(currentUserId)) {
-                                        fcmUserInfo.put(userId, userInfo!!)
-                                    } else {
-                                        currentUserNickName = userInfo?.nickName ?: ""
-                                    }
-                                    completedCount++
+                    override fun onCancelled(error: DatabaseError) {
 
-                                    if (completedCount.toString() == expectedCount.toString()) {
-                                        onGroupUserInfoLoaded()
-                                    }
-                                }
-
-                                override fun onCancelled(error: DatabaseError) {
-                                    completedCount++
-                                }
-                            })
                     }
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-            }
-        )
+            )
     }
 
     fun onGroupUserInfoLoaded() {
@@ -289,8 +303,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         chattingRVA =
             PartyChattingAdapter(chattingRecyclerView,
                 this,
-                currentUserId,
-                partyId,
+                currentUserId.toString(),
+                partyId.toString(),
                 partyUserInfo, peopleCount)
         chattingRecyclerView.adapter = chattingRVA
         chattingRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -301,8 +315,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val messageText = binding.sendMessage.text.toString()
         if (messageText != "") {
             val group_messages =
-                FirebasePartyMessage(currentUserId, getTime(), messageText, 0)
-            database.child("Groups").child(partyId).child("groupMessages").push()
+                FirebasePartyMessage(currentUserId.toString(), getTime(), messageText, 0)
+            database.child("Groups").child(partyId.toString()).child("groupMessages").push()
                 .setValue(group_messages)
                 .addOnSuccessListener {
                     binding.sendMessage.text.clear()
@@ -347,12 +361,14 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
         if (resultCode == RESULT_OK && requestCode == 100) {
 
-            val databaseRef = database.child("Groups").child(partyId).child("groupMessages")
+            val databaseRef =
+                database.child("Groups").child(partyId.toString()).child("groupMessages")
             val ImgRef = databaseRef.push()
             val uid = ImgRef.key
 
             data?.data?.let { uri ->
-                val storageRef = Firebase.storage.reference.child(partyId).child("${uid}")
+                val storageRef =
+                    Firebase.storage.reference.child(partyId.toString()).child("${uid}")
                 val bitmap: Bitmap =
                     MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
                 val baos = ByteArrayOutputStream()
@@ -368,7 +384,11 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val downloadUrl = task.result.toString()
                         val group_messages =
-                            FirebasePartyMessage(currentUserId, getTime(), "", 1, downloadUrl)
+                            FirebasePartyMessage(currentUserId.toString(),
+                                getTime(),
+                                "",
+                                1,
+                                downloadUrl)
                         ImgRef.setValue(group_messages)
                         for ((key, userInfo) in fcmUserInfo.entries) {
                             sendFcm(1, userInfo)
@@ -394,6 +414,41 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val intent = Intent(this, EditPartyInfoActivity::class.java)
 
         startActivity(intent)
+    }
+
+    fun recessionParty() {
+        retro.recessionParty(deleteUserId, deletePartyId)
+            .enqueue(object : Callback<PatchEditPartyInfoResponse> {
+                override fun onResponse(
+                    call: Call<PatchEditPartyInfoResponse>,
+                    response: Response<PatchEditPartyInfoResponse>,
+                ) {
+
+                    var result: PatchEditPartyInfoResponse? = response.body()
+                    Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
+
+                    if (response.isSuccessful) {
+                        Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
+
+                    } else {
+                        Log.d("MKRetrofit", "onResponse 실패: " + response.errorBody().toString())
+
+                        Toast.makeText(this@ChattingAndPartyInfoMFActivity,
+                            "그룹 탈퇴 오류 fail",
+                            Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+                override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
+                    Toast.makeText(this@ChattingAndPartyInfoMFActivity,
+                        "그룹 탈퇴 오류 ㄴㄻㄴㄹㄴㅇㄹfail",
+                        Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+            })
+
     }
 
 

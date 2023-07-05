@@ -32,6 +32,8 @@ class MakePartyActivity : AppCompatActivity() {
     val retro = ServerRetrofit.create()
     val userId: Long = 2
 
+
+    //나중에 intent로 그 전에 있던 식당안에 파티리스트에서 정보 가져와야함. PostMakePartyRequestRestaurantInfo의 객체로 받아와야할듯 그 전부터.
     val restaurantInfo = PostMakePartyRequestRestaurantInfo(
         2,
         "밥꼬찜닭",
@@ -169,6 +171,8 @@ class MakePartyActivity : AppCompatActivity() {
 
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
+
+
             if (binding.grpNameText.text.isNullOrBlank()) {
                 alterDialog("그룹명을 입력해주세요.")
 

@@ -30,7 +30,7 @@ class PartyFragment : Fragment() {
 
     var myPartyListModel = arrayListOf<MyPartyListModel>()
 
-    var currentUserId = "userId3"
+    var currentUserId: Long = 1
 
     var token = ""
 
@@ -59,7 +59,7 @@ class PartyFragment : Fragment() {
         })
 
 //
-//        binding.dummyBtn.setOnClickListener {
+        binding.dummyBtn.setOnClickListener {
 //
 ////             채팅 더미데이터 추가
 ////            val messageText = "Test2"
@@ -70,19 +70,19 @@ class PartyFragment : Fragment() {
 //
 //
 ////            Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
-//////            그룹 더미데이터 추가
-////            val database = Firebase.database
-////            val myRef = database.getReference("Groups")
-////            val hashtaglist = mutableListOf<Int>()
-////            hashtaglist.add(4)
-////            hashtaglist.add(3)
-////            val groupInfo = FirebasePartyInfo("그룹이름1", "메뉴1", "상세메뉴1",
-////                1, 4, getTime(), getTime(), hashtaglist)
-////            val groupUsers = mapOf("userId3" to false)
-////            val Group3 = FirebaseParty(groupInfo, groupUsers)
-//
-////            myRef.child("groupId1").setValue(Group3)
-////            myRef.child("groupId1").child("groupInfo").setValue(groupInfo)
+//            그룹 더미데이터 추가
+            val database = Firebase.database
+            val myRef = database.getReference("Groups")
+            val hashtaglist = mutableListOf<Int>()
+            hashtaglist.add(4)
+            hashtaglist.add(3)
+            val groupInfo = FirebasePartyInfo("그룹이름1", "메뉴1", "상세메뉴1",
+                1, 4, getTime(), getTime(), hashtaglist, "식당이름1", "www.naver.com")
+            val groupUsers = mapOf(currentUserId.toString() to true)
+            val Group3 = FirebaseParty(groupInfo, null, groupUsers)
+
+            myRef.child("1").setValue(Group3)
+//            myRef.child("groupId1").child("groupInfo").setValue(groupInfo)
 //
 ////            Users 더미데이터 추가
 //            val database = Firebase.database
@@ -93,7 +93,7 @@ class PartyFragment : Fragment() {
 //            banUsers.add("userId7")
 //            val userInfo = FirebaseUserInfo("8", "3이에용", banUsers,token)
 //            myRef.child("userId3").setValue(userInfo)
-//        }
+        }
 
         return binding.root
     }
@@ -107,7 +107,7 @@ class PartyFragment : Fragment() {
 
     //recyclerView adapter
     fun adapter(context: Context, list: List<MyPartyListModel>) {
-        myPartyAdapter = MyPartyListAdapter(context, list, currentUserId)
+        myPartyAdapter = MyPartyListAdapter(context, list, currentUserId.toString())
         myPartyRv.adapter = myPartyAdapter
         myPartyRv.layoutManager = LinearLayoutManager(context)
     }
@@ -141,7 +141,7 @@ class PartyFragment : Fragment() {
                         var notReadChatNumber = 0
 
                         for (data in sortedMessage) {
-                            if (!(currentUserId in data.confirmed))
+                            if (!(currentUserId.toString() in data.confirmed))
                                 notReadChatNumber += 1
                         }
 
