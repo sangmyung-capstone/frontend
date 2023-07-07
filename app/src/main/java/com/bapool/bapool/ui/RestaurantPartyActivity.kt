@@ -47,22 +47,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
         binding.goToMakeGrp.setOnClickListener {
 
 
-//
-//            FirebaseMessaging.getInstance().token.addOnCompleteListener(
-//                OnCompleteListener { task ->
-//                    if (!task.isSuccessful) {
-//                        Log.e("dsksdfkjsfkj", "token.toString()")
-//
-//                        return@OnCompleteListener
-//                    }
-//
-//                    // Get new FCM registration token
-//                    val token = task.result
-//
-//                    // Log and toast
-//                    Log.e("dsksdfkjsfkj", token.toString())
-//
-//                })
+
 
             val intent = Intent(this, MakePartyActivity::class.java)
             intent.putExtra("resName", resNameIntent)

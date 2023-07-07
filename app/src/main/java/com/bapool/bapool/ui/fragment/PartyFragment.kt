@@ -30,9 +30,9 @@ class PartyFragment : Fragment() {
 
     var myPartyListModel = arrayListOf<MyPartyListModel>()
 
-    var currentUserId: Long = 1
+    var currentUserId: String = "22"
 
-    var token = ""
+    private val TAG = "PartyFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,53 +46,65 @@ class PartyFragment : Fragment() {
         _binding = FragmentPartyBinding.inflate(inflater, container, false)
         getUserPartyData()
         initializeVari()
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("sadfasdfadsfsdTAG",
-                    "Fetching FCM registration token failed",
-                    task.exception)
-                return@OnCompleteListener
-            }
-            token = task.result
-
-            Log.d("sadfasdfadsfsdTAG", token)
-        })
 
 //
         binding.dummyBtn.setOnClickListener {
 //
-////             채팅 더미데이터 추가
-////            val messageText = "Test2"
-////            val groupMessages =
-////                FirebasePartyMessage("userId3", getTime(), messageText)
-////            database.child("Groups").child("groupId1").child("groupMessages").push()
-////                .setValue(groupMessages)
+            // 채팅 더미데이터 추가
+//            val database = Firebase.database
+//            val messageText = "Test2"
+//            val groupMessages =
+//                FirebasePartyMessage("1", getTime(), messageText)
+//            database.getReference("Groups").child("1").child("groupMessages").push()
+//                .setValue(groupMessages)
 //
 //
 ////            Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
 //            그룹 더미데이터 추가
-            val database = Firebase.database
-            val myRef = database.getReference("Groups")
-            val hashtaglist = mutableListOf<Int>()
-            hashtaglist.add(4)
-            hashtaglist.add(3)
-            val groupInfo = FirebasePartyInfo("그룹이름1", "메뉴1", "상세메뉴1",
-                1, 4, getTime(), getTime(), hashtaglist, "식당이름1", "www.naver.com")
-            val groupUsers = mapOf(currentUserId.toString() to true)
-            val Group3 = FirebaseParty(groupInfo, null, groupUsers)
-
-            myRef.child("1").setValue(Group3)
-//            myRef.child("groupId1").child("groupInfo").setValue(groupInfo)
+//            val database = Firebase.database
+//            val myRef = database.getReference("Groups")
+//            val hashtaglist = mutableListOf<Int>()
+//            hashtaglist.add(4)
+//            hashtaglist.add(3)
+//            val groupInfo = FirebasePartyInfo("그룹이름3", "메뉴3", "상세메뉴3",
+//                2, 3, getTime(), getTime(), hashtaglist, "식당이름3",33 ,"www.google.com")
+//            val groupUsers = mapOf("22" to true, "33" to true)
+//            val Group3 = FirebaseParty(groupInfo, null, groupUsers)
 //
-////            Users 더미데이터 추가
+//            myRef.child("33").setValue(Group3)
+//            myRef.child("1").child("groupUsers").updateChildren(groupUsers)
+//
+//            Users 더미데이터 추가
 //            val database = Firebase.database
 //            val myRef = database.getReference("Users")
 //
 //            val banUsers = mutableListOf<String>()
-//            banUsers.add("userId4")
-//            banUsers.add("userId7")
-//            val userInfo = FirebaseUserInfo("8", "3이에용", banUsers,token)
-//            myRef.child("userId3").setValue(userInfo)
+//            banUsers.add("22")
+//            banUsers.add("11")
+//            val userInfo = FirebaseUserInfo("3", "3이에용", banUsers,token)
+//            myRef.child("33").setValue(userInfo)
+//            val userInfo2 = FirebaseUserInfo("4", "4이에용", banUsers,token)
+//            myRef.child("44").setValue(userInfo2)
+//            val userInfo3 = FirebaseUserInfo("5", "5이에용", banUsers,token)
+//            myRef.child("55").setValue(userInfo3)
+
+
+
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(
+                OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.e("dsksdfkjsfkj", "token.toString()")
+
+                        return@OnCompleteListener
+                    }
+
+                    // Get new FCM registration token
+                    val token = task.result
+
+                    // Log and toast
+                    Log.e("dsksdfkjsfkj", token.toString())
+
+                })
         }
 
         return binding.root
@@ -120,7 +132,8 @@ class PartyFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     myPartyListModel.clear()
                     for (data in snapshot.children) {
-
+                        Log.d(TAG, data.value.toString())
+                        Log.d(TAG, data.key.toString())
                         val partyData = data.getValue(FirebaseParty::class.java)
                         val partyInfo = partyData?.groupInfo
                         var partyMessageMap: Map<String, FirebasePartyMessage>? =
@@ -136,8 +149,7 @@ class PartyFragment : Fragment() {
                             } else {
                                 sortedMessage[sortedMessage.lastIndex]
                             }
-//                        val lastChatItem: FirebasePartyMessage =
-//                            sortedMessage[sortedMessage.lastIndex]
+
                         var notReadChatNumber = 0
 
                         for (data in sortedMessage) {
@@ -170,12 +182,16 @@ class PartyFragment : Fragment() {
                     Log.d("채팅방확인소트후", sortedMyPartyListModel.toString())
                     adapter(requireContext(), sortedMyPartyListModel)
                     myPartyAdapter.notifyDataSetChanged()
+
                 }
+
 
                 override fun onCancelled(error: DatabaseError) {
-                }
-            })
 
+                }
+
+
+            })
     }
 
     //뷰바인딩 생명주기 관리

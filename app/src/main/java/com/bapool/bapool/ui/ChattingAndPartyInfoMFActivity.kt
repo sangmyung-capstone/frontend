@@ -69,10 +69,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     var peopleCount: Int = 0
 
     //임시 userId,groupId,deleteParty, deleteUserId
-    var currentUserId: Long = 1
-    var partyId: Long = 1
-    var deletePartyId: Long = 1
-    var deleteUserId: Long = 2
+    var currentUserId: String = ""
+    var partyId: String = ""
     var currentPartyInfo: FirebasePartyInfo = FirebasePartyInfo()
     private lateinit var currentUserNickName: String
 
@@ -99,8 +97,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         chattingRecyclerView = binding.chattingRv
         //intent로 받아올 userId랑 partyId
 
-//        currentUserId = intent.getStringExtra("currentUserId").toString()
-//        partyId = intent.getStringExtra("partyId").toString()
+        currentUserId = intent.getStringExtra("currentUserId").toString()
+        partyId = intent.getStringExtra("partyId").toString()
 
 
         //그룹 이름 지정
@@ -142,9 +140,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     }
                     ChattingAdapter()
                     chattingRVA.notifyDataSetChanged()
-
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
@@ -417,7 +413,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
     fun recessionParty() {
-        retro.recessionParty(deleteUserId, deletePartyId)
+        retro.recessionParty(1, 1)
             .enqueue(object : Callback<PatchEditPartyInfoResponse> {
                 override fun onResponse(
                     call: Call<PatchEditPartyInfoResponse>,
