@@ -35,18 +35,18 @@ class RestaurantPartyAdapter(val context: Context) :
         holder.bindItem(resGroup[position])
 
         holder.joinButton.setOnClickListener {
-            Toast.makeText(context, "joinbtn clicklistener", Toast.LENGTH_SHORT).show()
-            val resGroupDialog = resGroup[position]
-            val joinPartyDialog = JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(context))
-
-            dialogBinding(resGroupDialog, joinPartyDialog)
-
-
-            val mBuilder = AlertDialog.Builder(context)
-                .setView(joinPartyDialog.root)
-                .setTitle(resGroup[position].party_name)
-
-            mBuilder.show()
+//            Toast.makeText(context, "joinbtn clicklistener", Toast.LENGTH_SHORT).show()
+//            val resGroupDialog = resGroup[position]
+//            val joinPartyDialog = JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(context))
+//
+//            dialogBinding(resGroupDialog, joinPartyDialog)
+//
+//
+//            val mBuilder = AlertDialog.Builder(context)
+//                .setView(joinPartyDialog.root)
+//                .setTitle(resGroup[position].party_name)
+//
+//            mBuilder.show()
         }
     }
 
@@ -123,38 +123,38 @@ class RestaurantPartyAdapter(val context: Context) :
         return allNum
     }
 
-    fun dialogBinding(item: ResPartyList, binding: JoinpartyCustomDialogBinding) {
-        //차단유저 보이게하기
-        if (item.has_block_user) {
-            binding.ban.visibility = View.VISIBLE
-        }
-        //hashtag 보이게하기
-        val hashtagList: List<Int> = item.hashtag
-        if (hashtagList.isNotEmpty()) {
-            binding.hashtagVisible.visibility = View.VISIBLE
-            for (item in hashtagList) {
-                when (item) {
-                    1 -> binding.hash1.visibility = View.VISIBLE
-                    2 -> binding.hash2.visibility = View.VISIBLE
-                    3 -> binding.hash3.visibility = View.VISIBLE
-                    4 -> binding.hash4.visibility = View.VISIBLE
-                    5 -> binding.hash5.visibility = View.VISIBLE
-                }
-            }
-        }
-
-        val allNum = partiNum(item.participants, item.max_people)
-        val allDate = dateRange(item.start_date, item.end_date)
-
-        binding.menu.text = item.menu
-        binding.date.text = allDate
-        binding.participantsNum.text = allNum
-        binding.detail.text = item.detail
-        binding.rating.text = item.rating.toString()
-        binding.gotoChattingGrp.setOnClickListener {
-
-        }
-
-    }
+//    fun dialogBinding(item: ResPartyList, binding: JoinpartyCustomDialogBinding) {
+//        //차단유저 보이게하기
+//        if (item.has_block_user) {
+//            binding.ban.visibility = View.VISIBLE
+//        }
+//        //hashtag 보이게하기
+//        val hashtagList: List<Int> = item.hashtag
+//        if (hashtagList.isNotEmpty()) {
+//            binding.hashtagVisible.visibility = View.VISIBLE
+//            for (item in hashtagList) {
+//                when (item) {
+//                    1 -> binding.hash1.visibility = View.VISIBLE
+//                    2 -> binding.hash2.visibility = View.VISIBLE
+//                    3 -> binding.hash3.visibility = View.VISIBLE
+//                    4 -> binding.hash4.visibility = View.VISIBLE
+//                    5 -> binding.hash5.visibility = View.VISIBLE
+//                }
+//            }
+//        }
+//
+//        val allNum = partiNum(item.participants, item.max_people)
+//        val allDate = dateRange(item.start_date, item.end_date)
+//
+//        binding.menu.text = item.menu
+//        binding.date.text = allDate
+//        binding.participantsNum.text = allNum
+//        binding.detail.text = item.detail
+//        binding.rating.text = item.rating.toString()
+//        binding.gotoChattingGrp.setOnClickListener {
+//
+//        }
+//
+//    }
 }
 

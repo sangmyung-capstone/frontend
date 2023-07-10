@@ -9,8 +9,8 @@ import com.bapool.bapool.retrofit.data.FirebaseUserInfo
 
 class PartyUserInfoAdapter(
     val context: Context,
-    val groupUserInfo: ArrayList<Map<String, FirebaseUserInfo>>,
-    val groupOnerId: String,
+    val partyUserInfo: ArrayList<Map<String, FirebaseUserInfo>>,
+    val partyLeaderId: String,
 ) : RecyclerView.Adapter<PartyUserInfoAdapter.ViewHolder>() {
 
 
@@ -23,12 +23,12 @@ class PartyUserInfoAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItems(groupUserInfo[position])
+        holder.bindItems(partyUserInfo[position])
 
     }
 
     override fun getItemCount(): Int {
-        return groupUserInfo.size
+        return partyUserInfo.size
     }
 
 

@@ -4,19 +4,117 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/partyName"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
+
+    <TextView
+        android:id="@+id/partyMenu"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/partyName"
+        tools:layout_editor_absoluteX="0dp" />
 
     <ImageView
         android:id="@+id/textView"
-        android:layout_width="17dp"
-        android:layout_height="17dp"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/usershape"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/personicon"
         android:text="참여인원/정원"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/date"
-        app:layout_constraintStart_toEndOf="@+id/date"
-        app:layout_constraintTop_toTopOf="@+id/date" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/partyMenu" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/calendaricon"
+        app:layout_constraintBottom_toBottomOf="@+id/participantsNum"
+        app:layout_constraintStart_toEndOf="@+id/participantsNum"
+        app:layout_constraintTop_toTopOf="@+id/participantsNum" />
+
+    <TextView
+        android:id="@+id/dateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="만나는 시간"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/locationicon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/restaurantLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="만나는 시간"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ratingicon"
+        app:layout_constraintBottom_toBottomOf="@+id/restaurantLocation"
+        app:layout_constraintStart_toEndOf="@+id/restaurantLocation"
+        app:layout_constraintTop_toTopOf="@+id/restaurantLocation" />
+
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="만나는 시간"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toTopOf="@+id/imageView9" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:text="공지사항"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="#00D8D8D8"
+        android:paddingBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+        <TextView
+            android:text="dsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkl"
+            android:id="@+id/detailText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </ScrollView>
 
     <TextView
         android:id="@+id/participantsNum"
@@ -31,10 +129,11 @@
 
     <LinearLayout
         android:id="@+id/hashtagVisible"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_width="120dp"
         android:layout_height="20dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -87,119 +186,54 @@
 
     </LinearLayout>
 
+
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/ban"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="만나는 날짜 시간 범위로"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
+        android:text="* 그룹에 차단한 사용자가 포함되어 있습니다. *"
+        android:textColor="#FF0000"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/textView5"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
-    <TextView
-        android:id="@+id/detail_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="디테일"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/date"
-        app:layout_constraintTop_toBottomOf="@+id/date" />
-
-    <TextView
-        android:id="@+id/detail"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/detail_text"
-        app:layout_constraintStart_toEndOf="@+id/detail_text"
-        app:layout_constraintTop_toTopOf="@+id/detail_text" />
-
-    <TextView
-        android:id="@+id/menu_text"
-        android:layout_width="wrap_content"
-        android:layout_height="13dp"
-        android:layout_marginTop="50dp"
-        android:text="메뉴"
-        app:layout_constraintStart_toStartOf="@+id/detail_text"
-        app:layout_constraintTop_toBottomOf="@+id/detail_text" />
-
-    <TextView
-        android:id="@+id/menu"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/menu_text"
-        app:layout_constraintStart_toEndOf="@+id/menu_text"
-        app:layout_constraintTop_toTopOf="@+id/menu_text" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#EEEEEE"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-
-    <TextView
-        android:id="@+id/ban"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="* 차단한 사용자가 포함되어 있습니다. *"
-        android:textColor="#FF0000"
-        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="참여인원 평점:"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menu_text" />
-
-    <TextView
-        android:id="@+id/rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:text="3.8 / 4.5"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        tools:layout_editor_absoluteX="1dp" />
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="확인" />
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/scrollView2">-->
 
-        <TextView
-            android:id="@+id/gotoChattingGrp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="취소" />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:text="확인" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/gotoChattingGrp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:text="취소" />-->
+<!--    </LinearLayout>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

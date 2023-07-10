@@ -54,8 +54,6 @@ class PartyChattingAdapter(
     var imageResource: MutableMap<String, Uri> = HashMap()
     var imageResourceBool = true
 
-
-    val testUserId = "userId3"
     private var currentPage = 0
     private val itemsPerPage = 100
 
@@ -380,7 +378,11 @@ class PartyChattingAdapter(
     //이미지, 닉네임 배치
     fun setNickNameImg(position: Int, opponentId: TextView, opponentImage: ImageView) {
 
+        Log.d("asdfkadjfaks",position.toString())
+        Log.d("asdfkadjfaks",messages[position].senderId.toString())
         var opponentUserId = messages[position].senderId
+        Log.d("asdfkadjfaks",partyUserInfo[opponentUserId].toString())
+
         var opponentUserInfo = partyUserInfo[opponentUserId]
         opponentId.text = opponentUserInfo?.nickName ?: ""
         val imageName = "image${opponentUserInfo?.imgUrl}"
