@@ -17,6 +17,17 @@ class BlockListViewHolder(val binding: BlocklistItemsBinding) :
 class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>) :
     RecyclerView.Adapter<BlockListViewHolder>() {
 
+    interface BlockButtonClickListener {
+        fun onBlockButtonClicked()
+    }
+
+    fun setBlockButtonClickListener(listener: BlockButtonClickListener) {
+        blockButtonClickListener = listener
+    }
+
+    private var blockButtonClickListener: BlockButtonClickListener? = null
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlockListViewHolder {
         val binding = BlocklistItemsBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -48,6 +59,7 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
                         if (response.isSuccessful) {
                             val result = response.body()
                             Log.d("bap", "onResponse 성공 ")
+                            blockButtonClickListener?.onBlockButtonClicked()
                         } else {
                             // handle error response
                         }
@@ -62,4 +74,6 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
     }
 
     override fun getItemCount(): Int = datas.size
+
+
 }
