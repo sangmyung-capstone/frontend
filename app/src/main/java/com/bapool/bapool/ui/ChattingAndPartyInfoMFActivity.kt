@@ -250,7 +250,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         binding.restaurantIcon.setOnClickListener {
             val url = currentPartyInfo.siteUrls
 
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://${url}"))
             startActivity(intent)
         }
 

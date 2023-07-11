@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Context.DOWNLOAD_SERVICE
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -34,6 +35,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import com.bapool.bapool.R
+import com.bapool.bapool.ui.UserProfileCheck
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -313,6 +315,10 @@ class PartyChattingAdapter(
             binding.opponentTime.text = changeTimeFormat(item.sendedDate)
             readCount(item, binding.opponentConfirmed)
             setNickNameImg(position, binding.opponentId, binding.opponentImage)
+            binding.opponentImage.setOnClickListener {
+                val intent =  Intent(context,UserProfileCheck::class.java)
+                context.startActivity(intent)
+            }
         }
     }
 
@@ -328,6 +334,10 @@ class PartyChattingAdapter(
             setNickNameImg(position, binding.opponentId, binding.opponentImage)
             binding.opponentChatImg.setOnClickListener {
                 makeDialog(messageKey[position], item.downloadUrl)
+            }
+            binding.opponentImage.setOnClickListener {
+                val intent =  Intent(context,UserProfileCheck::class.java)
+                context.startActivity(intent)
             }
         }
     }
