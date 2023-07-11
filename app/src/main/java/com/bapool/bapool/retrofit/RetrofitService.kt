@@ -65,7 +65,7 @@ interface RetrofitService {
     ): Call<GetBlockUserResponse>
 
     @POST("/users/block/{user-id}")
-    fun BlockUser(
+    fun PostBlockUser(
         @Path("user-id") userId: Long,
         @Body request: BlockUserRequest,
     ): Call<BlockUserResponse>
