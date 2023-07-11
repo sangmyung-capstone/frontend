@@ -81,6 +81,12 @@ interface RetrofitService {
         @Query("party-id") partyId: Long
     ): Call<GetRatingUserResponse>
 
+    @POST("/users/rating/{user-id}")
+    fun PostRatingUser(
+        @Path("user-id") userId: Long,
+        @Body request: PostRatingUserRequest
+    ): Call<PostRatingUserResponse>
+
 
     //--------------------------------------------------------------------------
     // 손승현

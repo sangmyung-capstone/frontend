@@ -193,13 +193,16 @@ data class GetRatingUserResponse(
 }
 
 data class PostRatingUserRequest(
-    val users: List<UserData>
+    var users: List<UserData>
 )
-
 data class UserData(
-    val user_id: Int,
+    val user_id: Long,
     val rating: Float,
     val hashtag: List<Int>
+)
+data class PostRatingUserResponse(
+    val code: Int,
+    val message: String,
 )
 
 
