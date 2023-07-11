@@ -118,6 +118,7 @@ data class PostNaverSigninResponse(
     val result: PostNaverSigninResponseResult,
 ) {
     data class PostNaverSigninResponseResult(
+        val nickname: String,
         val user_id: Long,
         val access_token: String,
         val refresh_token: String,
