@@ -10,6 +10,8 @@ import com.bapool.bapool.adapter.RatingUserAdapter
 import com.bapool.bapool.databinding.ActivityRatinguserBinding
 import com.bapool.bapool.retrofit.data.GetRatingUserResponse
 import com.bapool.bapool.retrofit.data.PostRatingUserRequest
+import com.bapool.bapool.retrofit.data.PostRatingUserResponse
+import com.bapool.bapool.retrofit.data.UserData
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +28,8 @@ class RatingActivity : AppCompatActivity() {
 
         val retro = RetrofitService.create()
         val ratingUsersList = mutableListOf<GetRatingUserResponse.GetRatingUserResultUser>()
-        var ratingUserData = mutableListOf<PostRatingUserRequest>()
+        val postRatingUserRequest = PostRatingUserRequest(mutableListOf())
+
         var partyid: Long = 1
 
         retro.GetRatingUser(1, partyid)
@@ -53,6 +56,26 @@ class RatingActivity : AppCompatActivity() {
         //통신과정
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = RatingUserAdapter(ratingUsersList)
+        binding.recyclerView.adapter = RatingUserAdapter(ratingUsersList, postRatingUserRequest)
+        binding.ratingcomplete.setOnClickListener {
+            retro.PostRatingUser(1, postRatingUserRequest)
+                .enqueue(object : Callback<PostRatingUserResponse> {
+                    override fun onResponse(
+                        call: Call<PostRatingUserResponse>,
+                        response: Response<PostRatingUserResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("bap", "onResponse 성공\n$response")
+                            // handle successful response
+                        } else {
+                            // handle error response
+                        }
+                    }
+
+                    override fun onFailure(call: Call<PostRatingUserResponse>, t: Throwable) {
+                        // handle network or unexpected error
+                    }
+                })
+        }
     }
 }

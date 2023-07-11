@@ -92,6 +92,7 @@ data class PostNaverSignupRequest(
     val access_token: String,
     var nickname: String,
     var profile_img_id: Int,
+    var firebase_token: String
 )
 
 data class PostNaverSignupResponse(
@@ -139,6 +140,7 @@ data class PostKakaoSignupRequest(
     val access_token: String,
     var nickname: String,
     var profile_img_id: Int,
+    var firebase_token: String
 )
 
 data class PostKakaoSignupResponse(
@@ -148,6 +150,7 @@ data class PostKakaoSignupResponse(
 ) {
     data class PostKakaoSignupResponseResult(
         val user_id: Long,
+        val nickname: String,
         val access_token: String,
         val refresh_token: String,
     )
@@ -165,6 +168,7 @@ data class PostKakaoSigninResponse(
 ) {
     data class PostKakaoSigninResponseResult(
         val user_id: Long,
+        val nickname: String,
         val access_token: String,
         val refresh_token: String,
     )
@@ -193,13 +197,16 @@ data class GetRatingUserResponse(
 }
 
 data class PostRatingUserRequest(
-    val users: List<UserData>
+    var users: List<UserData>
 )
-
 data class UserData(
-    val user_id: Int,
+    val user_id: Long,
     val rating: Float,
     val hashtag: List<Int>
+)
+data class PostRatingUserResponse(
+    val code: Int,
+    val message: String,
 )
 
 

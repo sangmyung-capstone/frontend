@@ -14,7 +14,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BlockListActivity : AppCompatActivity() {
+class BlockListActivity : AppCompatActivity(), BlockListAdapter.BlockButtonClickListener {
+    override fun onBlockButtonClicked() {
+        // Refresh the blocklist activity
+        recreate()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityBlockListBinding.inflate(layoutInflater)
@@ -47,7 +52,9 @@ class BlockListActivity : AppCompatActivity() {
         //통신과정\
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = BlockListAdapter(blockedUsersList)
+        val adapter = BlockListAdapter(blockedUsersList)
+        adapter.setBlockButtonClickListener(this)
+        binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 this,

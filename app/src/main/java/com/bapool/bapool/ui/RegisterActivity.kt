@@ -16,6 +16,8 @@ import com.bapool.bapool.databinding.ActivityRegisterBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.LoginActivity.Companion.UserToken
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +28,7 @@ class RegisterActivity : AppCompatActivity() {
     private val binding get() = _binding!!
 
     var selectedButton: Button? = null // initially no button is selected
+    private lateinit var firebasetoken: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +37,17 @@ class RegisterActivity : AppCompatActivity() {
         var count = 0
         var textInputEditText = binding.nicknameEditText
 
-
         setContentView(binding.root);
+        FirebaseMessaging.getInstance().token.addOnCompleteListener (
+            OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.e("dsksdfkjsfkj", "token.toString()")
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                firebasetoken = task.result
+            })
 
         val buttons = listOf(
             binding.button1,
@@ -63,7 +75,8 @@ class RegisterActivity : AppCompatActivity() {
                     PostNaverSignupRequest(
                         intent.getStringExtra("token").toString(),
                         nickname,
-                        count
+                        count,
+                        firebasetoken
                     )
                 Log.d("bap", "OnRequest 정보 $userInfo")
 
@@ -116,7 +129,8 @@ class RegisterActivity : AppCompatActivity() {
                                                             response.body()
                                                         if (result != null) {
                                                             UserToken = result.result.access_token
-                                                            LoginActivity.UserId = result.result.user_id
+                                                            LoginActivity.UserId =
+                                                                result.result.user_id
                                                         }
                                                         Log.d("bap", "onRequest 성공: $userInfo");
                                                         Log.d(
@@ -162,7 +176,8 @@ class RegisterActivity : AppCompatActivity() {
                     PostKakaoSignupRequest(
                         intent.getStringExtra("token").toString(),
                         nickname,
-                        count
+                        count,
+                        firebasetoken
                     )
                 Log.d("bap", "OnRequest 정보 $userInfo")
 
@@ -215,7 +230,8 @@ class RegisterActivity : AppCompatActivity() {
                                                             response.body()
                                                         if (result != null) {
                                                             UserToken = result.result.access_token
-                                                            LoginActivity.UserId = result.result.user_id
+                                                            LoginActivity.UserId =
+                                                                result.result.user_id
                                                         }
                                                         Log.d("bap", "onRequest 성공: $userInfo");
                                                         Log.d(
