@@ -7,29 +7,28 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.inputmethod.EditorInfo
+import android.widget.*
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
 import com.bapool.bapool.adapter.RestaurantBottomAdapter
+import com.bapool.bapool.adapter.SearchViewAdapter
 import com.bapool.bapool.databinding.FragmentMapBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
-import com.bapool.bapool.retrofit.data.GetRestaurantInfoResult
-import com.bapool.bapool.retrofit.data.GetRestaurantsResult
-import com.bapool.bapool.retrofit.data.Restaurant
-import com.bapool.bapool.retrofit.data.RestaurantInfo
+import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.HomeActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.search.SearchView
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.naver.maps.geometry.LatLng
@@ -65,6 +64,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var cnt = 0
     var cnt2 = 0
 
+    var linkList: MutableList<String> = mutableListOf()    // 배열 생성
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,6 +76,51 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 위치 권한 요청 및 맵 초기화
         requestPermissions()
+
+
+        // search bar
+        binding.searchView.editText.setOnEditorActionListener { v, i, keyEvent ->
+            Log.d("search", v.text.toString())
+
+            retro.getRestaurantsSearch(
+                1,
+                v.text.toString(),
+                cameraPosition.target.longitude,
+                cameraPosition.target.latitude
+            ).enqueue(object : Callback<GetSearchResult> {
+                override fun onResponse(
+                    call: Call<GetSearchResult>,
+                    response: Response<GetSearchResult>
+                ) {
+                    Log.d("search", response.body().toString())
+                    // 식당검색결과 recyclerview 어댑터 바인딩
+                    binding.searchRecyclerView.adapter = SearchViewAdapter()
+                    binding.searchRecyclerView.layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                }
+
+                override fun onFailure(call: Call<GetSearchResult>, t: Throwable) {
+                    Log.d("search", t.message.toString())
+                    Log.d("search", "FAIL")
+                }
+            })
+
+
+            false
+        }
+        binding.searchView.addTransitionListener { searchView, previousState, newState ->
+            if (newState == SearchView.TransitionState.SHOWING) {
+                // 검색 결과 오픈 시 하단 네비게이션바 제거
+                val homeActivity = activity as HomeActivity
+                homeActivity.hideBottomNavi(true)
+            }
+        }
+
+//        binding.bottomSheet.findViewById<RecyclerView>(R.id.restaurant_recyclerview).adapter =
+//            RestaurantBottomAdapter(response.body()!!.result.restaurants)
+//        binding.bottomSheet.findViewById<RecyclerView>(R.id.restaurant_recyclerview).layoutManager =
+//            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
 
         // bottomSheet에 식당바텀리스트 레이아웃 할당
 //        layoutInflater.inflate(R.layout.bottom_restaurant_list, binding.bottomSheet, true)
@@ -101,11 +147,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val bottomBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         // behavior 속성
-//        bottomBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 //        bottomBehavior.isFitToContents = false
-//        bottomBehavior.peekHeight = dpToPx(180f, context).toInt()    // dp -> px변환
+        bottomBehavior.peekHeight = dpToPx(180f, context).toInt()    // dp -> px변환
 //        bottomBehavior.expandedOffset = dpToPx(600f, context).toInt()    // dp -> px변환
-
 
 
 //        bottomBehavior.apply {
@@ -226,6 +271,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 response: Response<GetRestaurantsResult>
             ) {
                 if (response.isSuccessful) {
+                    // 식당링크 모음
+                    for (idx in response.body()!!.result.restaurants)
+                        linkList.add(idx.link)
+
+                    Log.d("BOTTOM", linkList.toString())
+
                     // bottomSheet에 식당바텀리스트 레이아웃 할당
                     if (cnt2 == 0) {     // cnt 방식이 아닌 뷰 교체 방식의 제대로된 방법 필요
                         layoutInflater.inflate(
@@ -241,7 +292,29 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         RestaurantBottomAdapter(response.body()!!.result.restaurants)
                     binding.bottomSheet.findViewById<RecyclerView>(R.id.restaurant_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-
+                    // 식당바텀리스트 통신   // 식당링크 모음 필요
+//                    retro.getRestaurantsBottom(1, GetRestaurantsBottomRequest(linkList))
+//                        .enqueue(object : Callback<GetRestaurantsBottomResult> {
+//                            override fun onResponse(
+//                                call: Call<GetRestaurantsBottomResult>,
+//                                response: Response<GetRestaurantsBottomResult>
+//                            ) {
+//                                Log.d(
+//                                    "BOTTOM",
+//                                    response.body()?.message + response.body()?.result.toString()
+//                                )
+//                            }
+//
+//                            override fun onFailure(
+//                                call: Call<GetRestaurantsBottomResult>,
+//                                t: Throwable
+//                            ) {
+//                                // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+//                                Log.d("MARKER_INIT", "onResponse 실패")
+//                                Log.d("MARKER_INIT", response.body().toString())
+//                            }
+//
+//                        })
 
                     // 기존 마커 존재 시 전부 삭제
                     if (markerList.size != 0) {

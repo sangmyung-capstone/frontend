@@ -68,6 +68,21 @@ interface ServerRetrofit {
         @Query("latitude") latitude: Double?,
     ): Call<GetRestaurantInfoResult>
 
+    @GET("/test/restaurants/bottomlist/{user-id}")  // POST로 변경
+    fun getRestaurantsBottom(
+        @Path("user-id") userId: Long?,
+        @Body request: GetRestaurantsBottomRequest
+    ): Call<GetRestaurantsBottomResult>
+
+    @GET("/test/restaurants/search/{user-id}")
+    fun getRestaurantsSearch(
+        @Path("user-id") userId: Long?,
+        @Query("q") q: String?,
+//        @Query("rect") rect: String,
+        @Query("longitude") longitude: Double,
+        @Query("latitude ") latitude : Double
+    ): Call<GetSearchResult>
+
     //--------------------------------------------------------------------------
 
     //손승현
