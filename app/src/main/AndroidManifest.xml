@@ -19,6 +19,13 @@
         android:theme="@style/Theme.Bapool"
         tools:targetApi="31">
         <activity
+            android:name=".ui.UserProfileCheck"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.RatingActivity"
             android:exported="true">
             <meta-data
@@ -39,6 +46,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".ui.FinishActivity"
             android:exported="true">
@@ -77,7 +85,7 @@
         </activity>
         <activity
             android:name=".ui.MakePartyActivity"
-            android:exported="false">
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

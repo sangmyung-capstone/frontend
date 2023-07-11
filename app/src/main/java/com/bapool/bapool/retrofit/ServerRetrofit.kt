@@ -89,6 +89,13 @@ interface ServerRetrofit {
         @Body request: PatchEditPartyInfoRequest,
     ): Call<PatchEditPartyInfoResponse>
 
+
+    @DELETE("/test/parties/{user-id}/{party-id}")
+    fun recessionParty(
+        @Path("user-id") userId: Long,
+        @Path("party-id") partyId: Long,
+    ): Call<PatchEditPartyInfoResponse>
+
     //-----------------------------------------------------------------------------
 
     // 싱글톤 객체 생성
