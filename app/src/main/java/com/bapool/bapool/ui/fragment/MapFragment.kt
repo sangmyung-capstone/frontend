@@ -64,7 +64,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var cnt = 0
     var cnt2 = 0
 
-    var linkList: MutableList<String> = mutableListOf()    // 배열 생성
+    var restaurantIdList: MutableList<Long> = mutableListOf()    // 배열 생성
 
 
     override fun onCreateView(
@@ -81,6 +81,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // search bar
         binding.searchView.editText.setOnEditorActionListener { v, i, keyEvent ->
             Log.d("search", v.text.toString())
+            Log.d("search_tagert", cameraPosition.target.toString())
 
             retro.getRestaurantsSearch(
                 1,
@@ -92,9 +93,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     call: Call<GetSearchResult>,
                     response: Response<GetSearchResult>
                 ) {
-                    Log.d("search", response.body().toString())
+                    Log.d("search", "response : ${response.toString()}")
                     // 식당검색결과 recyclerview 어댑터 바인딩
-                    binding.searchRecyclerView.adapter = SearchViewAdapter()
+                    binding.searchRecyclerView.adapter =
+                        SearchViewAdapter(response.body()!!.result.restaurants)
                     binding.searchRecyclerView.layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 }
@@ -272,10 +274,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             ) {
                 if (response.isSuccessful) {
                     // 식당링크 모음
-                    for (idx in response.body()!!.result.restaurants)
-                        linkList.add(idx.link)
+//                    for (idx in response.body()!!.result.restaurants)
+//                        restaurantIdList.add(idx.restaurant_id)
+                    restaurantIdList.add(response.body()!!.result.restaurants[0].restaurant_id)
+                    restaurantIdList.add(response.body()!!.result.restaurants[1].restaurant_id)
 
-                    Log.d("BOTTOM", linkList.toString())
+
+                    Log.d("BOTTOM_ID_LIST", restaurantIdList.toString())
 
                     // bottomSheet에 식당바텀리스트 레이아웃 할당
                     if (cnt2 == 0) {     // cnt 방식이 아닌 뷰 교체 방식의 제대로된 방법 필요
@@ -293,28 +298,28 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     binding.bottomSheet.findViewById<RecyclerView>(R.id.restaurant_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     // 식당바텀리스트 통신   // 식당링크 모음 필요
-//                    retro.getRestaurantsBottom(1, GetRestaurantsBottomRequest(linkList))
-//                        .enqueue(object : Callback<GetRestaurantsBottomResult> {
-//                            override fun onResponse(
-//                                call: Call<GetRestaurantsBottomResult>,
-//                                response: Response<GetRestaurantsBottomResult>
-//                            ) {
-//                                Log.d(
-//                                    "BOTTOM",
-//                                    response.body()?.message + response.body()?.result.toString()
-//                                )
-//                            }
-//
-//                            override fun onFailure(
-//                                call: Call<GetRestaurantsBottomResult>,
-//                                t: Throwable
-//                            ) {
-//                                // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-//                                Log.d("MARKER_INIT", "onResponse 실패")
-//                                Log.d("MARKER_INIT", response.body().toString())
-//                            }
-//
-//                        })
+                    retro.getRestaurantsBottom(1, GetRestaurantsBottomRequest(restaurantIdList))
+                        .enqueue(object : Callback<GetRestaurantsBottomResult> {
+                            override fun onResponse(
+                                call: Call<GetRestaurantsBottomResult>,
+                                response: Response<GetRestaurantsBottomResult>
+                            ) {
+                                Log.d(
+                                    "BOTTOM",
+                                    response.body()?.message + response.body()?.result.toString()
+                                )
+                            }
+
+                            override fun onFailure(
+                                call: Call<GetRestaurantsBottomResult>,
+                                t: Throwable
+                            ) {
+                                // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                                Log.d("BOTTOM", "onResponse 실패")
+                                Log.d("BOTTOM", response.body().toString())
+                            }
+
+                        })
 
                     // 기존 마커 존재 시 전부 삭제
                     if (markerList.size != 0) {

@@ -63,7 +63,7 @@ data class Menu(
 )
 // -------------------------------------------------------------------------------------------------
 data class GetRestaurantsBottomRequest(
-    val restaurant_urls: List<String>
+    val restaurant_ids: List<Long>
 )
 data class GetRestaurantsBottomResult(
     val code: Int,
@@ -88,8 +88,8 @@ data class RestaurantSearch(
     val restaurant_address: String,
     val restaurant_id: Int,
     val restaurant_name: String,
-    val restaurant_x: Double,
-    val restaurant_y: Double
+    val restaurant_longitude: Double,
+    val restaurant_latitude: Double
 )
 
 
