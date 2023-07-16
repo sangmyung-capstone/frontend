@@ -1,6 +1,7 @@
 package com.bapool.bapool.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
+import com.bapool.bapool.retrofit.data.GetRestaurantInfoResult
 import com.bapool.bapool.retrofit.data.Restaurant
+import com.bapool.bapool.retrofit.data.UserData
+import com.bapool.bapool.ui.HomeActivity
+import com.bapool.bapool.ui.fragment.MapFragment
+import com.bapool.bapool.ui.fragment.MapFragment.Companion.markerList
 import com.bumptech.glide.Glide
+import com.naver.maps.map.NaverMap
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class RestaurantBottomAdapter(val itemList: List<Restaurant>) :
+class RestaurantBottomAdapter(val itemList: List<Restaurant>, val naverMap: NaverMap) :
     RecyclerView.Adapter<RestaurantBottomAdapter.RestaurantViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
@@ -30,6 +40,17 @@ class RestaurantBottomAdapter(val itemList: List<Restaurant>) :
 //            .load(itemList[position].imgURL)
             .load(R.drawable.bapool)
             .into(holder.restaurant_img)
+
+        holder.itemView.setOnClickListener {
+            Log.d("view_holder", "view holder${position} touch")
+            MapFragment().markerGoEvent(
+                naverMap,
+                markerList[position],
+                itemList[position].restaurant_id,
+                itemList[position].restaurant_longitude,
+                itemList[position].restaurant_latitude
+            )
+        }
     }
 
     override fun getItemCount(): Int {
@@ -43,6 +64,7 @@ class RestaurantBottomAdapter(val itemList: List<Restaurant>) :
         val restaurant_img = itemView.findViewById<ImageView>(R.id.bottom_restaurant_image)
         val restaurant_category = itemView.findViewById<TextView>(R.id.bottom_restaurant_category)
         val restaurant_address = itemView.findViewById<TextView>(R.id.bottom_restaurant_address)
-        val restaurant_group_number = itemView.findViewById<TextView>(R.id.bottom_restaurant_group_number)
+        val restaurant_group_number =
+            itemView.findViewById<TextView>(R.id.bottom_restaurant_group_number)
     }
 }
