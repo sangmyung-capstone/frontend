@@ -86,7 +86,7 @@ data class RestaurantSearch(
     val category: String,
     val num_of_party: Int,
     val restaurant_address: String,
-    val restaurant_id: Int,
+    val restaurant_id: Long,
     val restaurant_name: String,
     val restaurant_longitude: Double,
     val restaurant_latitude: Double

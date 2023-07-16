@@ -9,24 +9,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
-import com.bapool.bapool.retrofit.data.GetRestaurantInfoResult
 import com.bapool.bapool.retrofit.data.Restaurant
-import com.bapool.bapool.retrofit.data.UserData
-import com.bapool.bapool.ui.HomeActivity
 import com.bapool.bapool.ui.fragment.MapFragment
 import com.bapool.bapool.ui.fragment.MapFragment.Companion.markerList
 import com.bumptech.glide.Glide
 import com.naver.maps.map.NaverMap
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class RestaurantBottomAdapter(val itemList: List<Restaurant>, val naverMap: NaverMap) :
     RecyclerView.Adapter<RestaurantBottomAdapter.RestaurantViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.restaurant_recycler_view, parent, false)
+            .inflate(R.layout.bottom_item, parent, false)
         return RestaurantViewHolder(view, parent.context)
     }
 
@@ -42,7 +36,7 @@ class RestaurantBottomAdapter(val itemList: List<Restaurant>, val naverMap: Nave
             .into(holder.restaurant_img)
 
         holder.itemView.setOnClickListener {
-            Log.d("view_holder", "view holder${position} touch")
+            Log.d("bottom_view_holder", "view holder${position} touch")
             MapFragment().markerGoEvent(
                 naverMap,
                 markerList[position],

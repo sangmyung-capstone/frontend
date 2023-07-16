@@ -19,13 +19,13 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/restaurant_recyclerview"
+        android:id="@+id/bottom_recyclerview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/drag_handle"
-        tools:listitem="@layout/restaurant_recycler_view" />
+        tools:listitem="@layout/bottom_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
