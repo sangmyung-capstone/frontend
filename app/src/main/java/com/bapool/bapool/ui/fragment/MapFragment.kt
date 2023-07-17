@@ -69,8 +69,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var cnt = 0
     var cnt2 = 0
 
-    var restaurantIdList: MutableList<Long> = mutableListOf()    // 리스트 생성
-    var restaurantImageList: MutableList<String> = mutableListOf()  // 바텀리스트 이미지 리스트 생성
+    var restaurantIdList: MutableList<Long> = mutableListOf()    // 배열 생성
 
 
     override fun onCreateView(
@@ -258,7 +257,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("MARKER_INIT", "now bounds : ${naverMap.contentBounds}")
         Log.d("MARKER_INIT", "now camera : $cameraPosition")
         //------------------------------------
-        // 현위치에서 재검색 api
         retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
@@ -284,11 +282,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         cnt2++
                     }
 
-//                    // 식당바텀리스트 어댑터 바인딩
-//                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
-//                        RestaurantBottomAdapter(response.body()!!.result.restaurants, naverMap)
-//                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
-//                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    // 식당바텀리스트 어댑터 바인딩
+                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
+                        RestaurantBottomAdapter(response.body()!!.result.restaurants, naverMap)
+                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     // 식당바텀리스트 통신
                     Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
                     for (idx in 0 until restaurantIdList.size) {
@@ -306,11 +304,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                         response.body()?.message + response.body()?.result.toString()
                                     )
                                     // 이미지를 뷰홀더에 출력
-                                    // 해당 img url을 리스트로 저장 후 adapter에 파라미터로 넣기
-                                    restaurantImageList.add(
-                                        idx,
-                                        response.body()?.result!!.restaurant_img_urls[0]
-                                    )
+
                                 }
 
                                 override fun onFailure(
@@ -324,16 +318,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                             })
                     }
-                    // cnt 활용
-                    // 식당바텀리스트 어댑터 바인딩
-                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
-                        RestaurantBottomAdapter(
-                            response.body()!!.result.restaurants,
-                            restaurantImageList,
-                            naverMap
-                        )
-                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
-                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
 
                     // 기존 마커 존재 시 전부 삭제

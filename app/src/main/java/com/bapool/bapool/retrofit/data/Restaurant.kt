@@ -17,7 +17,7 @@ data class Restaurant(
     val num_of_party: Int,
     val restaurant_longitude: Double,
     val restaurant_latitude: Double,
-    val link: String    // 빠질 예정
+    val link: String
 )
 // -------------------------------------------------------------------------------------------------
 data class GetRestaurantLogResponse(
