@@ -30,8 +30,8 @@ class EditPartyInfoActivity : AppCompatActivity() {
     val hastagList = ArrayList(Collections.nCopies(5, 0))
     lateinit var maxPeople: NumberPicker
     val retro = ServerRetrofit.create()
-    val userId: Long = 2
-    val partyId: Long = 23
+    val userId: Long = 3
+    val partyId: Long = 8
     val TAG = "EditPartyInfoActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +39,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
         binding = ActivityEditPartyInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var resName = intent.getStringExtra("resName")
-        binding.resName.setText(resName)
+
 
 
         initializeVari()
@@ -128,34 +127,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
             timePickerDialogCustom(1)
         }
 
-
-        //모임 끝나는 날짜 정하기
-        binding.endDate.setOnClickListener {
-            if (binding.startDateText.text.toString() == "시작날짜") {
-                alterDialog("시작날짜를 정해주세요.")
-            } else {
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-                val minDate = dateFormat.parse("${binding.startDateText.text}")
-                val customDatePickerBinding =
-                    CustomDatepickerBinding.inflate(LayoutInflater.from(baseContext))
-                datePickerDialogCustom(minDate.time, 0)
-
-            }
-
-        }
-        //모임 끝나는 시간 정하기
-        binding.endTime.setOnClickListener {
-            timePickerDialogCustom(0)
-        }
-
-
-        //취소버튼 클릭
-        binding.cancelButton.setOnClickListener {
-
-
-        }
-
-
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
             if (binding.grpNameText.text.isNullOrBlank()) {
@@ -169,15 +140,9 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
             } else if (binding.startTimeText.text.toString() == "시작시간") {
                 alterDialog("시작시간을 입력해주세요.")
-            } else if (compareTime(binding.startDateText.text.toString(),
-                    binding.endDateText.text.toString(),
-                    binding.startTimeText.text.toString(),
-                    binding.endTimeText.text.toString())
-            ) {
-                alterDialog("끝나는 시간이 시작 시간보다 작습니다.")
             } else {
                 val endDateLocal =
-                    binding.endDateText.text.toString() + " " + binding.endTimeText.text.toString() + ":00"
+                    binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
                 val startDateLocal =
                     binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
 
@@ -269,9 +234,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
                     String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                 if (startOrEnd == 1) {
                     binding.startDateText.setText(selectedDate)
-                    binding.endDateText.setText(selectedDate)
                 } else if (startOrEnd == 0) {
-                    binding.endDateText.setText(selectedDate)
                 }
 
             }, year, month, day)
@@ -299,10 +262,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
             //시작시간 정할때 끝시간 +2시간으로 지정해줌
             if (startOrEnd == 1) {
                 binding.startTimeText.setText(selectedTime)
-                binding.endTimeText.setText(
-                    String.format("%02d:%02d", (selectedHour + 2) % 24, selectedMinute))
             } else if (startOrEnd == 0) {
-                binding.endTimeText.setText(selectedTime)
             }
 
         }, hour, minute, true)
@@ -320,35 +280,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
         }
         val dialog = builder.create()
         dialog.show()
-    }
-
-
-    private fun compareTime(
-        startDate: String,
-        endDate: String,
-        startTimeUnit: String,
-        endTimeUnit: String,
-    ): Boolean {
-        if (startDate == endDate) {
-            val resultNum = chageTimeForm(
-                startTimeUnit,
-                endTimeUnit
-            )
-            when {
-                resultNum < 0 -> {
-                    return false
-                }
-                resultNum > 0 -> {
-                    return true
-                }
-                else -> {
-                    return false
-                }
-            }
-        } else {
-            return false
-        }
-        return false
     }
 
     fun chageTimeForm(startTimeUnit: String, endTimeUnit: String): Int {

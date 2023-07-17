@@ -84,10 +84,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     private lateinit var currentUserNickName: String
 
 
-//    //임시 userId,groupId
-//    val testCurrentUserId = "userId3"
-//    val testPartyId = "groupId1"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChattingAndPartyInfoMfactivityBinding.inflate(layoutInflater)
@@ -154,8 +150,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
                                         if (!userId.equals(currentUserId)) {
                                             fcmUserInfo.put(userId, userInfo!!)
-                                            Log.d("sadfsadfdsafsdaf", fcmUserInfo.toString())
-
                                         } else {
                                             currentUserNickName = userInfo?.nickName ?: ""
                                         }
@@ -199,11 +193,16 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     //recyclerview 어댑터
     fun GroupInfoAdapter(
     ) {
+
         partyUserMenuRVA = PartyUserInfoAdapter(this, partyUserInfoMenu, groupOnerId)
         partyUserMenuRecyclerView.adapter = partyUserMenuRVA
         partyUserMenuRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         partyUserMenuRVA.notifyDataSetChanged()
+    }
+
+    fun GroupInfoAdapterSort() {
+
     }
 
 
@@ -242,9 +241,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
         }
         binding.menuPartyOut.setOnClickListener {
-            selectPartyLeaderDialog()
-            //showExitDialog()
-            //recessionParty()
+            showExitDialog()
         }
 
         binding.restaurantIcon.setOnClickListener {
@@ -252,6 +249,10 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://${url}"))
             startActivity(intent)
+        }
+
+        binding.closePartyBtn.setOnClickListener {
+            closePartyDialog()
         }
 
 
@@ -273,6 +274,25 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     binding.currentMaxPeople.setText(currentMaxPeople)
                     binding.detailOnChattingBackgroundText.setText(item.groupDetail)
                     binding.restaruantLocationTextNv.setText(item.restaurantName)
+                    if (currentUserId == item.groupLeaderId.toString()) {
+                        binding.closePartyBtn.visibility = View.VISIBLE
+                    }
+                    if (item.hashTag != null) {
+                        if (item.hashTag.isNotEmpty()) {
+                            binding.hashtagVisible.visibility = View.VISIBLE
+                            for (item in item.hashTag) {
+                                when (item) {
+                                    1 -> binding.hash1.visibility = View.VISIBLE
+                                    2 -> binding.hash2.visibility = View.VISIBLE
+                                    3 -> binding.hash3.visibility = View.VISIBLE
+                                    4 -> binding.hash4.visibility = View.VISIBLE
+                                    5 -> binding.hash5.visibility = View.VISIBLE
+                                }
+                            }
+                        }
+                    }
+
+
                     groupOnerId = item.groupLeaderId.toString()
                     currentPartyInfo = item
                 }
@@ -396,29 +416,25 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     fun editPartyInfo() {
         val intent = Intent(this, EditPartyInfoActivity::class.java)
-
+        intent.putExtra("partyInfo",currentPartyInfo)
         startActivity(intent)
     }
 
     fun recessionParty() {
-        retro.recessionParty(1, 1)
+        retro.recessionParty(2, 2)
             .enqueue(object : Callback<PatchEditPartyInfoResponse> {
                 override fun onResponse(
                     call: Call<PatchEditPartyInfoResponse>,
                     response: Response<PatchEditPartyInfoResponse>,
                 ) {
 
-                    var result: PatchEditPartyInfoResponse? = response.body()
-                    Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
+//                    var result: PatchEditPartyInfoResponse? = response.body()
 
                     if (response.isSuccessful) {
-                        Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
 
                     } else {
-                        Log.d("MKRetrofit", "onResponse 실패: " + response.errorBody().toString())
-
                         Toast.makeText(this@ChattingAndPartyInfoMFActivity,
-                            "그룹 탈퇴 오류 fail",
+                            "response x",
                             Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -470,8 +486,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         binding.participantsNum.text = " ${item.curNumberOfPeople}  /  ${item.maxNumberOfPeople}"
         binding.restaurantLocation.text = item.restaurantName
         binding.detailText.text = item.groupDetail
-//        binding.detailText.text = item.groupDetail
-
     }
 
 
@@ -481,7 +495,11 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         alertDialogBuilder.setTitle("그룹 나가기") // Set the dialog title
         alertDialogBuilder.setMessage("나가기를 하면 대화내용이 모두 삭제되고 채팅목록에서도 삭제됩니다.") // Set the dialog message
         alertDialogBuilder.setPositiveButton("나가기") { dialog, _ ->
-            Toast.makeText(this, "positive", Toast.LENGTH_SHORT).show()
+            if (currentUserId.equals(currentPartyInfo.groupLeaderId.toString())) {
+                selectPartyLeaderDialog()
+            } else {
+                recessionParty()
+            }
         }
 
         alertDialogBuilder.setNegativeButton("취소") { dialog, _ ->
@@ -499,11 +517,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         var copyPartyUserInfoMenu = partyUserInfoMenu
         var notCurrentUserPartyUsers = removeMapByUID(currentUserId, copyPartyUserInfoMenu)
 
-        Log.d("sdfasdsadf", partyUserInfoMenu.toString())
-        Log.d("sdfasdsadf", notCurrentUserPartyUsers.toString())
-
         val recyclerView = selectPartyLeader.recyclerView
-        val adapter = SelectPartyLeaderAdapter(this, partyUserInfoMenu, currentUserId)
+        val adapter = SelectPartyLeaderAdapter(this, partyUserInfoMenu, currentUserId, partyId)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -512,7 +527,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             .setView(selectPartyLeader.root)
         mBuilder.setTitle("그룹장 선택")
         mBuilder.setPositiveButton("OK") { dialog, _ ->
-            // Handle positive button click
+            showExitDialog()
         }
         mBuilder.setNegativeButton("Cancel") { dialog, _ ->
             // Handle negative button click
@@ -556,6 +571,50 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
 
+    fun closePartyRetrofit() {
+        retro.closeParty(currentUserId.toLong(), partyId.toLong())
+            .enqueue(object : Callback<PatchEditPartyInfoResponse> {
+                override fun onResponse(
+                    call: Call<PatchEditPartyInfoResponse>,
+                    response: Response<PatchEditPartyInfoResponse>,
+                ) {
+                    if (response.isSuccessful) {
+                        val result = response.body()
+                        Log.d("closeParty", response.body().toString())
+                        closePartyConfirmDialog()
+                    } else {
+                        Log.d("closeParty", response.errorBody().toString())
+
+                    }
+                }
+
+                override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
+                    Log.d("closeParty", "실패")
+                }
+            })
+
+    }
+
+    fun closePartyDialog() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setMessage("그룹의 시간을 확정하시겠습니까? 확정된 시간은 변경할 수 없습니다.") // Set the dialog message
+        alertDialogBuilder.setPositiveButton("확인") { dialog, _ ->
+            closePartyRetrofit()
+        }
+        alertDialogBuilder.setNegativeButton("취소") { dialog, _ ->
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    fun closePartyConfirmDialog() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setMessage("그룹이 마감되었습니다.") // Set the dialog message
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
 
 
 }

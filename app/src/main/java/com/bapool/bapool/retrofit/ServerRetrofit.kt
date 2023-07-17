@@ -6,6 +6,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -16,34 +18,33 @@ interface ServerRetrofit {
     // 정연수
     @POST("/users/naver/signin/already")
     fun PostNaverLoginCheck(
-        @Body request: PostNaverLoginCheckRequest
+        @Body request: PostNaverLoginCheckRequest,
     ): Call<PostNaverLoginCheckResponse>
 
     @POST("/users/naver/signup")
     fun PostNaverSignup(
-        @Body request: PostNaverSignupRequest
+        @Body request: PostNaverSignupRequest,
     ): Call<PostNaverSignupResponse>
 
     @POST("/users/naver/signin")
     fun PostNaverSingin(
-        @Body request: PostNaverSigninRequest
+        @Body request: PostNaverSigninRequest,
     ): Call<PostNaverSigninResponse>
 
     @POST("/users/kakao/signin/already")
     fun PostKakaoLoginCheck(
-        @Body request: PostkakaoLoginCheckRequest
+        @Body request: PostkakaoLoginCheckRequest,
     ): Call<PostKakaoLoginCheckResponse>
 
     @POST("/users/kakao/signup")
     fun PostKakaoSignup(
-        @Body request: PostKakaoSignupRequest
+        @Body request: PostKakaoSignupRequest,
     ): Call<PostKakaoSignupResponse>
 
     @POST("/users/kakao/signin")
     fun PostKakaoSingin(
-        @Body request: PostkakaoSigninRequest
+        @Body request: PostkakaoSigninRequest,
     ): Call<PostKakaoSigninResponse>
-
 
 
     //--------------------------------------------------------------------------
@@ -55,7 +56,7 @@ interface ServerRetrofit {
         @Query("rect") rect: String?,
     ): Call<GetRestaurantsResult>
 
-//    @GET("/restaurants/{user-id}/{restaurant-id}")
+    //    @GET("/restaurants/{user-id}/{restaurant-id}")
 //    fun getRestaurantInfo(
 //        @Path("user-id") userId: Long?,
 //        @Path("restaurant-id") restaurantId: Int?,
@@ -71,7 +72,7 @@ interface ServerRetrofit {
     @GET("/test/restaurants/bottomlist/{user-id}")  // POST로 변경
     fun getRestaurantsBottom(
         @Path("user-id") userId: Long?,
-        @Body request: GetRestaurantsBottomRequest
+        @Body request: GetRestaurantsBottomRequest,
     ): Call<GetRestaurantsBottomResult>
 
     @GET("/test/restaurants/search/{user-id}")
@@ -80,7 +81,7 @@ interface ServerRetrofit {
         @Query("q") q: String?,
 //        @Query("rect") rect: String,
         @Query("longitude") longitude: Double,
-        @Query("latitude ") latitude : Double
+        @Query("latitude ") latitude: Double,
     ): Call<GetSearchResult>
 
     //--------------------------------------------------------------------------
@@ -110,6 +111,31 @@ interface ServerRetrofit {
         @Path("user-id") userId: Long,
         @Path("party-id") partyId: Long,
     ): Call<PatchEditPartyInfoResponse>
+
+    @POST("test/users/profile/{user-id}")
+    fun checkUserProfile(
+        @Path("user-id") userId: Long,
+    ): Call<CheckUserProfileResponse>
+
+    @POST("/test/users/block/{user-id}")
+    fun BlockUser(
+        @Path("user-id") userId: Long,
+        @Body request: BlockUserRequest,
+    ): Call<BlockUserResponse>
+
+    @PATCH("test/parties/close/{user-id}/{party-id}")
+    fun closeParty(
+        @Path("user-id") userId: Long,
+        @Path("party-id") partyId: Long,
+    ): Call<PatchEditPartyInfoResponse>
+
+    @PATCH("test/change/{user-id}/{party-id}/{other-user-id}")
+    fun changePartyLeader(
+        @Path("user-id") userId: Long,
+        @Path("party-id") partyId: Long,
+        @Path("other-user-id") otherUserId: Long
+    ): Call<PatchEditPartyInfoResponse>
+
 
     //-----------------------------------------------------------------------------
 

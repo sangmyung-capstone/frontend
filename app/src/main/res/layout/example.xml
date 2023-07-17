@@ -7,6 +7,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <LinearLayout
+        android:id="@+id/hashtagVisible"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/partyNameNv">
+
+        <ImageView
+            android:id="@+id/hash1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag1"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/hash2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag2"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/hash1"
+            app:layout_constraintStart_toEndOf="@+id/hash1"
+            app:layout_constraintTop_toTopOf="@+id/hash1" />
+
+        <ImageView
+            android:id="@+id/hash3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag3"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/hash2"
+            app:layout_constraintStart_toEndOf="@+id/hash2"
+            app:layout_constraintTop_toTopOf="@+id/hash2" />
+
+        <ImageView
+            android:id="@+id/hash4"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag4"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/hash3"
+            app:layout_constraintStart_toEndOf="@+id/hash3"
+            app:layout_constraintTop_toTopOf="@+id/hash3" />
+
+        <ImageView
+            android:id="@+id/hash5"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag5"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/hash4"
+            app:layout_constraintStart_toEndOf="@+id/hash4"
+            app:layout_constraintTop_toTopOf="@+id/hash4" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/partyNameNv"
         android:layout_width="match_parent"
@@ -15,6 +73,7 @@
         android:text="그룹명"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,8 +85,9 @@
         android:gravity="center"
         android:text="메뉴"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/partyNameNv"
-        app:layout_constraintTop_toBottomOf="@+id/partyNameNv" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
 
 
     <LinearLayout
@@ -59,13 +119,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
+    <Button
+        android:id="@+id/closePartyBtn"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:visibility="gone"
+        android:text="확정하기"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
     <ImageView
         android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/locationicon"
-        app:layout_constraintStart_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/closePartyBtn" />
 
     <ImageView
         android:id="@+id/imageView8"
@@ -82,8 +153,8 @@
         android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="90dp"
-        android:text="dsfasfsadf"
         android:gravity="center_vertical"
+        android:text="dsfasfsadf"
 
         app:layout_constraintBottom_toBottomOf="@+id/imageView6"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -106,9 +177,9 @@
         android:id="@+id/currentMaxPeople"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:text="dsfasfsadf"
         android:layout_marginLeft="10dp"
         android:gravity="center_vertical"
+        android:text="dsfasfsadf"
         app:layout_constraintBottom_toBottomOf="@+id/imageView8"
         app:layout_constraintStart_toEndOf="@+id/imageView8"
         app:layout_constraintTop_toBottomOf="@+id/imageView7" />

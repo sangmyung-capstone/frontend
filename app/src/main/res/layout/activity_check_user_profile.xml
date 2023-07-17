@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.CheckUserProfileActivity">
+
+
+    <ImageView
+        android:id="@+id/userImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/image1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <RatingBar
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:progressTint="@color/main"
+        android:stepSize="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userImage" />
+
+
+    <LinearLayout
+        android:id="@+id/hashtagVisible"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rating">
+
+        <ImageView
+            android:id="@+id/hash1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag1"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/hash2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag2"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/hash1"
+            app:layout_constraintStart_toEndOf="@+id/hash1"
+            app:layout_constraintTop_toTopOf="@+id/hash1" />
+
+        <ImageView
+            android:id="@+id/hash3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag3"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/hash2"
+            app:layout_constraintStart_toEndOf="@+id/hash2"
+            app:layout_constraintTop_toTopOf="@+id/hash2" />
+
+        <ImageView
+            android:id="@+id/hash4"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag4"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/hash3"
+            app:layout_constraintStart_toEndOf="@+id/hash3"
+            app:layout_constraintTop_toTopOf="@+id/hash3" />
+
+        <ImageView
+            android:id="@+id/hash5"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/hashtag5"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/hash4"
+            app:layout_constraintStart_toEndOf="@+id/hash4"
+            app:layout_constraintTop_toTopOf="@+id/hash4" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/banBtn"
+        android:layout_marginTop="20dp"
+        android:text="차단"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

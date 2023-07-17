@@ -30,7 +30,7 @@ class MakePartyActivity : AppCompatActivity() {
     val hastagList = ArrayList(Collections.nCopies(5, 0))
     lateinit var maxPeople: NumberPicker
     val retro = ServerRetrofit.create()
-    val userId: Long = 2
+    val userId: String = "3"   //companion userid로 변경필요.
 
 
     //나중에 intent로 그 전에 있던 식당안에 파티리스트에서 정보 가져와야함. PostMakePartyRequestRestaurantInfo의 객체로 받아와야할듯 그 전부터.
@@ -141,27 +141,6 @@ class MakePartyActivity : AppCompatActivity() {
             timePickerDialogCustom(1)
         }
 
-
-        //모임 끝나는 날짜 정하기
-        binding.endDate.setOnClickListener {
-            if (binding.startDateText.text.toString() == "시작날짜") {
-                alterDialog("시작날짜를 정해주세요.")
-            } else {
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-                val minDate = dateFormat.parse("${binding.startDateText.text}")
-                val customDatePickerBinding =
-                    CustomDatepickerBinding.inflate(LayoutInflater.from(baseContext))
-                datePickerDialogCustom(minDate.time, 0)
-
-            }
-
-        }
-        //모임 끝나는 시간 정하기
-        binding.endTime.setOnClickListener {
-            timePickerDialogCustom(0)
-        }
-
-
         //취소버튼 클릭
         binding.cancelButton.setOnClickListener {
 
@@ -184,15 +163,9 @@ class MakePartyActivity : AppCompatActivity() {
 
             } else if (binding.startTimeText.text.toString() == "시작시간") {
                 alterDialog("시작시간을 입력해주세요.")
-            } else if (compareTime(binding.startDateText.text.toString(),
-                    binding.endDateText.text.toString(),
-                    binding.startTimeText.text.toString(),
-                    binding.endTimeText.text.toString())
-            ) {
-                alterDialog("끝나는 시간이 시작 시간보다 작습니다.")
-            } else {
+            }else {
                 val endDateLocal =
-                    binding.endDateText.text.toString() + " " + binding.endTimeText.text.toString() + ":00"
+                    binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
                 val startDateLocal =
                     binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
 
@@ -224,7 +197,7 @@ class MakePartyActivity : AppCompatActivity() {
     fun retrofit(makeParty: PostMakePartyRequest) {
 
 
-        retro.makeParty(userId, makeParty).enqueue(object : Callback<PostMakePartyResponse> {
+        retro.makeParty(userId.toLong(), makeParty).enqueue(object : Callback<PostMakePartyResponse> {
             override fun onResponse(
                 call: Call<PostMakePartyResponse>,
                 response: Response<PostMakePartyResponse>,
@@ -238,8 +211,8 @@ class MakePartyActivity : AppCompatActivity() {
 
                     val intent =
                         Intent(this@MakePartyActivity, ChattingAndPartyInfoMFActivity::class.java)
-                    intent.putExtra("currentUserId", "userId2")//현재 유저의 userId로 value값 교체
-                    intent.putExtra("partyId", "groupId2") // result 안의 party_id 값으로 value값 교체
+                    intent.putExtra("currentUserId", "22")//현재 유저의 userId로 value값 교체
+                    intent.putExtra("partyId", "33") // result 안의 party_id 값으로 value값 교체
                     startActivity(intent)
 
                     //group_id 넘겨줘야함 Intent할때
@@ -286,9 +259,7 @@ class MakePartyActivity : AppCompatActivity() {
                     String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                 if (startOrEnd == 1) {
                     binding.startDateText.setText(selectedDate)
-                    binding.endDateText.setText(selectedDate)
                 } else if (startOrEnd == 0) {
-                    binding.endDateText.setText(selectedDate)
                 }
 
             }, year, month, day)
@@ -316,10 +287,7 @@ class MakePartyActivity : AppCompatActivity() {
             //시작시간 정할때 끝시간 +2시간으로 지정해줌
             if (startOrEnd == 1) {
                 binding.startTimeText.setText(selectedTime)
-                binding.endTimeText.setText(
-                    String.format("%02d:%02d", (selectedHour + 2) % 24, selectedMinute))
             } else if (startOrEnd == 0) {
-                binding.endTimeText.setText(selectedTime)
             }
 
         }, hour, minute, true)
@@ -337,35 +305,6 @@ class MakePartyActivity : AppCompatActivity() {
         }
         val dialog = builder.create()
         dialog.show()
-    }
-
-
-    private fun compareTime(
-        startDate: String,
-        endDate: String,
-        startTimeUnit: String,
-        endTimeUnit: String,
-    ): Boolean {
-        if (startDate == endDate) {
-            val resultNum = chageTimeForm(
-                startTimeUnit,
-                endTimeUnit
-            )
-            when {
-                resultNum < 0 -> {
-                    return false
-                }
-                resultNum > 0 -> {
-                    return true
-                }
-                else -> {
-                    return false
-                }
-            }
-        } else {
-            return false
-        }
-        return false
     }
 
     fun chageTimeForm(startTimeUnit: String, endTimeUnit: String): Int {

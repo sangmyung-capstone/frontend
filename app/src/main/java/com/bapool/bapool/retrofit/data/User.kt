@@ -210,4 +210,21 @@ data class PostRatingUserResponse(
 )
 
 
+//타유저 프로필 조회
+data class CheckUserProfileResponse(
+    val code: Int,
+    val message: String,
+    val result: CheckUserProfileResult
+)
+
+data class CheckUserProfileResult(
+    val hashtag: List<Int>,
+    var is_block: Boolean,
+    val nickname: String,
+    val profileImg: Int,
+    val rating: Double,
+    val user_id: Int
+)
+
+
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,7 +23,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="의 그룹"
+        android:text="의 파티"
         android:textColor="@color/black"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="@+id/resName"
@@ -49,26 +50,15 @@
         app:layout_constraintTop_toBottomOf="@+id/restaurantLocation" />
 
     <TextView
-        android:id="@+id/restaurantName"
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:text="식당 이름"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLine" />
-
-    <TextView
+        android:layout_marginTop="7dp"
         android:id="@+id/restaurantLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
-        android:textSize="15sp"
         android:text="식당 주소"
-        android:layout_marginBottom="20dp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantName" />
+        app:layout_constraintTop_toBottomOf="@+id/textLine" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="5dp"
@@ -80,11 +70,12 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <android.widget.Button
+        android:background="@color/main"
         android:id="@+id/goToMakeGrp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="그룹생성"
+        android:text="파티 생성"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
