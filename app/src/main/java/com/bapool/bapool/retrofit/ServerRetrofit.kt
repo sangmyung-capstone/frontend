@@ -117,10 +117,10 @@ interface ServerRetrofit {
     //--------------------------------------------------------------------------
 
     //손승현
-    @GET("test/parties/{user_id}/{restaurant_id}")
+    @GET("test/parties/{user-id}/{restaurant-id}")
     fun getResPartyList(
-        @Path("user_id") userId: Long,
-        @Path("restaurant_id") restaurantId: Long,
+        @Path("user-id") userId: Long,
+        @Path("restaurant-id") restaurantId: Long,
     ): Call<GetResPartyListResponse>
 
     @POST("test/parties/{user-id}")
@@ -135,14 +135,13 @@ interface ServerRetrofit {
         @Body request: PatchEditPartyInfoRequest,
     ): Call<PatchEditPartyInfoResponse>
 
-
     @DELETE("/test/parties/{user-id}/{party-id}")
     fun recessionParty(
         @Path("user-id") userId: Long,
         @Path("party-id") partyId: Long,
     ): Call<PatchEditPartyInfoResponse>
 
-    @POST("test/users/profile/{user-id}")
+    @GET("/test/users/profile/{user-id}")
     fun checkUserProfile(
         @Path("user-id") userId: Long,
     ): Call<CheckUserProfileResponse>
@@ -151,7 +150,7 @@ interface ServerRetrofit {
     fun BlockUser(
         @Path("user-id") userId: Long,
         @Body request: BlockUserRequest,
-    ): Call<BlockUserResponse>
+    ): Call<BlockUserChattingProfileResponse>
 
     @PATCH("test/parties/close/{user-id}/{party-id}")
     fun closeParty(
@@ -159,11 +158,17 @@ interface ServerRetrofit {
         @Path("party-id") partyId: Long,
     ): Call<PatchEditPartyInfoResponse>
 
-    @PATCH("test/change/{user-id}/{party-id}/{other-user-id}")
+    @PATCH("test/parties/change/{user-id}/{party-id}/{other-user-id}")
     fun changePartyLeader(
         @Path("user-id") userId: Long,
         @Path("party-id") partyId: Long,
         @Path("other-user-id") otherUserId: Long
+    ): Call<PatchEditPartyInfoResponse>
+
+    @POST("test/parties/participant/{user-id}")
+    fun participateParty(
+        @Path("user-id") userId: Long,
+        @Body request: participateParty
     ): Call<PatchEditPartyInfoResponse>
 
 

@@ -92,7 +92,7 @@ data class PostNaverSignupRequest(
     val access_token: String,
     var nickname: String,
     var profile_img_id: Int,
-    var firebase_token: String
+    var firebase_token: String,
 )
 
 data class PostNaverSignupResponse(
@@ -141,7 +141,7 @@ data class PostKakaoSignupRequest(
     val access_token: String,
     var nickname: String,
     var profile_img_id: Int,
-    var firebase_token: String
+    var firebase_token: String,
 )
 
 data class PostKakaoSignupResponse(
@@ -185,10 +185,10 @@ data class FirebaseUserInfo(
 data class GetRatingUserResponse(
     val code: Int,
     val message: String,
-    val result: GetRatingUserResult
+    val result: GetRatingUserResult,
 ) {
     data class GetRatingUserResult(
-        val users: List<GetRatingUserResultUser>
+        val users: List<GetRatingUserResultUser>,
     )
 
     data class GetRatingUserResultUser(
@@ -198,13 +198,13 @@ data class GetRatingUserResponse(
 }
 
 data class PostRatingUserRequest(
-    var users: List<UserData>
+    var users: List<UserData>,
 )
 
 data class UserData(
     val user_id: Long,
     val rating: Float,
-    val hashtag: List<Int>
+    val hashtag: List<Int>,
 )
 
 data class PostRatingUserResponse(
@@ -217,17 +217,30 @@ data class PostRatingUserResponse(
 data class CheckUserProfileResponse(
     val code: Int,
     val message: String,
-    val result: CheckUserProfileResult
+    val result: CheckUserProfileResult,
 )
 
 data class CheckUserProfileResult(
-    val hashtag: List<Int>,
-    var is_block: Boolean,
-    val nickname: String,
+    val user_id: Long,
     val profileImg: Int,
+    val nickname: String,
+    var is_block: Boolean,
     val rating: Double,
-    val user_id: Int
+    val hashtag: List<Int>,
 )
 
+//유저 프로필 화면에서 유저 차단
+data class BlockUserChattingProfileResponse(
+    val code: Int,
+    val message: String,
+    val result: BlockUserChattingProfileResult
+)
+
+data class BlockUserChattingProfileResult(
+    val block_date: String,
+    val block_status: String,
+    val nickname: String,
+    val user_id: Int
+)
 
 

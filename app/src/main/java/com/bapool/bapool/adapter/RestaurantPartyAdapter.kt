@@ -1,25 +1,28 @@
 package com.bapool.bapool.adapter
 
-import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.bapool.bapool.databinding.JoinpartyCustomDialogBinding
 import com.bapool.bapool.databinding.RestaurantpartylistItemsBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
+import com.bapool.bapool.retrofit.data.PatchEditPartyInfoResponse
 import com.bapool.bapool.retrofit.data.ResPartyList
+import com.bapool.bapool.retrofit.data.participateParty
+import retrofit2.Call
+import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import retrofit2.Callback
 
 class RestaurantPartyAdapter(val context: Context) :
     RecyclerView.Adapter<RestaurantPartyAdapter.ViewHolder>() {
     var resName: String = ""
     var resGroup = listOf<ResPartyList>()
-
+    val retro = ServerRetrofit.create()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -34,20 +37,7 @@ class RestaurantPartyAdapter(val context: Context) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItem(resGroup[position])
 
-        holder.joinButton.setOnClickListener {
-//            Toast.makeText(context, "joinbtn clicklistener", Toast.LENGTH_SHORT).show()
-//            val resGroupDialog = resGroup[position]
-//            val joinPartyDialog = JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(context))
-//
-//            dialogBinding(resGroupDialog, joinPartyDialog)
-//
-//
-//            val mBuilder = AlertDialog.Builder(context)
-//                .setView(joinPartyDialog.root)
-//                .setTitle(resGroup[position].party_name)
-//
-//            mBuilder.show()
-        }
+
     }
 
     override fun getItemCount(): Int {
@@ -65,7 +55,7 @@ class RestaurantPartyAdapter(val context: Context) :
                 binding.ban.visibility = View.VISIBLE
             }
             //hashtag 보이게하기
-            val hashtagList: List<Int>? = item.hashtag
+            val hashtagList: List<Int>? = item.party_hashtag
             if (hashtagList != null) {
                 if (hashtagList.isNotEmpty()) {
                     binding.hashtagVisible.visibility = View.VISIBLE
@@ -95,9 +85,27 @@ class RestaurantPartyAdapter(val context: Context) :
             binding.participantsNum.text = allNum
             binding.grpName.text = item.party_name
             binding.detail.text = item.detail
-            binding.rating.text = item.rating?.toString()
+            binding.rating.text = item.user_rating?.toString()
+
+            joinButton.setOnClickListener {
+//            Toast.makeText(context, "joinbtn clicklistener", Toast.LENGTH_SHORT).show()
+//            val resGroupDialog = resGroup[position]
+//            val joinPartyDialog = JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(context))
+//
+//            dialogBinding(resGroupDialog, joinPartyDialog)
+//
+//
+//            val mBuilder = AlertDialog.Builder(context)
+//                .setView(joinPartyDialog.root)
+//                .setTitle(resGroup[position].party_name)
+//
+//            mBuilder.show()
+
+
+            }
 
         }
+
 
     }
 

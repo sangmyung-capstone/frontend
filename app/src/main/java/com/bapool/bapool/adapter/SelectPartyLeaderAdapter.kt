@@ -118,10 +118,38 @@ class SelectPartyLeaderAdapter(
                 }
             })
         }
+
+
+        //통신완료 하드코딩
+//        if (opponentUserId != null) {
+//            retro.changePartyLeader(5,
+//                3,
+//                1).enqueue(object : Callback<PatchEditPartyInfoResponse> {
+//                override fun onResponse(
+//                    call: Call<PatchEditPartyInfoResponse>,
+//                    response: Response<PatchEditPartyInfoResponse>,
+//                ) {
+//
+//                    if (response.isSuccessful) {
+//                        val result = response.body()
+//                        confirmChangePartyLeaderDialog()
+//                        Log.d("changePartyLeaderRetrofit", "$result")
+//                    } else {
+//                        Log.d("changePartyLeaderRetrofit", response.body()!!.message.toString())
+//                        Log.d("changePartyLeaderRetrofit", response.body()!!.code.toString())
+//
+//
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
+//                    Log.d("changePartyLeaderRetrofit", "실패")
+//                }
+//            })
+//        }
     }
 
     fun confirmChangePartyLeaderDialog() {
-
         val alertDialogBuilder = AlertDialog.Builder(context)
         alertDialogBuilder.setMessage("그룹장이 변경되었습니다.") // Set the dialog message
         val alertDialog = alertDialogBuilder.create()
