@@ -3,24 +3,27 @@ package com.bapool.bapool.ui
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.NumberPicker
+import android.widget.TextView
 import android.widget.Toast
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.ActivityEditPartyInfoBinding
 import com.bapool.bapool.databinding.CustomDatepickerBinding
 import com.bapool.bapool.databinding.CustomTimepickerBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
+import com.bapool.bapool.retrofit.data.FirebasePartyInfo
 import com.bapool.bapool.retrofit.data.PatchEditPartyInfoResponse
 import com.bapool.bapool.retrofit.data.PatchEditPartyInfoRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -34,6 +37,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
     val partyId: Long = 8
     val TAG = "EditPartyInfoActivity"
 
+    var receivePartyInfo: FirebasePartyInfo = FirebasePartyInfo()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditPartyInfoBinding.inflate(layoutInflater)
@@ -52,6 +56,15 @@ class EditPartyInfoActivity : AppCompatActivity() {
         maxPeople = binding.maxPeople
         maxPeople.maxValue = 20
         maxPeople.minValue = 2
+
+
+        receivePartyInfo = intent.getSerializableExtra("partyInfo") as FirebasePartyInfo
+        binding.grpNameText.setText(receivePartyInfo.groupName)
+        binding.menuText.setText(receivePartyInfo.groupMenu)
+        binding.detail.setText(receivePartyInfo.groupDetail)
+        changeDateFormat(binding.startDateText,binding.startTimeText)
+        val receiveHashtag = receivePartyInfo.hashTag
+        Log.d("receivePartyInfo",receiveHashtag.toString())
 
     }
 
@@ -282,16 +295,26 @@ class EditPartyInfoActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    fun chageTimeForm(startTimeUnit: String, endTimeUnit: String): Int {
-        val timeFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
-        val calendar1 = Calendar.getInstance()
-        val calendar2 = Calendar.getInstance()
+    fun changeDateFormat(startDateText: TextView, startTimeText: TextView) {
 
-        calendar1.time = timeFormat.parse(startTimeUnit)
-        calendar2.time = timeFormat.parse(endTimeUnit)
+        val inputDateTime = receivePartyInfo.startDate
 
-        val cmp = calendar1.compareTo(calendar2)
-        return cmp
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+        val dateTime = LocalDateTime.parse(inputDateTime, formatter)
+
+        val month = String.format("%02d", dateTime.monthValue)
+        val day = String.format("%02d", dateTime.dayOfMonth)
+        val year = dateTime.year.toString()
+
+        val hour = String.format("%02d", dateTime.hour)
+        val minute = String.format("%02d", dateTime.minute)
+
+// Output the extracted components
+        val date = "${year}-${month}-${day}"
+        val time = "$hour:$minute"
+
+        startDateText.setText(date)
+        startTimeText.setText(time)
 
     }
 }
