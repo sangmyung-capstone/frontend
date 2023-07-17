@@ -50,7 +50,7 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
             val retro = RetrofitService.create()
             var userInfo = BlockUserRequest(blockedUser.user_id)
 
-            retro.BlockUser(1, userInfo)
+            retro.PostBlockUser(1, userInfo)
                 .enqueue(object : Callback<BlockUserResponse> {
                     override fun onResponse(
                         call: Call<BlockUserResponse>,

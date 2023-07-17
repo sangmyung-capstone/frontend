@@ -30,10 +30,10 @@ class RestaurantLogActivity : AppCompatActivity() {
                     response: Response<GetRestaurantLogResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val blockedUsers = response.body()?.result?.parties
+                        val loglist = response.body()?.result?.parties
                         Log.d("bap", "onResponse 성공 ")
                         // handle successful response
-                        blockedUsers?.let { RestaurantsLogList.addAll(it) }
+                        loglist?.let { RestaurantsLogList.addAll(it) }
                         binding.recyclerView.adapter?.notifyDataSetChanged()
                     } else {
                         // handle error response
