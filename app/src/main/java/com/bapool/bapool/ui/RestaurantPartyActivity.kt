@@ -21,8 +21,9 @@ class RestaurantPartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRestaurantPartyBinding
     private lateinit var resGrpAdapter: RestaurantPartyAdapter
     lateinit var resGrpRv: RecyclerView
-    var restaurantNameIntent: String = ""
-    var restaurantLocationIntent: String = ""
+    lateinit var restaurantNameIntent: String
+    lateinit var restaurantLocationIntent: String
+    lateinit var restaurantIdIntent: String
     val userId: Long = 3
     val restaurantId: Long = 1470337852
 
@@ -35,9 +36,8 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
 
         initializeVari()
-        retrofit()
         listener()
-
+        retrofit()
 
     }
 
@@ -46,10 +46,19 @@ class RestaurantPartyActivity : AppCompatActivity() {
         resGrpRv = binding.resGrpRv
         resGrpAdapter = RestaurantPartyAdapter(this)
 
-//        restaurantNameIntent = intent.getStringExtra("restaurantNameIntent")
-//        restaurantLocationIntent = intent.getStringExtra("restaurantLocationIntent")
+        restaurantNameIntent = intent.getStringExtra("restaurantName").toString()
+        restaurantLocationIntent = intent.getStringExtra("restaurantAddress").toString()
+        restaurantIdIntent = intent.getStringExtra("restaurantId").toString()
+
+        Log.d("RestaurantPartyActivity",restaurantNameIntent.toString())
+
+        Log.d("RestaurantPartyActivity",restaurantLocationIntent.toString())
+        Log.d("RestaurantPartyActivity",restaurantIdIntent.toString())
         binding.restaurantLocation.setText(restaurantLocationIntent)
         binding.resName.setText(restaurantNameIntent)
+
+        retrofit()
+
 
 
     }
