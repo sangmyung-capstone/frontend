@@ -65,7 +65,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
         changeDateFormat(binding.startDateText, binding.startTimeText)
         setHashtagInfo()
 
-
     }
 
     fun listener() {
@@ -94,6 +93,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
                 hastagList.set(1, 1)
             }
         }
+
         binding.hash3.setOnClickListener {
             val image3 = binding.hash3
             val currentState = image3.background.constantState

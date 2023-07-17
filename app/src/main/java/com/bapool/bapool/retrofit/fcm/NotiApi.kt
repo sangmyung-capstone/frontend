@@ -8,9 +8,6 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-
-
-
 interface NotiAPI {
 
     @Headers("Authorization: key=$SERVER_KEY", "Content-Type:$CONTENT_TYPE")

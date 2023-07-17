@@ -20,7 +20,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     lateinit var resGrpRv: RecyclerView
     var restaurantNameIntent: String = ""
     var restaurantLocationIntent: String = ""
-    val userId: Long = 9
+    val userId: Long = 1
     val restaurantId: Long = 1470337852
 
     val retro = ServerRetrofit.create()
@@ -29,6 +29,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRestaurantPartyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         initializeVari()
         retrofit()
