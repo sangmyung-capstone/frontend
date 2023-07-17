@@ -21,20 +21,17 @@ data class MyPartyListModel(
 
 data class ResPartyList(
     val detail: String,
-    val end_date: String,
     val has_block_user: Boolean,
-    @SerializedName("party_hashtag")
-    val hashtag: List<Int>,
+    val party_hashtag: List<Int>,
     val max_people: Int,
     val menu: String,
     val participants: Int,
     val party_id: Int,
     val party_name: String,
-    @SerializedName("user_rating")
-    val rating: List<Double>,
+    val user_rating: Double,
     val start_date: String,
     val is_participate: Boolean,
-    val is_recruiting : Boolean
+    val is_recruiting: Boolean
 )
 
 
@@ -121,6 +118,10 @@ data class GetRestaurantPartiesListResult(
     val restaurant_name: String,
 )
 
+
+data class participateParty(
+    val party_id: Long
+)
 
 
 

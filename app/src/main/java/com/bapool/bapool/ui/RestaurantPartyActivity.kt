@@ -10,6 +10,9 @@ import com.bapool.bapool.adapter.RestaurantPartyAdapter
 import com.bapool.bapool.databinding.ActivityRestaurantPartyBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.GetResPartyListResponse
+import com.bapool.bapool.retrofit.data.PatchEditPartyInfoResponse
+import com.bapool.bapool.retrofit.data.ResPartyList
+import com.bapool.bapool.retrofit.data.participateParty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +23,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     lateinit var resGrpRv: RecyclerView
     var restaurantNameIntent: String = ""
     var restaurantLocationIntent: String = ""
-    val userId: Long = 1
+    val userId: Long = 3
     val restaurantId: Long = 1470337852
 
     val retro = ServerRetrofit.create()
@@ -59,6 +62,9 @@ class RestaurantPartyActivity : AppCompatActivity() {
             intent.putExtra("resName", restaurantNameIntent)
             startActivity(intent)
         }
+        binding.dummyBtn.setOnClickListener {
+            participatePartyUser()
+        }
 
     }
 
@@ -82,15 +88,14 @@ class RestaurantPartyActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         // 정상적으로 통신이 성공된 경우
                         response.body()?.let { result ->
-//                            val partyResult = result?.result
-//                            Log.d("sdkfjsadlfjasldf",partyResult.toString())
-//                            resNameIntent = partyResult?.restaurant_name ?: ""
-//                            resGrpAdapter.resName = partyResult?.restaurant_name ?: ""
-//                            binding.resName.setText(partyResult?.restaurant_name ?: "")
-//                            resGrpAdapter.resGroup = (partyResult?.parties ?: "") as List<ResPartyList>
-//                            binding.restaurantName.setText(partyResult?.restaurant_name ?: "")
-////                            Log.d("shRetrofitSE", partyResult.toString())
-//                            adapter()
+                            val partyResult = result?.result
+                            Log.d("sdkfjsadlfjasldf",partyResult.toString())
+                            resGrpAdapter.resName = partyResult?.restaurant_name ?: ""
+                            binding.resName.setText(partyResult?.restaurant_name ?: "")
+                            resGrpAdapter.resGroup = (partyResult?.parties ?: "") as List<ResPartyList>
+                            binding.resName.setText(partyResult?.restaurant_name ?: "")
+//                            Log.d("shRetrofitSE", partyResult.toString())
+                            adapter()
                         }
                     } else {
                         // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
@@ -102,8 +107,32 @@ class RestaurantPartyActivity : AppCompatActivity() {
                     Log.d("shRetrofitE", "onFailure 에러: " + t.message.toString());
                 }
             })
-
     }
 
 
+    //파티참여 retrofit
+    fun participatePartyUser(){
+        var item = participateParty(5)
+
+        retro.participateParty(5,item)
+            .enqueue(object : Callback<PatchEditPartyInfoResponse> {
+                override fun onResponse(
+                    call: Call<PatchEditPartyInfoResponse>,
+                    response: Response<PatchEditPartyInfoResponse>,
+                ) {
+                    if (response.isSuccessful) {
+                        val result = response.body()
+                        Log.d("participateParty", response.body().toString())
+                    } else {
+                        Log.d("participateParty", response.errorBody().toString())
+
+                    }
+                }
+
+                override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
+                    Log.d("participateParty", "실패")
+                }
+            })
+
+    }
 }

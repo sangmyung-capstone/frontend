@@ -292,7 +292,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         }
                     }
 
-
                     groupOnerId = item.groupLeaderId.toString()
                     currentPartyInfo = item
                 }
@@ -492,7 +491,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     fun showExitDialog() {
 
         val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setTitle("그룹 나가기") // Set the dialog title
+        alertDialogBuilder.setTitle("파티 나가기") // Set the dialog title
         alertDialogBuilder.setMessage("나가기를 하면 대화내용이 모두 삭제되고 채팅목록에서도 삭제됩니다.") // Set the dialog message
         alertDialogBuilder.setPositiveButton("나가기") { dialog, _ ->
             if (currentUserId.equals(currentPartyInfo.groupLeaderId.toString())) {
@@ -525,7 +524,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
         val mBuilder = AlertDialog.Builder(this)
             .setView(selectPartyLeader.root)
-        mBuilder.setTitle("그룹장 선택")
+        mBuilder.setTitle("파티장 선택")
         mBuilder.setPositiveButton("OK") { dialog, _ ->
             showExitDialog()
         }
@@ -597,7 +596,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     fun closePartyDialog() {
         val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setMessage("그룹의 시간을 확정하시겠습니까? 확정된 시간은 변경할 수 없습니다.") // Set the dialog message
+        alertDialogBuilder.setMessage("파티를 마감하시겠습니까? 확정된 시간은 변경할 수 없습니다.") // Set the dialog message
         alertDialogBuilder.setPositiveButton("확인") { dialog, _ ->
             closePartyRetrofit()
         }
@@ -610,7 +609,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     fun closePartyConfirmDialog() {
         val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setMessage("그룹이 마감되었습니다.") // Set the dialog message
+        alertDialogBuilder.setMessage("파티가 마감되었습니다.") // Set the dialog message
 
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()

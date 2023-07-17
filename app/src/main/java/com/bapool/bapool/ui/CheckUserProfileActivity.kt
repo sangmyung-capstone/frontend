@@ -8,10 +8,7 @@ import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityCheckUserProfileBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
-import com.bapool.bapool.retrofit.data.BlockUserRequest
-import com.bapool.bapool.retrofit.data.BlockUserResponse
-import com.bapool.bapool.retrofit.data.CheckUserProfileResponse
-import com.bapool.bapool.retrofit.data.CheckUserProfileResult
+import com.bapool.bapool.retrofit.data.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,13 +25,13 @@ class CheckUserProfileActivity : AppCompatActivity() {
     val myUid = 11
 
     //상대 uid
-    val opponentUid: Long = 22
+    val opponentUid: Long = 2
     val blockUserInfo = BlockUserRequest(opponentUid)
 
     //retrofit 연결 전 더미데이터
     val dummyHashtagData = listOf<Int>(3, 4)
     val dummyData = CheckUserProfileResult(
-        dummyHashtagData, false, "최부장0923", 2, 2.5, 1
+        1, 3, "최부장0923",false ,2.5,  dummyHashtagData
     )
 
 
@@ -98,21 +95,23 @@ class CheckUserProfileActivity : AppCompatActivity() {
     }
 
     fun checkUserProfileRetrofit() {
-        retro.checkUserProfile(opponentUid).enqueue(object : Callback<CheckUserProfileResponse> {
+
+        retro.checkUserProfile(5).enqueue(object : Callback<CheckUserProfileResponse>{
             override fun onResponse(
                 call: Call<CheckUserProfileResponse>,
                 response: Response<CheckUserProfileResponse>,
             ) {
+
                 if (response.isSuccessful) {
                     val result = response.body()
-                    Log.d("checkUserProfile", response.body().toString())
+                    Log.d("checkUserProfile1232", response.body().toString())
                 } else {
-                    Log.d("checkUserProfile", response.errorBody().toString())
+                    Log.d("checkUserProfile1232", response.errorBody().toString())
                 }
             }
 
             override fun onFailure(call: Call<CheckUserProfileResponse>, t: Throwable) {
-                Log.d("checkUserProfile", "실패")
+                Log.d("checkUserProfile1232","실패")
             }
         })
 
@@ -121,23 +120,21 @@ class CheckUserProfileActivity : AppCompatActivity() {
 
     fun blockRetrofit() {
 
-        retro.BlockUser(1, blockUserInfo)
-            .enqueue(object : Callback<BlockUserResponse> {
+        retro.BlockUser(5, blockUserInfo)
+            .enqueue(object : Callback<BlockUserChattingProfileResponse> {
                 override fun onResponse(
-                    call: Call<BlockUserResponse>,
-                    response: Response<BlockUserResponse>,
+                    call: Call<BlockUserChattingProfileResponse>,
+                    response: Response<BlockUserChattingProfileResponse>,
                 ) {
                     if (response.isSuccessful) {
-                        val result = response.body()
                         Log.d("BlockUserCheck", response.body().toString())
                     } else {
                         Log.d("BlockUserCheck", response.errorBody().toString())
-
                     }
                 }
 
-                override fun onFailure(call: Call<BlockUserResponse>, t: Throwable) {
-                    Log.d("BlockUserCheck", "실패")
+                override fun onFailure(call: Call<BlockUserChattingProfileResponse>, t: Throwable) {
+                    Log.d("BlockUserCheck", t.toString())
                 }
             })
     }
