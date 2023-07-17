@@ -38,6 +38,7 @@ import com.naver.maps.map.overlay.Align
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import okio.utf8Size
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,7 +70,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var cnt = 0
     var cnt2 = 0
 
-    var restaurantIdList: MutableList<Long> = mutableListOf()    // 배열 생성
+    var restaurantsList: MutableList<Restaurant> = mutableListOf()  // restaurant 리스트 생성
+    var restaurantIdList: MutableList<Long> = mutableListOf()    // id 리스트 생성
+    var restaurantImageList: MutableList<String> = mutableListOf()  // image url 리스트 생성
 
 
     override fun onCreateView(
@@ -282,14 +285,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         cnt2++
                     }
 
+                    restaurantsList = response.body()!!.result.restaurants.toMutableList()
                     // 식당바텀리스트 어댑터 바인딩
                     binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
-                        RestaurantBottomAdapter(response.body()!!.result.restaurants, naverMap)
+                        RestaurantBottomAdapter(
+                            response.body()!!.result.restaurants,
+                            restaurantImageList,
+                            naverMap
+                        )
                     binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     // 식당바텀리스트 통신
                     Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
                     for (idx in 0 until restaurantIdList.size) {
+                        Log.d("BOTTOM_IDX", idx.toString())
                         retro.getRestaurantsBottom(
                             1,
                             GetRestaurantsBottomRequest(listOf(restaurantIdList[idx]))
@@ -299,11 +308,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                     call: Call<GetRestaurantsBottomResult>,
                                     response: Response<GetRestaurantsBottomResult>
                                 ) {
-                                    Log.d(
-                                        "BOTTOM",
-                                        response.body()?.message + response.body()?.result.toString()
-                                    )
-                                    // 이미지를 뷰홀더에 출력
+                                    if (response.isSuccessful) {
+                                        Log.d(
+                                            "BOTTOM_IMG_URL",
+                                            "img url $idx : ${response.body()!!.result.restaurant_img_urls[0]}"
+                                        )
+//                                        if (response.body()!!.result.restaurant_img_urls[0]) {
+//                                            restaurantImageList.add(
+//                                                idx,
+//                                                response.body()!!.result.restaurant_img_urls[0]
+//                                            )
+//                                        }// img_urls은 전달 parameter 가 1개임으로 반드시 결과로 1개만 존재
+                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+                                        RestaurantBottomAdapter(
+                                            restaurantsList,
+                                            restaurantImageList,
+                                            naverMap
+                                        ).notifyItemChanged(idx)
+                                    }
 
                                 }
 
