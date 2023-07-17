@@ -1,17 +1,25 @@
 package com.bapool.bapool.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.recyclerview.widget.RecyclerView
+import com.bapool.bapool.R
 import com.bapool.bapool.databinding.ChattingAndPartyUserItemBinding
 import com.bapool.bapool.retrofit.data.FirebaseUserInfo
+import com.bapool.bapool.ui.CheckUserProfileActivity
 
 class PartyUserInfoAdapter(
     val context: Context,
     val partyUserInfo: ArrayList<Map<String, FirebaseUserInfo>>,
     val partyLeaderId: String,
 ) : RecyclerView.Adapter<PartyUserInfoAdapter.ViewHolder>() {
+
+    init {
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -36,6 +44,7 @@ class PartyUserInfoAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bindItems(item: Map<String, FirebaseUserInfo>) {
 
+            Log.d("sadfasdfadsf",partyUserInfo.toString())
 
             val userInfo = item.values.firstOrNull()
 
@@ -47,27 +56,22 @@ class PartyUserInfoAdapter(
                     context.resources.getIdentifier(imageName, "drawable", context.packageName)
                 binding.userImage.setImageResource(resourceId)
 
+            }
+            Log.d("asdfsaf", partyLeaderId)
+            Log.d("asdfsaf", item.keys.firstOrNull().toString())
+            if (partyLeaderId == item.keys.firstOrNull().toString()) {
+                val image = binding.userImage
 
-//                //firebase storage에서 이미지 받아오기
-//                val storageReference = Firebase.storage.reference.child("image"+ "${userInfo.imageUrl}"+".png")
-//
-//                val imageView = binding.userImage
-//
-//                storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        Glide.with(context)
-//                            .load(task.result)
-//                            .into(imageView)
-//                    } else {
-//                        Log.d("ChattingAdapter","image"+ "${userInfo.imageUrl}" + ".png")
-//                    }
-//                })
-
+                image.setBackgroundResource(R.drawable.custom_img_bg)
+            }
+            binding.userNameImageBackground.setOnClickListener {
+                val intent = Intent(context, CheckUserProfileActivity::class.java)
+                //opponentuid intent로 보내야됨
+                context.startActivity(intent)
             }
 
 
         }
     }
-
 
 }

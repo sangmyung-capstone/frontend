@@ -1,6 +1,7 @@
 package com.bapool.bapool.retrofit.data
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class GetResPartyListResponse(
     val code: Int,
@@ -33,6 +34,7 @@ data class ResPartyList(
     val rating: List<Double>,
     val start_date: String,
     val is_participate: Boolean,
+    val is_recruiting : Boolean
 )
 
 
@@ -97,7 +99,7 @@ data class FirebasePartyInfo
     val restaurantName: String = "",
     val groupLeaderId: Int = 0,
     val siteUrls: String = "",
-)
+): Serializable
 
 data class FirebasePartyMessage(
     var senderId: String = "",
@@ -115,7 +117,7 @@ data class FirebaseParty(
 )
 
 data class GetRestaurantPartiesListResult(
-    val parties: List<ResPartyList>,
+    val parties: List<ResPartyList>?,
     val restaurant_name: String,
 )
 

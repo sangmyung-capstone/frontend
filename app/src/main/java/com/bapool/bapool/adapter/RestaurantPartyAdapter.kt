@@ -88,7 +88,7 @@ class RestaurantPartyAdapter(val context: Context) :
             }
 
             val allNum = partiNum(item.participants, item.max_people)
-            val allDate = dateRange(item.start_date, item.end_date)
+            val allDate = dateRange(item.start_date)
 
             binding.menu.text = item.menu
             binding.date.text = allDate
@@ -102,16 +102,12 @@ class RestaurantPartyAdapter(val context: Context) :
     }
 
     //날짜 변환 함수
-    fun dateRange(startDate: String, endDate: String): String {
+    fun dateRange(startDate: String): String {
         val start_date = LocalDateTime.parse(startDate)
-        val end_date = LocalDateTime.parse(endDate)
 
-        val formatterStart = DateTimeFormatter.ofPattern("MMM d일, H:mm")
-        val formatterEnd = DateTimeFormatter.ofPattern("H:mm")
-        Log.d("datestart", startDate.format(formatterStart))
-        Log.d("datend", endDate.format(formatterEnd))
+        val formatterStart = DateTimeFormatter.ofPattern("MMM d일, H시 mm분")
         val range: String =
-            "${start_date.format(formatterStart)} - ${end_date.format(formatterEnd)}"
+            "${start_date.format(formatterStart)}"
         return range
 
     }

@@ -18,8 +18,9 @@ class RestaurantPartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRestaurantPartyBinding
     private lateinit var resGrpAdapter: RestaurantPartyAdapter
     lateinit var resGrpRv: RecyclerView
-    var resNameIntent: String = ""
-    val userId: Long = 9
+    var restaurantNameIntent: String = ""
+    var restaurantLocationIntent: String = ""
+    val userId: Long = 1
     val restaurantId: Long = 1470337852
 
     val retro = ServerRetrofit.create()
@@ -28,6 +29,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRestaurantPartyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         initializeVari()
         retrofit()
@@ -40,17 +42,21 @@ class RestaurantPartyActivity : AppCompatActivity() {
     fun initializeVari() {
         resGrpRv = binding.resGrpRv
         resGrpAdapter = RestaurantPartyAdapter(this)
+
+//        restaurantNameIntent = intent.getStringExtra("restaurantNameIntent")
+//        restaurantLocationIntent = intent.getStringExtra("restaurantLocationIntent")
+        binding.restaurantLocation.setText(restaurantLocationIntent)
+        binding.resName.setText(restaurantNameIntent)
+
+
     }
 
     //버튼 listener
     fun listener() {
         binding.goToMakeGrp.setOnClickListener {
 
-
-
-
             val intent = Intent(this, MakePartyActivity::class.java)
-            intent.putExtra("resName", resNameIntent)
+            intent.putExtra("resName", restaurantNameIntent)
             startActivity(intent)
         }
 
@@ -76,14 +82,15 @@ class RestaurantPartyActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         // 정상적으로 통신이 성공된 경우
                         response.body()?.let { result ->
-                            val partyResult = result.result
-                            resNameIntent = partyResult.restaurant_name
-                            resGrpAdapter.resName = partyResult.restaurant_name
-                            binding.resName.setText(partyResult.restaurant_name)
-                            resGrpAdapter.resGroup = partyResult.parties
-                            binding.restaurantName.setText(partyResult.restaurant_name)
-//                            Log.d("shRetrofitSE", partyResult.toString())
-                            adapter()
+//                            val partyResult = result?.result
+//                            Log.d("sdkfjsadlfjasldf",partyResult.toString())
+//                            resNameIntent = partyResult?.restaurant_name ?: ""
+//                            resGrpAdapter.resName = partyResult?.restaurant_name ?: ""
+//                            binding.resName.setText(partyResult?.restaurant_name ?: "")
+//                            resGrpAdapter.resGroup = (partyResult?.parties ?: "") as List<ResPartyList>
+//                            binding.restaurantName.setText(partyResult?.restaurant_name ?: "")
+////                            Log.d("shRetrofitSE", partyResult.toString())
+//                            adapter()
                         }
                     } else {
                         // 통신이 실패한 경우(응답코드 3xx, 4xx 등)

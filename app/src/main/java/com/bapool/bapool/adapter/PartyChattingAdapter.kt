@@ -35,11 +35,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import com.bapool.bapool.R
-import com.bapool.bapool.ui.UserProfileCheck
+import com.bapool.bapool.ui.CheckUserProfileActivity
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import okhttp3.internal.notify
 
 class PartyChattingAdapter(
     private val recyclerView: RecyclerView,
@@ -316,7 +315,8 @@ class PartyChattingAdapter(
             readCount(item, binding.opponentConfirmed)
             setNickNameImg(position, binding.opponentId, binding.opponentImage)
             binding.opponentImage.setOnClickListener {
-                val intent =  Intent(context,UserProfileCheck::class.java)
+                val intent =  Intent(context,CheckUserProfileActivity::class.java)
+                //userid 넘겨줘야함
                 context.startActivity(intent)
             }
         }
@@ -336,7 +336,8 @@ class PartyChattingAdapter(
                 makeDialog(messageKey[position], item.downloadUrl)
             }
             binding.opponentImage.setOnClickListener {
-                val intent =  Intent(context,UserProfileCheck::class.java)
+                val intent =  Intent(context,CheckUserProfileActivity::class.java)
+                //userid 넘겨줘야함
                 context.startActivity(intent)
             }
         }

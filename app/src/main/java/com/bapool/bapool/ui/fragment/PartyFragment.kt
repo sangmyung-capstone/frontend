@@ -30,7 +30,7 @@ class PartyFragment : Fragment() {
 
     var myPartyListModel = arrayListOf<MyPartyListModel>()
 
-    var currentUserId: String = "22"
+    var currentUserId: String = "11"
 
     private val TAG = "PartyFragment"
 
@@ -48,64 +48,64 @@ class PartyFragment : Fragment() {
         initializeVari()
 
 //
-        binding.dummyBtn.setOnClickListener {
+//        binding.dummyBtn.setOnClickListener {
+////
+//            // 채팅 더미데이터 추가
+////            val database = Firebase.database
+////            val messageText = "Test2"
+////            val groupMessages =
+////                FirebasePartyMessage("1", getTime(), messageText)
+////            database.getReference("Groups").child("1").child("groupMessages").push()
+////                .setValue(groupMessages)
+////
+////
+//////            Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
+////            그룹 더미데이터 추가
+////            val database = Firebase.database
+////            val myRef = database.getReference("Groups")
+////            val hashtaglist = mutableListOf<Int>()
+////            hashtaglist.add(4)
+////            hashtaglist.add(3)
+////            val groupInfo = FirebasePartyInfo("그룹이름3", "메뉴3", "상세메뉴3",
+////                2, 3, getTime(), getTime(), hashtaglist, "식당이름3",33 ,"www.google.com")
+////            val groupUsers = mapOf("22" to true, "33" to true)
+////            val Group3 = FirebaseParty(groupInfo, null, groupUsers)
+////
+////            myRef.child("33").setValue(Group3)
+////            myRef.child("1").child("groupUsers").updateChildren(groupUsers)
+////
+////            Users 더미데이터 추가
+////            val database = Firebase.database
+////            val myRef = database.getReference("Users")
+////
+////            val banUsers = mutableListOf<String>()
+////            banUsers.add("22")
+////            banUsers.add("11")
+////            val userInfo = FirebaseUserInfo("3", "3이에용", banUsers,token)
+////            myRef.child("33").setValue(userInfo)
+////            val userInfo2 = FirebaseUserInfo("4", "4이에용", banUsers,token)
+////            myRef.child("44").setValue(userInfo2)
+////            val userInfo3 = FirebaseUserInfo("5", "5이에용", banUsers,token)
+////            myRef.child("55").setValue(userInfo3)
 //
-            // 채팅 더미데이터 추가
-//            val database = Firebase.database
-//            val messageText = "Test2"
-//            val groupMessages =
-//                FirebasePartyMessage("1", getTime(), messageText)
-//            database.getReference("Groups").child("1").child("groupMessages").push()
-//                .setValue(groupMessages)
 //
 //
-////            Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
-//            그룹 더미데이터 추가
-//            val database = Firebase.database
-//            val myRef = database.getReference("Groups")
-//            val hashtaglist = mutableListOf<Int>()
-//            hashtaglist.add(4)
-//            hashtaglist.add(3)
-//            val groupInfo = FirebasePartyInfo("그룹이름3", "메뉴3", "상세메뉴3",
-//                2, 3, getTime(), getTime(), hashtaglist, "식당이름3",33 ,"www.google.com")
-//            val groupUsers = mapOf("22" to true, "33" to true)
-//            val Group3 = FirebaseParty(groupInfo, null, groupUsers)
+//            FirebaseMessaging.getInstance().token.addOnCompleteListener(
+//                OnCompleteListener { task ->
+//                    if (!task.isSuccessful) {
+//                        Log.e("dsksdfkjsfkj", "token.toString()")
 //
-//            myRef.child("33").setValue(Group3)
-//            myRef.child("1").child("groupUsers").updateChildren(groupUsers)
+//                        return@OnCompleteListener
+//                    }
 //
-//            Users 더미데이터 추가
-//            val database = Firebase.database
-//            val myRef = database.getReference("Users")
+//                    // Get new FCM registration token
+//                    val token = task.result
 //
-//            val banUsers = mutableListOf<String>()
-//            banUsers.add("22")
-//            banUsers.add("11")
-//            val userInfo = FirebaseUserInfo("3", "3이에용", banUsers,token)
-//            myRef.child("33").setValue(userInfo)
-//            val userInfo2 = FirebaseUserInfo("4", "4이에용", banUsers,token)
-//            myRef.child("44").setValue(userInfo2)
-//            val userInfo3 = FirebaseUserInfo("5", "5이에용", banUsers,token)
-//            myRef.child("55").setValue(userInfo3)
-
-
-
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(
-                OnCompleteListener { task ->
-                    if (!task.isSuccessful) {
-                        Log.e("dsksdfkjsfkj", "token.toString()")
-
-                        return@OnCompleteListener
-                    }
-
-                    // Get new FCM registration token
-                    val token = task.result
-
-                    // Log and toast
-                    Log.e("dsksdfkjsfkj", token.toString())
-
-                })
-        }
+//                    // Log and toast
+//                    Log.e("dsksdfkjsfkj", token.toString())
+//
+//                })
+//        }
 
         return binding.root
     }

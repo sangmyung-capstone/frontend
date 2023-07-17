@@ -3,24 +3,27 @@ package com.bapool.bapool.ui
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.NumberPicker
+import android.widget.TextView
 import android.widget.Toast
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.ActivityEditPartyInfoBinding
 import com.bapool.bapool.databinding.CustomDatepickerBinding
 import com.bapool.bapool.databinding.CustomTimepickerBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
+import com.bapool.bapool.retrofit.data.FirebasePartyInfo
 import com.bapool.bapool.retrofit.data.PatchEditPartyInfoResponse
 import com.bapool.bapool.retrofit.data.PatchEditPartyInfoRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -30,17 +33,17 @@ class EditPartyInfoActivity : AppCompatActivity() {
     val hastagList = ArrayList(Collections.nCopies(5, 0))
     lateinit var maxPeople: NumberPicker
     val retro = ServerRetrofit.create()
-    val userId: Long = 2
-    val partyId: Long = 23
+    val userId: Long = 3
+    val partyId: Long = 8
     val TAG = "EditPartyInfoActivity"
 
+    var receivePartyInfo: FirebasePartyInfo = FirebasePartyInfo()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditPartyInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var resName = intent.getStringExtra("resName")
-        binding.resName.setText(resName)
+
 
 
         initializeVari()
@@ -53,6 +56,14 @@ class EditPartyInfoActivity : AppCompatActivity() {
         maxPeople = binding.maxPeople
         maxPeople.maxValue = 20
         maxPeople.minValue = 2
+
+
+        receivePartyInfo = intent.getSerializableExtra("partyInfo") as FirebasePartyInfo
+        binding.grpNameText.setText(receivePartyInfo.groupName)
+        binding.menuText.setText(receivePartyInfo.groupMenu)
+        binding.detail.setText(receivePartyInfo.groupDetail)
+        changeDateFormat(binding.startDateText, binding.startTimeText)
+        setHashtagInfo()
 
     }
 
@@ -82,6 +93,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
                 hastagList.set(1, 1)
             }
         }
+
         binding.hash3.setOnClickListener {
             val image3 = binding.hash3
             val currentState = image3.background.constantState
@@ -128,34 +140,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
             timePickerDialogCustom(1)
         }
 
-
-        //모임 끝나는 날짜 정하기
-        binding.endDate.setOnClickListener {
-            if (binding.startDateText.text.toString() == "시작날짜") {
-                alterDialog("시작날짜를 정해주세요.")
-            } else {
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-                val minDate = dateFormat.parse("${binding.startDateText.text}")
-                val customDatePickerBinding =
-                    CustomDatepickerBinding.inflate(LayoutInflater.from(baseContext))
-                datePickerDialogCustom(minDate.time, 0)
-
-            }
-
-        }
-        //모임 끝나는 시간 정하기
-        binding.endTime.setOnClickListener {
-            timePickerDialogCustom(0)
-        }
-
-
-        //취소버튼 클릭
-        binding.cancelButton.setOnClickListener {
-
-
-        }
-
-
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
             if (binding.grpNameText.text.isNullOrBlank()) {
@@ -169,15 +153,9 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
             } else if (binding.startTimeText.text.toString() == "시작시간") {
                 alterDialog("시작시간을 입력해주세요.")
-            } else if (compareTime(binding.startDateText.text.toString(),
-                    binding.endDateText.text.toString(),
-                    binding.startTimeText.text.toString(),
-                    binding.endTimeText.text.toString())
-            ) {
-                alterDialog("끝나는 시간이 시작 시간보다 작습니다.")
             } else {
                 val endDateLocal =
-                    binding.endDateText.text.toString() + " " + binding.endTimeText.text.toString() + ":00"
+                    binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
                 val startDateLocal =
                     binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
 
@@ -220,7 +198,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
 ////                intent.putExtra("currentUserId", "userId2")//현재 유저의 userId로 value값 교체
 ////                intent.putExtra("partyId", "groupId2") // result 안의 party_id 값으로 value값 교체
 //                    startActivity(intent)
-
 
 
                 } else {
@@ -269,9 +246,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
                     String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                 if (startOrEnd == 1) {
                     binding.startDateText.setText(selectedDate)
-                    binding.endDateText.setText(selectedDate)
                 } else if (startOrEnd == 0) {
-                    binding.endDateText.setText(selectedDate)
                 }
 
             }, year, month, day)
@@ -299,10 +274,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
             //시작시간 정할때 끝시간 +2시간으로 지정해줌
             if (startOrEnd == 1) {
                 binding.startTimeText.setText(selectedTime)
-                binding.endTimeText.setText(
-                    String.format("%02d:%02d", (selectedHour + 2) % 24, selectedMinute))
             } else if (startOrEnd == 0) {
-                binding.endTimeText.setText(selectedTime)
             }
 
         }, hour, minute, true)
@@ -322,45 +294,46 @@ class EditPartyInfoActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    fun changeDateFormat(startDateText: TextView, startTimeText: TextView) {
 
-    private fun compareTime(
-        startDate: String,
-        endDate: String,
-        startTimeUnit: String,
-        endTimeUnit: String,
-    ): Boolean {
-        if (startDate == endDate) {
-            val resultNum = chageTimeForm(
-                startTimeUnit,
-                endTimeUnit
-            )
-            when {
-                resultNum < 0 -> {
-                    return false
-                }
-                resultNum > 0 -> {
-                    return true
-                }
-                else -> {
-                    return false
-                }
-            }
-        } else {
-            return false
-        }
-        return false
+        val inputDateTime = receivePartyInfo.startDate
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+        val dateTime = LocalDateTime.parse(inputDateTime, formatter)
+
+        val month = String.format("%02d", dateTime.monthValue)
+        val day = String.format("%02d", dateTime.dayOfMonth)
+        val year = dateTime.year.toString()
+
+        val hour = String.format("%02d", dateTime.hour)
+        val minute = String.format("%02d", dateTime.minute)
+
+// Output the extracted components
+        val date = "${year}-${month}-${day}"
+        val time = "$hour:$minute"
+
+        startDateText.setText(date)
+        startTimeText.setText(time)
+
     }
 
-    fun chageTimeForm(startTimeUnit: String, endTimeUnit: String): Int {
-        val timeFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
-        val calendar1 = Calendar.getInstance()
-        val calendar2 = Calendar.getInstance()
+    fun setHashtagInfo(){
+        val receiveHashtag = receivePartyInfo.hashTag
+        val image1 = binding.hash1
+        val image2 = binding.hash2
+        val image3 = binding.hash3
+        val image4 = binding.hash4
+        val image5 = binding.hash5
 
-        calendar1.time = timeFormat.parse(startTimeUnit)
-        calendar2.time = timeFormat.parse(endTimeUnit)
-
-        val cmp = calendar1.compareTo(calendar2)
-        return cmp
-
+        for (data in receiveHashtag) {
+            when (data) {
+                1 -> image1.setBackgroundResource(R.drawable.custom_img_bg)
+                2 -> image2.setBackgroundResource(R.drawable.custom_img_bg)
+                3 -> image3.setBackgroundResource(R.drawable.custom_img_bg)
+                4 -> image4.setBackgroundResource(R.drawable.custom_img_bg)
+                5 -> image5.setBackgroundResource(R.drawable.custom_img_bg)
+                else -> Log.d("EditPartyInfoActivity","error")
+            }
+        }
     }
 }
