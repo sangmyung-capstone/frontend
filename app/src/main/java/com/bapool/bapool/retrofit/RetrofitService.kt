@@ -12,68 +12,14 @@ import retrofit2.http.*
 /*** !!! MOCK SERVER !!! ***/
 interface RetrofitService {
 
-    // 정연수
-    @POST("/users/naver/signin/already")
-    fun PostNaverLoginCheck(
-        @Body request: PostNaverLoginCheckRequest
-    ): Call<PostNaverLoginCheckResponse>
-
-    @POST("/users/naver/signup")
-    fun PostNaverSignup(
-        @Body request: PostNaverSignupRequest
-    ): Call<PostNaverSignupResponse>
-
-    @POST("/users/naver/signin")
-    fun PostNaverSingin(
-        @Body request: PostNaverSigninRequest
-    ): Call<PostNaverSigninResponse>
-
-    @POST("/users/kakao/signin/already")
-    fun PostKakaoLoginCheck(
-        @Body request: PostkakaoLoginCheckRequest
-    ): Call<PostKakaoLoginCheckResponse>
-
-    @POST("/users/kakao/signup")
-    fun PostKakaoSignup(
-        @Body request: PostKakaoSignupRequest
-    ): Call<PostKakaoSignupResponse>
-
-    @POST("/users/kakao/signin")
-    fun PostKakaoSingin(
-        @Body request: PostkakaoSigninRequest
-    ): Call<PostKakaoSigninResponse>
-
-    @GET("users/mypage/{user-id}")
-    fun getMyPage(
-        @Path("user-id") userId: Long,
-    ): Call<GetMypageResponse>
-
     @PATCH("/users/info/{user-id}")
     fun ChangeUserInfo(
         @Path("user-id") userId: Long,
         @Body request: PatchChangeProfileRequest,
     ): Call<PatchChangeProfileResponse>
 
-    @DELETE("/users/{user-id}")
-    fun DeleteUser(
-        @Path("user-id") userId: Long,
-    ): Call<DeleteUserResponse>
 
-    @GET("/users/block/{user-id}")
-    fun GetBlockUser(
-        @Path("user-id") userId: Long,
-    ): Call<GetBlockUserResponse>
 
-    @POST("/users/block/{user-id}")
-    fun PostBlockUser(
-        @Path("user-id") userId: Long,
-        @Body request: BlockUserRequest,
-    ): Call<BlockUserResponse>
-
-    @GET("/restaurants/log/{user-id}")
-    fun GetrestaurantsLog(
-        @Path("user-id") userId: Long,
-    ): Call<GetRestaurantLogResponse>
 
     @GET("/users/rating/{user-id}")
     fun GetRatingUser(

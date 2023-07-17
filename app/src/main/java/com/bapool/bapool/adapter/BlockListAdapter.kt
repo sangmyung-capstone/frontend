@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.BlocklistItemsBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,7 +48,7 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
 
         binding.blockbutton.setOnClickListener {
             // Handle the button click event
-            val retro = RetrofitService.create()
+            val retro = ServerRetrofit.create()
             var userInfo = BlockUserRequest(blockedUser.user_id)
 
             retro.PostBlockUser(1, userInfo)

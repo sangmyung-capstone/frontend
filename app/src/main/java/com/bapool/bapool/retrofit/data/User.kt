@@ -73,7 +73,7 @@ data class BlockUserResponse(
 )
 
 data class BlockUserRequest(
-    val blocked_user_id: Long,
+    val blocked_user_id: Long
 )
 
 //네이버 로그인 확인 데이터클래스

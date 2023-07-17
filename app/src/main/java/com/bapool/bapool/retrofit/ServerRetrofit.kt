@@ -46,6 +46,32 @@ interface ServerRetrofit {
         @Body request: PostkakaoSigninRequest,
     ): Call<PostKakaoSigninResponse>
 
+    @GET("users/mypage/{user-id}")
+    fun getMyPage(
+        @Path("user-id") userId: Long,
+    ): Call<GetMypageResponse>
+
+    @DELETE("/users/delete/{user-id}")
+    fun DeleteUser(
+        @Path("user-id") userId: Long,
+    ): Call<DeleteUserResponse>
+
+    @GET("/users/block/{user-id}")
+    fun GetBlockUser(
+        @Path("user-id") userId: Long,
+    ): Call<GetBlockUserResponse>
+
+    @POST("/users/block/{user-id}")
+    fun PostBlockUser(
+        @Path("user-id") userId: Long,
+        @Body request: BlockUserRequest,
+    ): Call<BlockUserResponse>
+
+    @GET("test/restaurants/log/{user-id}")
+    fun GetrestaurantsLog(
+        @Path("user-id") userId: Long,
+    ): Call<GetRestaurantLogResponse>
+
 
     //--------------------------------------------------------------------------
 

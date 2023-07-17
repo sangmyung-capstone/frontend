@@ -32,7 +32,7 @@ class RatingActivity : AppCompatActivity() {
 
         var partyid: Long = 1
 
-        retro.GetRatingUser(1, partyid)
+        retro.GetRatingUser(UserId!!, partyid)
             .enqueue(object : Callback<GetRatingUserResponse> {
                 override fun onResponse(
                     call: Call<GetRatingUserResponse>,
@@ -58,7 +58,7 @@ class RatingActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = RatingUserAdapter(ratingUsersList, postRatingUserRequest)
         binding.ratingcomplete.setOnClickListener {
-            retro.PostRatingUser(1, postRatingUserRequest)
+            retro.PostRatingUser(UserId!!, postRatingUserRequest)
                 .enqueue(object : Callback<PostRatingUserResponse> {
                     override fun onResponse(
                         call: Call<PostRatingUserResponse>,
