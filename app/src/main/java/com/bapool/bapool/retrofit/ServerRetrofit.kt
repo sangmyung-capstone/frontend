@@ -51,7 +51,7 @@ interface ServerRetrofit {
         @Path("user-id") userId: Long,
     ): Call<GetMypageResponse>
 
-    @DELETE("/users/{user-id}")
+    @DELETE("/users/delete/{user-id}")
     fun DeleteUser(
         @Path("user-id") userId: Long,
     ): Call<DeleteUserResponse>

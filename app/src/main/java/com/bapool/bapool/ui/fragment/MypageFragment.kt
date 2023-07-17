@@ -101,6 +101,9 @@ class MypageFragment : Fragment() {
                             var result: DeleteUserResponse? = response.body()
                             Log.d("bap", "onResponse 성공: " + result?.toString())
                             // handle successful response
+                            val intent = Intent(requireContext(), LoginActivity::class.java)
+                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+
 
                         } else {
                             // handle error response
