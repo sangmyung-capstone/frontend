@@ -62,9 +62,9 @@ class EditPartyInfoActivity : AppCompatActivity() {
         binding.grpNameText.setText(receivePartyInfo.groupName)
         binding.menuText.setText(receivePartyInfo.groupMenu)
         binding.detail.setText(receivePartyInfo.groupDetail)
-        changeDateFormat(binding.startDateText,binding.startTimeText)
-        val receiveHashtag = receivePartyInfo.hashTag
-        Log.d("receivePartyInfo",receiveHashtag.toString())
+        changeDateFormat(binding.startDateText, binding.startTimeText)
+        setHashtagInfo()
+
 
     }
 
@@ -200,7 +200,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
 //                    startActivity(intent)
 
 
-
                 } else {
                     Log.d("MKRetrofit", "onResponse 실패: " + response.errorBody().toString())
 
@@ -316,5 +315,25 @@ class EditPartyInfoActivity : AppCompatActivity() {
         startDateText.setText(date)
         startTimeText.setText(time)
 
+    }
+
+    fun setHashtagInfo(){
+        val receiveHashtag = receivePartyInfo.hashTag
+        val image1 = binding.hash1
+        val image2 = binding.hash2
+        val image3 = binding.hash3
+        val image4 = binding.hash4
+        val image5 = binding.hash5
+
+        for (data in receiveHashtag) {
+            when (data) {
+                1 -> image1.setBackgroundResource(R.drawable.custom_img_bg)
+                2 -> image2.setBackgroundResource(R.drawable.custom_img_bg)
+                3 -> image3.setBackgroundResource(R.drawable.custom_img_bg)
+                4 -> image4.setBackgroundResource(R.drawable.custom_img_bg)
+                5 -> image5.setBackgroundResource(R.drawable.custom_img_bg)
+                else -> Log.d("EditPartyInfoActivity","error")
+            }
+        }
     }
 }
