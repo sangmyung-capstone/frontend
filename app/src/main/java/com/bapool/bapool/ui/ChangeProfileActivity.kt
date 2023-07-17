@@ -16,6 +16,7 @@ import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityRegisterBinding
 import com.bapool.bapool.retrofit.data.PatchChangeProfileRequest
 import com.bapool.bapool.retrofit.data.PatchChangeProfileResponse
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,7 +60,7 @@ class ChangeProfileActivity : AppCompatActivity() {
 
             val retro = RetrofitService.create()
 
-            retro.ChangeUserInfo(1, userInfo)
+            retro.ChangeUserInfo(UserId!!, userInfo)
                 .enqueue(object : Callback<PatchChangeProfileResponse> {
                     override fun onResponse(
                         call: Call<PatchChangeProfileResponse>,

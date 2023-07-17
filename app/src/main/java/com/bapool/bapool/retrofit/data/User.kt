@@ -73,7 +73,7 @@ data class BlockUserResponse(
 )
 
 data class BlockUserRequest(
-    val user_id: Long,
+    val blocked_user_id: Long
 )
 
 //네이버 로그인 확인 데이터클래스
@@ -200,11 +200,13 @@ data class GetRatingUserResponse(
 data class PostRatingUserRequest(
     var users: List<UserData>
 )
+
 data class UserData(
     val user_id: Long,
     val rating: Float,
     val hashtag: List<Int>
 )
+
 data class PostRatingUserResponse(
     val code: Int,
     val message: String,

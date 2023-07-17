@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment
 import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.FragmentMypageBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.DeleteUserResponse
 import com.bapool.bapool.retrofit.data.GetMypageResponse
 import com.bapool.bapool.ui.BlockListActivity
 import com.bapool.bapool.ui.ChangeProfileActivity
 import com.bapool.bapool.ui.LoginActivity
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.RestaurantLogActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,9 +34,9 @@ class MypageFragment : Fragment() {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
 
         //통신과정
-        val retro = RetrofitService.create()
+        val retro = ServerRetrofit.create()
 
-        retro.getMyPage( 1)
+        retro.getMyPage(UserId!!)
             .enqueue(object : Callback<GetMypageResponse> {
                 override fun onResponse(
                     call: Call<GetMypageResponse>,
@@ -87,9 +89,9 @@ class MypageFragment : Fragment() {
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
         binding.deleteUser.setOnClickListener {
-            val retro = RetrofitService.create()
+            val retro = ServerRetrofit.create()
 
-            retro.DeleteUser( 1)
+            retro.DeleteUser(UserId!!)
                 .enqueue(object : Callback<DeleteUserResponse> {
                     override fun onResponse(
                         call: Call<DeleteUserResponse>,
@@ -99,6 +101,9 @@ class MypageFragment : Fragment() {
                             var result: DeleteUserResponse? = response.body()
                             Log.d("bap", "onResponse 성공: " + result?.toString())
                             // handle successful response
+                            val intent = Intent(requireContext(), LoginActivity::class.java)
+                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+
 
                         } else {
                             // handle error response
