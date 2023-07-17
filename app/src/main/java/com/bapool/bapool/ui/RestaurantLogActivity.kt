@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.adapter.RestaurantLogAdapter
 import com.bapool.bapool.databinding.ActivityRestaurantLogBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.GetRestaurantLogResponse
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
@@ -20,18 +21,18 @@ class RestaurantLogActivity : AppCompatActivity() {
         val binding = ActivityRestaurantLogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val retro = RetrofitService.create()
+        val retro = ServerRetrofit.create()
         val RestaurantsLogList = mutableListOf<GetRestaurantLogResponse.Party>()
 
-        retro.GetrestaurantsLog(UserId!!)
+        retro.GetrestaurantsLog(1)
             .enqueue(object : Callback<GetRestaurantLogResponse> {
                 override fun onResponse(
                     call: Call<GetRestaurantLogResponse>,
                     response: Response<GetRestaurantLogResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val loglist = response.body()?.result?.parties
-                        Log.d("bap", "onResponse 성공 ")
+                        val loglist = response.body()?.result?.partyInfoList
+                        Log.d("bap", "onResponse 성공 $loglist")
                         // handle successful response
                         loglist?.let { RestaurantsLogList.addAll(it) }
                         binding.recyclerView.adapter?.notifyDataSetChanged()

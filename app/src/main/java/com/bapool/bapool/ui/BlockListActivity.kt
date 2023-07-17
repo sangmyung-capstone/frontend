@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.adapter.BlockListAdapter
 import com.bapool.bapool.databinding.ActivityBlockListBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.GetBlockUserResponse
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
@@ -25,7 +26,7 @@ class BlockListActivity : AppCompatActivity(), BlockListAdapter.BlockButtonClick
         val binding = ActivityBlockListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val retro = RetrofitService.create()
+        val retro = ServerRetrofit.create()
         val blockedUsersList = mutableListOf<GetBlockUserResponse.BlockedUser>()
         UserId = 1 //임시로 사용할 것 나중에 삭제해야함.
 
