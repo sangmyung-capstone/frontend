@@ -43,7 +43,7 @@ data class PostMakePartyRequest(
     val menu: String,
     val hashtag: List<Int>,
     val detail: String,
-    val restaurant_info: PostMakePartyRequestRestaurantInfo,
+    val restaurant_info: goToRestaurantPartyList,
 )
 
 data class PatchEditPartyInfoRequest(

@@ -20,7 +20,7 @@ import com.bapool.bapool.adapter.PartyChattingAdapter
 import com.bapool.bapool.adapter.PartyUserInfoAdapter
 import com.bapool.bapool.adapter.SelectPartyLeaderAdapter
 import com.bapool.bapool.databinding.ActivityChattingAndPartyInfoMfactivityBinding
-import com.bapool.bapool.databinding.JoinpartyCustomDialogBinding
+import com.bapool.bapool.databinding.PartyinfoCustomDialogBinding
 import com.bapool.bapool.databinding.SelectPartyleaderDialogBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
@@ -452,17 +452,17 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
 
     fun showDetailDialog() {
-        val joinPartyDialog = JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(this))
+        val partyInfoDialog = PartyinfoCustomDialogBinding.inflate(LayoutInflater.from(this))
 
-        dialogBinding(currentPartyInfo, joinPartyDialog)
+        dialogBinding(currentPartyInfo, partyInfoDialog)
 
         val mBuilder = AlertDialog.Builder(this)
-            .setView(joinPartyDialog.root)
+            .setView(partyInfoDialog.root)
 
         mBuilder.show()
     }
 
-    fun dialogBinding(item: FirebasePartyInfo, binding: JoinpartyCustomDialogBinding) {
+    fun dialogBinding(item: FirebasePartyInfo, binding: PartyinfoCustomDialogBinding) {
 
         //hashtag 보이게하기
         val hashtagList: List<Int> = item.hashTag

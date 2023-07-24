@@ -477,9 +477,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .into(binding.bottomSheet.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
         binding.bottomSheet.findViewById<Button>(R.id.bottomButtonParty).setOnClickListener {
             val intent = Intent(requireContext(), RestaurantPartyActivity::class.java)
-            intent.putExtra("restaurantName", result?.restaurant_name)
-            intent.putExtra("restaurantAddress", result?.restaurant_address)
-            intent.putExtra("restaurantId", result?.restaurant_id)
+            val goToRestaurantPartyList = goToRestaurantPartyList(
+                result?.restaurant_id, result?.restaurant_name, result?.restaurant_address,
+                result?.img_url ?: "", result?.link ?: "",
+                result?.category ?: "",
+                result?.phone ?: ""
+            )
+
+            intent.putExtra("restaurantInfoObject", goToRestaurantPartyList)
+
             startActivity(intent)
         }
         // 스트링

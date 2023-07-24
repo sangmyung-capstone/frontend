@@ -4,15 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.adapter.RestaurantPartyAdapter
 import com.bapool.bapool.databinding.ActivityRestaurantPartyBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
-import com.bapool.bapool.retrofit.data.GetResPartyListResponse
-import com.bapool.bapool.retrofit.data.PatchEditPartyInfoResponse
-import com.bapool.bapool.retrofit.data.ResPartyList
-import com.bapool.bapool.retrofit.data.participateParty
+import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,10 +20,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRestaurantPartyBinding
     private lateinit var resGrpAdapter: RestaurantPartyAdapter
     lateinit var resGrpRv: RecyclerView
-    lateinit var restaurantNameIntent: String
-    lateinit var restaurantLocationIntent: String
-    lateinit var restaurantIdIntent: String
-    val userId: Long = 3
+    lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
     val restaurantId: Long = 1470337852
 
     val retro = ServerRetrofit.create()
@@ -33,8 +29,8 @@ class RestaurantPartyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRestaurantPartyBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
+        restaurantPartyInfoObject =
+            intent.getSerializableExtra("restaurantInfoObject") as goToRestaurantPartyList
         initializeVari()
         listener()
         retrofit()
@@ -46,20 +42,11 @@ class RestaurantPartyActivity : AppCompatActivity() {
         resGrpRv = binding.resGrpRv
         resGrpAdapter = RestaurantPartyAdapter(this)
 
-        restaurantNameIntent = intent.getStringExtra("restaurantName").toString()
-        restaurantLocationIntent = intent.getStringExtra("restaurantAddress").toString()
-        restaurantIdIntent = intent.getStringExtra("restaurantId").toString()
 
-        Log.d("RestaurantPartyActivity",restaurantNameIntent.toString())
-
-        Log.d("RestaurantPartyActivity",restaurantLocationIntent.toString())
-        Log.d("RestaurantPartyActivity",restaurantIdIntent.toString())
-        binding.restaurantLocation.setText(restaurantLocationIntent)
-        binding.resName.setText(restaurantNameIntent)
+        binding.resName.setText(restaurantPartyInfoObject.name)
+        binding.restaurantLocation.setText(restaurantPartyInfoObject.address)
 
         retrofit()
-
-
 
     }
 
@@ -68,7 +55,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
         binding.goToMakeGrp.setOnClickListener {
 
             val intent = Intent(this, MakePartyActivity::class.java)
-            intent.putExtra("resName", restaurantNameIntent)
+            intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
             startActivity(intent)
         }
         binding.dummyBtn.setOnClickListener {
@@ -81,30 +68,34 @@ class RestaurantPartyActivity : AppCompatActivity() {
     fun adapter() {
         resGrpRv.adapter = resGrpAdapter
         resGrpRv.layoutManager = LinearLayoutManager(this)
+        resGrpAdapter.notifyDataSetChanged()
     }
 
     //retrofit
     fun retrofit() {
 
-        retro.getResPartyList(userId, restaurantId)
+        //restaur
+        retro.getResPartyList(UserId!!.toLong(), restaurantPartyInfoObject.restaurant_id!!.toLong())
             .enqueue(object : Callback<GetResPartyListResponse> {
                 override fun onResponse(
                     call: Call<GetResPartyListResponse>,
                     response: Response<GetResPartyListResponse>,
                 ) {
-                    Log.d("shRetrofitSE", response.body().toString())
 
                     if (response.isSuccessful) {
                         // 정상적으로 통신이 성공된 경우
                         response.body()?.let { result ->
                             val partyResult = result?.result
-                            Log.d("sdkfjsadlfjasldf",partyResult.toString())
+
+                            if(partyResult?.parties.isNullOrEmpty()){
+                                binding.notifyNoParty.visibility = View.VISIBLE
+                            }
                             resGrpAdapter.resName = partyResult?.restaurant_name ?: ""
-                            binding.resName.setText(partyResult?.restaurant_name ?: "")
-                            resGrpAdapter.resGroup = (partyResult?.parties ?: "") as List<ResPartyList>
-                            binding.resName.setText(partyResult?.restaurant_name ?: "")
-//                            Log.d("shRetrofitSE", partyResult.toString())
+                            resGrpAdapter.resGroup =
+                                (partyResult?.parties ?: "") as List<ResPartyList>
+                            Log.d("shRetrofitSE", partyResult.toString())
                             adapter()
+
                         }
                     } else {
                         // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
@@ -120,10 +111,10 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
 
     //파티참여 retrofit
-    fun participatePartyUser(){
+    fun participatePartyUser() {
         var item = participateParty(5)
 
-        retro.participateParty(5,item)
+        retro.participateParty(5, item)
             .enqueue(object : Callback<PatchEditPartyInfoResponse> {
                 override fun onResponse(
                     call: Call<PatchEditPartyInfoResponse>,
@@ -144,4 +135,5 @@ class RestaurantPartyActivity : AppCompatActivity() {
             })
 
     }
+
 }

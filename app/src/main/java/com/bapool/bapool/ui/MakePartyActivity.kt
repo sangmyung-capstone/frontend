@@ -31,29 +31,15 @@ class MakePartyActivity : AppCompatActivity() {
     lateinit var maxPeople: NumberPicker
     val retro = ServerRetrofit.create()
     val userId: String = "3"   //companion userid로 변경필요.
-
-
-    //나중에 intent로 그 전에 있던 식당안에 파티리스트에서 정보 가져와야함. PostMakePartyRequestRestaurantInfo의 객체로 받아와야할듯 그 전부터.
-    val restaurantInfo = PostMakePartyRequestRestaurantInfo(
-        2,
-        "밥꼬찜닭",
-        "서울 동작구",
-        "wfwlifwfjl.com",
-        "wfjwilifajwfl.com",
-        "육류 고기",
-        "010-1111-2222"
-    )
+    lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMakePartyBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-        var resName = intent.getStringExtra("resName")
-        binding.resName.setText(resName)
-
+        this.restaurantPartyInfoObject =
+            intent.getSerializableExtra("restaurantInfoObject") as goToRestaurantPartyList
 
         initializeVari()
         listener()
@@ -66,6 +52,8 @@ class MakePartyActivity : AppCompatActivity() {
         maxPeople = binding.maxPeople
         maxPeople.maxValue = 20
         maxPeople.minValue = 2
+
+        binding.resName.setText(this.restaurantPartyInfoObject.name)
 
     }
 
@@ -163,7 +151,7 @@ class MakePartyActivity : AppCompatActivity() {
 
             } else if (binding.startTimeText.text.toString() == "시작시간") {
                 alterDialog("시작시간을 입력해주세요.")
-            }else {
+            } else {
                 val endDateLocal =
                     binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
                 val startDateLocal =
@@ -181,7 +169,8 @@ class MakePartyActivity : AppCompatActivity() {
                         binding.menuText.text.toString(),
                         hastagList,
                         binding.detail.text.toString(),
-                        restaurantInfo)
+                        restaurantPartyInfoObject
+                    )
 
                 Log.d("MakePartyInfo", makeGrpInstance.toString())
 
@@ -197,26 +186,30 @@ class MakePartyActivity : AppCompatActivity() {
     fun retrofit(makeParty: PostMakePartyRequest) {
 
 
-        retro.makeParty(userId.toLong(), makeParty).enqueue(object : Callback<PostMakePartyResponse> {
-            override fun onResponse(
-                call: Call<PostMakePartyResponse>,
-                response: Response<PostMakePartyResponse>,
-            ) {
+        retro.makeParty(userId.toLong(), makeParty)
+            .enqueue(object : Callback<PostMakePartyResponse> {
+                override fun onResponse(
+                    call: Call<PostMakePartyResponse>,
+                    response: Response<PostMakePartyResponse>,
+                ) {
 
-                if (response.isSuccessful) {
-                    var result: PostMakePartyResponse? =
-                        response.body()
-                    Log.d("MKRetrofit", "onRequest 성공: $makeParty")
-                    Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
+                    if (response.isSuccessful) {
+                        var result: PostMakePartyResponse? =
+                            response.body()
+                        Log.d("MKRetrofit", "onRequest 성공: $makeParty")
+                        Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
 
-                    val intent =
-                        Intent(this@MakePartyActivity, ChattingAndPartyInfoMFActivity::class.java)
-                    intent.putExtra("currentUserId", "22")//현재 유저의 userId로 value값 교체
-                    intent.putExtra("partyId", "33") // result 안의 party_id 값으로 value값 교체
-                    startActivity(intent)
+                        val intent =
+                            Intent(
+                                this@MakePartyActivity,
+                                ChattingAndPartyInfoMFActivity::class.java
+                            )
+                        intent.putExtra("currentUserId", "22")//현재 유저의 userId로 value값 교체
+                        intent.putExtra("partyId", "33") // result 안의 party_id 값으로 value값 교체
+                        startActivity(intent)
 
-                    //group_id 넘겨줘야함 Intent할때
-                } else {
+                        //group_id 넘겨줘야함 Intent할때
+                    } else {
 //                    val responseCode = response.code()
 //                    val errorBody = response.errorBody()?.string()
 //                    Log.d("MKRetrofit", response.toString())
@@ -224,17 +217,18 @@ class MakePartyActivity : AppCompatActivity() {
 //                    // 실패한 응답 처리
 //                    Log.d("MKRetrofit", "응답 실패. 응답 코드: $responseCode, 에러 메시지: $errorBody")
 
-                    Toast.makeText(this@MakePartyActivity, "그룹 생성 오류", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MakePartyActivity, "그룹 생성 오류", Toast.LENGTH_SHORT)
+                            .show()
 
+                    }
                 }
-            }
 
 
-            override fun onFailure(call: Call<PostMakePartyResponse>, t: Throwable) {
-                Log.d("MKRetrofit", "그룹생성 레트로핏 fail")
-                Log.d("MKRetrofit", "onResponse 실패 :" + t.toString())
-            }
-        })
+                override fun onFailure(call: Call<PostMakePartyResponse>, t: Throwable) {
+                    Log.d("MKRetrofit", "그룹생성 레트로핏 fail")
+                    Log.d("MKRetrofit", "onResponse 실패 :" + t.toString())
+                }
+            })
 
     }
 
