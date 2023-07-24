@@ -22,6 +22,10 @@ class RestaurantBottomAdapter(
 ) :
     RecyclerView.Adapter<RestaurantBottomAdapter.RestaurantViewHolder>() {
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.bottom_item, parent, false)
@@ -35,8 +39,10 @@ class RestaurantBottomAdapter(
         holder.restaurant_group_number.text = itemList[position].num_of_party.toString()
 
         Log.d("bottom_view_holder", "view holder${position} run")
+        Log.d("bottom_view_holder", "image list ${position} run")
 
-        if (imageList.isEmpty())
+//        if ((imageList[position] == "a") || (imageList[position] == null))
+        if (imageList[position] == null)
             Glide.with(holder.context)
 //            .load(itemList[position].imgURL)
                 .load(R.drawable.bapool)
@@ -44,10 +50,17 @@ class RestaurantBottomAdapter(
         else    // adapter.notifyItemChanged(position) 호출 시
             Glide.with(holder.context)
                 .load(imageList[position])
+                .error(R.drawable.hashtag5)
                 .into(holder.restaurant_img)
 
         holder.itemView.setOnClickListener {
             Log.d("bottom_view_holder", "view holder${position} touch")
+            Log.d(
+                "bottom_view_holder",
+                "id : ${itemList[position].restaurant_id}\n" +
+                        "name : ${itemList[position].restaurant_name}" +
+                        "image list : ${imageList[position]}"
+            )
             MapFragment().markerGoEvent(
                 naverMap,
                 markerList[position],
@@ -57,6 +70,7 @@ class RestaurantBottomAdapter(
             )
         }
     }
+
 
     override fun getItemCount(): Int {
         return itemList.count()

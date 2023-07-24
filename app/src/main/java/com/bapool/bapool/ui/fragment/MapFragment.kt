@@ -252,6 +252,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun markerInit() {
         cameraPosition = naverMap.cameraPosition
+        restaurantImageList = MutableList(45) { "a" }
 
         rect =
             "${naverMap.contentBounds.northWest.longitude},${naverMap.contentBounds.northWest.latitude},${naverMap.contentBounds.southEast.longitude},${naverMap.contentBounds.southEast.latitude}"
@@ -297,6 +298,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     // 식당바텀리스트 통신
                     Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
+                    Log.d("BOTTOM_RESTAURANTS", restaurantsList.toString())
                     for (idx in 0 until restaurantIdList.size) {
                         Log.d("BOTTOM_IDX", idx.toString())
                         retro.getRestaurantsBottom(
@@ -311,20 +313,37 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                     if (response.isSuccessful) {
                                         Log.d(
                                             "BOTTOM_IMG_URL",
-                                            "img url $idx : ${response.body()!!.result.restaurant_img_urls[0]}"
+                                            "id : ${restaurantIdList[idx]} \nimg url $idx : ${response.body()!!.result.restaurant_img_urls[0]}"
                                         )
-//                                        if (response.body()!!.result.restaurant_img_urls[0]) {
-//                                            restaurantImageList.add(
-//                                                idx,
-//                                                response.body()!!.result.restaurant_img_urls[0]
-//                                            )
-//                                        }// img_urls은 전달 parameter 가 1개임으로 반드시 결과로 1개만 존재
+                                        Log.d(
+                                            "BOTTOM_IMG_LIST",
+                                            "img list before : $restaurantImageList\n" +
+                                                    "size : ${restaurantImageList.size}"
+                                        )
+//                                        restaurantImageList.add(
+//                                            idx,
+//                                            response.body()!!.result.restaurant_img_urls[0]
+//                                        )
+                                        restaurantImageList[idx] =
+                                            response.body()!!.result.restaurant_img_urls[0] // img_urls은 전달 parameter 가 1개임으로 반드시 결과로 1개만 존재
+                                        Log.d(
+                                            "BOTTOM_IMG_LIST",
+                                            "img list after : $restaurantImageList"
+                                        )
+
                                         // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
                                         RestaurantBottomAdapter(
                                             restaurantsList,
                                             restaurantImageList,
                                             naverMap
                                         ).notifyItemChanged(idx)
+
+                                        binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
+                                            LinearLayoutManager(
+                                                context,
+                                                LinearLayoutManager.VERTICAL,
+                                                false
+                                            )
                                     }
 
                                 }
@@ -492,7 +511,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
         // 이미지
         Glide.with(this)
-            .load("https:" + result?.img_url)
+            .load(result?.img_url)
             .placeholder(R.drawable.hashtag1) // Glide 로 이미지 로딩을 시작하기 전에 보여줄 이미지를 설정한다.
             .error(R.drawable.hashtag5) // error 시 보여줄 이미지
             .into(binding.bottomSheet.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
