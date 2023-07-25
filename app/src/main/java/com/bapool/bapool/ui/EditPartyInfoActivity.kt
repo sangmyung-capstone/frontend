@@ -60,7 +60,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
         receivePartyInfo = intent.getSerializableExtra("partyInfo") as FirebasePartyInfo
         binding.grpNameText.setText(receivePartyInfo.groupName)
-        binding.menuText.setText(receivePartyInfo.groupMenu)
+       // binding.menuText.setText(receivePartyInfo.groupMenu)
         binding.detail.setText(receivePartyInfo.groupDetail)
         changeDateFormat(binding.startDateText, binding.startTimeText)
         setHashtagInfo()

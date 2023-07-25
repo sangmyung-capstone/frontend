@@ -3,10 +3,8 @@ package com.bapool.bapool.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +25,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     private lateinit var resGrpAdapter: RestaurantPartyAdapter
     lateinit var resGrpRv: RecyclerView
     lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
-    var restaurantPartiesInfo : List<ResPartyList> = arrayListOf()
+    var restaurantPartiesInfo: List<ResPartyList> = arrayListOf()
     val restaurantId: Long = 1470337852
 
     val retro = ServerRetrofit.create()
@@ -56,7 +54,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
         retrofit()
 
 
-        resGrpAdapter.itemClick = object : RestaurantPartyAdapter.ItemClick{
+        resGrpAdapter.itemClick = object : RestaurantPartyAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
                 val joinPartyDialog =
                     JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(this@RestaurantPartyActivity))
@@ -68,7 +66,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         dialog.dismiss()
                     }
                     .setPositiveButton("참여") { dialog, _ ->
-                        confirmParticipatePartyDialog()
+                        confirmParticipatePartyDialog(restaurantPartiesInfo[position].party_id.toString())
                     }
                 mBuilder.show()
 
@@ -76,7 +74,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
         }
     }
 
-    fun confirmParticipatePartyDialog(){
+    fun confirmParticipatePartyDialog(party_id: String) {
 
         val mBuilder = AlertDialog.Builder(this@RestaurantPartyActivity)
             .setMessage("파티에 참여하시겠습니까?")
@@ -84,9 +82,9 @@ class RestaurantPartyActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             .setPositiveButton("확인") { dialog, _ ->
-                participatePartyUser()
+                participatePartyUser(party_id)
                 // 파티 채팅창으로 이동해야함.
-                
+
             }
         mBuilder.show()
     }
@@ -99,9 +97,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
             intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
             startActivity(intent)
         }
-        binding.dummyBtn.setOnClickListener {
-            participatePartyUser()
-        }
+
 
     }
 
@@ -129,35 +125,33 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         response.body()?.let { result ->
                             val partyResult = result?.result
 
-                            if(partyResult?.parties.isNullOrEmpty()){
+                            if (partyResult?.parties.isNullOrEmpty()) {
                                 binding.notifyNoParty.visibility = View.VISIBLE
                             }
-                            restaurantPartiesInfo = (partyResult?.parties ?: "") as List<ResPartyList>
+                            restaurantPartiesInfo =
+                                (partyResult?.parties ?: "") as List<ResPartyList>
                             resGrpAdapter.resName = partyResult?.restaurant_name ?: ""
                             resGrpAdapter.resGroup =
                                 (partyResult?.parties ?: "") as List<ResPartyList>
-                            Log.d("shRetrofitSE", partyResult.toString())
                             adapter()
 
                         }
                     } else {
                         // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                        Log.d("shRetrofitE", "onResponse 실패100")
                     }
                 }
 
                 override fun onFailure(call: Call<GetResPartyListResponse>, t: Throwable) {
-                    Log.d("shRetrofitE", "onFailure 에러: " + t.message.toString());
                 }
             })
     }
 
 
     //파티참여 retrofit
-    fun participatePartyUser() {
-        var item = participateParty(11)
+    fun participatePartyUser(party_id: String) {
+        var item = participateParty(party_id.toLong())
 
-        retro.participateParty(5, item)
+        retro.participateParty(UserId!!.toLong(), item)
             .enqueue(object : Callback<PatchEditPartyInfoResponse> {
                 override fun onResponse(
                     call: Call<PatchEditPartyInfoResponse>,
@@ -165,20 +159,23 @@ class RestaurantPartyActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val result = response.body()
-                        Log.d("participateParty", response.body().toString())
+                        val intent = Intent(this@RestaurantPartyActivity,
+                            ChattingAndPartyInfoMFActivity::class.java)
+                        intent.putExtra("currentUserId", UserId)
+                        intent.putExtra("partyId", party_id)
+
+                        startActivity(intent)
+
                     } else {
-                        Log.d("participateParty", response.errorBody().toString())
 
                     }
                 }
 
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
-                    Log.d("participateParty", "실패")
                 }
             })
 
     }
-
 
 
     //다이얼로그
@@ -234,8 +231,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
         var allNum: String = "${participants} / ${max_people}"
         return allNum
     }
-
-
 
 
 }

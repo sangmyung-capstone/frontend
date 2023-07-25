@@ -65,7 +65,7 @@ class PartyChattingAdapter(
 
         }, 1000)
 
-        FirebaseDatabase.getInstance().getReference("Groups")
+        FirebaseDatabase.getInstance().getReference("test").child("Groups")
             .child(groupId).child("groupMessages")
             .addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -162,8 +162,9 @@ class PartyChattingAdapter(
                     val testMap: Map<String, Boolean> = mapOf(currentUserId to true)
                     if (messages.size > 0) {
                         if (!messages[messages.size - 1].confirmed.containsKey(currentUserId)) {
-                            FirebaseDatabase.getInstance().getReference("Groups")
-                                .child(groupId).child("groupMessages").child(messageKeyObject).child("confirmed")
+                            FirebaseDatabase.getInstance().getReference("test").child("Groups")
+                                .child(groupId).child("groupMessages").child(messageKeyObject)
+                                .child("confirmed")
                                 .updateChildren(testMap)
                                 .addOnCompleteListener {
                                     recyclerView.scrollToPosition(messageKey.size - 1)
@@ -315,7 +316,7 @@ class PartyChattingAdapter(
             readCount(item, binding.opponentConfirmed)
             setNickNameImg(position, binding.opponentId, binding.opponentImage)
             binding.opponentImage.setOnClickListener {
-                val intent =  Intent(context,CheckUserProfileActivity::class.java)
+                val intent = Intent(context, CheckUserProfileActivity::class.java)
                 //userid 넘겨줘야함
                 context.startActivity(intent)
             }
@@ -336,8 +337,9 @@ class PartyChattingAdapter(
                 makeDialog(messageKey[position], item.downloadUrl)
             }
             binding.opponentImage.setOnClickListener {
-                val intent =  Intent(context,CheckUserProfileActivity::class.java)
+                val intent = Intent(context, CheckUserProfileActivity::class.java)
                 //userid 넘겨줘야함
+                intent.putExtra("opponentUseId", item.senderId)
                 context.startActivity(intent)
             }
         }
@@ -361,7 +363,7 @@ class PartyChattingAdapter(
                         } else {
                             readcount_text.visibility = View.GONE
                         }
-                        Log.d("dsafkjesfkjadshfkjasdhf",snapshot.value.toString())
+                        Log.d("dsafkjesfkjadshfkjasdhf", snapshot.value.toString())
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -389,10 +391,10 @@ class PartyChattingAdapter(
     //이미지, 닉네임 배치
     fun setNickNameImg(position: Int, opponentId: TextView, opponentImage: ImageView) {
 
-        Log.d("asdfkadjfaks",position.toString())
-        Log.d("asdfkadjfaks",messages[position].senderId.toString())
+        Log.d("asdfkadjfaks", position.toString())
+        Log.d("asdfkadjfaks", messages[position].senderId.toString())
         var opponentUserId = messages[position].senderId
-        Log.d("asdfkadjfaks",partyUserInfo[opponentUserId].toString())
+        Log.d("asdfkadjfaks", partyUserInfo[opponentUserId].toString())
 
         var opponentUserInfo = partyUserInfo[opponentUserId]
         opponentId.text = opponentUserInfo?.nickName ?: ""
@@ -422,7 +424,7 @@ class PartyChattingAdapter(
 
         val imageView = Img
         val taskResult = imageResource[ImgKey]
-        Log.d("이미지확인",taskResult.toString())
+        Log.d("이미지확인", taskResult.toString())
         Glide.with(context)
             .load(taskResult)
             .listener(object : RequestListener<Drawable> {
@@ -433,7 +435,7 @@ class PartyChattingAdapter(
                     target: Target<Drawable>?,
                     isFirstResource: Boolean,
                 ): Boolean {
-                    Log.d("이미지로드확인","이미지 로드 실패")
+                    Log.d("이미지로드확인", "이미지 로드 실패")
 
                     return false
                 }
@@ -445,7 +447,7 @@ class PartyChattingAdapter(
                     dataSource: com.bumptech.glide.load.DataSource?,
                     isFirstResource: Boolean,
                 ): Boolean {
-                    Log.d("이미지로드확인","이미지 로드 성공")
+                    Log.d("이미지로드확인", "이미지 로드 성공")
 
                     if (imageResourceBool) {
                         recyclerView.postDelayed({
