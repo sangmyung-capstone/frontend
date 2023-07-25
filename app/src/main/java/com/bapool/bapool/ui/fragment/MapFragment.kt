@@ -450,6 +450,69 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         marker.height = 100
     }
 
+    fun searchMarkerGoEvent(
+        id: Long,
+        long: Double,
+        lati: Double,
+        isParty: Boolean,
+        restaurant_name: String
+    ) { // 인자로서 marker의 lati long 필요  // num of party   // name
+        binding.coordinatorLayout.removeView(binding.searchView)
+
+        // 추가적인 마커 생성 및 카메라 이동 필요
+        if (markerList.size != 0) {
+            Log.d("MARKER_INIT", "marker clear!!!")
+            for (i in 0 until markerList.size) markerList[i].map = null
+            markerList.clear()
+        }
+        markerList.add(0, Marker()) // 마커 할당
+        if (isParty) // group이 있는 마커 표현
+            markerList[0].icon = bapoolImg
+        else
+            markerList[0].icon = bapoolImgRed
+        markerList[0].isHideCollidedSymbols = true
+        markerList[0].isHideCollidedCaptions = true
+        markerList[0].position = LatLng(lati, long)  // 마커 위치 정보
+        markerList[0].map = naverMap    // 생성 마커들 지도에 출력
+        markerList[0].width = 75
+        markerList[0].height = 75
+        markerList[0].captionText = restaurant_name
+        // 이후 마커 클릭 이벤트와 같은 상황 구현
+        // 마커 클릭 시 하단 네비게이션바 제거
+        (activity as HomeActivity).hideBottomNavi(true)
+
+
+        retro.getRestaurantInfo(1, id, long, lati)
+            .enqueue(object : Callback<GetRestaurantInfoResult> {
+                override fun onResponse(
+                    call: Call<GetRestaurantInfoResult>,
+                    response: Response<GetRestaurantInfoResult>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d("MARKER_INFO", response.body().toString())
+                        createMarkerInfo(response.body()?.result)
+                    } else {
+                        // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                        Log.d("MARKER_INFO", "onResponse 실패")
+                    }
+                }
+
+                override fun onFailure(call: Call<GetRestaurantInfoResult>, t: Throwable) {
+                    Log.d("MARKER_INFO", t.message.toString())
+                    Log.d("MARKER_INFO", "FAIL")
+                }
+            })
+
+
+        // 해당 마커 위치로 지도 이동
+        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(markerList[0].position, 20.0))
+
+        // 마커 크기 변경 // 애니메이션 추가
+        markerList[0].width = 100
+        markerList[0].height = 100
+        // 위의 markerGoEvent와 디자인패턴 이용??
+    }
+
     private fun markerClickEvent(marker: Marker, id: Long, long: Double, lati: Double) {
         marker.setOnClickListener {
 
