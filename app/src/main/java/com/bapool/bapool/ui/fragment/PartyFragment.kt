@@ -13,6 +13,7 @@ import com.bapool.bapool.adapter.MyPartyListAdapter
 import com.bapool.bapool.databinding.FragmentPartyBinding
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.retrofit.fcm.FirebaseService
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -30,7 +31,7 @@ class PartyFragment : Fragment() {
 
     var myPartyListModel = arrayListOf<MyPartyListModel>()
 
-    var currentUserId: String = "3"
+    var currentUserId: String = UserId.toString()
 
 
 
