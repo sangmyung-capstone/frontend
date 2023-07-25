@@ -86,7 +86,7 @@ data class PostMakePartyResponse(
 data class FirebasePartyInfo
     (
     val groupName: String = "",
-    //val groupMenu: String = "",
+    val groupMenu: String = "",
     val groupDetail: String = "",
     val curNumberOfPeople: Int = 0,
     val maxNumberOfPeople: Int = 0,
