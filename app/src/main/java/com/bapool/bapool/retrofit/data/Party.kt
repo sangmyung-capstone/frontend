@@ -43,7 +43,7 @@ data class PostMakePartyRequest(
     val menu: String,
     val hashtag: List<Int>,
     val detail: String,
-    val restaurant_info: PostMakePartyRequestRestaurantInfo,
+    val restaurant_info: goToRestaurantPartyList,
 )
 
 data class PatchEditPartyInfoRequest(
@@ -86,7 +86,7 @@ data class PostMakePartyResponse(
 data class FirebasePartyInfo
     (
     val groupName: String = "",
-    val groupMenu: String = "",
+    //val groupMenu: String = "",
     val groupDetail: String = "",
     val curNumberOfPeople: Int = 0,
     val maxNumberOfPeople: Int = 0,

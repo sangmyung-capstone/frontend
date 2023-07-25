@@ -25,6 +25,7 @@ import com.bapool.bapool.databinding.FragmentMapBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.HomeActivity
+import com.bapool.bapool.ui.RestaurantPartyActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.search.SearchView
@@ -74,7 +75,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
 
@@ -95,7 +96,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             ).enqueue(object : Callback<GetSearchResult> {
                 override fun onResponse(
                     call: Call<GetSearchResult>,
-                    response: Response<GetSearchResult>
+                    response: Response<GetSearchResult>,
                 ) {
                     Log.d("search", "response : ${response.toString()}")
                     // 식당검색결과 recyclerview 어댑터 바인딩
@@ -261,7 +262,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
-                response: Response<GetRestaurantsResult>
+                response: Response<GetRestaurantsResult>,
             ) {
                 if (response.isSuccessful) {
                     // 식당링크 모음  // 현위치에서 재검색 이후 리스트 사이즈만큼 api 요청 필요 및 바인딩
@@ -303,7 +304,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             .enqueue(object : Callback<GetRestaurantsBottomResult> {
                                 override fun onResponse(
                                     call: Call<GetRestaurantsBottomResult>,
-                                    response: Response<GetRestaurantsBottomResult>
+                                    response: Response<GetRestaurantsBottomResult>,
                                 ) {
                                     if (response.isSuccessful) {
                                         Log.d(
@@ -345,7 +346,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                                 override fun onFailure(
                                     call: Call<GetRestaurantsBottomResult>,
-                                    t: Throwable
+                                    t: Throwable,
                                 ) {
                                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                                     Log.d("BOTTOM", "onResponse 실패")
@@ -424,7 +425,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .enqueue(object : Callback<GetRestaurantInfoResult> {
                 override fun onResponse(
                     call: Call<GetRestaurantInfoResult>,
-                    response: Response<GetRestaurantInfoResult>
+                    response: Response<GetRestaurantInfoResult>,
                 ) {
                     if (response.isSuccessful) {
                         Log.d("MARKER_INFO", response.body().toString())
@@ -528,7 +529,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 .enqueue(object : Callback<GetRestaurantInfoResult> {
                     override fun onResponse(
                         call: Call<GetRestaurantInfoResult>,
-                        response: Response<GetRestaurantInfoResult>
+                        response: Response<GetRestaurantInfoResult>,
                     ) {
                         if (response.isSuccessful) {
                             Log.d("MARKER_INFO", response.body().toString())
@@ -572,6 +573,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .placeholder(R.drawable.hashtag1) // Glide 로 이미지 로딩을 시작하기 전에 보여줄 이미지를 설정한다.
             .error(R.drawable.hashtag5) // error 시 보여줄 이미지
             .into(binding.bottomSheet.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
+        binding.bottomSheet.findViewById<Button>(R.id.bottomButtonParty).setOnClickListener {
+            val intent = Intent(requireContext(), RestaurantPartyActivity::class.java)
+            val goToRestaurantPartyList = goToRestaurantPartyList(
+                result?.restaurant_id, result?.restaurant_name, result?.restaurant_address,
+                result?.img_url ?: "", result?.link ?: "",
+                result?.category ?: "",
+                result?.phone ?: ""
+            )
+
+            intent.putExtra("restaurantInfoObject", goToRestaurantPartyList)
+
+            startActivity(intent)
+        }
         // 스트링
         binding.bottomSheet.findViewById<TextView>(R.id.bottomTextName).text =
             result?.restaurant_name

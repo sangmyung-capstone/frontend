@@ -30,7 +30,9 @@ class PartyFragment : Fragment() {
 
     var myPartyListModel = arrayListOf<MyPartyListModel>()
 
-    var currentUserId: String = "11"
+    var currentUserId: String = "3"
+
+
 
     private val TAG = "PartyFragment"
 
@@ -125,7 +127,7 @@ class PartyFragment : Fragment() {
     }
 
     fun getUserPartyData() {
-        FirebaseDatabase.getInstance().getReference("Groups")
+        FirebaseDatabase.getInstance().getReference("test").child("Groups")
             .orderByChild("groupUsers/$currentUserId")
             .equalTo(true)
             .addValueEventListener(object : ValueEventListener {
@@ -173,8 +175,8 @@ class PartyFragment : Fragment() {
                             grpName, participants, lastChat, notReadChatNumber, lastChatTime)
                         myPartyListModel.add(dataModel)
 
-
                     }
+
 
                     Log.d("채팅방확인소트전", myPartyListModel.toString())
                     val sortedMyPartyListModel =

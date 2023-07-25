@@ -1,5 +1,7 @@
 package com.bapool.bapool.retrofit.data
 
+import java.io.Serializable
+
 data class GetRestaurantsResult(
     val code: Int,
     val message: String,
@@ -93,3 +95,17 @@ data class RestaurantSearch(
 )
 
 
+
+// -------------------------------------------------------------------------------------------------
+//식당정보  ->  식당안의 파티리스트로 넘기는 intent 객체
+
+
+data class goToRestaurantPartyList(
+    val restaurant_id: Long?,
+    val name: String?,
+    val address: String?,
+    val img_url: String,
+    val site_url: String,
+    val category: String,
+    val phone: String,
+): Serializable

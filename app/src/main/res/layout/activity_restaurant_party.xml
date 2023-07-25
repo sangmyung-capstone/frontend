@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -49,41 +48,55 @@
         android:id="@+id/textLine2"
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="2dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="2dp"
         android:background="#EEEEEE"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurantLocation" />
 
     <TextView
-        android:layout_marginTop="7dp"
         android:id="@+id/restaurantLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="7dp"
         android:text="식당 주소"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLine" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="5dp"
-        android:background="#EEEEEE"
         android:id="@+id/resGrpRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="#EEEEEE"
         app:layout_constraintTop_toBottomOf="@+id/textLine2"
         tools:layout_editor_absoluteX="0dp" />
 
     <android.widget.Button
-        android:background="@color/main"
         android:id="@+id/goToMakeGrp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:background="@color/main"
         android:text="파티 생성"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <TextView
+        android:id="@+id/notifyNoParty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="존재하는 파티가 없습니다."
+        android:textColor="#BCBCBC"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/goToMakeGrp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/resGrpRv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

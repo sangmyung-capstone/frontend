@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="210dp"
+    android:layout_height="200dp"
     android:layout_margin="10dp"
     android:layout_marginBottom="0dp"
     android:background="@drawable/restaurant_partylist_item_corner">
@@ -37,8 +36,8 @@
         android:id="@+id/bottomTextName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="인원"
         android:layout_marginLeft="10dp"
+        android:text="인원"
         app:layout_constraintBottom_toBottomOf="@+id/menu"
         app:layout_constraintStart_toEndOf="@+id/menu"
         app:layout_constraintTop_toTopOf="@+id/menu" />
@@ -123,9 +122,12 @@
 
     <TextView
         android:id="@+id/detail"
-        android:layout_width="320dp"
+        android:layout_width="305dp"
         android:layout_height="50dp"
-        android:padding="5dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingLeft="10dp"
         android:text="detail"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -151,13 +153,16 @@
 
     <Button
         android:id="@+id/joinGrp"
-        android:layout_width="70dp"
+        android:layout_width="80dp"
         android:layout_height="50dp"
         android:text="참여"
         android:textColor="@color/black"
         android:textSize="10dp"
+        android:layout_marginBottom="2.5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/detail"
+        app:layout_constraintTop_toBottomOf="@+id/textLine" />
 
     <TextView
         android:id="@+id/ban"
@@ -175,7 +180,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="참여인원 평점:"
+        android:text="참여인원 평균 평점 :"
         app:layout_constraintStart_toStartOf="@+id/textView8"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -196,6 +201,8 @@
         android:id="@+id/textLine"
         android:layout_width="match_parent"
         android:layout_height="3dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:background="#EEEEEE"
         app:layout_constraintBottom_toTopOf="@+id/detail"
         app:layout_constraintEnd_toEndOf="parent"

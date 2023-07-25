@@ -27,6 +27,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
     //상대 uid
     val opponentUid: Long = 2
     val blockUserInfo = BlockUserRequest(opponentUid)
+    var opponentUserId: String =""
 
     //retrofit 연결 전 더미데이터
     val dummyHashtagData = listOf<Int>(3, 4)
@@ -40,7 +41,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
         binding = ActivityCheckUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        opponentUserId = intent.getStringExtra("opponentUserId").toString()
         checkUserProfileRetrofit()
 
         //이미지 binding
@@ -96,7 +97,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
 
     fun checkUserProfileRetrofit() {
 
-        retro.checkUserProfile(5).enqueue(object : Callback<CheckUserProfileResponse>{
+        retro.checkUserProfile(3).enqueue(object : Callback<CheckUserProfileResponse>{
             override fun onResponse(
                 call: Call<CheckUserProfileResponse>,
                 response: Response<CheckUserProfileResponse>,
