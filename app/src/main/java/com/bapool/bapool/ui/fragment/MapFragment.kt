@@ -67,9 +67,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     //    val retro = RetrofitService.create()  // MOCK SERVER
     val retro = ServerRetrofit.create()
 
-    var cnt = 0
-    var cnt2 = 0
-
     var restaurantsList: MutableList<Restaurant> = mutableListOf()  // restaurant 리스트 생성
     var restaurantIdList: MutableList<Long> = mutableListOf()    // id 리스트 생성
     var restaurantImageList: MutableList<String> = mutableListOf()  // image url 리스트 생성
@@ -142,7 +139,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val bottomBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         // behavior 속성
-        bottomBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 //        bottomBehavior.isFitToContents = false
         bottomBehavior.peekHeight = dpToPx(180f, context).toInt()    // dp -> px변환
 //        bottomBehavior.expandedOffset = dpToPx(600f, context).toInt()    // dp -> px변환
@@ -277,14 +274,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     Log.d("BOTTOM_ID_LIST", restaurantIdList.toString())
 
                     // bottomSheet에 식당바텀리스트 레이아웃 할당
-                    if (cnt2 == 0) {     // cnt 방식이 아닌 뷰 교체 방식의 제대로된 방법 필요
-                        layoutInflater.inflate(
-                            R.layout.bottom_restaurant_list,
-                            binding.bottomSheet,
-                            true
-                        )
-                        cnt2++
-                    }
+                    binding.bottomSheet.removeAllViews()
+                    layoutInflater.inflate(
+                        R.layout.bottom_restaurant_list,
+                        binding.bottomSheet,
+                        true
+                    )
 
                     restaurantsList = response.body()!!.result.restaurants.toMutableList()
                     // 식당바텀리스트 어댑터 바인딩
@@ -424,10 +419,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 마커 클릭 시 하단 네비게이션바 제거
 //        (activity as HomeActivity).hideBottomNavi(true)
 
-//        if (cnt == 0) {     // cnt 방식이 아닌 뷰 교체 방식의 제대로된 방법 필요
-//            layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
-//            cnt++
-//        }
 
         retro.getRestaurantInfo(1, id, long, lati)
             .enqueue(object : Callback<GetRestaurantInfoResult> {
@@ -469,11 +460,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             (activity as HomeActivity).hideBottomNavi(true)
 
 
-            if (cnt == 0) {     // cnt 방식이 아닌 뷰 교체 방식의 제대로된 방법 필요
-                layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
-                cnt++
-            }
-
             retro.getRestaurantInfo(1, id, long, lati)
                 .enqueue(object : Callback<GetRestaurantInfoResult> {
                     override fun onResponse(
@@ -503,12 +489,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             marker.width = 100
             marker.height = 100
 
+
+
             true
         }
     }
 
     fun createMarkerInfo(result: RestaurantInfo?) {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
+
+        binding.bottomSheet.removeAllViews()
+        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
+        BottomSheetBehavior.from(binding.bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
+
         // 이미지
         Glide.with(this)
             .load(result?.img_url)

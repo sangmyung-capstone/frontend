@@ -41,7 +41,6 @@ class RestaurantBottomAdapter(
         Log.d("bottom_view_holder", "view holder${position} run")
         Log.d("bottom_view_holder", "image list ${position} run")
 
-//        if ((imageList[position] == "a") || (imageList[position] == null))
         if (imageList[position] == null)
             Glide.with(holder.context)
 //            .load(itemList[position].imgURL)
