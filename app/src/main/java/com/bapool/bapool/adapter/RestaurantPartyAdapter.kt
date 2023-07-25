@@ -47,6 +47,11 @@ class RestaurantPartyAdapter(val context: Context) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
+        if(itemClick != null){
+            holder.joinButton.setOnClickListener{ v->
+                itemClick?.onClick(v,position)
+            }
+        }
         holder.bindItem(resGroup[position])
 
 
@@ -59,6 +64,8 @@ class RestaurantPartyAdapter(val context: Context) :
 
     inner class ViewHolder(private val binding: RestaurantpartylistItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+
         val joinButton: Button = binding.joinGrp
         fun bindItem(item: ResPartyList) {
 
@@ -112,25 +119,6 @@ class RestaurantPartyAdapter(val context: Context) :
             binding.detail.text = item.detail
             binding.rating.text = item.user_rating?.toString()
 
-            joinButton.setOnClickListener {
-                val joinPartyDialog =
-                    JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(context))
-                dialogBinding(item, joinPartyDialog)
-
-                val mBuilder = AlertDialog.Builder(context)
-                    .setView(joinPartyDialog.root)
-                    .setNegativeButton("취소") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .setPositiveButton("참여") { dialog, _ ->
-                        participatePartyUser()
-                    }
-
-
-                mBuilder.show()
-
-
-            }
 
         }
 
@@ -155,67 +143,5 @@ class RestaurantPartyAdapter(val context: Context) :
         return allNum
     }
 
-    fun dialogBinding(item: ResPartyList, binding: JoinpartyCustomDialogBinding) {
-        //차단유저 보이게하기
-        if (item.has_block_user) {
-            binding.ban.visibility = View.VISIBLE
-        }
-        //hashtag 보이게하기
-        val hashtagList: List<Int> = item.party_hashtag
-        if (hashtagList.isNotEmpty()) {
-            binding.hashtagVisible.visibility = View.VISIBLE
-            var count = 0
-            for (item in hashtagList) {
-                count++
-                if (item == 1)
-                    when (count) {
-                        1 -> binding.hash1.visibility = View.VISIBLE
-                        2 -> binding.hash2.visibility = View.VISIBLE
-                        3 -> binding.hash3.visibility = View.VISIBLE
-                        4 -> binding.hash4.visibility = View.VISIBLE
-                        5 -> binding.hash5.visibility = View.VISIBLE
-                    }
-            }
-        }
-
-        val allNum = partiNum(item.participants, item.max_people)
-        val allDate = dateRange(item.start_date)
-
-        binding.partyName.text = item.party_name
-        binding.partyMenu.text = item.menu
-        binding.dateTime.text = allDate
-        binding.participantsNum.text = allNum
-        binding.detailText.text = item.detail
-        binding.rating.text = item.user_rating.toString()
-
-
-    }
-
-
-    //파티참여 retrofit
-    fun participatePartyUser() {
-        var item = participateParty(22)
-
-        retro.participateParty(5, item)
-            .enqueue(object : Callback<PatchEditPartyInfoResponse> {
-                override fun onResponse(
-                    call: Call<PatchEditPartyInfoResponse>,
-                    response: Response<PatchEditPartyInfoResponse>,
-                ) {
-                    if (response.isSuccessful) {
-                        val result = response.body()
-                        Log.d("participateParty", response.body().toString())
-                    } else {
-                        Log.d("participateParty", response.errorBody().toString())
-
-                    }
-                }
-
-                override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
-                    Log.d("participateParty", "실패")
-                }
-            })
-
-    }
 }
 
