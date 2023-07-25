@@ -17,7 +17,7 @@ data class Restaurant(
     val num_of_party: Int,
     val restaurant_longitude: Double,
     val restaurant_latitude: Double,
-    val link: String
+//    val link: String  // api 변경으로 인한 link 삭제
 )
 // -------------------------------------------------------------------------------------------------
 data class GetRestaurantLogResponse(

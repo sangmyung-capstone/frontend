@@ -38,6 +38,7 @@ import com.naver.maps.map.overlay.Align
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import okio.utf8Size
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -66,10 +67,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     //    val retro = RetrofitService.create()  // MOCK SERVER
     val retro = ServerRetrofit.create()
 
-    var cnt = 0
-    var cnt2 = 0
-
-    var restaurantIdList: MutableList<Long> = mutableListOf()    // 배열 생성
+    var restaurantsList: MutableList<Restaurant> = mutableListOf()  // restaurant 리스트 생성
+    var restaurantIdList: MutableList<Long> = mutableListOf()    // id 리스트 생성
+    var restaurantImageList: MutableList<String> = mutableListOf()  // image url 리스트 생성
 
 
     override fun onCreateView(
@@ -139,7 +139,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val bottomBehavior = BottomSheetBehavior.from(binding.bottomSheet)
         // behavior 속성
-        bottomBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 //        bottomBehavior.isFitToContents = false
         bottomBehavior.peekHeight = dpToPx(180f, context).toInt()    // dp -> px변환
 //        bottomBehavior.expandedOffset = dpToPx(600f, context).toInt()    // dp -> px변환
@@ -249,6 +249,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun markerInit() {
         cameraPosition = naverMap.cameraPosition
+        restaurantImageList = MutableList(45) { "a" }
 
         rect =
             "${naverMap.contentBounds.northWest.longitude},${naverMap.contentBounds.northWest.latitude},${naverMap.contentBounds.southEast.longitude},${naverMap.contentBounds.southEast.latitude}"
@@ -273,23 +274,28 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     Log.d("BOTTOM_ID_LIST", restaurantIdList.toString())
 
                     // bottomSheet에 식당바텀리스트 레이아웃 할당
-                    if (cnt2 == 0) {     // cnt 방식이 아닌 뷰 교체 방식의 제대로된 방법 필요
-                        layoutInflater.inflate(
-                            R.layout.bottom_restaurant_list,
-                            binding.bottomSheet,
-                            true
-                        )
-                        cnt2++
-                    }
+                    binding.bottomSheet.removeAllViews()
+                    layoutInflater.inflate(
+                        R.layout.bottom_restaurant_list,
+                        binding.bottomSheet,
+                        true
+                    )
 
+                    restaurantsList = response.body()!!.result.restaurants.toMutableList()
                     // 식당바텀리스트 어댑터 바인딩
                     binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
-                        RestaurantBottomAdapter(response.body()!!.result.restaurants, naverMap)
+                        RestaurantBottomAdapter(
+                            response.body()!!.result.restaurants,
+                            restaurantImageList,
+                            naverMap
+                        )
                     binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     // 식당바텀리스트 통신
                     Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
+                    Log.d("BOTTOM_RESTAURANTS", restaurantsList.toString())
                     for (idx in 0 until restaurantIdList.size) {
+                        Log.d("BOTTOM_IDX", idx.toString())
                         retro.getRestaurantsBottom(
                             1,
                             GetRestaurantsBottomRequest(listOf(restaurantIdList[idx]))
@@ -299,11 +305,41 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                     call: Call<GetRestaurantsBottomResult>,
                                     response: Response<GetRestaurantsBottomResult>
                                 ) {
-                                    Log.d(
-                                        "BOTTOM",
-                                        response.body()?.message + response.body()?.result.toString()
-                                    )
-                                    // 이미지를 뷰홀더에 출력
+                                    if (response.isSuccessful) {
+                                        Log.d(
+                                            "BOTTOM_IMG_URL",
+                                            "id : ${restaurantIdList[idx]} \nimg url $idx : ${response.body()!!.result.restaurant_img_urls[0]}"
+                                        )
+                                        Log.d(
+                                            "BOTTOM_IMG_LIST",
+                                            "img list before : $restaurantImageList\n" +
+                                                    "size : ${restaurantImageList.size}"
+                                        )
+//                                        restaurantImageList.add(
+//                                            idx,
+//                                            response.body()!!.result.restaurant_img_urls[0]
+//                                        )
+                                        restaurantImageList[idx] =
+                                            response.body()!!.result.restaurant_img_urls[0] // img_urls은 전달 parameter 가 1개임으로 반드시 결과로 1개만 존재
+                                        Log.d(
+                                            "BOTTOM_IMG_LIST",
+                                            "img list after : $restaurantImageList"
+                                        )
+
+                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+                                        RestaurantBottomAdapter(
+                                            restaurantsList,
+                                            restaurantImageList,
+                                            naverMap
+                                        ).notifyItemChanged(idx)
+
+                                        binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
+                                            LinearLayoutManager(
+                                                context,
+                                                LinearLayoutManager.VERTICAL,
+                                                false
+                                            )
+                                    }
 
                                 }
 
@@ -383,10 +419,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 마커 클릭 시 하단 네비게이션바 제거
 //        (activity as HomeActivity).hideBottomNavi(true)
 
-//        if (cnt == 0) {     // cnt 방식이 아닌 뷰 교체 방식의 제대로된 방법 필요
-//            layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
-//            cnt++
-//        }
 
         retro.getRestaurantInfo(1, id, long, lati)
             .enqueue(object : Callback<GetRestaurantInfoResult> {
@@ -418,6 +450,70 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         marker.height = 100
     }
 
+    fun searchMarkerGoEvent(
+        naverMap: NaverMap,
+        id: Long,
+        long: Double,
+        lati: Double,
+        isParty: Boolean,
+        restaurant_name: String
+    ) { // 인자로서 marker의 lati long 필요  // num of party   // name
+//        binding.coordinatorLayout.removeView(binding.searchView)
+
+        // 추가적인 마커 생성 및 카메라 이동 필요
+        if (markerList.size != 0) {
+            Log.d("MARKER_INIT", "marker clear!!!")
+            for (i in 0 until markerList.size) markerList[i].map = null
+            markerList.clear()
+        }
+        markerList.add(0, Marker()) // 마커 할당
+        if (isParty) // group이 있는 마커 표현
+            markerList[0].icon = bapoolImg
+        else
+            markerList[0].icon = bapoolImgRed
+        markerList[0].isHideCollidedSymbols = true
+        markerList[0].isHideCollidedCaptions = true
+        markerList[0].position = LatLng(lati, long)  // 마커 위치 정보
+        markerList[0].map = naverMap    // 생성 마커들 지도에 출력
+        markerList[0].width = 75
+        markerList[0].height = 75
+        markerList[0].captionText = restaurant_name
+        // 이후 마커 클릭 이벤트와 같은 상황 구현
+        // 마커 클릭 시 하단 네비게이션바 제거
+        (activity as HomeActivity).hideBottomNavi(true)
+
+
+        retro.getRestaurantInfo(1, id, long, lati)
+            .enqueue(object : Callback<GetRestaurantInfoResult> {
+                override fun onResponse(
+                    call: Call<GetRestaurantInfoResult>,
+                    response: Response<GetRestaurantInfoResult>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d("MARKER_INFO", response.body().toString())
+                        createMarkerInfo(response.body()?.result)
+                    } else {
+                        // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                        Log.d("MARKER_INFO", "onResponse 실패")
+                    }
+                }
+
+                override fun onFailure(call: Call<GetRestaurantInfoResult>, t: Throwable) {
+                    Log.d("MARKER_INFO", t.message.toString())
+                    Log.d("MARKER_INFO", "FAIL")
+                }
+            })
+
+
+        // 해당 마커 위치로 지도 이동
+        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(markerList[0].position, 20.0))
+
+        // 마커 크기 변경 // 애니메이션 추가
+        markerList[0].width = 100
+        markerList[0].height = 100
+        // 위의 markerGoEvent와 디자인패턴 이용??
+    }
+
     private fun markerClickEvent(marker: Marker, id: Long, long: Double, lati: Double) {
         marker.setOnClickListener {
 
@@ -427,11 +523,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             // 마커 클릭 시 하단 네비게이션바 제거
             (activity as HomeActivity).hideBottomNavi(true)
 
-
-            if (cnt == 0) {     // cnt 방식이 아닌 뷰 교체 방식의 제대로된 방법 필요
-                layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
-                cnt++
-            }
 
             retro.getRestaurantInfo(1, id, long, lati)
                 .enqueue(object : Callback<GetRestaurantInfoResult> {
@@ -462,15 +553,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             marker.width = 100
             marker.height = 100
 
+
+
             true
         }
     }
 
     fun createMarkerInfo(result: RestaurantInfo?) {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
+
+        binding.bottomSheet.removeAllViews()
+        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
+        BottomSheetBehavior.from(binding.bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
+
         // 이미지
         Glide.with(this)
-            .load("https:" + result?.img_url)
+            .load(result?.img_url)
             .placeholder(R.drawable.hashtag1) // Glide 로 이미지 로딩을 시작하기 전에 보여줄 이미지를 설정한다.
             .error(R.drawable.hashtag5) // error 시 보여줄 이미지
             .into(binding.bottomSheet.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
