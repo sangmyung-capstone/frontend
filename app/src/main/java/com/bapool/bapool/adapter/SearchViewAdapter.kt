@@ -29,13 +29,14 @@ class SearchViewAdapter(val itemList: List<RestaurantSearch>, val naverMap: Nave
         holder.itemView.setOnClickListener {
             Log.d("search_view_holder", "view holder${position} touch")
 
-//            MapFragment().searchMarkerGoEvent(
-//                itemList[position].restaurant_id,
-//                itemList[position].restaurant_longitude,
-//                itemList[position].restaurant_latitude,
-//                (itemList[position].num_of_party != 0),
-//                itemList[position].restaurant_name
-//            ) // long && lati 전달 필요 // MapFragment()가 새로운 객체임 // 다시 생각
+            MapFragment().searchMarkerGoEvent(
+                naverMap,
+                itemList[position].restaurant_id,
+                itemList[position].restaurant_longitude,
+                itemList[position].restaurant_latitude,
+                (itemList[position].num_of_party != 0),
+                itemList[position].restaurant_name
+            ) // long && lati 전달 필요 // MapFragment()가 새로운 객체임 // 다시 생각
             // 기존 마커와는 다른 마커!!! // 검색 결과에서 나오는 식당은 현재 지도에 있는 마커가 아님!!!
 //            MapFragment().markerGoEvent(
 //                naverMap,

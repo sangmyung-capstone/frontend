@@ -451,13 +451,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     fun searchMarkerGoEvent(
+        naverMap: NaverMap,
         id: Long,
         long: Double,
         lati: Double,
         isParty: Boolean,
         restaurant_name: String
     ) { // 인자로서 marker의 lati long 필요  // num of party   // name
-        binding.coordinatorLayout.removeView(binding.searchView)
+//        binding.coordinatorLayout.removeView(binding.searchView)
 
         // 추가적인 마커 생성 및 카메라 이동 필요
         if (markerList.size != 0) {
