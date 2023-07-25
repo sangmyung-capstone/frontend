@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.adapter.RatingUserAdapter
 import com.bapool.bapool.databinding.ActivityRatinguserBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.GetRatingUserResponse
 import com.bapool.bapool.retrofit.data.PostRatingUserRequest
 import com.bapool.bapool.retrofit.data.PostRatingUserResponse
@@ -26,7 +27,7 @@ class RatingActivity : AppCompatActivity() {
         val binding = ActivityRatinguserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val retro = RetrofitService.create()
+        val retro = ServerRetrofit.create()
         val ratingUsersList = mutableListOf<GetRatingUserResponse.GetRatingUserResultUser>()
         val postRatingUserRequest = PostRatingUserRequest(mutableListOf())
 

@@ -72,6 +72,18 @@ interface ServerRetrofit {
         @Path("user-id") userId: Long,
     ): Call<GetRestaurantLogResponse>
 
+    @GET("/users/rating/{user-id}")
+    fun GetRatingUser(
+        @Path("user-id") userId: Long,
+        @Query("party-id") partyId: Long
+    ): Call<GetRatingUserResponse>
+
+    @POST("/users/rating/{user-id}")
+    fun PostRatingUser(
+        @Path("user-id") userId: Long,
+        @Body request: PostRatingUserRequest
+    ): Call<PostRatingUserResponse>
+
 
     //--------------------------------------------------------------------------
 

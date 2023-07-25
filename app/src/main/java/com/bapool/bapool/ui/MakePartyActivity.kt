@@ -16,6 +16,7 @@ import com.bapool.bapool.databinding.CustomDatepickerBinding
 import com.bapool.bapool.databinding.CustomTimepickerBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +31,7 @@ class MakePartyActivity : AppCompatActivity() {
     val hastagList = ArrayList(Collections.nCopies(5, 0))
     lateinit var maxPeople: NumberPicker
     val retro = ServerRetrofit.create()
-    val userId: String = "3"   //companion userid로 변경필요.
+    val userId: Long = UserId!!   //companion userid로 변경필요.
     lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
 
 
