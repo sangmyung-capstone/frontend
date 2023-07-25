@@ -1,11 +1,13 @@
 package com.bapool.bapool.ui
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import com.bapool.bapool.R
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -13,9 +15,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bapool.bapool.R
 import com.bapool.bapool.adapter.PartyChattingAdapter
 import com.bapool.bapool.adapter.PartyUserInfoAdapter
 import com.bapool.bapool.adapter.SelectPartyLeaderAdapter
@@ -23,7 +27,10 @@ import com.bapool.bapool.databinding.ActivityChattingAndPartyInfoMfactivityBindi
 import com.bapool.bapool.databinding.PartyinfoCustomDialogBinding
 import com.bapool.bapool.databinding.SelectPartyleaderDialogBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
-import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.retrofit.data.FirebasePartyInfo
+import com.bapool.bapool.retrofit.data.FirebasePartyMessage
+import com.bapool.bapool.retrofit.data.FirebaseUserInfo
+import com.bapool.bapool.retrofit.data.PatchEditPartyInfoResponse
 import com.bapool.bapool.retrofit.fcm.NotiModel
 import com.bapool.bapool.retrofit.fcm.PushNotification
 import com.bapool.bapool.retrofit.fcm.RetrofitInstance
@@ -39,7 +46,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
+import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -64,6 +73,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     //retrofit
     val retro = ServerRetrofit.create()
+
+    //알람시스템 변수
+    lateinit var startdate: String
+    var mypartyid: Int = 0
+    lateinit var partyName: String
+
 
     //Log TAG
     val TAG = "ChattingAndPartyInfoMFActivity"
@@ -146,9 +161,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                         }
 
                                         if (!userId.equals(currentUserId)) {
-                                            fcmUserInfo.put(userId, userInfo!!)
+                                            fcmUserInfo.put(userId, userInfo)
                                         } else {
-                                            currentUserNickName = userInfo?.nickName ?: ""
+                                            currentUserNickName = userInfo.nickName
                                         }
                                         partyUserMenuRVA.notifyDataSetChanged()
                                         chattingRVA.notifyDataSetChanged()
@@ -175,7 +190,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     fun ChattingAdapter() {
 
         chattingRVA =
-            PartyChattingAdapter(chattingRecyclerView,
+            PartyChattingAdapter(
+                chattingRecyclerView,
                 this,
                 currentUserId,
                 partyId,
@@ -209,10 +225,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
         }
 
-        toggle = ActionBarDrawerToggle(this@ChattingAndPartyInfoMFActivity,
+        toggle = ActionBarDrawerToggle(
+            this@ChattingAndPartyInfoMFActivity,
             binding.drawerNavigationLayout,
             R.string.open,
-            R.string.close)
+            R.string.close
+        )
         binding.drawerNavigationLayout.addDrawerListener(toggle)
         toggle.syncState()
 
@@ -264,9 +282,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     //binding.partyMenuNv.setText(item.groupMenu)
                     binding.startDateTextNv.setText(item.startDate)
                     val currentMaxPeople = "${item.curNumberOfPeople} / ${item.maxNumberOfPeople}"
-                    binding.currentMaxPeople.setText(currentMaxPeople)
-                    binding.detailOnChattingBackgroundText.setText(item.groupDetail)
-                    binding.restaruantLocationTextNv.setText(item.restaurantName)
+                    binding.currentMaxPeople.text = currentMaxPeople
+                    binding.detailOnChattingBackgroundText.text = item.groupDetail
+                    binding.restaruantLocationTextNv.text = item.restaurantName
                     if (currentUserId == item.groupLeaderId.toString()) {
                         binding.closePartyBtn.visibility = View.VISIBLE
                     }
@@ -287,6 +305,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
                     groupOnerId = item.groupLeaderId.toString()
                     currentPartyInfo = item
+
+                    //알람 만들기
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -381,11 +402,13 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val downloadUrl = task.result.toString()
                         val group_messages =
-                            FirebasePartyMessage(currentUserId.toString(),
+                            FirebasePartyMessage(
+                                currentUserId.toString(),
                                 getTime(),
                                 "",
                                 1,
-                                downloadUrl)
+                                downloadUrl
+                            )
                         ImgRef.setValue(group_messages)
                         for ((key, userInfo) in fcmUserInfo.entries) {
                             sendFcm(1, userInfo)
@@ -426,17 +449,21 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
 
                     } else {
-                        Toast.makeText(this@ChattingAndPartyInfoMFActivity,
+                        Toast.makeText(
+                            this@ChattingAndPartyInfoMFActivity,
                             "response x",
-                            Toast.LENGTH_SHORT)
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                     }
                 }
 
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
-                    Toast.makeText(this@ChattingAndPartyInfoMFActivity,
+                    Toast.makeText(
+                        this@ChattingAndPartyInfoMFActivity,
                         "그룹 탈퇴 오류 ㄴㄻㄴㄹㄴㅇㄹfail",
-                        Toast.LENGTH_SHORT)
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
 
                 }
@@ -579,7 +606,14 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val result = response.body()
                         Log.d("closeParty", response.body().toString())
+                        //스타트데이트로 알림 생성
                         closePartyConfirmDialog()
+                        callAlarm(
+                            this@ChattingAndPartyInfoMFActivity,
+                            startdate,
+                            partyId.toInt(),
+                            "$partyName 에서 곧 먹을 시간입니다."
+                        )
                     } else {
                         Log.d("closeParty", response.errorBody().toString())
 
@@ -614,6 +648,51 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
+
+    fun callAlarm(context: Context, time: String, alarm_code: Int, content: String) {
+        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val receiverIntent = Intent(context, MyReceiver::class.java) //리시버로 전달될 인텐트 설정
+        receiverIntent.apply {
+            putExtra("alarm_rqCode", alarm_code) //요청 코드를 리시버에 전달
+            putExtra("content", content) //수정_일정 제목을 리시버에 전달
+        }
+
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getBroadcast(
+                context,
+                alarm_code,
+                receiverIntent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            PendingIntent.getBroadcast(
+                context,
+                alarm_code,
+                receiverIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd H:mm:ss")
+        var datetime = Date()
+        try {
+            datetime = dateFormat.parse(time) as Date
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        val calendar = Calendar.getInstance()
+        calendar.time = datetime
+        calendar.add(Calendar.HOUR_OF_DAY, -2)
+        Log.d("알림","$calendar")
+
+        //API 23(android 6.0) 이상(해당 api 레벨부터 도즈모드 도입으로 setExact 사용 시 알람이 울리지 않음)
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+    }
 }
 
 

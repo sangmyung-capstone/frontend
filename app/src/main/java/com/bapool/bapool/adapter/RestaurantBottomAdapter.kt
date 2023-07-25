@@ -15,8 +15,16 @@ import com.bapool.bapool.ui.fragment.MapFragment.Companion.markerList
 import com.bumptech.glide.Glide
 import com.naver.maps.map.NaverMap
 
-class RestaurantBottomAdapter(val itemList: List<Restaurant>, val naverMap: NaverMap) :
+class RestaurantBottomAdapter(
+    val itemList: List<Restaurant>,
+    val imageList: List<String>,
+    val naverMap: NaverMap
+) :
     RecyclerView.Adapter<RestaurantBottomAdapter.RestaurantViewHolder>() {
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -30,13 +38,28 @@ class RestaurantBottomAdapter(val itemList: List<Restaurant>, val naverMap: Nave
         holder.restaurant_address.text = itemList[position].restaurant_address
         holder.restaurant_group_number.text = itemList[position].num_of_party.toString()
 
-        Glide.with(holder.context)
+        Log.d("bottom_view_holder", "view holder${position} run")
+        Log.d("bottom_view_holder", "image list ${position} run")
+
+        if (imageList[position] == null)
+            Glide.with(holder.context)
 //            .load(itemList[position].imgURL)
-            .load(R.drawable.bapool)
-            .into(holder.restaurant_img)
+                .load(R.drawable.bapool)
+                .into(holder.restaurant_img)
+        else    // adapter.notifyItemChanged(position) 호출 시
+            Glide.with(holder.context)
+                .load(imageList[position])
+                .error(R.drawable.hashtag5)
+                .into(holder.restaurant_img)
 
         holder.itemView.setOnClickListener {
             Log.d("bottom_view_holder", "view holder${position} touch")
+            Log.d(
+                "bottom_view_holder",
+                "id : ${itemList[position].restaurant_id}\n" +
+                        "name : ${itemList[position].restaurant_name}" +
+                        "image list : ${imageList[position]}"
+            )
             MapFragment().markerGoEvent(
                 naverMap,
                 markerList[position],
@@ -46,6 +69,7 @@ class RestaurantBottomAdapter(val itemList: List<Restaurant>, val naverMap: Nave
             )
         }
     }
+
 
     override fun getItemCount(): Int {
         return itemList.count()
