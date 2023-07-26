@@ -41,6 +41,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -148,6 +149,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                 object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
 
+
+                                        //파티 2가 오류나는 이유. user6 가 Users에 저장되어 있지않음  userid 12에 저장되어있음 백에서 이유 찾아볼것
+
                                         userInfo = snapshot.getValue(FirebaseUserInfo::class.java)!!
                                         partyUserInfo[userId] = userInfo
 
@@ -245,7 +249,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         }
         binding.detailOnChattingBackground.setOnClickListener {
             showDetailDialog()
-
         }
         binding.detailIcon.setOnClickListener {
             showDetailDialog()
@@ -276,38 +279,45 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         database.child("test").child("Groups").child(partyId.toString()).child("groupInfo")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val item = snapshot.getValue(FirebasePartyInfo::class.java)!!
-                    binding.GrpName.setText(item.groupName)
-                    binding.partyNameNv.setText(item.groupName)
-                    //binding.partyMenuNv.setText(item.groupMenu)
-                    binding.startDateTextNv.setText(item.startDate)
-                    val currentMaxPeople = "${item.curNumberOfPeople} / ${item.maxNumberOfPeople}"
-                    binding.currentMaxPeople.text = currentMaxPeople
-                    binding.detailOnChattingBackgroundText.text = item.groupDetail
-                    binding.restaruantLocationTextNv.text = item.restaurantName
-                    if (currentUserId == item.groupLeaderId.toString()) {
-                        binding.closePartyBtn.visibility = View.VISIBLE
-                    }
-                    if (item.hashTag != null) {
-                        if (item.hashTag.isNotEmpty()) {
-                            binding.hashtagVisible.visibility = View.VISIBLE
-                            for (item in item.hashTag) {
-                                when (item) {
-                                    1 -> binding.hash1.visibility = View.VISIBLE
-                                    2 -> binding.hash2.visibility = View.VISIBLE
-                                    3 -> binding.hash3.visibility = View.VISIBLE
-                                    4 -> binding.hash4.visibility = View.VISIBLE
-                                    5 -> binding.hash5.visibility = View.VISIBLE
+                    if(snapshot.value != null) {
+                        val item = snapshot.getValue(FirebasePartyInfo::class.java)!!
+                        binding.GrpName.setText(item.groupName)
+                        binding.partyNameNv.setText(item.groupName)
+                        binding.partyMenuNv.setText(item.menu)
+                        binding.startDateTextNv.setText(item.startDate)
+                        val currentMaxPeople =
+                            "${item.curNumberOfPeople} / ${item.maxNumberOfPeople}"
+                        binding.currentMaxPeople.text = currentMaxPeople
+                        binding.detailOnChattingBackgroundText.text = item.groupDetail
+                        binding.restaruantLocationTextNv.text = item.restaurantName
+                        if (currentUserId == item.groupLeaderId.toString()) {
+                            binding.closePartyBtn.visibility = View.VISIBLE
+                            binding.menuEditPartyInfo.visibility = View.VISIBLE
+                        }
+                        if (item.hashTag != null) {
+                            if (item.hashTag.isNotEmpty()) {
+                                binding.hashtagVisible.visibility = View.VISIBLE
+                                var count = 0
+                                for (item in item.hashTag) {
+                                    if(item == 1){
+                                        count++
+                                        when (count) {
+                                            1 -> binding.hash1.visibility = View.VISIBLE
+                                            2 -> binding.hash2.visibility = View.VISIBLE
+                                            3 -> binding.hash3.visibility = View.VISIBLE
+                                            4 -> binding.hash4.visibility = View.VISIBLE
+                                            5 -> binding.hash5.visibility = View.VISIBLE
+                                        }
+                                    }
+
                                 }
                             }
                         }
+
+                        groupOnerId = item.groupLeaderId.toString()
+                        currentPartyInfo = item
+
                     }
-
-                    groupOnerId = item.groupLeaderId.toString()
-                    currentPartyInfo = item
-
-                    //알람 만들기
-
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -433,6 +443,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     fun editPartyInfo() {
         val intent = Intent(this, EditPartyInfoActivity::class.java)
         intent.putExtra("partyInfo", currentPartyInfo)
+        intent.putExtra("partyId",partyId)
         startActivity(intent)
     }
 
@@ -506,7 +517,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         }
 
         binding.partyName.text = item.groupName
-        //binding.partyMenu.text = item.groupMenu
+        binding.partyMenu.text = item.menu
         binding.dateTime.text = item.startDate
         binding.participantsNum.text = " ${item.curNumberOfPeople}  /  ${item.maxNumberOfPeople}"
         binding.restaurantLocation.text = item.restaurantName

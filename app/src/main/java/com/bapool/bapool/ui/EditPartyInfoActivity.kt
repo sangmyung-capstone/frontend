@@ -18,6 +18,7 @@ import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.FirebasePartyInfo
 import com.bapool.bapool.retrofit.data.PatchEditPartyInfoResponse
 import com.bapool.bapool.retrofit.data.PatchEditPartyInfoRequest
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,18 +34,15 @@ class EditPartyInfoActivity : AppCompatActivity() {
     val hastagList = ArrayList(Collections.nCopies(5, 0))
     lateinit var maxPeople: NumberPicker
     val retro = ServerRetrofit.create()
-    val userId: Long = 3
-    val partyId: Long = 8
+    val userId: Long = UserId!!
     val TAG = "EditPartyInfoActivity"
 
     var receivePartyInfo: FirebasePartyInfo = FirebasePartyInfo()
+    var partyId: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditPartyInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-
 
         initializeVari()
         listener()
@@ -59,9 +57,11 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
 
         receivePartyInfo = intent.getSerializableExtra("partyInfo") as FirebasePartyInfo
+        partyId = intent.getStringExtra("partyId").toString()
         binding.grpNameText.setText(receivePartyInfo.groupName)
-       // binding.menuText.setText(receivePartyInfo.groupMenu)
+        binding.menuText.setText(receivePartyInfo.menu)
         binding.detail.setText(receivePartyInfo.groupDetail)
+        binding.maxPeople.value = receivePartyInfo.maxNumberOfPeople
         changeDateFormat(binding.startDateText, binding.startTimeText)
         setHashtagInfo()
 
@@ -161,7 +161,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
                 val editPartyInstance =
                     PatchEditPartyInfoRequest(
-                        partyId,
+                        partyId.toLong(),
                         binding.grpNameText.text.toString(),
                         maxPeople.value,
                         startDateLocal,
@@ -180,7 +180,8 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
 
     fun retrofit(editParty: PatchEditPartyInfoRequest) {
-
+        Log.d("MKRetrofit", editParty.toString())
+        Log.d("MKRetrofit", userId.toString())
         retro.editParty(userId, editParty).enqueue(object : Callback<PatchEditPartyInfoResponse> {
             override fun onResponse(
                 call: Call<PatchEditPartyInfoResponse>,
@@ -191,18 +192,10 @@ class EditPartyInfoActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     Log.d("MKRetrofit", "onRequest 성공: $editParty")
                     Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
-
-//                    val intent =
-//                        Intent(this@EditPartyInfoActivity,
-//                            ChattingAndPartyInfoMFActivity::class.java)
-////                intent.putExtra("currentUserId", "userId2")//현재 유저의 userId로 value값 교체
-////                intent.putExtra("partyId", "groupId2") // result 안의 party_id 값으로 value값 교체
-//                    startActivity(intent)
-
+                    finish()
 
                 } else {
                     Log.d("MKRetrofit", "onResponse 실패: " + response.errorBody().toString())
-
                     Toast.makeText(this@EditPartyInfoActivity, "그룹 생성 오류 fail", Toast.LENGTH_SHORT)
                         .show()
 
@@ -212,12 +205,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
-//                    val responseCode = response.code()
-//                    val errorBody = response.errorBody()?.string()
-//                    Log.d("MKRetrofit", response.toString())
-//
-//                    // 실패한 응답 처리
-//                    Log.d("MKRetrofit", "응답 실패. 응답 코드: $responseCode, 에러 메시지: $errorBody")
 
                 Toast.makeText(this@EditPartyInfoActivity, "그룹 생성 오류", Toast.LENGTH_SHORT).show()
             }
@@ -298,7 +285,11 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
         val inputDateTime = receivePartyInfo.startDate
 
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+
+        Log.d("sadfasfadsfasdfasdf",receivePartyInfo.toString())
+        Log.d("sadfasfadsfasdfasdf",receivePartyInfo.startDate)
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
         val dateTime = LocalDateTime.parse(inputDateTime, formatter)
 
         val month = String.format("%02d", dateTime.monthValue)
@@ -308,7 +299,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
         val hour = String.format("%02d", dateTime.hour)
         val minute = String.format("%02d", dateTime.minute)
 
-// Output the extracted components
         val date = "${year}-${month}-${day}"
         val time = "$hour:$minute"
 

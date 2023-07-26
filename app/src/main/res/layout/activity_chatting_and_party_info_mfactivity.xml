@@ -357,6 +357,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <ImageView
+                    android:visibility="gone"
                     android:id="@+id/menuEditPartyInfo"
                     android:layout_width="40dp"
                     android:layout_height="40dp"

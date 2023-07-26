@@ -96,18 +96,18 @@ class RestaurantPartyAdapter(val context: Context) :
                 }
             }
 
-//            //만약 참여중인 파티이라면 button을 다르게 표시
-//            if (item.is_participate) {
-//                Log.d("is_participate", (!item.is_participate).toString())
-//                binding.joinGrp.isEnabled = false
-//                binding.joinGrp.text = "참여중"
-//            }
-//            //마감된파티
-//            if (item.is_recruiting) {
-//                Log.d("is_participate", (!item.is_participate).toString())
-//                binding.joinGrp.isEnabled = false
-//                binding.joinGrp.text = "마감"
-//            }
+            //만약 참여중인 파티이라면 button을 다르게 표시
+            if (item.is_participate) {
+                Log.d("is_participate", (!item.is_participate).toString())
+                binding.joinGrp.isEnabled = false
+                binding.joinGrp.text = "참여중"
+            }
+            //마감된파티
+            if (!item.is_recruiting) {
+                Log.d("is_participate", (!item.is_participate).toString())
+                binding.joinGrp.isEnabled = false
+                binding.joinGrp.text = "마감"
+            }
 
             val allNum = partiNum(item.participants, item.max_people)
             val allDate = dateRange(item.start_date)

@@ -7,16 +7,18 @@
     tools:context=".ui.MakePartyActivity">
 
 
-        <EditText
-            android:id="@+id/menu_text"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/make_party_text_background"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10"/>
+    <EditText
+        android:id="@+id/menu_text"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="7dp"
+        android:paddingLeft="7dp"
+        android:textSize="13sp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/make_party_text_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"/>
 
 
 
@@ -60,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="10dp"
-        android:text="그룹명"
+        android:text="파티이름"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLine" />
@@ -96,21 +98,14 @@
         android:background="#EEEEEE"
         app:layout_constraintTop_toBottomOf="@+id/resName" />
 
-    <android.widget.Button
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="취소"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
 
         <EditText
             android:id="@+id/grpNameText"
             android:layout_width="match_parent"
+            android:textSize="13sp"
             android:layout_height="40dp"
             android:layout_marginStart="30dp"
+            android:paddingLeft="7dp"
             android:layout_marginTop="7dp"
             android:layout_marginEnd="30dp"
             android:background="@drawable/make_party_text_background"
@@ -142,10 +137,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textview20">
         <EditText
             android:id="@+id/detail"
+            android:textSize="13sp"
             android:layout_width="match_parent"
             android:layout_margin="7dp"
             android:background="@android:color/transparent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
     </ScrollView>
 
@@ -239,6 +235,7 @@
         android:layout_width="match_parent"
         android:hint="시작 날짜"
         android:gravity="center_vertical"
+        android:paddingLeft="7dp"
         android:background="@drawable/make_party_text_background"
         android:layout_height="30dp"
         android:layout_marginLeft="30dp"
@@ -252,6 +249,7 @@
         android:layout_width="match_parent"
         android:hint="시작 시간"
         android:gravity="center_vertical"
+        android:paddingLeft="7dp"
         android:background="@drawable/make_party_text_background"
         android:layout_height="30dp"
         android:layout_marginLeft="30dp"

@@ -9,8 +9,10 @@
 
 
         <EditText
+            android:paddingLeft="7dp"
             android:id="@+id/menu_text"
             android:layout_width="match_parent"
+            android:textSize="13sp"
             android:layout_height="40dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="7dp"
@@ -87,21 +89,22 @@
             app:layout_constraintTop_toBottomOf="@+id/resName" />
 
 
-        <EditText
-            android:id="@+id/grpNameText"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="30dp"
-            android:background="@drawable/make_party_text_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView9"
-            app:layout_constraintTop_toBottomOf="@+id/textView9"/>
+    <EditText
+        android:id="@+id/grpNameText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/make_party_text_background"
+        android:paddingLeft="7dp"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
-
-
-        <TextView
+    <TextView
             android:id="@+id/textview20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -123,10 +126,11 @@
             app:layout_constraintTop_toBottomOf="@+id/textview20">
             <EditText
                 android:id="@+id/detail"
+                android:textSize="13sp"
                 android:layout_width="match_parent"
                 android:layout_margin="7dp"
                 android:background="@android:color/transparent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
 
         </ScrollView>
 
@@ -219,6 +223,7 @@
             android:id="@+id/startDateText"
             android:layout_width="match_parent"
             android:hint="시작 날짜"
+            android:paddingLeft="7dp"
             android:gravity="center_vertical"
             android:background="@drawable/make_party_text_background"
             android:layout_height="30dp"
@@ -235,6 +240,7 @@
             android:gravity="center_vertical"
             android:background="@drawable/make_party_text_background"
             android:layout_height="30dp"
+            android:paddingLeft="7dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="100dp"

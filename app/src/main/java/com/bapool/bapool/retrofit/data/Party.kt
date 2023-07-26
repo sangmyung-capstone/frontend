@@ -94,7 +94,7 @@ data class FirebasePartyInfo
     val endDate: String = "",
     val hashTag: List<Int> = listOf(),
     val restaurantName: String = "",
-    val groupLeaderId: Int = 0,
+    val groupLeaderId: Long = 0,
     val siteUrls: String = "",
 ): Serializable
 
