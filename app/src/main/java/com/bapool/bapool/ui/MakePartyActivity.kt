@@ -201,12 +201,11 @@ class MakePartyActivity : AppCompatActivity() {
                             )
                         intent.putExtra("currentUserId", userId)//현재 유저의 userId로 value값 교체
                         intent.putExtra("partyId", result!!.result.party_id.toString()) // result 안의 party_id 값으로 value값 교체
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
 
                     } else {
-//                    val responseCode = response.code()
-//                    val errorBody = response.errorBody()?.string()
-//                    Log.d("MKRetrofit", response.toString())
+
                         Toast.makeText(this@MakePartyActivity, "그룹 생성 오류", Toast.LENGTH_SHORT)
                             .show()
 

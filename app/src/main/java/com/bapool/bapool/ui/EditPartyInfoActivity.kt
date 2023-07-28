@@ -22,7 +22,6 @@ import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -62,6 +61,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
         binding.menuText.setText(receivePartyInfo.menu)
         binding.detail.setText(receivePartyInfo.groupDetail)
         binding.maxPeople.value = receivePartyInfo.maxNumberOfPeople
+        binding.maxPeople.wrapSelectorWheel = false
         changeDateFormat(binding.startDateText, binding.startTimeText)
         setHashtagInfo()
 
@@ -168,6 +168,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
                         endDateLocal,
                         binding.menuText.text.toString(),
                         binding.detail.text.toString(),
+                        hastagList
                     )
                 Log.d(TAG, editPartyInstance.toString())
 
@@ -182,33 +183,41 @@ class EditPartyInfoActivity : AppCompatActivity() {
     fun retrofit(editParty: PatchEditPartyInfoRequest) {
         Log.d("MKRetrofit", editParty.toString())
         Log.d("MKRetrofit", userId.toString())
-        retro.editParty(userId, editParty).enqueue(object : Callback<PatchEditPartyInfoResponse> {
-            override fun onResponse(
-                call: Call<PatchEditPartyInfoResponse>,
-                response: Response<PatchEditPartyInfoResponse>,
-            ) {
-                var result: PatchEditPartyInfoResponse? = response.body()
+        retro.editParty(7, editParty)
+            .enqueue(object : Callback<PatchEditPartyInfoResponse> {
+                override fun onResponse(
+                    call: Call<PatchEditPartyInfoResponse>,
+                    response: Response<PatchEditPartyInfoResponse>,
+                ) {
+                    var result: PatchEditPartyInfoResponse? = response.body()
 
-                if (response.isSuccessful) {
-                    Log.d("MKRetrofit", "onRequest 성공: $editParty")
-                    Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
-                    finish()
+                    if (response.isSuccessful) {
+                        Log.d("MKRetrofit", "onRequest 성공: $editParty")
+                        Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
+                        finish()
+                    } else {
+                        Log.d("MKRetrofit", "onResponse 실패: " + response.body()?.code.toString())
+                        Log.d("MKRetrofit", "onResponse 실패: " + response.body()?.message.toString())
 
-                } else {
-                    Log.d("MKRetrofit", "onResponse 실패: " + response.errorBody().toString())
-                    Toast.makeText(this@EditPartyInfoActivity, "그룹 생성 오류 fail", Toast.LENGTH_SHORT)
-                        .show()
+
+
+                        Toast.makeText(
+                            this@EditPartyInfoActivity,
+                            "그룹 생성 오류 fail",
+                            Toast.LENGTH_SHORT ).show()
+
+
+
+                    }
 
                 }
 
+                override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
 
-            }
-
-            override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
-
-                Toast.makeText(this@EditPartyInfoActivity, "그룹 생성 오류", Toast.LENGTH_SHORT).show()
-            }
-        })
+                    Toast.makeText(this@EditPartyInfoActivity, "그룹 생성 오류", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
 
     }
 
@@ -286,8 +295,8 @@ class EditPartyInfoActivity : AppCompatActivity() {
         val inputDateTime = receivePartyInfo.startDate
 
 
-        Log.d("sadfasfadsfasdfasdf",receivePartyInfo.toString())
-        Log.d("sadfasfadsfasdfasdf",receivePartyInfo.startDate)
+        Log.d("sadfasfadsfasdfasdf", receivePartyInfo.toString())
+        Log.d("sadfasfadsfasdfasdf", receivePartyInfo.startDate)
 
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
         val dateTime = LocalDateTime.parse(inputDateTime, formatter)
@@ -307,7 +316,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
     }
 
-    fun setHashtagInfo(){
+    fun setHashtagInfo() {
         val receiveHashtag = receivePartyInfo.hashTag
         val image1 = binding.hash1
         val image2 = binding.hash2
@@ -315,15 +324,20 @@ class EditPartyInfoActivity : AppCompatActivity() {
         val image4 = binding.hash4
         val image5 = binding.hash5
 
+        var count = 0
         for (data in receiveHashtag) {
-            when (data) {
-                1 -> image1.setBackgroundResource(R.drawable.custom_img_bg)
-                2 -> image2.setBackgroundResource(R.drawable.custom_img_bg)
-                3 -> image3.setBackgroundResource(R.drawable.custom_img_bg)
-                4 -> image4.setBackgroundResource(R.drawable.custom_img_bg)
-                5 -> image5.setBackgroundResource(R.drawable.custom_img_bg)
-                else -> Log.d("EditPartyInfoActivity","error")
+            count++
+            if(data == 1){
+                when (count) {
+                    1 -> image1.setBackgroundResource(R.drawable.custom_img_bg)
+                    2 -> image2.setBackgroundResource(R.drawable.custom_img_bg)
+                    3 -> image3.setBackgroundResource(R.drawable.custom_img_bg)
+                    4 -> image4.setBackgroundResource(R.drawable.custom_img_bg)
+                    5 -> image5.setBackgroundResource(R.drawable.custom_img_bg)
+                    else -> Log.d("EditPartyInfoActivity", "error")
+                }
             }
+
         }
     }
 }

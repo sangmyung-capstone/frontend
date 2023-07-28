@@ -34,7 +34,6 @@ class PartyFragment : Fragment() {
     var currentUserId: String = UserId.toString()
 
 
-
     private val TAG = "PartyFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +50,7 @@ class PartyFragment : Fragment() {
         initializeVari()
 
 //
-//        binding.dummyBtn.setOnClickListener {
+        //  binding.dummy.setOnClickListener {
 ////
 //            // 채팅 더미데이터 추가
 ////            val database = Firebase.database
@@ -62,19 +61,19 @@ class PartyFragment : Fragment() {
 ////                .setValue(groupMessages)
 ////
 ////
-//////            Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
-////            그룹 더미데이터 추가
-////            val database = Firebase.database
-////            val myRef = database.getReference("Groups")
-////            val hashtaglist = mutableListOf<Int>()
-////            hashtaglist.add(4)
-////            hashtaglist.add(3)
-////            val groupInfo = FirebasePartyInfo("그룹이름3", "메뉴3", "상세메뉴3",
-////                2, 3, getTime(), getTime(), hashtaglist, "식당이름3",33 ,"www.google.com")
-////            val groupUsers = mapOf("22" to true, "33" to true)
-////            val Group3 = FirebaseParty(groupInfo, null, groupUsers)
-////
-////            myRef.child("33").setValue(Group3)
+////           Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
+//            그룹 더미데이터 추가
+//            val database = Firebase.database
+//            val myRef = database.getReference("Groups")
+//            val hashtaglist = mutableListOf<Int>()
+//            hashtaglist.add(4)
+//            hashtaglist.add(3)
+//            val groupInfo = FirebasePartyInfo("그룹이름3", "메뉴3", "상세메뉴3",
+//                2, 3, getTime(), getTime(), hashtaglist, "식당이름3",33 ,"www.google.com")
+//            val groupUsers = mapOf("22" to true, "33" to true)
+//            val Group3 = FirebaseParty(groupInfo, null, groupUsers)
+//
+//            myRef.child("33").setValue(Group3)
 ////            myRef.child("1").child("groupUsers").updateChildren(groupUsers)
 ////
 ////            Users 더미데이터 추가
@@ -108,8 +107,19 @@ class PartyFragment : Fragment() {
 //                    Log.e("dsksdfkjsfkj", token.toString())
 //
 //                })
-//        }
 
+//            val database = Firebase.database
+//            val hashtaglist = mutableListOf<Int>()
+//            hashtaglist.add(1)
+//            hashtaglist.add(0)
+//            hashtaglist.add(1)
+//            hashtaglist.add(0)
+//            hashtaglist.add(1)
+//            database.getReference("Groups").child("33").child("groupInfo").child("hashtTag").setValue(hashtaglist)
+//            val testObject = FirebaseTest("수정 1", hashtaglist, 12)
+//            database.getReference("Groups").child("33").child("groupInfo").setValue(testObject)
+
+        //}
         return binding.root
     }
 
@@ -171,9 +181,11 @@ class PartyFragment : Fragment() {
                         }
                         val lastChatTime: String = lastChatItem.sendedDate
 
-                        val dataModel = MyPartyListModel(grpId,
+                        val dataModel = MyPartyListModel(
+                            grpId,
                             resName,
-                            grpName, participants, lastChat, notReadChatNumber, lastChatTime)
+                            grpName, participants, lastChat, notReadChatNumber, lastChatTime
+                        )
                         myPartyListModel.add(dataModel)
 
                     }
@@ -210,4 +222,5 @@ class PartyFragment : Fragment() {
         val date = sdf.format(currentTime)
         return date.toString()
     }
+
 }

@@ -129,55 +129,55 @@ interface ServerRetrofit {
     //--------------------------------------------------------------------------
 
     //손승현
-    @GET("test/parties/{user-id}/{restaurant-id}")
+    @GET("/parties/{user-id}/{restaurant-id}")
     fun getResPartyList(
         @Path("user-id") userId: Long,
         @Path("restaurant-id") restaurantId: Long,
     ): Call<GetResPartyListResponse>
 
-    @POST("test/parties/{user-id}")
+    @POST("/parties/{user-id}")
     fun makeParty(
         @Path("user-id") userId: Long,
         @Body request: PostMakePartyRequest,
     ): Call<PostMakePartyResponse>
 
-    @PATCH("test/parties/{user-id}")
+    @PATCH("/parties/{user-id}")
     fun editParty(
         @Path("user-id") userId: Long,
         @Body request: PatchEditPartyInfoRequest,
     ): Call<PatchEditPartyInfoResponse>
 
-    @DELETE("/test/parties/{user-id}/{party-id}")
+    @DELETE("/parties/{user-id}/{party-id}")
     fun recessionParty(
         @Path("user-id") userId: Long,
         @Path("party-id") partyId: Long,
     ): Call<PatchEditPartyInfoResponse>
 
-    @GET("/test/users/profile/{user-id}")
+    @GET("/users/profile/{user-id}")
     fun checkUserProfile(
         @Path("user-id") userId: Long,
     ): Call<CheckUserProfileResponse>
 
-    @POST("/test/users/block/{user-id}")
+    @POST("/users/block/{user-id}")
     fun BlockUser(
         @Path("user-id") userId: Long,
         @Body request: BlockUserRequest,
     ): Call<BlockUserChattingProfileResponse>
 
-    @PATCH("test/parties/close/{user-id}/{party-id}")
+    @PATCH("/parties/close/{user-id}/{party-id}")
     fun closeParty(
         @Path("user-id") userId: Long,
         @Path("party-id") partyId: Long,
     ): Call<PatchEditPartyInfoResponse>
 
-    @PATCH("test/parties/change/{user-id}/{party-id}/{other-user-id}")
+    @PATCH("/parties/change/{user-id}/{party-id}/{other-user-id}")
     fun changePartyLeader(
         @Path("user-id") userId: Long,
         @Path("party-id") partyId: Long,
         @Path("other-user-id") otherUserId: Long
     ): Call<PatchEditPartyInfoResponse>
 
-    @POST("test/parties/participant/{user-id}")
+    @POST("/parties/participant/{user-id}")
     fun participateParty(
         @Path("user-id") userId: Long,
         @Body request: participateParty

@@ -317,7 +317,8 @@ class PartyChattingAdapter(
             setNickNameImg(position, binding.opponentId, binding.opponentImage)
             binding.opponentImage.setOnClickListener {
                 val intent = Intent(context, CheckUserProfileActivity::class.java)
-                //userid 넘겨줘야함
+                intent.putExtra("opponentUserId",item.senderId)
+
                 context.startActivity(intent)
             }
         }
@@ -340,6 +341,7 @@ class PartyChattingAdapter(
                 val intent = Intent(context, CheckUserProfileActivity::class.java)
                 //userid 넘겨줘야함
                 intent.putExtra("opponentUseId", item.senderId)
+                Log.d("asdfasfasdfasf",item.senderId)
                 context.startActivity(intent)
             }
         }

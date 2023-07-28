@@ -76,9 +76,11 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     val retro = ServerRetrofit.create()
 
     //알람시스템 변수
-    lateinit var startdate: String
+    //연수야 이것좀 바꿨다  lateinit var startdate: String ->
+    var startdate: String = ""
     var mypartyid: Int = 0
-    lateinit var partyName: String
+    //연수야 이것좀 바꿨다      lateinit var partyName: String ->
+    var partyName: String = ""
 
 
     //Log TAG
@@ -109,6 +111,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         listener()
         getPartyUserInfo()
 
+
+        Log.d("asdjflasdfjlasdfjklasdf",currentPartyInfo.status.toString())
 
     }
 
@@ -448,16 +452,22 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
     fun recessionParty() {
-        retro.recessionParty(2, 2)
+        retro.recessionParty(currentUserId.toLong(), partyId.toLong())
             .enqueue(object : Callback<PatchEditPartyInfoResponse> {
                 override fun onResponse(
                     call: Call<PatchEditPartyInfoResponse>,
                     response: Response<PatchEditPartyInfoResponse>,
                 ) {
 
-//                    var result: PatchEditPartyInfoResponse? = response.body()
+                    Log.d("asdjflasdfjlasdfjklasdf",response.body().toString())
+                    Log.d("asdjflasdfjlasdfjklasdf",currentUserId.toString())
+                    Log.d("asdjflasdfjlasdfjklasdf",partyId.toString())
 
                     if (response.isSuccessful) {
+
+                        Log.d("asdjflasdfjlasdfjklasdfSucc",response.body().toString())
+
+                        finish()
 
                     } else {
                         Toast.makeText(
@@ -466,6 +476,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         )
                             .show()
+
+
+                        Log.d("asdjflasdfjlasdfjklasdf",response.errorBody().toString())
                     }
                 }
 
@@ -530,11 +543,16 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         alertDialogBuilder.setTitle("파티 나가기") // Set the dialog title
         alertDialogBuilder.setMessage("나가기를 하면 대화내용이 모두 삭제되고 채팅목록에서도 삭제됩니다.")
         alertDialogBuilder.setPositiveButton("나가기") { dialog, _ ->
-            if (currentUserId.equals(currentPartyInfo.groupLeaderId.toString())) {
-                selectPartyLeaderDialog()
-            } else {
+            if(!(currentPartyInfo.curNumberOfPeople == 1)){
+                if (currentUserId.equals(currentPartyInfo.groupLeaderId.toString())) {
+                    selectPartyLeaderDialog()
+                } else {
+                    recessionParty()
+                }
+            }else{
                 recessionParty()
             }
+
         }
 
         alertDialogBuilder.setNegativeButton("취소") { dialog, _ ->
@@ -617,6 +635,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val result = response.body()
                         Log.d("closeParty", response.body().toString())
+                        binding.closePartyBtn.isEnabled = false
+                        binding.closePartyBtn.text = "마감"
                         //스타트데이트로 알림 생성
                         closePartyConfirmDialog()
                         callAlarm(
@@ -627,7 +647,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         )
                     } else {
                         Log.d("closeParty", response.errorBody().toString())
-
                     }
                 }
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {

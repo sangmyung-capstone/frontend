@@ -23,13 +23,17 @@ class SelectPartyLeaderAdapter(
     val currentPartyId: String,
 ) : RecyclerView.Adapter<SelectPartyLeaderAdapter.ViewHolder>() {
 
+
     val retro = ServerRetrofit.create()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            ChattingAndPartyUserItemBinding.inflate(LayoutInflater.from(parent.context),
+            ChattingAndPartyUserItemBinding.inflate(
+                LayoutInflater.from(parent.context),
                 parent,
-                false)
+                false
+            )
 
         return ViewHolder(binding)
     }
@@ -94,9 +98,11 @@ class SelectPartyLeaderAdapter(
     fun changePartyLeaderRetrofit(opponentUserId: String?) {
 
         if (opponentUserId != null) {
-            retro.changePartyLeader(currentUserId.toLong(),
+            retro.changePartyLeader(
+                currentUserId.toLong(),
                 currentPartyId.toLong(),
-                opponentUserId.toLong()).enqueue(object : Callback<PatchEditPartyInfoResponse> {
+                opponentUserId.toLong()
+            ).enqueue(object : Callback<PatchEditPartyInfoResponse> {
                 override fun onResponse(
                     call: Call<PatchEditPartyInfoResponse>,
                     response: Response<PatchEditPartyInfoResponse>,
@@ -120,7 +126,7 @@ class SelectPartyLeaderAdapter(
         }
 
 
-        //통신완료 하드코딩
+      //통신완료 하드코딩
 //        if (opponentUserId != null) {
 //            retro.changePartyLeader(5,
 //                3,
@@ -147,6 +153,7 @@ class SelectPartyLeaderAdapter(
 //                }
 //            })
 //        }
+
     }
 
     fun confirmChangePartyLeaderDialog() {

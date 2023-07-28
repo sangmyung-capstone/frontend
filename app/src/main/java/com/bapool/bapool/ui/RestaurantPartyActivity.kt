@@ -75,7 +75,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
                     }
                 mBuilder.show()
-
             }
         }
     }
@@ -89,7 +88,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
             }
 
         mBuilder.show()
-
     }
 
     //파티참여 물어보는 dialog
@@ -108,14 +106,13 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
     //버튼 listener
     fun listener() {
+
         binding.goToMakeGrp.setOnClickListener {
             val intent = Intent(this, MakePartyActivity::class.java)
             intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
             startActivity(intent)
         }
-        binding.dummy.setOnClickListener {
 
-        }
     }
 
     //recyclerview 연결
@@ -129,7 +126,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
     //retrofit
     fun retrofit() {
 
-        //restaur
         retro.getResPartyList(UserId!!.toLong(), restaurantPartyInfoObject.restaurant_id!!.toLong())
             .enqueue(object : Callback<GetResPartyListResponse> {
                 override fun onResponse(
@@ -247,6 +243,104 @@ class RestaurantPartyActivity : AppCompatActivity() {
     fun partiNum(participants: Int, max_people: Int): String {
         var allNum: String = "${participants} / ${max_people}"
         return allNum
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Called when the activity becomes visible to the user
+    override fun onStart() {
+        super.onStart()
+        Log.d("aasdfasfasdfdsdfasdfa","onStart")    }
+
+    // Called when the activity is fully visible to the user
+    override fun onResume() {
+        super.onResume()
+        Log.d("aasdfasfasdfdsdfasdfa","onResume")    }
+
+    // Called when the activity is partially obscured by another activity or a dialog
+    override fun onPause() {
+        super.onPause()
+        Log.d("aasdfasfasdfdsdfasdfa","onPause")    }
+
+    // Called when the activity is no longer visible to the user
+    override fun onStop() {
+        super.onStop()
+        Log.d("aasdfasfasdfdsdfasdfa","onStop")    }
+
+    // Called when the activity is destroyed
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("aasdfasfasdfdsdfasdfa","onDestroy")    }
+
+    // Called when the activity is recreated after previously being destroyed
+    // (e.g., device rotation or configuration change)
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("aasdfasfasdfdsdfasdfa","onRestart")    }
+
+    // Called when the system is about to destroy the activity to reclaim resources
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d("aasdfasfasdfdsdfasdfa","onSaveInstanceState")        }
+
+    // Called when the system has restored the activity's state after recreation
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Log.d("aasdfasfasdfdsdfasdfa","onRestoreInstanceState")
+
     }
 
 

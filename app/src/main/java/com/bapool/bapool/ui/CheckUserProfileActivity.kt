@@ -9,6 +9,7 @@ import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityCheckUserProfileBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,108 +21,107 @@ class CheckUserProfileActivity : AppCompatActivity() {
     //레트로핏
     val retro = ServerRetrofit.create()
 
-    //opponentUid 와 myUid를 받아와야함. myUid는 companion으로 받아오면 되고, opponentUid는 intent로 받아와서 retrofit으로 날리면됨
-    //내 userId
-    val myUid = 11
-
     //상대 uid
-    val opponentUid: Long = 2
-    val blockUserInfo = BlockUserRequest(opponentUid)
-    var opponentUserId: String =""
-
-    //retrofit 연결 전 더미데이터
-    val dummyHashtagData = listOf<Int>(3, 4)
-    val dummyData = CheckUserProfileResult(
-        1, 3, "최부장0923",false ,2.5,  dummyHashtagData
-    )
-
+    var opponentUserId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCheckUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        opponentUserId = intent.getStringExtra("opponentUserId").toString()
+        opponentUserId = intent.getStringExtra("opponentUserId")!!
         checkUserProfileRetrofit()
 
         //이미지 binding
-        val imageName = "image${dummyData.profileImg}"
-        val resourceId =
-            this.resources.getIdentifier(imageName,
-                "drawable",
-                this.packageName)
-        binding.userImage.setImageResource(resourceId)
-
-        //평점 binding
-        binding.rating.rating = dummyData.rating.toFloat()
-
-
-        //hashtag binding
-        if (dummyData.hashtag != null) {
-            if (dummyData.hashtag.isNotEmpty()) {
-                binding.hashtagVisible.visibility = View.VISIBLE
-                for (item in dummyData.hashtag) {
-                    when (item) {
-                        1 -> binding.hash1.visibility = View.VISIBLE
-                        2 -> binding.hash2.visibility = View.VISIBLE
-                        3 -> binding.hash3.visibility = View.VISIBLE
-                        4 -> binding.hash4.visibility = View.VISIBLE
-                        5 -> binding.hash5.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
-        if (dummyData.is_block) {
-            binding.banBtn.text = "차단 취소"
-            binding.banBtn.setBackgroundResource(R.drawable.unblock_button_background)
-        } else {
-            binding.banBtn.text = "차단"
-            binding.banBtn.setBackgroundResource(R.drawable.block_button_background)
-        }
-        binding.banBtn.setOnClickListener {
-            if (dummyData.is_block) {
-                binding.banBtn.text = "차단"
-                binding.banBtn.setBackgroundResource(R.drawable.block_button_background)
-                dummyData.is_block = false
-                blockRetrofit()
-            } else {
-                binding.banBtn.text = "차단 취소"
-                binding.banBtn.setBackgroundResource(R.drawable.unblock_button_background)
-                dummyData.is_block = true
-                blockRetrofit()
-            }
-        }
 
 
     }
 
     fun checkUserProfileRetrofit() {
 
-        retro.checkUserProfile(3).enqueue(object : Callback<CheckUserProfileResponse>{
-            override fun onResponse(
-                call: Call<CheckUserProfileResponse>,
-                response: Response<CheckUserProfileResponse>,
-            ) {
+        retro.checkUserProfile(opponentUserId.toLong())
+            .enqueue(object : Callback<CheckUserProfileResponse> {
+                override fun onResponse(
+                    call: Call<CheckUserProfileResponse>,
+                    response: Response<CheckUserProfileResponse>,
+                ) {
 
-                if (response.isSuccessful) {
-                    val result = response.body()
-                    Log.d("checkUserProfile1232", response.body().toString())
-                } else {
-                    Log.d("checkUserProfile1232", response.errorBody().toString())
+                    if (response.isSuccessful) {
+                        val result = response.body()
+                        val userInfo = result!!.result
+
+                        Log.d("asdfasfasdfasf",userInfo.toString())
+
+                        val imageName = "image${userInfo.profileImg}"
+                        val resourceId = resources.getIdentifier(imageName,"drawable",packageName)
+                        binding.userImage.setImageResource(resourceId)
+
+                        //평점 binding
+                        binding.rating.rating = userInfo.rating.toFloat()
+                        binding.nickName.text = userInfo.nickname
+
+                        //hashtag binding
+                        if (userInfo.hashtag != null) {
+                            if (userInfo.hashtag.isNotEmpty()) {
+                                binding.hashtagVisible.visibility = View.VISIBLE
+                                var count = 0
+                                for (item in userInfo.hashtag) {
+                                    count++
+                                    if(item == 1){
+                                        when (count) {
+                                            1 -> binding.hash1.visibility = View.VISIBLE
+                                            2 -> binding.hash2.visibility = View.VISIBLE
+                                            3 -> binding.hash3.visibility = View.VISIBLE
+                                            4 -> binding.hash4.visibility = View.VISIBLE
+                                            5 -> binding.hash5.visibility = View.VISIBLE
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                        if(UserId.toString() == opponentUserId){
+                            binding.banBtn.visibility = View.GONE
+                        }
+                        if (userInfo.is_block) {
+                            binding.banBtn.text = "차단 취소"
+                            binding.banBtn.setBackgroundResource(R.drawable.unblock_button_background)
+                        } else {
+                            binding.banBtn.text = "차단"
+                            binding.banBtn.setBackgroundResource(R.drawable.block_button_background)
+                        }
+                        binding.banBtn.setOnClickListener {
+                            if (userInfo.is_block) {
+                                binding.banBtn.text = "차단"
+                                binding.banBtn.setBackgroundResource(R.drawable.block_button_background)
+                                userInfo.is_block = false
+                                blockRetrofit()
+                            } else {
+                                binding.banBtn.text = "차단 취소"
+                                binding.banBtn.setBackgroundResource(R.drawable.unblock_button_background)
+                                userInfo.is_block = true
+                                blockRetrofit()
+                            }
+                        }
+
+                    } else {
+                        Log.d("checkUserProfile1232", response.errorBody().toString())
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<CheckUserProfileResponse>, t: Throwable) {
-                Log.d("checkUserProfile1232","실패")
-            }
-        })
+                override fun onFailure(call: Call<CheckUserProfileResponse>, t: Throwable) {
+                    Log.d("checkUserProfile1232", "실패")
+                }
+            })
 
     }
 
 
     fun blockRetrofit() {
 
-        retro.BlockUser(5, blockUserInfo)
+        val blockUserInfo = BlockUserRequest(opponentUserId.toLong())
+
+        retro.BlockUser(UserId!!, blockUserInfo)
             .enqueue(object : Callback<BlockUserChattingProfileResponse> {
                 override fun onResponse(
                     call: Call<BlockUserChattingProfileResponse>,

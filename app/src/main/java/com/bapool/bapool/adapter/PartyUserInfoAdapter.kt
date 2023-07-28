@@ -11,6 +11,7 @@ import com.bapool.bapool.R
 import com.bapool.bapool.databinding.ChattingAndPartyUserItemBinding
 import com.bapool.bapool.retrofit.data.FirebaseUserInfo
 import com.bapool.bapool.ui.CheckUserProfileActivity
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 
 class PartyUserInfoAdapter(
     val context: Context,
@@ -65,9 +66,11 @@ class PartyUserInfoAdapter(
                 image.setBackgroundResource(R.drawable.custom_img_bg)
             }
             binding.userNameImageBackground.setOnClickListener {
-                val intent = Intent(context, CheckUserProfileActivity::class.java)
-                //opponentuid intent로 보내야됨
-                context.startActivity(intent)
+
+                    val intent = Intent(context, CheckUserProfileActivity::class.java)
+                    intent.putExtra("opponentUserId",item.keys.firstOrNull().toString())
+                    context.startActivity(intent)
+
             }
 
 
