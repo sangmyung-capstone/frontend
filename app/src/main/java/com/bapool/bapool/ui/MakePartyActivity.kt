@@ -4,18 +4,20 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.NumberPicker
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.ActivityMakePartyBinding
 import com.bapool.bapool.databinding.CustomDatepickerBinding
 import com.bapool.bapool.databinding.CustomTimepickerBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
-import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.retrofit.data.PostMakePartyRequest
+import com.bapool.bapool.retrofit.data.PostMakePartyResponse
+import com.bapool.bapool.retrofit.data.goToRestaurantPartyList
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,7 +25,6 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 
 class MakePartyActivity : AppCompatActivity() {
@@ -136,12 +137,18 @@ class MakePartyActivity : AppCompatActivity() {
 
 
             if (binding.grpNameText.text.isNullOrBlank()) {
-                alterDialog("그룹명을 입력해주세요.")
+                alterDialog("파티명을 입력해주세요.")
 
-            } else if (binding.menuText.text.isNullOrBlank()) {
-                alterDialog("상세메뉴를 입력해주세요.")
+            }else if(binding.grpNameText.length() > 10){
+                alterDialog("파티명은 10글자까지 가능합니다.")
 
-            } else if (binding.startDateText.text.toString() == "시작날짜") {
+            }else if(binding.menuText.text.isNullOrBlank()){
+                alterDialog("메뉴를 입력해주세요.")
+
+            }else if(binding.grpNameText.length() > 10){
+                alterDialog("메뉴명은 10글자까지 가능합니다.")
+
+            }else if (binding.startDateText.text.toString() == "시작날짜") {
                 alterDialog("시작날짜를 입력해주세요.")
 
             } else if (binding.startTimeText.text.toString() == "시작시간") {
@@ -199,9 +206,7 @@ class MakePartyActivity : AppCompatActivity() {
                                 this@MakePartyActivity,
                                 ChattingAndPartyInfoMFActivity::class.java
                             )
-                        intent.putExtra("currentUserId", userId)//현재 유저의 userId로 value값 교체
                         intent.putExtra("partyId", result!!.result.party_id.toString()) // result 안의 party_id 값으로 value값 교체
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
 
                     } else {

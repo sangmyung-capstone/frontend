@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.ImageView
 import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
@@ -69,67 +70,75 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
     fun listener() {
         //hashtag 선택 listener
-        binding.hash1.setOnClickListener {
-            val image1 = binding.hash1
-            val currentState = image1.background.constantState
-            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-            if (currentState == normalState) {
-                image1.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-                hastagList.set(0, 0)
-            } else {
-                image1.setBackgroundResource(R.drawable.custom_img_bg)
-                hastagList.set(0, 1)
-            }
-        }
-        binding.hash2.setOnClickListener {
-            val image2 = binding.hash2
-            val currentState = image2.background.constantState
-            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-            if (currentState == normalState) {
-                image2.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-                hastagList.set(1, 0)
-            } else {
-                image2.setBackgroundResource(R.drawable.custom_img_bg)
-                hastagList.set(1, 1)
-            }
-        }
+//        binding.hash1.setOnClickListener {
+//            val image1 = binding.hash1
+//            val currentState = image1.background.constantState
+//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
+//            if (currentState == normalState) {
+//                image1.setBackgroundResource(R.drawable.custom_img_bg_pressed)
+//                hastagList.set(0, 0)
+//            } else {
+//                image1.setBackgroundResource(R.drawable.custom_img_bg)
+//                hastagList.set(0, 1)
+//            }
+//        }
+//        binding.hash2.setOnClickListener {
+//            val image2 = binding.hash2
+//            val currentState = image2.background.constantState
+//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
+//            if (currentState == normalState) {
+//                image2.setBackgroundResource(R.drawable.custom_img_bg_pressed)
+//                hastagList.set(1, 0)
+//            } else {
+//                image2.setBackgroundResource(R.drawable.custom_img_bg)
+//                hastagList.set(1, 1)
+//            }
+//        }
+//
+//        binding.hash3.setOnClickListener {
+//            val image3 = binding.hash3
+//            val currentState = image3.background.constantState
+//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
+//            if (currentState == normalState) {
+//                image3.setBackgroundResource(R.drawable.custom_img_bg_pressed)
+//                hastagList.set(2, 0)
+//            } else {
+//                image3.setBackgroundResource(R.drawable.custom_img_bg)
+//                hastagList.set(2, 1)
+//            }
+//        }
+//        binding.hash4.setOnClickListener {
+//            val image4 = binding.hash4
+//            val currentState = image4.background.constantState
+//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
+//            if (currentState == normalState) {
+//                image4.setBackgroundResource(R.drawable.custom_img_bg_pressed)
+//                hastagList.set(3, 0)
+//            } else {
+//                image4.setBackgroundResource(R.drawable.custom_img_bg)
+//                hastagList.set(3, 1)
+//            }
+//        }
+//        binding.hash5.setOnClickListener {
+//            val image5 = binding.hash5
+//            val currentState = image5.background.constantState
+//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
+//            if (currentState == normalState) {
+//                image5.setBackgroundResource(R.drawable.custom_img_bg_pressed)
+//                hastagList.set(4, 0)
+//            } else {
+//                image5.setBackgroundResource(R.drawable.custom_img_bg)
+//                hastagList.set(4, 1)
+//            }
+//        }
 
-        binding.hash3.setOnClickListener {
-            val image3 = binding.hash3
-            val currentState = image3.background.constantState
-            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-            if (currentState == normalState) {
-                image3.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-                hastagList.set(2, 0)
-            } else {
-                image3.setBackgroundResource(R.drawable.custom_img_bg)
-                hastagList.set(2, 1)
-            }
-        }
-        binding.hash4.setOnClickListener {
-            val image4 = binding.hash4
-            val currentState = image4.background.constantState
-            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-            if (currentState == normalState) {
-                image4.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-                hastagList.set(3, 0)
-            } else {
-                image4.setBackgroundResource(R.drawable.custom_img_bg)
-                hastagList.set(3, 1)
-            }
-        }
-        binding.hash5.setOnClickListener {
-            val image5 = binding.hash5
-            val currentState = image5.background.constantState
-            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-            if (currentState == normalState) {
-                image5.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-                hastagList.set(4, 0)
-            } else {
-                image5.setBackgroundResource(R.drawable.custom_img_bg)
-                hastagList.set(4, 1)
-            }
-        }
+
+        hashtagClickListener(binding.hash1,0)
+        hashtagClickListener(binding.hash2,1)
+        hashtagClickListener(binding.hash3,2)
+        hashtagClickListener(binding.hash4,3)
+        hashtagClickListener(binding.hash5,4)
+
         //모임시작 날짜 정하기
         binding.startDate.setOnClickListener {
             datePickerDialogCustom(System.currentTimeMillis(), 1)
@@ -142,12 +151,26 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
+
+            Log.d("asdfasdfadsf",binding.grpNameText.text.length.toString())
+            Log.d("asdfasdfadsf",binding.menuText.text.isNullOrBlank().toString())
+
+            Log.d("asdfasdfadsf",binding.menuText.text.length.toString())
+
             if (binding.grpNameText.text.isNullOrBlank()) {
-                alterDialog("그룹명을 입력해주세요.")
+                alterDialog("파티명을 입력해주세요.")
 
-            } else if (binding.menuText.text.isNullOrBlank()) {
-                alterDialog("상세메뉴를 입력해주세요.")
+            }else if(binding.grpNameText.length() > 10){
+                alterDialog("파티명은 10글자까지 가능합니다.")
 
+            }else if(binding.menuText.text.isNullOrBlank()){
+                alterDialog("메뉴를 입력해주세요.")
+
+            }else if(binding.menuText.length() > 10){
+                alterDialog("메뉴명은 10글자까지 가능합니다.")
+
+            }else if(binding.maxPeople.value < receivePartyInfo.curNumberOfPeople){
+                alterDialog("현재 인원보다 적은 정원을 선택할 수 없습니다.")
             } else if (binding.startDateText.text.toString() == "시작날짜") {
                 alterDialog("시작날짜를 입력해주세요.")
 
@@ -176,6 +199,21 @@ class EditPartyInfoActivity : AppCompatActivity() {
             }
 
 
+        }
+    }
+
+
+    fun hashtagClickListener(image: ImageView, i: Int) {
+        image.setOnClickListener {
+            val currentState = image.background.constantState
+            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
+            if (currentState == normalState) {
+                image.setBackgroundResource(R.drawable.custom_img_bg_pressed)
+                hastagList.set(i, 0)
+            } else {
+                image.setBackgroundResource(R.drawable.custom_img_bg)
+                hastagList.set(i, 1)
+            }
         }
     }
 
@@ -329,11 +367,32 @@ class EditPartyInfoActivity : AppCompatActivity() {
             count++
             if(data == 1){
                 when (count) {
-                    1 -> image1.setBackgroundResource(R.drawable.custom_img_bg)
-                    2 -> image2.setBackgroundResource(R.drawable.custom_img_bg)
-                    3 -> image3.setBackgroundResource(R.drawable.custom_img_bg)
-                    4 -> image4.setBackgroundResource(R.drawable.custom_img_bg)
-                    5 -> image5.setBackgroundResource(R.drawable.custom_img_bg)
+                    1 -> {
+                        image1.setBackgroundResource(R.drawable.custom_img_bg)
+                        hastagList.set(0, 1)
+
+                    }
+
+                    2 -> {
+                        image2.setBackgroundResource(R.drawable.custom_img_bg)
+                        hastagList.set(1, 1)
+
+                    }
+                    3 -> {
+                        image3.setBackgroundResource(R.drawable.custom_img_bg)
+                        hastagList.set(2, 1)
+
+                    }
+                    4 -> {
+                        image4.setBackgroundResource(R.drawable.custom_img_bg)
+                        hastagList.set(3, 1)
+
+                    }
+                    5 -> {
+                        image5.setBackgroundResource(R.drawable.custom_img_bg)
+                        hastagList.set(4, 1)
+
+                    }
                     else -> Log.d("EditPartyInfoActivity", "error")
                 }
             }

@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <TextView
             android:id="@+id/GrpName"
             android:layout_width="wrap_content"
@@ -266,7 +265,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:visibility="gone"
-                android:text="확정하기"
+                android:text="마감하기"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
