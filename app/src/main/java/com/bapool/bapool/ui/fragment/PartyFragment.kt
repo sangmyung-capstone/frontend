@@ -34,7 +34,6 @@ class PartyFragment : Fragment() {
     var currentUserId: String = UserId.toString()
 
 
-
     private val TAG = "PartyFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -171,9 +170,11 @@ class PartyFragment : Fragment() {
                         }
                         val lastChatTime: String = lastChatItem.sendedDate
 
-                        val dataModel = MyPartyListModel(grpId,
+                        val dataModel = MyPartyListModel(
+                            grpId,
                             resName,
-                            grpName, participants, lastChat, notReadChatNumber, lastChatTime)
+                            grpName, participants, lastChat, notReadChatNumber, lastChatTime
+                        )
                         myPartyListModel.add(dataModel)
 
                     }

@@ -28,10 +28,10 @@ data class GetRestaurantLogResponse(
     val result: Result
 ) {
     data class Result(
-        val partyInfoList: List<Party>
+        val parties: List<parties>
     )
 
-    data class Party(
+    data class parties(
         val party_id: Int,
         val party_name: String,
         val restaurant_name: String,
