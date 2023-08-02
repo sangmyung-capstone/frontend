@@ -12,6 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/dummy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/GrpName"
@@ -266,7 +270,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:visibility="gone"
-                android:text="확정하기"
+                android:text="파티 시간,인원 확정하기"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -357,6 +361,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <ImageView
+                    android:visibility="gone"
                     android:id="@+id/menuEditPartyInfo"
                     android:layout_width="40dp"
                     android:layout_height="40dp"

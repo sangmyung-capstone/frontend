@@ -12,13 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.adapter.MyPartyListAdapter
 import com.bapool.bapool.databinding.FragmentPartyBinding
 import com.bapool.bapool.retrofit.data.*
-import com.bapool.bapool.retrofit.fcm.FirebaseService
+import com.bapool.bapool.ui.LoginActivity
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import java.text.SimpleDateFormat
 
 
@@ -30,9 +28,6 @@ class PartyFragment : Fragment() {
     lateinit var myPartyRv: RecyclerView
 
     var myPartyListModel = arrayListOf<MyPartyListModel>()
-
-    var currentUserId: String = UserId.toString()
-
 
     private val TAG = "PartyFragment"
 
@@ -49,9 +44,7 @@ class PartyFragment : Fragment() {
         getUserPartyData()
         initializeVari()
 
-//
-//        binding.dummyBtn.setOnClickListener {
-////
+
 //            // 채팅 더미데이터 추가
 ////            val database = Firebase.database
 ////            val messageText = "Test2"
@@ -61,19 +54,19 @@ class PartyFragment : Fragment() {
 ////                .setValue(groupMessages)
 ////
 ////
-//////            Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
-////            그룹 더미데이터 추가
-////            val database = Firebase.database
-////            val myRef = database.getReference("Groups")
-////            val hashtaglist = mutableListOf<Int>()
-////            hashtaglist.add(4)
-////            hashtaglist.add(3)
-////            val groupInfo = FirebasePartyInfo("그룹이름3", "메뉴3", "상세메뉴3",
-////                2, 3, getTime(), getTime(), hashtaglist, "식당이름3",33 ,"www.google.com")
-////            val groupUsers = mapOf("22" to true, "33" to true)
-////            val Group3 = FirebaseParty(groupInfo, null, groupUsers)
-////
-////            myRef.child("33").setValue(Group3)
+////           Toast.makeText(this, "취소버튼", Toast.LENGTH_SHORT).show()
+//            그룹 더미데이터 추가
+//            val database = Firebase.database
+//            val myRef = database.getReference("Groups")
+//            val hashtaglist = mutableListOf<Int>()
+//            hashtaglist.add(4)
+//            hashtaglist.add(3)
+//            val groupInfo = FirebasePartyInfo("그룹이름3", "메뉴3", "상세메뉴3",
+//                2, 3, getTime(), getTime(), hashtaglist, "식당이름3",33 ,"www.google.com")
+//            val groupUsers = mapOf("22" to true, "33" to true)
+//            val Group3 = FirebaseParty(groupInfo, null, groupUsers)
+//
+//            myRef.child("33").setValue(Group3)
 ////            myRef.child("1").child("groupUsers").updateChildren(groupUsers)
 ////
 ////            Users 더미데이터 추가
@@ -107,7 +100,17 @@ class PartyFragment : Fragment() {
 //                    Log.e("dsksdfkjsfkj", token.toString())
 //
 //                })
-//        }
+
+//            val database = Firebase.database
+//            val hashtaglist = mutableListOf<Int>()
+//            hashtaglist.add(1)
+//            hashtaglist.add(0)
+//            hashtaglist.add(1)
+//            hashtaglist.add(0)
+//            hashtaglist.add(1)
+//            database.getReference("Groups").child("33").child("groupInfo").child("hashtTag").setValue(hashtaglist)
+//            val testObject = FirebaseTest("수정 1", hashtaglist, 12)
+//            database.getReference("Groups").child("33").child("groupInfo").setValue(testObject)
 
         return binding.root
     }
@@ -121,14 +124,14 @@ class PartyFragment : Fragment() {
 
     //recyclerView adapter
     fun adapter(context: Context, list: List<MyPartyListModel>) {
-        myPartyAdapter = MyPartyListAdapter(context, list, currentUserId.toString())
+        myPartyAdapter = MyPartyListAdapter(context, list, UserId.toString())
         myPartyRv.adapter = myPartyAdapter
         myPartyRv.layoutManager = LinearLayoutManager(context)
     }
 
     fun getUserPartyData() {
         FirebaseDatabase.getInstance().getReference("test").child("Groups")
-            .orderByChild("groupUsers/$currentUserId")
+            .orderByChild("groupUsers/${UserId.toString()}")
             .equalTo(true)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -155,12 +158,12 @@ class PartyFragment : Fragment() {
                         var notReadChatNumber = 0
 
                         for (data in sortedMessage) {
-                            if (!(currentUserId.toString() in data.confirmed))
+                            if (!(UserId.toString() in data.confirmed))
                                 notReadChatNumber += 1
                         }
 
                         val grpId = data.key.toString()
-                        val resName: String = ""
+                        val resName: String = partyInfo?.restaurantName ?: ""
                         val grpName = partyInfo?.groupName ?: ""
                         val participants = partyInfo?.curNumberOfPeople ?: 0
                         val lastChat: String = if (lastChatItem.type == 1) {
@@ -204,11 +207,5 @@ class PartyFragment : Fragment() {
         _binding = null
     }
 
-    fun getTime(): String {
-        val currentTime = System.currentTimeMillis()
 
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS")
-        val date = sdf.format(currentTime)
-        return date.toString()
-    }
 }

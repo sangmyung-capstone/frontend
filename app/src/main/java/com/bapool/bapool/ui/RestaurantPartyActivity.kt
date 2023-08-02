@@ -3,6 +3,7 @@ package com.bapool.bapool.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -26,7 +27,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
     lateinit var resGrpRv: RecyclerView
     lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
     var restaurantPartiesInfo: List<ResPartyList> = arrayListOf()
-    val restaurantId: Long = 1470337852
 
     val retro = ServerRetrofit.create()
 
@@ -66,14 +66,31 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         dialog.dismiss()
                     }
                     .setPositiveButton("참여") { dialog, _ ->
-                        confirmParticipatePartyDialog(restaurantPartiesInfo[position].party_id.toString())
+
+                        if (restaurantPartiesInfo[position].participants == restaurantPartiesInfo[position].max_people) {
+                            overCapacityDialog()
+                        } else {
+                            confirmParticipatePartyDialog(restaurantPartiesInfo[position].party_id.toString())
+                        }
+
                     }
                 mBuilder.show()
-
             }
         }
     }
 
+    //정원 초과 알려주는 dialog
+    fun overCapacityDialog(){
+        val mBuilder = AlertDialog.Builder(this@RestaurantPartyActivity)
+            .setMessage("파티의 인원이 꽉찼습니다!")
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+        mBuilder.show()
+    }
+
+    //파티참여 물어보는 dialog
     fun confirmParticipatePartyDialog(party_id: String) {
 
         val mBuilder = AlertDialog.Builder(this@RestaurantPartyActivity)
@@ -83,21 +100,18 @@ class RestaurantPartyActivity : AppCompatActivity() {
             }
             .setPositiveButton("확인") { dialog, _ ->
                 participatePartyUser(party_id)
-                // 파티 채팅창으로 이동해야함.
-
             }
         mBuilder.show()
     }
 
     //버튼 listener
     fun listener() {
-        binding.goToMakeGrp.setOnClickListener {
 
+        binding.goToMakeGrp.setOnClickListener {
             val intent = Intent(this, MakePartyActivity::class.java)
             intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
             startActivity(intent)
         }
-
 
     }
 
@@ -112,7 +126,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
     //retrofit
     fun retrofit() {
 
-        //restaur
         retro.getResPartyList(UserId!!.toLong(), restaurantPartyInfoObject.restaurant_id!!.toLong())
             .enqueue(object : Callback<GetResPartyListResponse> {
                 override fun onResponse(
@@ -161,7 +174,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         val result = response.body()
                         val intent = Intent(this@RestaurantPartyActivity,
                             ChattingAndPartyInfoMFActivity::class.java)
-                        intent.putExtra("currentUserId", UserId)
                         intent.putExtra("partyId", party_id)
 
                         startActivity(intent)
@@ -218,7 +230,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     fun dateRange(startDate: String): String {
         val start_date = LocalDateTime.parse(startDate)
 
-        val formatterStart = DateTimeFormatter.ofPattern("MMM d일, H시 mm분")
+        val formatterStart = DateTimeFormatter.ofPattern("MMM d일 H시 mm분")
         val range: String =
             "${start_date.format(formatterStart)}"
         return range
@@ -232,5 +244,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
         return allNum
     }
 
-
 }
+
+

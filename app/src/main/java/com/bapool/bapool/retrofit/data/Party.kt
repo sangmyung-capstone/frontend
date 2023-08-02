@@ -54,6 +54,7 @@ data class PatchEditPartyInfoRequest(
     val end_date: String,
     val menu: String,
     val detail: String,
+    val hashtag: List<Int>
 )
 
 data class PatchEditPartyInfoResponse(
@@ -71,7 +72,6 @@ data class PostMakePartyRequestRestaurantInfo(
     val category: String,
     val phone: String,
 )
-
 
 data class Result(
     val party_id: Long,
@@ -94,9 +94,10 @@ data class FirebasePartyInfo
     val endDate: String = "",
     val hashTag: List<Int> = listOf(),
     val restaurantName: String = "",
-    val groupLeaderId: Int = 0,
+    val groupLeaderId: Long = 0,
     val siteUrls: String = "",
-): Serializable
+    val status: String = ""
+) : Serializable
 
 data class FirebasePartyMessage(
     var senderId: String = "",
@@ -118,10 +119,6 @@ data class GetRestaurantPartiesListResult(
     val restaurant_name: String,
 )
 
-
 data class participateParty(
     val party_id: Long
 )
-
-
-
