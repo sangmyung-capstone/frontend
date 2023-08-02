@@ -28,7 +28,6 @@ class BlockListActivity : AppCompatActivity(), BlockListAdapter.BlockButtonClick
 
         val retro = ServerRetrofit.create()
         val blockedUsersList = mutableListOf<GetBlockUserResponse.BlockedUser>()
-        UserId = 1 //임시로 사용할 것 나중에 삭제해야함.
 
         retro.GetBlockUser(UserId!!)
             .enqueue(object : Callback<GetBlockUserResponse> {

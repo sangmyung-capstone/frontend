@@ -64,7 +64,7 @@ class RegisterActivity : AppCompatActivity() {
         for ((index, button) in buttons.withIndex()) {
             button.setOnClickListener {
                 selectButton(button, buttons)
-                count = index
+                count = index + 1
             }
         }
         //완료 버튼 리스너
@@ -143,6 +143,7 @@ class RegisterActivity : AppCompatActivity() {
                                                                 this@RegisterActivity,
                                                                 FinishActivity::class.java
                                                             )
+                                                        intent.putExtra("nickname", "${result!!.result.nickname}")
                                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                                         finish()
                                                     } else {
@@ -244,6 +245,7 @@ class RegisterActivity : AppCompatActivity() {
                                                                 this@RegisterActivity,
                                                                 FinishActivity::class.java
                                                             )
+                                                        intent.putExtra("nickname", "${result!!.result.nickname}")
                                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                                         finish()
                                                     } else {

@@ -22,22 +22,24 @@ class RestaurantLogActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val retro = ServerRetrofit.create()
-        val RestaurantsLogList = mutableListOf<GetRestaurantLogResponse.Party>()
+        val RestaurantsLogList = mutableListOf<GetRestaurantLogResponse.parties>()
 
-        retro.GetrestaurantsLog(1)
+        retro.GetrestaurantsLog(UserId!!)
             .enqueue(object : Callback<GetRestaurantLogResponse> {
                 override fun onResponse(
                     call: Call<GetRestaurantLogResponse>,
                     response: Response<GetRestaurantLogResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val loglist = response.body()?.result?.partyInfoList
-                        Log.d("bap", "onResponse 성공 $loglist")
+                        val loglist = response.body()?.result?.parties
+                        Log.d("bap", "onResponse 성공 ${response.body()}")
                         // handle successful response
                         loglist?.let { RestaurantsLogList.addAll(it) }
                         binding.recyclerView.adapter?.notifyDataSetChanged()
                     } else {
                         // handle error response
+                        Log.d("bap", "onResponse 실패 $response")
+
                     }
                 }
 

@@ -12,12 +12,6 @@ import retrofit2.http.*
 /*** !!! MOCK SERVER !!! ***/
 interface RetrofitService {
 
-    @PATCH("/users/info/{user-id}")
-    fun ChangeUserInfo(
-        @Path("user-id") userId: Long,
-        @Body request: PatchChangeProfileRequest,
-    ): Call<PatchChangeProfileResponse>
-
 
 
 
