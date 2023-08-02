@@ -44,17 +44,7 @@ class PartyFragment : Fragment() {
         getUserPartyData()
         initializeVari()
 
-//
-          binding.dummy.setOnClickListener {
-              val database = Firebase.database.getReference()
-//
-              val group_messages =
-                  FirebasePartyMessage(UserId.toString(), "getTime()", "messageText", 0)
-              database.child("test").child("Groups").child(2.toString()).child("groupMessages")
-                  .push()
-                  .setValue(group_messages)
-          }
-////
+
 //            // 채팅 더미데이터 추가
 ////            val database = Firebase.database
 ////            val messageText = "Test2"
@@ -122,7 +112,6 @@ class PartyFragment : Fragment() {
 //            val testObject = FirebaseTest("수정 1", hashtaglist, 12)
 //            database.getReference("Groups").child("33").child("groupInfo").setValue(testObject)
 
-        //}
         return binding.root
     }
 

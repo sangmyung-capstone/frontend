@@ -40,6 +40,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -114,6 +115,22 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         initializeVari()
         listener()
         getPartyUserInfo()
+
+
+        //페이징 처리중인 코드
+//        binding.chattingRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//
+//                if (!binding.chattingRv.canScrollVertically(0)) {   //최하단에 오면`
+//                    chattingRVA.initPageControl++
+//                    chattingRVA.messages.clear()
+//                    chattingRVA.messageKey.clear()
+//                    chattingRVA.itemsPerPage += 10
+//                    chattingRVA.getMessageData()                }
+//
+//            }
+//        })
 
     }
 
@@ -201,7 +218,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 this,
                 currentUserId,
                 partyId,
-                partyUserInfo, peopleCount)
+                partyUserInfo, peopleCount
+            )
         chattingRecyclerView.adapter = chattingRVA
         chattingRecyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -212,6 +230,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     //recyclerview 어댑터
     fun GroupInfoAdapter(
     ) {
+        Log.d("asdfasdfasdfsdafasdfsda", partyUserInfo.toString())
         partyUserMenuRVA = PartyUserInfoAdapter(this, partyUserInfoMenu, groupOnerId)
         partyUserMenuRecyclerView.adapter = partyUserMenuRVA
         partyUserMenuRecyclerView.layoutManager =
@@ -297,7 +316,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         }
                         if (!(item.status.equals("RECRUITING"))) {
                             binding.closePartyBtn.isEnabled = false
-                            binding.closePartyBtn.text = "마감"
+                            binding.closePartyBtn.text = "확정 완료"
+
                         }
                         if (item.status.equals("DEADLINE")) {
                             binding.menuEditPartyInfo.setOnClickListener {
@@ -376,22 +396,41 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 sendFcm(0, userInfo)
             }
         }
-
-
     }
 
+
+    //마감되었다고 채팅창에 알림
+    fun sendNotificationChatting() {
+        val startTime = formatNotificationTime(currentPartyInfo.startDate)
+        val notificationText = "파티 모임 시간이 ${startTime} 으로 확정되었습니다."
+        var items = mutableListOf<String>()
+        for (data in partyUserInfo.values) {
+            items.add(data.firebaseToken.toString())
+        }
+        if (notificationText != "") {
+            val group_messages =
+                FirebasePartyMessage("공지", getTime(), notificationText, 2)
+            database.child("test").child("Groups").child(partyId.toString()).child("groupMessages")
+                .push()
+                .setValue(group_messages)
+            for (data in items) {
+                sendNotificationFcm(data)
+                Log.d("asdfsdfsadasdf",data)
+            }
+        }
+    }
+
+    //채팅 fcm 보내기
     private fun fcmPush(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
-
         RetrofitInstance.api.postNotification(notification)
-
     }
 
-
+    //채팅 fcm 보내기
     fun sendFcm(messageType: Int, userInfo: FirebaseUserInfo) {
         val getterToken = userInfo.firebaseToken.toString()
         val msgText: String = if (messageType == 1) {
             "사진"
-        } else {
+        }else {
             binding.sendMessage.text.toString()
         }
         val notiModel = NotiModel(currentUserNickName, msgText)
@@ -402,11 +441,22 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
 
+    fun sendNotificationFcm(firebaseToken: String) {
+
+        val notiModel = NotiModel(currentUserNickName, "공지")
+
+        val pushModel = PushNotification(notiModel, firebaseToken)
+
+        fcmPush(pushModel)
+    }
+
+    //이미지저장
     fun saveImg() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(gallery, 100)
     }
 
+    //이미지 저장
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -420,7 +470,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             val selectedMediaUri = data.data
 
             val mediaType = contentResolver.getType(selectedMediaUri!!)
-            Log.d("asdfsadfdsafasdfads",mediaType.toString())
+            Log.d("asdfsadfdsafasdfads", mediaType.toString())
 
             if (mediaType?.startsWith("image/") == true) {
                 data?.data?.let { uri ->
@@ -457,12 +507,11 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
 
                 }
-            }else if(mediaType?.startsWith("video/") == true){
+            } else if (mediaType?.startsWith("video/") == true) {
                 alterDialog("동영상은 보낼 수 없습니다.")
-            } else{
-                Log.d(TAG,"사진 혹은 동영상 보내기 오류.")
+            } else {
+                Log.d(TAG, "사진 혹은 동영상 보내기 오류.")
             }
-
 
         }
     }
@@ -490,15 +539,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     call: Call<PatchEditPartyInfoResponse>,
                     response: Response<PatchEditPartyInfoResponse>,
                 ) {
-
                     if (response.isSuccessful) {
                         finish()
-
                     } else {
 
                     }
                 }
-
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
 
                 }
@@ -535,7 +581,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         4 -> binding.hash4.visibility = View.VISIBLE
                         5 -> binding.hash5.visibility = View.VISIBLE
                     }
-
                 }
             }
         }
@@ -645,8 +690,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val result = response.body()
-                        Log.d("closeParty", response.body().toString())
 
+                        //마감되었다고 채팅창에 알림
+                        sendNotificationChatting()
                         //스타트데이트로 알림 생성
                         closePartyConfirmDialog()
                         callAlarm(
@@ -764,6 +810,36 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun formatNotificationTime(dateTimeString: String): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
+        val date = sdf.parse(dateTimeString)
+        val currentTime = Calendar.getInstance().time
+
+        val cal = Calendar.getInstance()
+        cal.time = date
+        val targetDate = cal.get(Calendar.DATE)
+        val currentDate = Calendar.getInstance().get(Calendar.DATE)
+
+        return when {
+            targetDate == currentDate -> {
+                // Same day
+                val sdfOutput = SimpleDateFormat("HH시 mm분", Locale.getDefault())
+                "오늘 ${sdfOutput.format(date)}"
+            }
+            targetDate == currentDate + 1 -> {
+                // Next day
+                val sdfOutput = SimpleDateFormat("HH시 mm분", Locale.getDefault())
+                "내일 ${sdfOutput.format(date)}"
+            }
+            else -> {
+                // Other dates
+                val sdfOutput = SimpleDateFormat("MM월 dd일 HH시 mm분", Locale.getDefault())
+                sdfOutput.format(date)
+            }
+        }
+    }
+
 
     fun alterDialog(exceptionalString: String) {
         val builder = AlertDialog.Builder(this)

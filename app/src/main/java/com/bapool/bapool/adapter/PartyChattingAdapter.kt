@@ -36,6 +36,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import com.bapool.bapool.R
+import com.bapool.bapool.databinding.ChatitemNotificationBinding
 import com.bapool.bapool.ui.CheckUserProfileActivity
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -56,24 +57,28 @@ class PartyChattingAdapter(
     var imageResource: MutableMap<String, Uri> = HashMap()
     var imageResourceBool = true
 
-    private var currentPage = 0
-    private var itemsPerPage = 10
+    var initPageControl = 0
+
+    var currentPage = 0
+    var itemsPerPage = 10
 
     private lateinit var databaseReference: DatabaseReference
     lateinit var childEventListener: ChildEventListener
 
 
     init {
+
+        recyclerView.postDelayed({
+            recyclerView.scrollToPosition(messages.size - 1)
+
+        }, 1000)
+
         getMessageData()
     }
 
 
 
     fun getMessageData(){
-        recyclerView.postDelayed({
-            recyclerView.scrollToPosition(messages.size - 1)
-
-        }, 1000)
 
         databaseReference = FirebaseDatabase.getInstance().getReference("test").child("Groups")
             .child(groupId).child("groupMessages")
@@ -83,43 +88,8 @@ class PartyChattingAdapter(
 
                 val oldMessages = ArrayList(messages)
                 val oldMessageKeys = ArrayList(messageKey)
-                val oldImageResource = imageResource
 
                 val readUsers: MutableMap<String, FirebasePartyMessage> = HashMap()
-
-                val diffResult2 = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                    override fun getOldListSize(): Int {
-                        return oldImageResource.size
-                    }
-
-                    override fun getNewListSize(): Int {
-                        return imageResource.size
-                    }
-
-                    override fun areItemsTheSame(
-                        oldItemPosition: Int,
-                        newItemPosition: Int,
-                    ): Boolean {
-                        val oldKey = oldImageResource.keys.elementAt(oldItemPosition)
-                        val newKey = imageResource.keys.elementAt(newItemPosition)
-                        return oldKey == newKey
-                    }
-
-                    override fun areContentsTheSame(
-                        oldItemPosition: Int,
-                        newItemPosition: Int,
-                    ): Boolean {
-                        val oldKey = oldImageResource.keys.elementAt(oldItemPosition)
-                        val oldValue = oldImageResource[oldKey]
-                        val newKey = imageResource.keys.elementAt(newItemPosition)
-                        val newValue = imageResource[newKey]
-
-                        // Compare the content of the map values here
-                        // Return true if the contents are the same, false otherwise
-                        return oldValue == newValue
-                    }
-
-                })
 
                 val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                     override fun getOldListSize(): Int {
@@ -178,20 +148,25 @@ class PartyChattingAdapter(
                             .child("confirmed")
                             .updateChildren(testMap)
                             .addOnCompleteListener {
-                                recyclerView.scrollToPosition(messageKey.size - 1)
+                                if(initPageControl==0){
+                                    recyclerView.scrollToPosition(messageKey.size - 1)
+
+                                }
                             }
                     } else {
-                        recyclerView.scrollToPosition(messageKey.size - 1)
+                        if(initPageControl==0){
+                            recyclerView.scrollToPosition(messageKey.size - 1)
 
+                        }
                     }
                 }
-                recyclerView.scrollToPosition(messageKey.size - 1)
+                if(initPageControl==0){
+                    recyclerView.scrollToPosition(messageKey.size - 1)
+
+                }
                 Log.d("들어와있는지확인후", messages.toString())
 
                 diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)
-                Log.d("onChildAdd`", messages[messages.size - 1].toString())
-                Log.d("onChildAdd`", messageObject_modify.toString())
-
 
             }
 
@@ -207,9 +182,6 @@ class PartyChattingAdapter(
                     notifyItemChanged(messageIndex)
                 }
 
-                Log.d("onChildChanged", changeMessageKey.toString())
-                Log.d("onChildChanged", changeMessageObject.toString())
-                Log.d("onChildChanged", messageIndex.toString())
                 notifyItemChanged(messageIndex)
 
 
@@ -226,7 +198,7 @@ class PartyChattingAdapter(
 
             }
         }
-        databaseReference.limitToLast(10).addChildEventListener(childEventListener)
+        databaseReference.addChildEventListener(childEventListener)
     }
 
 
@@ -251,11 +223,17 @@ class PartyChattingAdapter(
                 return OtherMessageViewHolder(binding)
 
             }
-            else -> {      //메시지가 상대 메시지인 경우
+            4 -> {      //메시지가 상대 메시지인 경우
                 val binding =
                     ChatitemOpponentimgBinding.inflate(inflater, parent, false)
 
                 return OtherImgViewHolder(binding)
+            }
+            else -> {
+                val binding =
+                    ChatitemNotificationBinding.inflate(inflater, parent, false)
+
+                return PartyNoticiationViewHolder(binding)
             }
         }
 
@@ -270,7 +248,10 @@ class PartyChattingAdapter(
             } else {
                 return 2
             }
-        } else {
+        } else if(messages[position].senderId.equals("공지") ){
+            return 5
+        }
+        else {
             if (messages[position].type == 0) {
                 return 3
             } else {
@@ -285,7 +266,8 @@ class PartyChattingAdapter(
             1 -> (holder as MyMessageViewHolder).bind(messages[position])
             2 -> (holder as MyImgViewHolder).bind(messages[position], position)
             3 -> (holder as OtherMessageViewHolder).bind(messages[position], position)
-            else -> (holder as OtherImgViewHolder).bind(messages[position], position)
+            4 -> (holder as OtherImgViewHolder).bind(messages[position], position)
+            else -> (holder as PartyNoticiationViewHolder).bind(messages[position])
         }
     }
 
@@ -305,6 +287,7 @@ class PartyChattingAdapter(
     }
 
     //내 이미지 viewholder
+
     inner class MyImgViewHolder(private val binding: ChatitemMyimgBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FirebasePartyMessage, position: Int) {
@@ -347,17 +330,29 @@ class PartyChattingAdapter(
             binding.opponentTime.text = changeTimeFormat(item.sendedDate)
             readCount(item, binding.opponentConfirmed)
             setNickNameImg(position, binding.opponentId, binding.opponentImage)
+
             binding.opponentChatImg.setOnClickListener {
                 makeDialog(messageKey[position], item.downloadUrl)
             }
+
             binding.opponentImage.setOnClickListener {
                 val intent = Intent(context, CheckUserProfileActivity::class.java)
                 //userid 넘겨줘야함
                 intent.putExtra("opponentUseId", item.senderId)
-                Log.d("asdfasfasdfasf", item.senderId)
                 context.startActivity(intent)
             }
+
         }
+    }
+
+    //마감 됐을 때 나오는 viewHolder
+    inner class PartyNoticiationViewHolder(private val binding: ChatitemNotificationBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: FirebasePartyMessage) {
+            binding.notificationContent.text = item.content
+        }
+
     }
 
     //읽은 사람 숫자
@@ -388,9 +383,6 @@ class PartyChattingAdapter(
         } else {
             var count: Int = peopleCount - items.confirmed.size
 
-            Log.d("dsakjfsadkjlfsdkj", peopleCount.toString())
-
-            Log.d("dsakjfsadkjlfsdkj", items.confirmed.size.toString())
             if (count > 0) {
                 readcount_text.setText(count.toString())
                 readcount_text.visibility = View.VISIBLE
@@ -466,8 +458,10 @@ class PartyChattingAdapter(
 
                     if (imageResourceBool) {
                         recyclerView.postDelayed({
-                            recyclerView.scrollToPosition(messages.size - 1)
-                        }, 1000)
+                            if(initPageControl==0){
+                                recyclerView.scrollToPosition(messageKey.size - 1)
+
+                            }                        }, 1000)
 
                         imageResourceBool = false
                     }
@@ -529,16 +523,6 @@ class PartyChattingAdapter(
 
     fun removeChildEventListener() {
         databaseReference.removeEventListener(childEventListener)
-    }
-
-    fun paging() {
-        messages.clear()
-        messageKey.clear()
-        imageResource.clear()
-
-
-
-        databaseReference.limitToLast(20).addChildEventListener(childEventListener)
     }
 
 
