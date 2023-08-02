@@ -146,7 +146,7 @@ class LoginActivity : AppCompatActivity() {
                                                         }
                                                         Toast.makeText(
                                                             this@LoginActivity,
-                                                            "${result?.result?.nickname}님 환영합니다",
+                                                            "${result?.result?.nickname}님 환영합니다 ${result?.result?.user_id}",
                                                             Toast.LENGTH_SHORT
                                                         ).show()
                                                         Log.d("bap", "onRequest 성공: $token");
@@ -247,7 +247,7 @@ class LoginActivity : AppCompatActivity() {
                                                         }
                                                         Toast.makeText(
                                                             this@LoginActivity,
-                                                            "${result?.result?.nickname}님 환영합니다",
+                                                            "${result?.result?.nickname}님 환영합니다 ${result?.result?.user_id}",
                                                             Toast.LENGTH_SHORT
                                                         ).show()
                                                         Log.d("bap", "onRequest 성공: $token");

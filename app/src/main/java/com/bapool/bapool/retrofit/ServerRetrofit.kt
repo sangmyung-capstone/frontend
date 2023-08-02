@@ -67,7 +67,7 @@ interface ServerRetrofit {
         @Body request: BlockUserRequest,
     ): Call<BlockUserResponse>
 
-    @GET("test/restaurants/log/{user-id}")
+    @GET("/parties/log/{user-id}")
     fun GetrestaurantsLog(
         @Path("user-id") userId: Long,
     ): Call<GetRestaurantLogResponse>
@@ -81,8 +81,15 @@ interface ServerRetrofit {
     @POST("/users/rating/{user-id}")
     fun PostRatingUser(
         @Path("user-id") userId: Long,
+        @Query("party-id") partyId: Long,
         @Body request: PostRatingUserRequest
     ): Call<PostRatingUserResponse>
+
+    @PATCH("/users/info/{user-id}")
+    fun ChangeUserInfo(
+        @Path("user-id") userId: Long,
+        @Body request: PatchChangeProfileRequest,
+    ): Call<PatchChangeProfileResponse>
 
 
     //--------------------------------------------------------------------------

@@ -31,7 +31,7 @@ class RatingActivity : AppCompatActivity() {
         val ratingUsersList = mutableListOf<GetRatingUserResponse.GetRatingUserResultUser>()
         val postRatingUserRequest = PostRatingUserRequest(mutableListOf())
 
-        var partyid: Long = 1
+        val partyid = intent.getLongExtra("party_id", 1)
 
         retro.GetRatingUser(UserId!!, partyid)
             .enqueue(object : Callback<GetRatingUserResponse> {
@@ -59,7 +59,7 @@ class RatingActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = RatingUserAdapter(ratingUsersList, postRatingUserRequest)
         binding.ratingcomplete.setOnClickListener {
-            retro.PostRatingUser(UserId!!, postRatingUserRequest)
+            retro.PostRatingUser(UserId!!, partyid, postRatingUserRequest)
                 .enqueue(object : Callback<PostRatingUserResponse> {
                     override fun onResponse(
                         call: Call<PostRatingUserResponse>,

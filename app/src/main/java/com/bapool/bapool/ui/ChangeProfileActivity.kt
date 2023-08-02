@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityRegisterBinding
+import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.PatchChangeProfileRequest
 import com.bapool.bapool.retrofit.data.PatchChangeProfileResponse
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
@@ -50,7 +51,7 @@ class ChangeProfileActivity : AppCompatActivity() {
         for ((index, button) in buttons.withIndex()) {
             button.setOnClickListener {
                 selectButton(button, buttons)
-                count = index
+                count = index + 1
             }
         }
         //완료 버튼 리스너
@@ -58,7 +59,7 @@ class ChangeProfileActivity : AppCompatActivity() {
             var nickname: String = textInputEditText.text.toString()
             var userInfo = PatchChangeProfileRequest(nickname, count)
 
-            val retro = RetrofitService.create()
+            val retro = ServerRetrofit.create()
 
             retro.ChangeUserInfo(UserId!!, userInfo)
                 .enqueue(object : Callback<PatchChangeProfileResponse> {

@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 class RestaurantLogViewHolder(val binding: LoglistItemsBinding) :
     RecyclerView.ViewHolder(binding.root)
 
-class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogResponse.Party>) :
+class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogResponse.parties>) :
     RecyclerView.Adapter<RestaurantLogViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantLogViewHolder {
@@ -37,10 +37,9 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
         binding.groupname.text = Loglist.party_name
 
         //Glide 쓰는 과정
-        if(Loglist.imgUrl != null){
+        if (Loglist.imgUrl != null) {
             Glide.with(holder.itemView).load(Loglist.imgUrl).into(binding.restaurantImage)
-        }
-        else if(Loglist.imgUrl == null){
+        } else if (Loglist.imgUrl == null) {
             binding.restaurantImage.setImageResource(R.drawable.restaurant_icon)
         }
 
