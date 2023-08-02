@@ -51,6 +51,8 @@ class RestaurantBottomAdapter(
                 .load(imageList[position])
                 .error(R.drawable.hashtag5)
                 .into(holder.restaurant_img)
+        holder.restaurant_img.clipToOutline = true
+
 
         holder.itemView.setOnClickListener {
             Log.d("bottom_view_holder", "view holder${position} touch")
@@ -60,7 +62,7 @@ class RestaurantBottomAdapter(
                         "name : ${itemList[position].restaurant_name}" +
                         "image list : ${imageList[position]}"
             )
-            MapFragment().markerGoEvent(
+            MapFragment.getInstance()?.markerGoEvent(
                 naverMap,
                 markerList[position],
                 itemList[position].restaurant_id,

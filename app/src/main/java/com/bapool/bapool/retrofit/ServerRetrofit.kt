@@ -102,11 +102,6 @@ interface ServerRetrofit {
         @Query("rect") rect: String?,
     ): Call<GetRestaurantsResult>
 
-    //    @GET("/restaurants/{user-id}/{restaurant-id}")
-//    fun getRestaurantInfo(
-//        @Path("user-id") userId: Long?,
-//        @Path("restaurant-id") restaurantId: Int?,
-//    )
     @GET("/test/restaurants/{user-id}/{restaurant-id}")
 //    @GET("/restaurants/{user-id}/{restaurant-id}")
     fun getRestaurantInfo(

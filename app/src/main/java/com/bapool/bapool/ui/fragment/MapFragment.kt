@@ -14,8 +14,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.UiThread
+import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.core.view.isEmpty
+import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.add
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
@@ -25,6 +31,7 @@ import com.bapool.bapool.databinding.FragmentMapBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.HomeActivity
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.RestaurantPartyActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -39,7 +46,6 @@ import com.naver.maps.map.overlay.Align
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
-import okio.utf8Size
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -60,6 +66,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
         val markerList: ArrayList<Marker> = arrayListOf() // 배열 생성
+
+        private var instance: com.bapool.bapool.ui.fragment.MapFragment? = null
+        fun getInstance(): com.bapool.bapool.ui.fragment.MapFragment? {
+            return instance
+        }
     }
 
     val bapoolImg = OverlayImage.fromResource(R.drawable.bapool_circle) // by lazy
@@ -72,6 +83,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var restaurantIdList: MutableList<Long> = mutableListOf()    // id 리스트 생성
     var restaurantImageList: MutableList<String> = mutableListOf()  // image url 리스트 생성
 
+    var waitTime = 0L
+
+    init {
+        instance = this
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,7 +105,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.d("search_tagert", cameraPosition.target.toString())
 
             retro.getRestaurantsSearch(
-                1,
+                UserId,
                 v.text.toString(),
                 cameraPosition.target.longitude,
                 cameraPosition.target.latitude
@@ -118,8 +134,26 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
             if (newState == SearchView.TransitionState.SHOWING) {
                 // 검색 결과 오픈 시 하단 네비게이션바 제거
-                val homeActivity = activity as HomeActivity
-                homeActivity.hideBottomNavi(true)
+                //        (activity as HomeActivity).hideBottomNavi(true)
+
+                // 수정 필요
+//                val callback = object : OnBackPressedCallback(true) {
+//                    override fun handleOnBackPressed() {
+//                        if (newState == SearchView.TransitionState.SHOWING) searchView.hide()
+//                        else {
+//                            if (System.currentTimeMillis() - waitTime >= 1500) {
+//                                waitTime = System.currentTimeMillis()
+//                                Toast.makeText(context, "버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+//                            } else {
+//                                finishAffinity(requireActivity())
+//                            }
+//                        }
+//                    }
+//                }
+//                requireActivity().onBackPressedDispatcher.addCallback(
+//                    binding.bottomSheet.findViewTreeLifecycleOwner()!!,
+//                    callback
+//                )
             }
         }
 
@@ -259,7 +293,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("MARKER_INIT", "now bounds : ${naverMap.contentBounds}")
         Log.d("MARKER_INIT", "now camera : $cameraPosition")
         //------------------------------------
-        retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
+        retro.getRestaurants(UserId, rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
                 response: Response<GetRestaurantsResult>,
@@ -269,8 +303,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     restaurantIdList.clear()
                     for (idx in response.body()!!.result.restaurants)
                         restaurantIdList.add(idx.restaurant_id)
-//                    restaurantIdList.add(response.body()!!.result.restaurants[0].restaurant_id)
-
 
                     Log.d("BOTTOM_ID_LIST", restaurantIdList.toString())
 
@@ -298,7 +330,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     for (idx in 0 until restaurantIdList.size) {
                         Log.d("BOTTOM_IDX", idx.toString())
                         retro.getRestaurantsBottom(
-                            1,
+                            UserId,
                             GetRestaurantsBottomRequest(listOf(restaurantIdList[idx]))
                         )
                             .enqueue(object : Callback<GetRestaurantsBottomResult> {
@@ -421,7 +453,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //        (activity as HomeActivity).hideBottomNavi(true)
 
 
-        retro.getRestaurantInfo(1, id, long, lati)
+        retro.getRestaurantInfo(UserId, id, long, lati)
             .enqueue(object : Callback<GetRestaurantInfoResult> {
                 override fun onResponse(
                     call: Call<GetRestaurantInfoResult>,
@@ -429,7 +461,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 ) {
                     if (response.isSuccessful) {
                         Log.d("MARKER_INFO", response.body().toString())
-//                        createMarkerInfo(response.body()?.result)
+                        createMarkerInfo(response.body()?.result)
                     } else {
                         // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                         Log.d("MARKER_INFO", "onResponse 실패")
@@ -459,8 +491,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         isParty: Boolean,
         restaurant_name: String
     ) { // 인자로서 marker의 lati long 필요  // num of party   // name
-//        binding.coordinatorLayout.removeView(binding.searchView)
-
+        binding.searchView.hide()
         // 추가적인 마커 생성 및 카메라 이동 필요
         if (markerList.size != 0) {
             Log.d("MARKER_INIT", "marker clear!!!")
@@ -476,15 +507,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         markerList[0].isHideCollidedCaptions = true
         markerList[0].position = LatLng(lati, long)  // 마커 위치 정보
         markerList[0].map = naverMap    // 생성 마커들 지도에 출력
-        markerList[0].width = 75
-        markerList[0].height = 75
+        markerList[0].width = 50
+        markerList[0].height = 50
         markerList[0].captionText = restaurant_name
-        // 이후 마커 클릭 이벤트와 같은 상황 구현
+        // 해당 마커 클릭 이벤트
+        markerClickEvent(markerList[0], id, long, lati)
         // 마커 클릭 시 하단 네비게이션바 제거
-        (activity as HomeActivity).hideBottomNavi(true)
+//        (activity as HomeActivity).hideBottomNavi(true)
 
 
-        retro.getRestaurantInfo(1, id, long, lati)
+        retro.getRestaurantInfo(UserId, id, long, lati)
             .enqueue(object : Callback<GetRestaurantInfoResult> {
                 override fun onResponse(
                     call: Call<GetRestaurantInfoResult>,
@@ -518,14 +550,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun markerClickEvent(marker: Marker, id: Long, long: Double, lati: Double) {
         marker.setOnClickListener {
 
+
             Log.d("MARKER_INFO", "lati: $lati long: $long")
             Log.d("MARKER_INFO", "Restaurant id : $id")
 
             // 마커 클릭 시 하단 네비게이션바 제거
-            (activity as HomeActivity).hideBottomNavi(true)
+//            (activity as HomeActivity).hideBottomNavi(true)
 
 
-            retro.getRestaurantInfo(1, id, long, lati)
+            retro.getRestaurantInfo(UserId, id, long, lati)
                 .enqueue(object : Callback<GetRestaurantInfoResult> {
                     override fun onResponse(
                         call: Call<GetRestaurantInfoResult>,
@@ -566,6 +599,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.bottomSheet.removeAllViews()
         layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
         BottomSheetBehavior.from(binding.bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.bottomSheet.isNotEmpty()) binding.bottomSheet.removeAllViews()
+                else {
+                    if (System.currentTimeMillis() - waitTime >= 1500) {
+                        waitTime = System.currentTimeMillis()
+                        Toast.makeText(context, "버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        finishAffinity(requireActivity())
+                    }
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            binding.bottomSheet.findViewTreeLifecycleOwner()!!,
+            callback
+        )
 
         // 이미지
         Glide.with(this)
@@ -650,6 +701,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .check()
     }
 
+//    override fun onBackPressed() {
+//        if (flag == "marker_info") {
+//            binding.bottomSheet.removeAllViews()
+//        } else if (flag == "search_bar") {
+//            binding.searchView.removeAllViews()
+//        }
+//    }
+
 
     //뷰바인딩 생명주기 관리
     override fun onDestroyView() {
@@ -657,8 +716,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         _binding = null
 
-        val homeActivity = activity as HomeActivity
-        homeActivity.hideBottomNavi(false)
+//            (activity as HomeActivity).hideBottomNavi(true)
     }
 
 
