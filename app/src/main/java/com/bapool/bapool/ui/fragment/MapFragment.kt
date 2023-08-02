@@ -31,6 +31,7 @@ import com.bapool.bapool.databinding.FragmentMapBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.HomeActivity
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.RestaurantPartyActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -104,7 +105,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Log.d("search_tagert", cameraPosition.target.toString())
 
             retro.getRestaurantsSearch(
-                1,
+                UserId,
                 v.text.toString(),
                 cameraPosition.target.longitude,
                 cameraPosition.target.latitude
@@ -292,7 +293,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("MARKER_INIT", "now bounds : ${naverMap.contentBounds}")
         Log.d("MARKER_INIT", "now camera : $cameraPosition")
         //------------------------------------
-        retro.getRestaurants(1, rect).enqueue(object : Callback<GetRestaurantsResult> {
+        retro.getRestaurants(UserId, rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
                 call: Call<GetRestaurantsResult>,
                 response: Response<GetRestaurantsResult>,
@@ -329,7 +330,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     for (idx in 0 until restaurantIdList.size) {
                         Log.d("BOTTOM_IDX", idx.toString())
                         retro.getRestaurantsBottom(
-                            1,
+                            UserId,
                             GetRestaurantsBottomRequest(listOf(restaurantIdList[idx]))
                         )
                             .enqueue(object : Callback<GetRestaurantsBottomResult> {
@@ -452,7 +453,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //        (activity as HomeActivity).hideBottomNavi(true)
 
 
-        retro.getRestaurantInfo(1, id, long, lati)
+        retro.getRestaurantInfo(UserId, id, long, lati)
             .enqueue(object : Callback<GetRestaurantInfoResult> {
                 override fun onResponse(
                     call: Call<GetRestaurantInfoResult>,
@@ -515,7 +516,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //        (activity as HomeActivity).hideBottomNavi(true)
 
 
-        retro.getRestaurantInfo(1, id, long, lati)
+        retro.getRestaurantInfo(UserId, id, long, lati)
             .enqueue(object : Callback<GetRestaurantInfoResult> {
                 override fun onResponse(
                     call: Call<GetRestaurantInfoResult>,
@@ -557,7 +558,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //            (activity as HomeActivity).hideBottomNavi(true)
 
 
-            retro.getRestaurantInfo(1, id, long, lati)
+            retro.getRestaurantInfo(UserId, id, long, lati)
                 .enqueue(object : Callback<GetRestaurantInfoResult> {
                     override fun onResponse(
                         call: Call<GetRestaurantInfoResult>,
