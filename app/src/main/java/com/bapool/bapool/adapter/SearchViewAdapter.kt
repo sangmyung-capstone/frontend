@@ -29,7 +29,7 @@ class SearchViewAdapter(val itemList: List<RestaurantSearch>, val naverMap: Nave
         holder.itemView.setOnClickListener {
             Log.d("search_view_holder", "view holder${position} touch")
 
-            MapFragment().searchMarkerGoEvent(
+            MapFragment.getInstance()?.searchMarkerGoEvent(
                 naverMap,
                 itemList[position].restaurant_id,
                 itemList[position].restaurant_longitude,
