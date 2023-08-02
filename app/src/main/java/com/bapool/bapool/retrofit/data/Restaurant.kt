@@ -7,9 +7,11 @@ data class GetRestaurantsResult(
     val message: String,
     val result: RestaurantsResult
 )
+
 data class RestaurantsResult(
     val restaurants: List<Restaurant>
 )
+
 data class Restaurant(
     val restaurant_id: Long,
     val restaurant_name: String,
@@ -21,6 +23,7 @@ data class Restaurant(
     val restaurant_latitude: Double,
 //    val link: String  // api 변경으로 인한 link 삭제
 )
+
 // -------------------------------------------------------------------------------------------------
 data class GetRestaurantLogResponse(
     val code: Int,
@@ -37,15 +40,18 @@ data class GetRestaurantLogResponse(
         val restaurant_name: String,
         val imgUrl: String,
         val restaurant_address: String,
-        val category: String
+        val category: String,
+        val rating_complete: Boolean
     )
 }
+
 // -------------------------------------------------------------------------------------------------
 data class GetRestaurantInfoResult(
     val code: Int,
     val message: String,
     val result: RestaurantInfo
 )
+
 data class RestaurantInfo(
     val restaurant_id: Long,
     val restaurant_name: String,
@@ -59,31 +65,38 @@ data class RestaurantInfo(
     val img_url: String,
     val menu: List<Menu>
 )
+
 data class Menu(
     val name: String,
     val price: String
 )
+
 // -------------------------------------------------------------------------------------------------
 data class GetRestaurantsBottomRequest(
     val restaurant_ids: List<Long>
 )
+
 data class GetRestaurantsBottomResult(
     val code: Int,
     val message: String,
     val result: RestaurantsBottomResult
 )
+
 data class RestaurantsBottomResult(
     val restaurant_img_urls: List<String>
 )
+
 // -------------------------------------------------------------------------------------------------
 data class GetSearchResult(
     val code: Int,
     val message: String,
     val result: SearchResult
 )
+
 data class SearchResult(
     val restaurants: List<RestaurantSearch>
 )
+
 data class RestaurantSearch(
     val category: String,
     val num_of_party: Int,
@@ -93,7 +106,6 @@ data class RestaurantSearch(
     val restaurant_longitude: Double,
     val restaurant_latitude: Double
 )
-
 
 
 // -------------------------------------------------------------------------------------------------
@@ -108,4 +120,4 @@ data class goToRestaurantPartyList(
     val site_url: String,
     val category: String,
     val phone: String,
-): Serializable
+) : Serializable
