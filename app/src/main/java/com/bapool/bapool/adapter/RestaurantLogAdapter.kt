@@ -43,6 +43,8 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
             binding.restaurantImage.setImageResource(R.drawable.restaurant_icon)
         }
 
+        binding.ratingbutton.isEnabled = Loglist.rating_complete
+
         binding.ratingbutton.setOnClickListener {
             val intent = Intent(context, RatingActivity::class.java)
             intent.putExtra("party_id", Loglist.party_id)

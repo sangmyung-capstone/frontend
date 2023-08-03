@@ -40,6 +40,8 @@ class RestaurantPartyActivity : AppCompatActivity() {
         listener()
         retrofit()
 
+
+
     }
 
     //버튼초기화
@@ -52,6 +54,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
         binding.restaurantLocation.setText(restaurantPartyInfoObject.address)
 
         retrofit()
+
 
 
         resGrpAdapter.itemClick = object : RestaurantPartyAdapter.ItemClick {
@@ -126,6 +129,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     //retrofit
     fun retrofit() {
 
+
         retro.getResPartyList(UserId!!.toLong(), restaurantPartyInfoObject.restaurant_id!!.toLong())
             .enqueue(object : Callback<GetResPartyListResponse> {
                 override fun onResponse(
@@ -150,11 +154,13 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
                         }
                     } else {
-                        // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                     }
                 }
 
                 override fun onFailure(call: Call<GetResPartyListResponse>, t: Throwable) {
+
+                    Log.d("hghkhk",t.toString())
+
                 }
             })
     }

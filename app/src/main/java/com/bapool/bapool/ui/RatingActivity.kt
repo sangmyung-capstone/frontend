@@ -31,9 +31,9 @@ class RatingActivity : AppCompatActivity() {
         val ratingUsersList = mutableListOf<GetRatingUserResponse.GetRatingUserResultUser>()
         val postRatingUserRequest = PostRatingUserRequest(mutableListOf())
 
-        val partyid = intent.getLongExtra("party_id", 1)
+        val partyid = intent.getIntExtra("party_id",1)
 
-        retro.GetRatingUser(UserId!!, partyid)
+        retro.GetRatingUser(UserId!!, partyid.toLong())
             .enqueue(object : Callback<GetRatingUserResponse> {
                 override fun onResponse(
                     call: Call<GetRatingUserResponse>,
@@ -47,6 +47,8 @@ class RatingActivity : AppCompatActivity() {
                         binding.recyclerView.adapter?.notifyDataSetChanged()
                     } else {
                         // handle error response
+                        Log.d("bap", "onResponse 실패 $response")
+
                     }
                 }
 
@@ -59,7 +61,7 @@ class RatingActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = RatingUserAdapter(ratingUsersList, postRatingUserRequest)
         binding.ratingcomplete.setOnClickListener {
-            retro.PostRatingUser(UserId!!, partyid, postRatingUserRequest)
+            retro.PostRatingUser(UserId!!, partyid.toLong(), postRatingUserRequest)
                 .enqueue(object : Callback<PostRatingUserResponse> {
                     override fun onResponse(
                         call: Call<PostRatingUserResponse>,
@@ -67,6 +69,7 @@ class RatingActivity : AppCompatActivity() {
                     ) {
                         if (response.isSuccessful) {
                             Log.d("bap", "onResponse 성공\n$response")
+                            finish()
                             // handle successful response
                         } else {
                             // handle error response
