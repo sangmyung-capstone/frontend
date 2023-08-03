@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.RestaurantPartyActivity">
 
-    <Button
-        android:id="@+id/dummyBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <TextView
         android:id="@+id/resName"
         android:layout_width="wrap_content"
@@ -27,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="의 파티"
@@ -69,8 +62,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/resGrpRv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
         android:background="#EEEEEE"
         app:layout_constraintTop_toBottomOf="@+id/textLine2"
         tools:layout_editor_absoluteX="0dp" />

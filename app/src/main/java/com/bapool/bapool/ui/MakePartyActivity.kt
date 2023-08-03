@@ -4,18 +4,20 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.NumberPicker
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.ActivityMakePartyBinding
 import com.bapool.bapool.databinding.CustomDatepickerBinding
 import com.bapool.bapool.databinding.CustomTimepickerBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
-import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.retrofit.data.PostMakePartyRequest
+import com.bapool.bapool.retrofit.data.PostMakePartyResponse
+import com.bapool.bapool.retrofit.data.goToRestaurantPartyList
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,7 +25,6 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 
 class MakePartyActivity : AppCompatActivity() {
@@ -31,7 +32,7 @@ class MakePartyActivity : AppCompatActivity() {
     val hastagList = ArrayList(Collections.nCopies(5, 0))
     lateinit var maxPeople: NumberPicker
     val retro = ServerRetrofit.create()
-    val userId: Long = UserId!!   //companion userid로 변경필요.
+    val userId: String = UserId.toString()   //companion userid로 변경필요.
     lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
 
 
@@ -39,7 +40,7 @@ class MakePartyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMakePartyBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        this.restaurantPartyInfoObject =
+        restaurantPartyInfoObject =
             intent.getSerializableExtra("restaurantInfoObject") as goToRestaurantPartyList
 
         initializeVari()
@@ -130,24 +131,24 @@ class MakePartyActivity : AppCompatActivity() {
             timePickerDialogCustom(1)
         }
 
-        //취소버튼 클릭
-        binding.cancelButton.setOnClickListener {
-
-
-        }
-
 
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
 
 
             if (binding.grpNameText.text.isNullOrBlank()) {
-                alterDialog("그룹명을 입력해주세요.")
+                alterDialog("파티명을 입력해주세요.")
 
-            } else if (binding.menuText.text.isNullOrBlank()) {
-                alterDialog("상세메뉴를 입력해주세요.")
+            }else if(binding.grpNameText.length() > 10){
+                alterDialog("파티명은 10글자까지 가능합니다.")
 
-            } else if (binding.startDateText.text.toString() == "시작날짜") {
+            }else if(binding.menuText.text.isNullOrBlank()){
+                alterDialog("메뉴를 입력해주세요.")
+
+            }else if(binding.grpNameText.length() > 10){
+                alterDialog("메뉴명은 10글자까지 가능합니다.")
+
+            }else if (binding.startDateText.text.toString() == "시작날짜") {
                 alterDialog("시작날짜를 입력해주세요.")
 
             } else if (binding.startTimeText.text.toString() == "시작시간") {
@@ -205,18 +206,10 @@ class MakePartyActivity : AppCompatActivity() {
                                 this@MakePartyActivity,
                                 ChattingAndPartyInfoMFActivity::class.java
                             )
-                        intent.putExtra("currentUserId", "22")//현재 유저의 userId로 value값 교체
-                        intent.putExtra("partyId", "33") // result 안의 party_id 값으로 value값 교체
+                        intent.putExtra("partyId", result!!.result.party_id.toString()) // result 안의 party_id 값으로 value값 교체
                         startActivity(intent)
 
-                        //group_id 넘겨줘야함 Intent할때
                     } else {
-//                    val responseCode = response.code()
-//                    val errorBody = response.errorBody()?.string()
-//                    Log.d("MKRetrofit", response.toString())
-//
-//                    // 실패한 응답 처리
-//                    Log.d("MKRetrofit", "응답 실패. 응답 코드: $responseCode, 에러 메시지: $errorBody")
 
                         Toast.makeText(this@MakePartyActivity, "그룹 생성 오류", Toast.LENGTH_SHORT)
                             .show()
