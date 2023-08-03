@@ -95,15 +95,13 @@ interface ServerRetrofit {
     //--------------------------------------------------------------------------
 
     // 이현제
-    @GET("/test/restaurants/{user-id}")
-//    @GET("/restaurants/{user-id}")
+    @GET("/restaurants/{user-id}")
     fun getRestaurants(
         @Path("user-id") userId: Long?,
         @Query("rect") rect: String?,
     ): Call<GetRestaurantsResult>
 
-    @GET("/test/restaurants/{user-id}/{restaurant-id}")
-//    @GET("/restaurants/{user-id}/{restaurant-id}")
+    @GET("/restaurants/{user-id}/{restaurant-id}")
     fun getRestaurantInfo(
         @Path("user-id") userId: Long?,
         @Path("restaurant-id") restaurantId: Long?,
@@ -111,15 +109,13 @@ interface ServerRetrofit {
         @Query("latitude") latitude: Double?,
     ): Call<GetRestaurantInfoResult>
 
-    @POST("/test/restaurants/bottomlist/{user-id}")
-//    @POST("/restaurants/bottomlist/{user-id}")
+    @POST("/restaurants/bottomlist/{user-id}")
     fun getRestaurantsBottom(
         @Path("user-id") userId: Long?,
         @Body request: GetRestaurantsBottomRequest,
     ): Call<GetRestaurantsBottomResult>
 
-    @GET("/test/restaurants/search/{user-id}")
-//    @GET("/restaurants/search/{user-id}")
+    @GET("/restaurants/search/{user-id}")
     fun getRestaurantsSearch(
         @Path("user-id") userId: Long?,
         @Query("q") q: String?,
