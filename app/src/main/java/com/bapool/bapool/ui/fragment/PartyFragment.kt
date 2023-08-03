@@ -29,6 +29,8 @@ class PartyFragment : Fragment() {
 
     var myPartyListModel = arrayListOf<MyPartyListModel>()
 
+    var currentUserId: String = UserId.toString()
+
     private val TAG = "PartyFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
