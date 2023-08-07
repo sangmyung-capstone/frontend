@@ -55,14 +55,17 @@ class PartyChattingAdapter(
     var messages: ArrayList<FirebasePartyMessage> = arrayListOf()
     var messageKey: ArrayList<String> = arrayListOf()
     var imageResource: MutableMap<String, Uri> = HashMap()
-    var imageResourceBool = true
+    private var imageResourceBool = true
+    private var chattingResourceBool = true
 
     var initPageControl = 0
 
     var currentPage = 0
     var itemsPerPage = 10
+    var firstKey = ""
 
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var updateChattingReference: DatabaseReference
     lateinit var childEventListener: ChildEventListener
 
 
@@ -74,11 +77,12 @@ class PartyChattingAdapter(
         }, 1000)
 
         getMessageData()
+
+
     }
 
 
-
-    fun getMessageData(){
+    fun getMessageData() {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("test").child("Groups")
             .child(groupId).child("groupMessages")
@@ -148,24 +152,24 @@ class PartyChattingAdapter(
                             .child("confirmed")
                             .updateChildren(testMap)
                             .addOnCompleteListener {
-                                if(initPageControl==0){
+                                if (initPageControl == 0) {
                                     recyclerView.scrollToPosition(messageKey.size - 1)
 
                                 }
                             }
                     } else {
-                        if(initPageControl==0){
+                        if (initPageControl == 0) {
                             recyclerView.scrollToPosition(messageKey.size - 1)
 
                         }
                     }
                 }
-                if(initPageControl==0){
+                if (initPageControl == 0) {
                     recyclerView.scrollToPosition(messageKey.size - 1)
 
                 }
                 Log.d("들어와있는지확인후", messages.toString())
-
+                firstKey = messageKey.first()
                 diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)
 
             }
@@ -181,10 +185,7 @@ class PartyChattingAdapter(
                     messages[messageIndex] = changeMessageObject
                     notifyItemChanged(messageIndex)
                 }
-
                 notifyItemChanged(messageIndex)
-
-
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -198,7 +199,34 @@ class PartyChattingAdapter(
 
             }
         }
-        databaseReference.addChildEventListener(childEventListener)
+        databaseReference.limitToLast(10)
+            .addChildEventListener(childEventListener)
+
+    }
+
+
+    fun updateChatting(){
+        updateChattingReference = FirebaseDatabase.getInstance().getReference("test").child("Groups")
+            .child(groupId).child("groupMessages")
+
+        updateChattingReference.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                for(data in snapshot.children){
+                    val messageObject: FirebasePartyMessage =
+                        snapshot.getValue(FirebasePartyMessage::class.java)!!
+                    val messageKeyObject = snapshot.key.toString()
+
+                    messages.add(0,messageObject)
+                    messageKey.add(0,messageKeyObject)
+                }
+                notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
 
@@ -248,10 +276,9 @@ class PartyChattingAdapter(
             } else {
                 return 2
             }
-        } else if(messages[position].senderId.equals("공지") ){
+        } else if (messages[position].senderId.equals("공지")) {
             return 5
-        }
-        else {
+        } else {
             if (messages[position].type == 0) {
                 return 3
             } else {
@@ -458,10 +485,11 @@ class PartyChattingAdapter(
 
                     if (imageResourceBool) {
                         recyclerView.postDelayed({
-                            if(initPageControl==0){
+                            if (initPageControl == 0) {
                                 recyclerView.scrollToPosition(messageKey.size - 1)
 
-                            }                        }, 1000)
+                            }
+                        }, 1000)
 
                         imageResourceBool = false
                     }
@@ -525,6 +553,19 @@ class PartyChattingAdapter(
         databaseReference.removeEventListener(childEventListener)
     }
 
+    fun upadateChatting() {
+
+        itemsPerPage += 5
+        updateChatting()
+        notifyDataSetChanged()
+
+
+//
+//        recyclerView.postDelayed({
+//            recyclerView.scrollToPosition()
+//        }, 1000)
+
+    }
 
 
 }

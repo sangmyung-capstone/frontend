@@ -96,7 +96,8 @@ data class FirebasePartyInfo
     val restaurantName: String = "",
     val groupLeaderId: Long = 0,
     val siteUrls: String = "",
-    val status: String = ""
+    val status: String = "",
+    val restaurantImgUrl: String = ""
 ) : Serializable
 
 data class FirebasePartyMessage(

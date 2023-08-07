@@ -9,7 +9,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
@@ -40,7 +40,6 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -92,7 +91,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
 
     //RecyclerView adapter 연결
-    var resumeCount = 0
     private lateinit var chattingRVA: PartyChattingAdapter
     private lateinit var partyUserMenuRVA: PartyUserInfoAdapter
     lateinit var chattingRecyclerView: RecyclerView
@@ -115,22 +113,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         initializeVari()
         listener()
         getPartyUserInfo()
-
-
-        //페이징 처리중인 코드
-//        binding.chattingRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//
-//                if (!binding.chattingRv.canScrollVertically(0)) {   //최하단에 오면`
-//                    chattingRVA.initPageControl++
-//                    chattingRVA.messages.clear()
-//                    chattingRVA.messageKey.clear()
-//                    chattingRVA.itemsPerPage += 10
-//                    chattingRVA.getMessageData()                }
-//
-//            }
-//        })
 
     }
 
@@ -167,10 +149,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                             .addValueEventListener(
                                 object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
-
-
-                                        //파티 2가 오류나는 이유. user6 가 Users에 저장되어 있지않음  userid 12에 저장되어있음 백에서 이유 찾아볼것
-
                                         userInfo = snapshot.getValue(FirebaseUserInfo::class.java)!!
                                         partyUserInfo[userId] = userInfo
 
@@ -289,6 +267,18 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             closePartyDialog()
         }
 
+        binding.refreshLayout.setOnRefreshListener {
+
+            chattingRVA.upadateChatting()
+
+            lifecycleScope.launch {
+                delay(1000) // Simulate a 2-second delay
+                binding.refreshLayout.isRefreshing = false
+            }
+
+            Toast.makeText(this, "새로고침", Toast.LENGTH_SHORT).show()
+        }
+
 
     }
 
@@ -328,7 +318,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                 alterDialog("이미 완료된 파티입니다.")
                             }
                         }
-                        Log.d("dasfdsfsafdasf", item.hashTag.toString())
                         if (item.hashTag != null) {
                             if (item.hashTag.isNotEmpty()) {
                                 binding.hashtagVisible.visibility = View.VISIBLE
@@ -357,7 +346,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                             }
                         }
 
-                        groupOnerId = item.groupLeaderId.toString()
+                        if(groupOnerId == ""){
+                            groupOnerId = item.groupLeaderId.toString()
+                        }else{
+                            groupOnerId = item.groupLeaderId.toString()
+                            GroupInfoAdapter()
+                        }
                         currentPartyInfo = item
 
                     }
@@ -402,7 +396,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     //마감되었다고 채팅창에 알림
     fun sendNotificationChatting() {
         val startTime = formatNotificationTime(currentPartyInfo.startDate)
-        val notificationText = "파티 모임 시간이 ${startTime} 으로 확정되었습니다."
+        val partyName = currentPartyInfo.groupName
+        val notificationText = "${partyName} 파티 모임 시간이 ${startTime} 으로 확정되었습니다."
         var items = mutableListOf<String>()
         for (data in partyUserInfo.values) {
             items.add(data.firebaseToken.toString())
@@ -415,7 +410,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 .setValue(group_messages)
             for (data in items) {
                 sendNotificationFcm(data)
-                Log.d("asdfsdfsadasdf",data)
+                Log.d("asdfsdfsadasdf", data)
             }
         }
     }
@@ -430,7 +425,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val getterToken = userInfo.firebaseToken.toString()
         val msgText: String = if (messageType == 1) {
             "사진"
-        }else {
+        } else {
             binding.sendMessage.text.toString()
         }
         val notiModel = NotiModel(currentUserNickName, msgText)
@@ -522,6 +517,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             binding.drawerNavigationLayout.closeDrawer(GravityCompat.END)
         } else {
             super.onBackPressed()
+            chattingRVA.removeChildEventListener()
         }
     }
 
@@ -545,6 +541,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
                     }
                 }
+
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
 
                 }
@@ -602,17 +599,16 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             if (!(currentPartyInfo.curNumberOfPeople == 1)) {
                 if (currentUserId.equals(currentPartyInfo.groupLeaderId.toString())) {
                     selectPartyLeaderDialog()
-                } else {
-                    recessionParty()
-                }
-            } else {
+                    dialog.dismiss()
+                } else recessionParty()
+            }
+        else {
                 recessionParty()
             }
 
         }
-
         alertDialogBuilder.setNegativeButton("취소") { dialog, _ ->
-            Toast.makeText(this, "negative", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
         }
 
         val alertDialog = alertDialogBuilder.create()
@@ -625,23 +621,35 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         var copyPartyUserInfoMenu = partyUserInfoMenu
         var notCurrentUserPartyUsers = removeMapByUID(currentUserId, copyPartyUserInfoMenu)
 
-        val recyclerView = selectPartyLeader.recyclerView
-        val adapter = SelectPartyLeaderAdapter(this, partyUserInfoMenu, currentUserId, partyId)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
 
         val mBuilder = AlertDialog.Builder(this)
             .setView(selectPartyLeader.root)
         mBuilder.setTitle("파티장 선택")
         mBuilder.setPositiveButton("OK") { dialog, _ ->
-            showExitDialog()
+            dialog.dismiss()
         }
         mBuilder.setNegativeButton("Cancel") { dialog, _ ->
-            // Handle negative button click
+            dialog.dismiss()
+        }
+
+        val recyclerView = selectPartyLeader.recyclerView
+        val adapter = SelectPartyLeaderAdapter(this, partyUserInfoMenu, currentUserId, partyId,mBuilder.create())
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        adapter.itemClick = object : SelectPartyLeaderAdapter.ItemClick
+        {
+            override fun onClick(view: View, position: Int) {
+                Toast.makeText(baseContext,"adsfasfasdf",Toast.LENGTH_SHORT).show()
+            }
         }
 
         mBuilder.show()
+
+
+
+
 
     }
 
@@ -857,6 +865,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d("aasdfasfasdfdsdfasdfa", "onDestroy")
     }
+
 
 }
 

@@ -66,7 +66,6 @@ class PartyUserInfoAdapter(
                 image.setBackgroundResource(R.drawable.custom_img_bg)
             }
             binding.userNameImageBackground.setOnClickListener {
-
                     val intent = Intent(context, CheckUserProfileActivity::class.java)
                     intent.putExtra("opponentUserId",item.keys.firstOrNull().toString())
                     context.startActivity(intent)
