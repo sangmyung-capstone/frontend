@@ -47,9 +47,9 @@ class RestaurantPartyAdapter(val context: Context) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 
-        if(itemClick != null){
-            holder.joinButton.setOnClickListener{ v->
-                itemClick?.onClick(v,position)
+        if (itemClick != null) {
+            holder.joinButton.setOnClickListener { v ->
+                itemClick?.onClick(v, position)
             }
         }
         holder.bindItem(resGroup[position])
@@ -78,19 +78,15 @@ class RestaurantPartyAdapter(val context: Context) :
             if (hashtagList != null) {
                 if (hashtagList.isNotEmpty()) {
                     binding.hashtagVisible.visibility = View.VISIBLE
-                    var count = 0
                     for (item in hashtagList) {
-                        Log.d("hashtagList", item.toString())
-                        count++
-                        if (item == 1) {
-                            when (count) {
-                                1 -> binding.hash1.visibility = View.VISIBLE
-                                2 -> binding.hash2.visibility = View.VISIBLE
-                                3 -> binding.hash3.visibility = View.VISIBLE
-                                4 -> binding.hash4.visibility = View.VISIBLE
-                                5 -> binding.hash5.visibility = View.VISIBLE
-                            }
+                        when (item) {
+                            1 -> binding.hash1.visibility = View.VISIBLE
+                            2 -> binding.hash2.visibility = View.VISIBLE
+                            3 -> binding.hash3.visibility = View.VISIBLE
+                            4 -> binding.hash4.visibility = View.VISIBLE
+                            5 -> binding.hash5.visibility = View.VISIBLE
                         }
+
 
                     }
                 }

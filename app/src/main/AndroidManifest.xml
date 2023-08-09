@@ -76,10 +76,9 @@
                 android:value="" />
         </activity>
         <activity
-            android:launchMode="singleTask"
             android:name=".ui.ChattingAndPartyInfoMFActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

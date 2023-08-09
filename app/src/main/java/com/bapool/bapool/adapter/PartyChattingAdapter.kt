@@ -199,7 +199,7 @@ class PartyChattingAdapter(
 
             }
         }
-        databaseReference.limitToLast(10)
+        databaseReference
             .addChildEventListener(childEventListener)
 
     }
@@ -224,7 +224,6 @@ class PartyChattingAdapter(
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
         })
     }

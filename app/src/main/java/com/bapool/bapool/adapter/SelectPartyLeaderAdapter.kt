@@ -22,7 +22,6 @@ class SelectPartyLeaderAdapter(
     val partyUserInfo: ArrayList<Map<String, FirebaseUserInfo>>,
     val currentUserId: String,
     val currentPartyId: String,
-    var create: AlertDialog,
 ) : RecyclerView.Adapter<SelectPartyLeaderAdapter.ViewHolder>() {
 
 
@@ -83,13 +82,15 @@ class SelectPartyLeaderAdapter(
                     context.resources.getIdentifier(imageName, "drawable", context.packageName)
                 binding.userImage.setImageResource(resourceId)
 
+                clickEvent.setOnClickListener {
+                }
+
             }
         }
     }
 
 
     fun confirmDialog(nickName: String, opponentUserId: String?) {
-
         val alertDialogBuilder = AlertDialog.Builder(context)
         alertDialogBuilder.setMessage("${nickName}님을 그룹장으로 임명하시겠습니까?") // Set the dialog message
         alertDialogBuilder.setPositiveButton("확인") { dialog, _ ->
@@ -120,14 +121,10 @@ class SelectPartyLeaderAdapter(
                         val result = response.body()
                         confirmChangePartyLeaderDialog()
                         Log.d("changePartyLeaderRetrofit", response.body().toString())
-
                     } else {
-
                         Log.d("changePartyLeaderRetrofit", response.errorBody().toString())
-
                     }
                 }
-
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
                     Log.d("changePartyLeaderRetrofit", "실패")
                 }

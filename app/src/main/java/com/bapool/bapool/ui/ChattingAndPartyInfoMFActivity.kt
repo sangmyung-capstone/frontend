@@ -198,9 +198,24 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 partyId,
                 partyUserInfo, peopleCount
             )
-        chattingRecyclerView.adapter = chattingRVA
-        chattingRecyclerView.layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(this)
+        chattingRecyclerView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            // 레이아웃 변화를 감지하여 처리하는 코드
+            if (bottom < oldBottom) {
+                // 키보드가 나타날 때의 처리를 여기에 작성
+                Toast.makeText(this, "키보드생김", Toast.LENGTH_SHORT).show()
+                layoutManager.stackFromEnd = true // RecyclerView 스크롤을 맨 아래로 이동
 
+            } else if (bottom > oldBottom) {
+                // 키보드가 사라질 때의 처리를 여기에 작성
+                Toast.makeText(this, "키보드사라짐", Toast.LENGTH_SHORT).show()
+                layoutManager.stackFromEnd = false // RecyclerView 스크롤을 맨 아래로 이동 해제
+
+            }
+        }
+
+        chattingRecyclerView.adapter = chattingRVA
+        chattingRecyclerView.layoutManager = layoutManager
 
     }
 
@@ -269,12 +284,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
         binding.refreshLayout.setOnRefreshListener {
 
-            chattingRVA.upadateChatting()
-
-            lifecycleScope.launch {
-                delay(1000) // Simulate a 2-second delay
-                binding.refreshLayout.isRefreshing = false
-            }
+//            chattingRVA.upadateChatting()
+//
+//            lifecycleScope.launch {
+//                delay(1000) // Simulate a 2-second delay
+//                binding.refreshLayout.isRefreshing = false
+//            }
 
             Toast.makeText(this, "새로고침", Toast.LENGTH_SHORT).show()
         }
@@ -289,6 +304,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         database.child("test").child("Groups").child(partyId.toString()).child("groupInfo")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+
                     if (snapshot.value != null) {
                         val item = snapshot.getValue(FirebasePartyInfo::class.java)!!
                         binding.GrpName.setText(item.groupName)
@@ -318,42 +334,36 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                 alterDialog("이미 완료된 파티입니다.")
                             }
                         }
+                        binding.hash1.visibility = View.GONE
+                        binding.hash2.visibility = View.GONE
+                        binding.hash3.visibility = View.GONE
+                        binding.hash4.visibility = View.GONE
+                        binding.hash5.visibility = View.GONE
                         if (item.hashTag != null) {
                             if (item.hashTag.isNotEmpty()) {
                                 binding.hashtagVisible.visibility = View.VISIBLE
                                 var count = 0
                                 for (item in item.hashTag) {
                                     count++
-                                    if (item == 1) {
-                                        when (count) {
-                                            1 -> binding.hash1.visibility = View.VISIBLE
-                                            2 -> binding.hash2.visibility = View.VISIBLE
-                                            3 -> binding.hash3.visibility = View.VISIBLE
-                                            4 -> binding.hash4.visibility = View.VISIBLE
-                                            5 -> binding.hash5.visibility = View.VISIBLE
-                                        }
-                                    } else {
-                                        when (count) {
-                                            1 -> binding.hash1.visibility = View.GONE
-                                            2 -> binding.hash2.visibility = View.GONE
-                                            3 -> binding.hash3.visibility = View.GONE
-                                            4 -> binding.hash4.visibility = View.GONE
-                                            5 -> binding.hash5.visibility = View.GONE
-                                        }
+                                    when (item) {
+                                        1 -> binding.hash1.visibility = View.VISIBLE
+                                        2 -> binding.hash2.visibility = View.VISIBLE
+                                        3 -> binding.hash3.visibility = View.VISIBLE
+                                        4 -> binding.hash4.visibility = View.VISIBLE
+                                        5 -> binding.hash5.visibility = View.VISIBLE
                                     }
-
                                 }
                             }
                         }
 
-                        if(groupOnerId == ""){
+
+                        if (groupOnerId == "") {
                             groupOnerId = item.groupLeaderId.toString()
-                        }else{
+                        } else {
                             groupOnerId = item.groupLeaderId.toString()
                             GroupInfoAdapter()
                         }
                         currentPartyInfo = item
-
                     }
                 }
 
@@ -409,7 +419,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 .push()
                 .setValue(group_messages)
             for (data in items) {
-                sendNotificationFcm(data)
+                sendNotificationFcm(data, notificationText)
                 Log.d("asdfsdfsadasdf", data)
             }
         }
@@ -436,9 +446,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
 
-    fun sendNotificationFcm(firebaseToken: String) {
+    fun sendNotificationFcm(firebaseToken: String, notificationText: String) {
 
-        val notiModel = NotiModel(currentUserNickName, "공지")
+        val notiModel = NotiModel(currentUserNickName, notificationText)
 
         val pushModel = PushNotification(notiModel, firebaseToken)
 
@@ -567,18 +577,15 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val hashtagList: List<Int> = item.hashTag
         if (hashtagList.isNotEmpty()) {
             binding.hashtagVisible.visibility = View.VISIBLE
-            var count = 0
             for (item in hashtagList) {
-                count++
-                if (item == 1) {
-                    when (item) {
-                        1 -> binding.hash1.visibility = View.VISIBLE
-                        2 -> binding.hash2.visibility = View.VISIBLE
-                        3 -> binding.hash3.visibility = View.VISIBLE
-                        4 -> binding.hash4.visibility = View.VISIBLE
-                        5 -> binding.hash5.visibility = View.VISIBLE
-                    }
+                when (item) {
+                    1 -> binding.hash1.visibility = View.VISIBLE
+                    2 -> binding.hash2.visibility = View.VISIBLE
+                    3 -> binding.hash3.visibility = View.VISIBLE
+                    4 -> binding.hash4.visibility = View.VISIBLE
+                    5 -> binding.hash5.visibility = View.VISIBLE
                 }
+
             }
         }
 
@@ -601,8 +608,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     selectPartyLeaderDialog()
                     dialog.dismiss()
                 } else recessionParty()
-            }
-        else {
+            } else {
                 recessionParty()
             }
 
@@ -616,41 +622,59 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
     fun selectPartyLeaderDialog() {
-        val selectPartyLeader = SelectPartyleaderDialogBinding.inflate(LayoutInflater.from(this))
+        val selectPartyLeader = SelectPartyLeaderDialog(this)
 
         var copyPartyUserInfoMenu = partyUserInfoMenu
         var notCurrentUserPartyUsers = removeMapByUID(currentUserId, copyPartyUserInfoMenu)
 
 
 
-        val mBuilder = AlertDialog.Builder(this)
-            .setView(selectPartyLeader.root)
-        mBuilder.setTitle("파티장 선택")
-        mBuilder.setPositiveButton("OK") { dialog, _ ->
-            dialog.dismiss()
-        }
-        mBuilder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        val recyclerView = selectPartyLeader.recyclerView
-        val adapter = SelectPartyLeaderAdapter(this, partyUserInfoMenu, currentUserId, partyId,mBuilder.create())
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        adapter.itemClick = object : SelectPartyLeaderAdapter.ItemClick
-        {
-            override fun onClick(view: View, position: Int) {
-                Toast.makeText(baseContext,"adsfasfasdf",Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        mBuilder.show()
+        selectPartyLeader.setTitle("파티장 선택")
+        selectPartyLeader.setPartyUserInfoMenu(partyUserInfoMenu)
+        selectPartyLeader.setPartyId(partyId)
 
 
+        val adapter = SelectPartyLeaderAdapter(
+            this,
+            partyUserInfoMenu,
+            partyId,
+            currentUserId
+        )
+
+        selectPartyLeader.show()
 
 
-
+//        val selectPartyLeader = SelectPartyleaderDialogBinding.inflate(LayoutInflater.from(this))
+//
+//        var copyPartyUserInfoMenu = partyUserInfoMenu
+//        var notCurrentUserPartyUsers = removeMapByUID(currentUserId, copyPartyUserInfoMenu)
+//
+//
+//        val mBuilder = AlertDialog.Builder(this)
+//            .setView(selectPartyLeader.root)
+//        mBuilder.setTitle("파티장 선택")
+//        partyLeaderDialogVari = mBuilder.create()
+//
+//        val recyclerView = selectPartyLeader.recyclerView
+//        val adapter = SelectPartyLeaderAdapter(
+//            this,
+//            partyUserInfoMenu,
+//            currentUserId,
+//            partyId,
+//            partyLeaderDialogVari
+//        )
+//        recyclerView.adapter = adapter
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+//
+//        adapter.itemClick = object : SelectPartyLeaderAdapter.ItemClick
+//        {
+//            override fun onClick(view: View, position: Int) {
+//                Toast.makeText(baseContext,"adsfasfasdf",Toast.LENGTH_SHORT).show()
+//                adapter.dismissDialog()
+//            }
+//        }
+//
+//        mBuilder.show()
     }
 
     fun getMapByUID(uid: String): Map<String, FirebaseUserInfo>? {
@@ -662,7 +686,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         return null
     }
 
-
     fun replaceMapByUID(uid: String, newMap: Map<String, FirebaseUserInfo>) {
         for (index in 0 until partyUserInfoMenu.size) {
             val map = partyUserInfoMenu[index]
@@ -672,7 +695,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             }
         }
     }
-
 
     fun removeMapByUID(
         uid: String,

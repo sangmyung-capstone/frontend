@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -164,6 +165,22 @@ class MakePartyActivity : AppCompatActivity() {
                 Log.d("LocalDateEndStart", endDateLocal)
                 Log.d("LocalDateEndStart", startDateLocal)
 
+                var hashtagList = arrayListOf<Int>()
+                var count = 0
+                for(data in hastagList){
+                    count++
+                    if(data != 0){
+                        when (count) {
+                            1 -> hashtagList.add(1)
+                            2 -> hashtagList.add(2)
+                            3 -> hashtagList.add(3)
+                            4 -> hashtagList.add(4)
+                            5 -> hashtagList.add(5)
+                        }                    }
+
+                }
+
+
                 val makeGrpInstance =
                     PostMakePartyRequest(
                         binding.grpNameText.text.toString(),
@@ -171,12 +188,10 @@ class MakePartyActivity : AppCompatActivity() {
                         startDateLocal,
                         endDateLocal,
                         binding.menuText.text.toString(),
-                        hastagList,
+                        hashtagList,
                         binding.detail.text.toString(),
                         restaurantPartyInfoObject
                     )
-
-
 
                 retrofit(makeGrpInstance)
             }
