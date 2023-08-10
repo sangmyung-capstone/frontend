@@ -360,6 +360,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         groupOnerId = item.groupLeaderId.toString()
                         currentPartyInfo = item
 
+                        partyName = item.groupName //파티이름 받아오기
+                        startdate = item.startDate //시작하는 날짜 받아오기
+
                     }
                 }
 
@@ -415,7 +418,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 .setValue(group_messages)
             for (data in items) {
                 sendNotificationFcm(data)
-                Log.d("asdfsdfsadasdf",data)
+                Log.d("asdfsdfsadasdf", data)
             }
         }
     }
@@ -430,7 +433,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val getterToken = userInfo.firebaseToken.toString()
         val msgText: String = if (messageType == 1) {
             "사진"
-        }else {
+        } else {
             binding.sendMessage.text.toString()
         }
         val notiModel = NotiModel(currentUserNickName, msgText)
@@ -545,6 +548,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
                     }
                 }
+
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
 
                 }
@@ -591,6 +595,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         binding.participantsNum.text = " ${item.curNumberOfPeople}  /  ${item.maxNumberOfPeople}"
         binding.restaurantLocation.text = item.restaurantName
         binding.detailText.text = item.groupDetail
+
+
     }
 
     fun showExitDialog() {
@@ -699,7 +705,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                             this@ChattingAndPartyInfoMFActivity,
                             startdate,
                             partyId.toInt(),
-                            "$partyName 에서 곧 먹을 시간입니다."
+                            "$partyName" + "에서 곧 먹을 시간입니다."
                         )
                     } else {
                         Log.d("closeParty", response.errorBody().toString())
@@ -760,17 +766,20 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             )
         }
 
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd H:mm:ss")
-        var datetime = Date()
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        var datetime: Date? = null
         try {
-            datetime = dateFormat.parse(time) as Date
+            datetime = inputFormat.parse(time) as Date
         } catch (e: ParseException) {
             e.printStackTrace()
         }
 
+        val formattedTime = outputFormat.format(datetime)
+        Log.d("Formatted Time", formattedTime)
         val calendar = Calendar.getInstance()
         calendar.time = datetime
-        calendar.add(Calendar.HOUR_OF_DAY, -2)
+        calendar.add(Calendar.HOUR_OF_DAY, -1)
         Log.d("알림", "$calendar")
 
         //API 23(android 6.0) 이상(해당 api 레벨부터 도즈모드 도입으로 setExact 사용 시 알람이 울리지 않음)
