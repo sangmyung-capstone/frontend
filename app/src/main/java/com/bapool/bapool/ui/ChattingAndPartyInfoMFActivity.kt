@@ -707,6 +707,13 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                             partyId.toInt(),
                             "$partyName" + "에서 곧 먹을 시간입니다."
                         )
+                        callRating(
+                            this@ChattingAndPartyInfoMFActivity,
+                            startdate,
+                            partyId.toInt(),
+                            "맛있게 드셨나요? 유저평가 부탁드립니다."
+                        )
+                        Log.d("closeparty","$result")
                     } else {
                         Log.d("closeParty", response.errorBody().toString())
                     }
@@ -741,8 +748,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-
-    fun callAlarm(context: Context, time: String, alarm_code: Int, content: String) {
+    fun callAlarm(context: Context, time: String, alarm_code: Int, content: String) {//식전 알람 보내는 함수
         val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val receiverIntent = Intent(context, MyReceiver::class.java) //리시버로 전달될 인텐트 설정
         receiverIntent.apply {
@@ -780,6 +786,61 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         calendar.time = datetime
         calendar.add(Calendar.HOUR_OF_DAY, -1)
+        Log.d("알림", "$calendar")
+
+        //API 23(android 6.0) 이상(해당 api 레벨부터 도즈모드 도입으로 setExact 사용 시 알람이 울리지 않음)
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+    }
+
+    fun callRating(
+        context: Context,
+        time: String,
+        alarm_code: Int,
+        content: String
+    ) {//유저평가 알림 보내는 함수
+        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val receiverIntent = Intent(context, RatingReceiver::class.java) //리시버로 전달될 인텐트 설정
+        receiverIntent.apply {
+            putExtra("alarm_rqCode", alarm_code*1000) //요청 코드를 리시버에 전달
+            putExtra("content", content) //수정_일정 제목을 리시버에 전달
+            putExtra("userid", UserId)
+            putExtra("partyid",alarm_code)
+        }
+
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getBroadcast(
+                context,
+                alarm_code,
+                receiverIntent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            PendingIntent.getBroadcast(
+                context,
+                alarm_code,
+                receiverIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        var datetime: Date? = null
+        try {
+            datetime = inputFormat.parse(time) as Date
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        val formattedTime = outputFormat.format(datetime)
+        Log.d("Formatted Time", formattedTime)
+        val calendar = Calendar.getInstance()
+        calendar.time = datetime
+        calendar.add(Calendar.MINUTE, 2)//테스트를 위해 2분으로 설정 나중에 수정필요
         Log.d("알림", "$calendar")
 
         //API 23(android 6.0) 이상(해당 api 레벨부터 도즈모드 도입으로 setExact 사용 시 알람이 울리지 않음)
