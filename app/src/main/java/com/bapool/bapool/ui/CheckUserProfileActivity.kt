@@ -39,7 +39,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
 
     fun checkUserProfileRetrofit() {
 
-        retro.checkUserProfile(opponentUserId.toLong())
+        retro.checkUserProfile(UserId!!.toLong(),opponentUserId.toLong())
             .enqueue(object : Callback<CheckUserProfileResponse> {
                 override fun onResponse(
                     call: Call<CheckUserProfileResponse>,
