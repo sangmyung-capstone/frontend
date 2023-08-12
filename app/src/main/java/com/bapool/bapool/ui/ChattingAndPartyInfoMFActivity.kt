@@ -345,6 +345,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         GroupInfoAdapter()
                     }
                     currentPartyInfo = item
+                    partyName = item.groupName //파티이름 받아오기
+                    startdate = item.startDate //시작하는 날짜 받아오기
                 }
             }
 
@@ -427,9 +429,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         finish()
 
                     } else {
-
-                        partyName = item.groupName //파티이름 받아오기
-                        startdate = item.startDate //시작하는 날짜 받아오기
 
                     }
                 }
