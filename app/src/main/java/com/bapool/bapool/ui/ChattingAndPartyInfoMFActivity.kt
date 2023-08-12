@@ -66,7 +66,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
 
     //user Img nickname 에 넣을 데이터
-    var partyUserInfo: MutableMap<String, FirebaseUserInfo> = HashMap()
+    var partyUserInfo: MutableMap<String, FirebaseUserInfo> = HashMap()//4명 전부 다 들어있음.
     var partyUserInfoMenu: ArrayList<Map<String, FirebaseUserInfo>> = arrayListOf()
     var groupOnerId: String = ""
 
@@ -460,6 +460,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                             startdate,
                             partyId.toInt(),
                             "$partyName 에서 곧 먹을 시간입니다."
+                        )
+                        callRating(
+                            this@ChattingAndPartyInfoMFActivity,
+                            startdate,
+                            partyId.toInt(),
+                            "맛있게 드셨나요? 유저평가 부탁드립니다."
                         )
                     } else {
                         Log.d("closeParty", response.errorBody().toString())

@@ -73,37 +73,35 @@ class ChangeProfileActivity : AppCompatActivity() {
                             Log.d("bap", "onResponse 성공: " + result?.toString());
                             // handle successful response
                             if (result != null) {
-                                //중복인 경우
-                                if (result.is_duplicate) {
-                                    val builder =//닉네임이 중복된다는 다이얼로그 출력
-                                        AlertDialog.Builder(this@ChangeProfileActivity).setTitle("")
-                                            .setMessage("닉네임이 중복됩니다.")
-                                            .setPositiveButton(
-                                                "확인",
-                                                DialogInterface.OnClickListener { dialog, which ->
-                                                    Toast.makeText(
-                                                        this@ChangeProfileActivity,
-                                                        "확인",
-                                                        Toast.LENGTH_SHORT
-                                                    )
-                                                        .show()
-                                                })
-                                    builder.show()
-                                }
-                                //중복이 아닌경우 홈화면으로 넘어감
-                                else {
-                                    val intent =
-                                        Intent(this@ChangeProfileActivity, HomeActivity::class.java)
-                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-                                }
-
+                                val intent =
+                                    Intent(this@ChangeProfileActivity, HomeActivity::class.java)
+                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                             }
                         } else {
                             // handle error response
+                            if (response.code() == 300) {
+                                val builder =//닉네임이 중복된다는 다이얼로그 출력
+                                    AlertDialog.Builder(this@ChangeProfileActivity).setTitle("")
+                                        .setMessage("닉네임이 중복됩니다.")
+                                        .setPositiveButton(
+                                            "확인",
+                                            DialogInterface.OnClickListener { dialog, which ->
+                                                Toast.makeText(
+                                                    this@ChangeProfileActivity,
+                                                    "확인",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                    .show()
+                                            })
+                                builder.show()
+                            }
                         }
                     }
 
-                    override fun onFailure(call: Call<PatchChangeProfileResponse>, t: Throwable) {
+                    override fun onFailure(
+                        call: Call<PatchChangeProfileResponse>,
+                        t: Throwable
+                    ) {
                         // handle network or unexpected error
                     }
                 })

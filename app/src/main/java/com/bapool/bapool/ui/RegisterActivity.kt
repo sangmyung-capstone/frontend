@@ -38,7 +38,7 @@ class RegisterActivity : AppCompatActivity() {
         var textInputEditText = binding.nicknameEditText
 
         setContentView(binding.root);
-        FirebaseMessaging.getInstance().token.addOnCompleteListener (
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(
             OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     Log.e("dsksdfkjsfkj", "token.toString()")
@@ -96,21 +96,7 @@ class RegisterActivity : AppCompatActivity() {
                                 // handle successful response
                                 if (result != null) {
                                     //중복인 경우
-                                    if (result.code == 300) {
-                                        val builder =//닉네임이 중복된다는 다이얼로그 출력
-                                            AlertDialog.Builder(this@RegisterActivity).setTitle("")
-                                                .setMessage("닉네임이 중복됩니다.")
-                                                .setPositiveButton(
-                                                    "확인",
-                                                    DialogInterface.OnClickListener { dialog, which ->
-                                                        Toast.makeText(
-                                                            this@RegisterActivity,
-                                                            "확인",
-                                                            Toast.LENGTH_SHORT
-                                                        )
-                                                            .show()
-                                                    })
-                                        builder.show()
+                                    if (result.code == 300) {//이건 아님
                                     }
                                     //중복이 아닌경우 홈화면으로 넘어감
                                     else {
@@ -143,7 +129,10 @@ class RegisterActivity : AppCompatActivity() {
                                                                 this@RegisterActivity,
                                                                 FinishActivity::class.java
                                                             )
-                                                        intent.putExtra("nickname", "${result!!.result.nickname}")
+                                                        intent.putExtra(
+                                                            "nickname",
+                                                            "${result!!.result.nickname}"
+                                                        )
                                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                                         finish()
                                                     } else {
@@ -162,7 +151,23 @@ class RegisterActivity : AppCompatActivity() {
 
                                 }
                             } else {
-                                // handle error response
+                                //중복인 경우
+                                if (response.code() == 300) {
+                                    val builder =//닉네임이 중복된다는 다이얼로그 출력
+                                        AlertDialog.Builder(this@RegisterActivity).setTitle("")
+                                            .setMessage("닉네임이 중복됩니다.")
+                                            .setPositiveButton(
+                                                "확인",
+                                                DialogInterface.OnClickListener { dialog, which ->
+                                                    Toast.makeText(
+                                                        this@RegisterActivity,
+                                                        "확인",
+                                                        Toast.LENGTH_SHORT
+                                                    )
+                                                        .show()
+                                                })
+                                    builder.show()
+                                }
                             }
                         }
 
@@ -199,20 +204,6 @@ class RegisterActivity : AppCompatActivity() {
                                 if (result != null) {
                                     //중복인 경우
                                     if (result.code == 300) {
-                                        val builder =//닉네임이 중복된다는 다이얼로그 출력
-                                            AlertDialog.Builder(this@RegisterActivity).setTitle("")
-                                                .setMessage("닉네임이 중복됩니다.")
-                                                .setPositiveButton(
-                                                    "확인",
-                                                    DialogInterface.OnClickListener { dialog, which ->
-                                                        Toast.makeText(
-                                                            this@RegisterActivity,
-                                                            "확인",
-                                                            Toast.LENGTH_SHORT
-                                                        )
-                                                            .show()
-                                                    })
-                                        builder.show()
                                     }
                                     //중복이 아닌경우 홈화면으로 넘어감
                                     else {
@@ -245,7 +236,10 @@ class RegisterActivity : AppCompatActivity() {
                                                                 this@RegisterActivity,
                                                                 FinishActivity::class.java
                                                             )
-                                                        intent.putExtra("nickname", "${result!!.result.nickname}")
+                                                        intent.putExtra(
+                                                            "nickname",
+                                                            "${result!!.result.nickname}"
+                                                        )
                                                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                                                         finish()
                                                     } else {
@@ -265,6 +259,20 @@ class RegisterActivity : AppCompatActivity() {
                                 }
                             } else {
                                 // handle error response
+                                val builder =//닉네임이 중복된다는 다이얼로그 출력
+                                    AlertDialog.Builder(this@RegisterActivity).setTitle("")
+                                        .setMessage("닉네임이 중복됩니다.")
+                                        .setPositiveButton(
+                                            "확인",
+                                            DialogInterface.OnClickListener { dialog, which ->
+                                                Toast.makeText(
+                                                    this@RegisterActivity,
+                                                    "확인",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                    .show()
+                                            })
+                                builder.show()
                             }
                         }
 
