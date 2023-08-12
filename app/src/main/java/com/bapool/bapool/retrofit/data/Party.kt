@@ -17,6 +17,7 @@ data class MyPartyListModel(
     val lastChat: String = "",
     val notReadChat: Int,
     val lastChatTime: String = "",
+    val restaurantImgUrl: String = ""
 )
 
 data class ResPartyList(

@@ -61,7 +61,7 @@ class PartyChattingAdapter(
     var initPageControl = 0
 
     var currentPage = 0
-    var itemsPerPage = 10
+    var itemsPerPage = 5
     var firstKey = ""
 
     private lateinit var databaseReference: DatabaseReference
@@ -73,11 +73,10 @@ class PartyChattingAdapter(
 
         recyclerView.postDelayed({
             recyclerView.scrollToPosition(messages.size - 1)
-
         }, 1000)
-
         getMessageData()
-
+        databaseReference.limitToLast(itemsPerPage+1)
+            .addChildEventListener(childEventListener)
 
     }
 
@@ -199,8 +198,8 @@ class PartyChattingAdapter(
 
             }
         }
-        databaseReference
-            .addChildEventListener(childEventListener)
+
+
 
     }
 
@@ -209,18 +208,71 @@ class PartyChattingAdapter(
         updateChattingReference = FirebaseDatabase.getInstance().getReference("test").child("Groups")
             .child(groupId).child("groupMessages")
 
+
         updateChattingReference.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+//                val readUsers: MutableMap<String, FirebasePartyMessage> = HashMap()
 
                 for(data in snapshot.children){
-                    val messageObject: FirebasePartyMessage =
-                        snapshot.getValue(FirebasePartyMessage::class.java)!!
-                    val messageKeyObject = snapshot.key.toString()
 
-                    messages.add(0,messageObject)
-                    messageKey.add(0,messageKeyObject)
+                    Log.d("sdfsafsadfadsfasd",data.value.toString())
+                    Log.d("sdfsafsadfadsfasd",data.key.toString())
+//                    val messageObject: FirebasePartyMessage =
+//                        data.getValue(FirebasePartyMessage::class.java)!!
+//                    val messageObject_modify: FirebasePartyMessage =
+//                        data.getValue(FirebasePartyMessage::class.java)!!
+//                    val messageKeyObject = data.key.toString()
+//
+//                    messageKey.add(messageKeyObject)
+//                    messageObject_modify.confirmed.put(currentUserId, true)
+//                    readUsers.put(messageKeyObject, messageObject_modify)
+//                    messages.add(messageObject)
+//
+//                    if (messageObject.type == 1) {
+//                        val storageReference =
+//                            Firebase.storage.reference.child(groupId).child(messageKeyObject)
+//
+//                        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+//                            if (task.isSuccessful) {
+//                                imageResourceBool = true
+//                                imageResource[messageKeyObject] = task.result
+//                                notifyDataSetChanged()
+//                            } else {
+//                            }
+//                        })
+//
+//                    }
+//                    val testMap: Map<String, Boolean> = mapOf(currentUserId to true)
+//                    if (messages.size > 0) {
+//                        if (!messages[messages.size - 1].confirmed.containsKey(currentUserId)) {
+//                            FirebaseDatabase.getInstance().getReference("test").child("Groups")
+//                                .child(groupId).child("groupMessages").child(messageKeyObject)
+//                                .child("confirmed")
+//                                .updateChildren(testMap)
+//                                .addOnCompleteListener {
+//                                    if (initPageControl == 0) {
+//                                        recyclerView.scrollToPosition(messageKey.size - 1)
+//
+//                                    }
+//                                }
+//                        } else {
+//                            if (initPageControl == 0) {
+//                                recyclerView.scrollToPosition(messageKey.size - 1)
+//
+//                            }
+//                        }
+//                    }
+//                    if (initPageControl == 0) {
+//                        recyclerView.scrollToPosition(messageKey.size - 1)
+//
+//                    }
+//                    Log.d("들어와있는지확인후", messages.toString())
+//                    firstKey = messageKey.first()
+//
+//
+
                 }
-                notifyDataSetChanged()
+
             }
 
             override fun onCancelled(error: DatabaseError) {

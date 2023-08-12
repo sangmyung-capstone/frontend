@@ -11,10 +11,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.ActivityHomeBinding
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.fragment.MapFragment
 import com.bapool.bapool.ui.fragment.MypageFragment
 import com.bapool.bapool.ui.fragment.PartyFragment
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
 
 class HomeActivity : AppCompatActivity() {
@@ -48,6 +50,7 @@ class HomeActivity : AppCompatActivity() {
 //        val navController = navigationFragment.navController
 
         initBottomNavigation()
+        refreshFirebaseToken()
 
         this.onBackPressedDispatcher.addCallback(this, callback) //위에서 생성한 콜백 인스턴스 붙여주기
     }
@@ -129,6 +132,21 @@ class HomeActivity : AppCompatActivity() {
     fun hideBottomNavi(state: Boolean) {
         if (state) binding.mainBottomNav.visibility = View.GONE
         else binding.mainBottomNav.visibility = View.VISIBLE
+    }
+
+
+    fun refreshFirebaseToken(){
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+
+                FirebaseDatabase.getInstance().getReference("test").child("Users").child(UserId.toString()).child("firebaseToken")
+                    .setValue(token)
+            } else {
+                println("Failed to get FCM token: ${task.exception}")
+            }
+        }
     }
 
 

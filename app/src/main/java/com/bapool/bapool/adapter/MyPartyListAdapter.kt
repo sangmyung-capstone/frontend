@@ -4,16 +4,21 @@ package com.bapool.bapool.adapter
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.databinding.MypartylistItemsBinding
 import com.bapool.bapool.retrofit.data.MyPartyListModel
 import com.bapool.bapool.ui.ChattingAndPartyInfoMFActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 
 class MyPartyListAdapter(
     val context: Context,
     private val myPartyList: List<MyPartyListModel>,
-    val currentUserId: String
 ) :
     RecyclerView.Adapter<MyPartyListAdapter.ViewHolder>() {
 
@@ -61,7 +66,26 @@ class MyPartyListAdapter(
 
             }
             binding.participantsNum.text = "(${item.participants})"
+            getImgData(binding.partyRestaurantImage,item.restaurantImgUrl)
         }
+    }
+
+    fun getImgData(partyRestaurantImage: ImageView, restaurantImgUrl: String) {
+
+
+//// RequestOptions to customize Glide's behavior
+        val requestOptions = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache the image
+            .transform(RoundedCorners(50))//
+        //          .placeholder(R.drawable.placeholder_image) // Placeholder image while loading
+//            .error(R.drawable.error_image) // Image to display on error
+
+// Load the image using Glide
+        Glide.with(context)
+            .load(restaurantImgUrl)
+            .centerCrop()
+            .apply(requestOptions)
+            .into(partyRestaurantImage)
     }
 
 

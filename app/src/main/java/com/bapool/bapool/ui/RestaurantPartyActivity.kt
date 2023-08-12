@@ -185,11 +185,14 @@ class RestaurantPartyActivity : AppCompatActivity() {
                     response: Response<PatchEditPartyInfoResponse>,
                 ) {
                     if (response.isSuccessful) {
+
+
+
                         val result = response.body()
                         val intent = Intent(this@RestaurantPartyActivity,
                             ChattingAndPartyInfoMFActivity::class.java)
                         intent.putExtra("partyId", party_id)
-
+                        intent.putExtra("joinUserId",UserId.toString())
                         startActivity(intent)
 
                     } else {
@@ -257,8 +260,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
         var allNum: String = "${participants} / ${max_people}"
         return allNum
     }
-
-
 
 }
 

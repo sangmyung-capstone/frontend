@@ -62,8 +62,10 @@ class PartyUserInfoAdapter(
             Log.d("asdfsaf", item.keys.firstOrNull().toString())
             if (partyLeaderId == item.keys.firstOrNull().toString()) {
                 val image = binding.userImage
-
                 image.setBackgroundResource(R.drawable.custom_img_bg)
+            } else{
+                val image = binding.userImage
+                image.setBackgroundResource(R.drawable.custom_img_bg_pressed)
             }
             binding.userNameImageBackground.setOnClickListener {
                     val intent = Intent(context, CheckUserProfileActivity::class.java)

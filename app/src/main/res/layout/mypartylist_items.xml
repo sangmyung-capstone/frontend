@@ -4,20 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/myPartyRoom"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:layout_margin="10dp">
+    android:layout_height="120dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp">
 
 
     <TextView
         android:id="@+id/resName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:text="식당이름"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxWidth="220dp"
+        android:maxLines="1"
+        android:text="식당이름sadfasfsdfadsf"
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/participantsNum"
-        app:layout_constraintStart_toEndOf="@+id/participantsNum"
-        app:layout_constraintTop_toTopOf="@+id/participantsNum" />
+        app:layout_constraintStart_toStartOf="@+id/grpName"
+        app:layout_constraintTop_toBottomOf="@+id/grpName" />
 
     <TextView
         android:id="@+id/grpName"
@@ -25,7 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:text="그룹명"
+        android:ellipsize="end"
+        android:maxWidth="160dp"
+        android:maxLines="1"
+        android:text="그룹명sdfasfsadfdsaasdfsadfasfasdfsadfsadfasdfasdf"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/partyRestaurantImage"
@@ -33,29 +40,27 @@
 
 
     <ImageView
-        android:src="@drawable/image1"
         android:id="@+id/partyRestaurantImage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="80dp"
         android:layout_marginLeft="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/image1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lastChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="13dp"
+        android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxWidth="220dp"
         android:maxLines="1"
         android:text=""
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="25dp"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView7"
-        app:layout_constraintStart_toEndOf="@+id/partyRestaurantImage"
-        app:layout_constraintTop_toBottomOf="@+id/grpName" />
+        app:layout_constraintStart_toStartOf="@+id/resName"
+        app:layout_constraintTop_toBottomOf="@+id/resName" />
 
     <TextView
         android:id="@+id/participantsNum"
@@ -73,7 +78,7 @@
         android:id="@+id/notReadChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
         android:text="15"
         android:textColor="@color/black"
         android:textSize="25sp"
@@ -87,5 +92,6 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#EEEEEE"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/partyRestaurantImage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

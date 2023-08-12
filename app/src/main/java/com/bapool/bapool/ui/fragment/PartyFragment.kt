@@ -17,6 +17,7 @@ import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import java.text.SimpleDateFormat
 
 
@@ -47,6 +48,8 @@ class PartyFragment : Fragment() {
         _binding = FragmentPartyBinding.inflate(inflater, container, false)
         getUserPartyData()
         initializeVari()
+
+
 
 
 //            // 채팅 더미데이터 추가
@@ -118,13 +121,18 @@ class PartyFragment : Fragment() {
 
 
 //        binding.dummy.setOnClickListener {
-//
-//                        val database = Firebase.database
-//            val myRef = database.getReference("test").child("Users")
-//
-//            val userInfo = FirebaseUserInfo(3, "승현승현",null ,"eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjcsImlhdCI6MTY5MTQxMTY0MywiZXhwIjoxNjkyNjIxMjQzfQ.Yx6S9IJnU5N1injVcxnsSecLdtispOf2GA-EQyz_ptY")
-//            myRef.child("7").setValue(userInfo)
-//
+//            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    val token = task.result
+//                    // Use the FCM token as needed
+//                    // For example, send it to your server to target specific devices
+//                    // or subscribe to topics
+//                    println("FCM Token: $token")
+//                    Log.d("sdfasdfsafadsfasdfasdf",token)
+//                } else {
+//                    println("Failed to get FCM token: ${task.exception}")
+//                }
+//            }
 //        }
 
         return binding.root
@@ -139,7 +147,7 @@ class PartyFragment : Fragment() {
 
     //recyclerView adapter
     fun adapter(context: Context, list: List<MyPartyListModel>) {
-        myPartyAdapter = MyPartyListAdapter(context, list, UserId.toString())
+        myPartyAdapter = MyPartyListAdapter(context, list)
         myPartyRv.adapter = myPartyAdapter
         myPartyRv.layoutManager = LinearLayoutManager(context)
     }
@@ -179,6 +187,7 @@ class PartyFragment : Fragment() {
                     val resName: String = partyInfo?.restaurantName ?: ""
                     val grpName = partyInfo?.groupName ?: ""
                     val participants = partyInfo?.curNumberOfPeople ?: 0
+                    val restaurantImgUrl = partyInfo?.restaurantImgUrl ?: ""
                     val lastChat: String = if (lastChatItem.type == 1) {
                         "사진"
                     } else {
@@ -189,7 +198,7 @@ class PartyFragment : Fragment() {
                     val dataModel = MyPartyListModel(
                         grpId,
                         resName,
-                        grpName, participants, lastChat, notReadChatNumber, lastChatTime
+                        grpName, participants, lastChat, notReadChatNumber, lastChatTime,restaurantImgUrl
                     )
                     myPartyListModel.add(dataModel)
 
