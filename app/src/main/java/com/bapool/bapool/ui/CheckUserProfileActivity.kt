@@ -39,7 +39,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
 
     fun checkUserProfileRetrofit() {
 
-        retro.checkUserProfile(UserId!!.toLong(),opponentUserId.toLong())
+        retro.checkUserProfile(UserId!!.toLong(), opponentUserId.toLong())
             .enqueue(object : Callback<CheckUserProfileResponse> {
                 override fun onResponse(
                     call: Call<CheckUserProfileResponse>,
@@ -50,10 +50,10 @@ class CheckUserProfileActivity : AppCompatActivity() {
                         val result = response.body()
                         val userInfo = result!!.result
 
-                        Log.d("asdfasfasdfasf",userInfo.toString())
+                        Log.d("asdfasfasdfasf", userInfo.toString())
 
                         val imageName = "image${userInfo.profileImg}"
-                        val resourceId = resources.getIdentifier(imageName,"drawable",packageName)
+                        val resourceId = resources.getIdentifier(imageName, "drawable", packageName)
                         binding.userImage.setImageResource(resourceId)
 
                         //평점 binding
@@ -64,23 +64,19 @@ class CheckUserProfileActivity : AppCompatActivity() {
                         if (userInfo.hashtag != null) {
                             if (userInfo.hashtag.isNotEmpty()) {
                                 binding.hashtagVisible.visibility = View.VISIBLE
-                                var count = 0
                                 for (item in userInfo.hashtag) {
-                                    count++
-                                    if(item == 1){
-                                        when (count) {
-                                            1 -> binding.hash1.visibility = View.VISIBLE
-                                            2 -> binding.hash2.visibility = View.VISIBLE
-                                            3 -> binding.hash3.visibility = View.VISIBLE
-                                            4 -> binding.hash4.visibility = View.VISIBLE
-                                            5 -> binding.hash5.visibility = View.VISIBLE
-                                        }
+                                    when (item) {
+                                        1 -> binding.hash1.visibility = View.VISIBLE
+                                        2 -> binding.hash2.visibility = View.VISIBLE
+                                        3 -> binding.hash3.visibility = View.VISIBLE
+                                        4 -> binding.hash4.visibility = View.VISIBLE
+                                        5 -> binding.hash5.visibility = View.VISIBLE
                                     }
-
                                 }
+
                             }
                         }
-                        if(UserId.toString() == opponentUserId){
+                        if (UserId.toString() == opponentUserId) {
                             binding.banBtn.visibility = View.GONE
                         }
                         if (userInfo.is_block) {
