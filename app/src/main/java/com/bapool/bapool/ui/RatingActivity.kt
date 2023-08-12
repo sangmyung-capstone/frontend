@@ -72,6 +72,7 @@ class RatingActivity : AppCompatActivity() {
                             finish()
                             // handle successful response
                         } else {
+                            Log.d("bap", "onResponse 실패\n$response\n$postRatingUserRequest")
                             // handle error response
                         }
                     }

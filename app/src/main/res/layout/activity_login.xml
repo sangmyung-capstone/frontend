@@ -21,7 +21,7 @@
 
         <ImageButton
             android:id="@+id/naver_login_button"
-            android:layout_width="80dp"
+            android:layout_width="74dp"
             android:layout_height="60dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
@@ -29,8 +29,8 @@
 
         <ImageButton
             android:id="@+id/kakao_login_button"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="105dp"
+            android:layout_height="33dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
             android:src="@drawable/kakao_login_medium" />

@@ -19,6 +19,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_marginHorizontal="15dp"
+            android:layout_weight="4"
             android:text="닉네임" />
 
         <TextView
@@ -28,6 +29,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_marginHorizontal="15dp"
+            android:layout_weight="4"
             android:text="차단한 날짜" />
 
         <Button
@@ -37,6 +39,7 @@
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
+            android:layout_weight="1"
             android:text="차단해제" />
     </LinearLayout>
 

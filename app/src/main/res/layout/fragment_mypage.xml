@@ -66,35 +66,47 @@
                 android:isIndicator="true"
                 android:progressTint="@color/main"/>
 
-            <Button
-                android:id="@+id/change_profile"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="닉네임/프로필 이미지 변경" />
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp">
 
-            <Button
-                android:id="@+id/block"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="차단관리" />
+                <Button
+                    android:id="@+id/change_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="닉네임/프로필 이미지 변경"
+                    android:layout_marginBottom="10dp"/>
 
-            <Button
-                android:id="@+id/restarurantlog"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="먹었던정보" />
+                <Button
+                    android:id="@+id/block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="차단관리"
+                    android:layout_marginBottom="10dp"/>
 
-            <Button
-                android:id="@+id/logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="로그아웃" />
+                <Button
+                    android:id="@+id/restarurantlog"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="먹었던정보"
+                    android:layout_marginBottom="10dp"/>
 
-            <Button
-                android:id="@+id/delete_user"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="회원탈퇴" />
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="로그아웃"
+                    android:layout_marginBottom="10dp"/>
+
+                <Button
+                    android:id="@+id/delete_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="회원탈퇴"
+                    android:layout_marginBottom="10dp"/>
+            </LinearLayout>
 
         </LinearLayout>
 

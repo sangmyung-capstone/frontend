@@ -1,7 +1,6 @@
 package com.bapool.bapool.adapter
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -37,13 +36,13 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
         binding.groupname.text = Loglist.party_name
 
         //Glide 쓰는 과정
-        if (Loglist.imgUrl != null) {
-            Glide.with(holder.itemView).load(Loglist.imgUrl).into(binding.restaurantImage)
-        } else if (Loglist.imgUrl == null) {
+        if (Loglist.restaurant_img_url != null) {
+            Glide.with(holder.itemView).load(Loglist.restaurant_img_url).into(binding.restaurantImage)
+        } else if (Loglist.restaurant_img_url == null) {
             binding.restaurantImage.setImageResource(R.drawable.restaurant_icon)
         }
 
-        binding.ratingbutton.isEnabled = Loglist.rating_complete
+        binding.ratingbutton.isEnabled = !Loglist.rating_complete
 
         binding.ratingbutton.setOnClickListener {
             val intent = Intent(context, RatingActivity::class.java)

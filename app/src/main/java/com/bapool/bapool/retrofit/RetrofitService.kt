@@ -13,21 +13,6 @@ import retrofit2.http.*
 interface RetrofitService {
 
 
-
-
-    @GET("/users/rating/{user-id}")
-    fun GetRatingUser(
-        @Path("user-id") userId: Long,
-        @Query("party-id") partyId: Long
-    ): Call<GetRatingUserResponse>
-
-    @POST("/users/rating/{user-id}")
-    fun PostRatingUser(
-        @Path("user-id") userId: Long,
-        @Body request: PostRatingUserRequest
-    ): Call<PostRatingUserResponse>
-
-
     //--------------------------------------------------------------------------
     // 손승현
     @GET("parties/{user_id}/{restaurant_id}")
