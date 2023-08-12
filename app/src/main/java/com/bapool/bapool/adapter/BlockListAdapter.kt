@@ -45,7 +45,7 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
         val blockedUser = datas[position]
         val binding = holder.binding
 
-        val formatter = DateTimeFormatter.ISO_INSTANT
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
         val dateTime = LocalDateTime.parse(blockedUser.block_date, formatter)
 
         // Set the data to the views

@@ -37,7 +37,10 @@
             android:name=".ui.MyReceiver"
             android:enabled="true"
             android:exported="true" />
-
+        <receiver
+            android:name=".ui.RatingReceiver"
+            android:enabled="true"
+            android:exported="true" />
         <activity
             android:name=".ui.CheckUserProfileActivity"
             android:exported="true">

@@ -42,10 +42,11 @@ class RestaurantBottomAdapter(
         Log.d("bottom_view_holder", "image list ${position} run")
 
         if (imageList[position] == null)
-            Glide.with(holder.context)
-//            .load(itemList[position].imgURL)
-                .load(R.drawable.bapool)
-                .into(holder.restaurant_img)
+            // 이미지 없음 빈 이미지
+//            Glide.with(holder.context)
+////            .load(itemList[position].imgURL)
+//                .load(R.drawable.bapool)
+//                .into(holder.restaurant_img)
         else    // adapter.notifyItemChanged(position) 호출 시
             Glide.with(holder.context)
                 .load(imageList[position])

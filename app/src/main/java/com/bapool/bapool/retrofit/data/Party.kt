@@ -1,6 +1,5 @@
 package com.bapool.bapool.retrofit.data
 
-import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class GetResPartyListResponse(
@@ -123,4 +122,10 @@ data class GetRestaurantPartiesListResult(
 
 data class participateParty(
     val party_id: Long
+)
+
+data class PatchPartyDoneResponse(
+    val code: Int,
+    val message: String,
+    val result: String
 )

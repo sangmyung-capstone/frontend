@@ -155,13 +155,32 @@ class LoginActivity : AppCompatActivity() {
                                                             "onResponse 성공: " + result?.toString()
                                                         );
                                                         // handle successful response
-                                                        val intent =
-                                                            Intent(
-                                                                this@LoginActivity,
-                                                                HomeActivity::class.java
+                                                        if (intent.getStringExtra("Activity")
+                                                                .equals("Rating")
+                                                        ) {
+                                                            val intent =
+                                                                Intent(
+                                                                    this@LoginActivity,
+                                                                    RestaurantLogActivity::class.java
+                                                                )
+                                                            intent.putExtra(
+                                                                "token",
+                                                                token.accessToken
                                                             )
-                                                        intent.putExtra("token", token.accessToken)
-                                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                        } else {
+                                                            val intent =
+                                                                Intent(
+                                                                    this@LoginActivity,
+                                                                    HomeActivity::class.java
+                                                                )
+                                                            intent.putExtra(
+                                                                "token",
+                                                                token.accessToken
+                                                            )
+                                                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                        }
+
                                                     } else {
                                                         // handle error response
                                                     }
@@ -255,14 +274,25 @@ class LoginActivity : AppCompatActivity() {
                                                             "bap",
                                                             "onResponse 성공: " + result?.toString()
                                                         );
-                                                        // handle successful response
-                                                        val intent =
-                                                            Intent(
-                                                                this@LoginActivity,
-                                                                HomeActivity::class.java
-                                                            )
-                                                        intent.putExtra("token", "$token")
-                                                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                        if (intent.getStringExtra("Activity")
+                                                                .equals("Rating")
+                                                        ) {
+                                                            val intent =
+                                                                Intent(
+                                                                    this@LoginActivity,
+                                                                    RestaurantLogActivity::class.java
+                                                                )
+                                                            intent.putExtra("token", "$token")
+                                                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                        } else {
+                                                            val intent =
+                                                                Intent(
+                                                                    this@LoginActivity,
+                                                                    HomeActivity::class.java
+                                                                )
+                                                            intent.putExtra("token", "$token")
+                                                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                                        }
                                                     } else {
                                                         // handle error response
                                                     }

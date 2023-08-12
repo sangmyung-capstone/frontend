@@ -6,8 +6,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -75,13 +73,13 @@ interface ServerRetrofit {
     @GET("/users/rating/{user-id}")
     fun GetRatingUser(
         @Path("user-id") userId: Long,
-        @Query("party-id") partyId: Long
+        @Query("party_id") partyId: Long
     ): Call<GetRatingUserResponse>
 
     @POST("/users/rating/{user-id}")
     fun PostRatingUser(
         @Path("user-id") userId: Long,
-        @Query("party-id") partyId: Long,
+        @Query("party_id") partyId: Long,
         @Body request: PostRatingUserRequest
     ): Call<PostRatingUserResponse>
 
@@ -91,19 +89,23 @@ interface ServerRetrofit {
         @Body request: PatchChangeProfileRequest,
     ): Call<PatchChangeProfileResponse>
 
+    @PATCH("/parties/done/{user-id}/{party-id}")
+    fun PatchPartyDone(
+        @Path("user-id") userId: Long,
+        @Path("party-id") partyId: Long
+    ): Call<PatchPartyDoneResponse>
+
 
     //--------------------------------------------------------------------------
 
     // 이현제
-    @GET("/test/restaurants/{user-id}")
-//    @GET("/restaurants/{user-id}")
+    @GET("/restaurants/{user-id}")
     fun getRestaurants(
         @Path("user-id") userId: Long?,
         @Query("rect") rect: String?,
     ): Call<GetRestaurantsResult>
 
-    @GET("/test/restaurants/{user-id}/{restaurant-id}")
-//    @GET("/restaurants/{user-id}/{restaurant-id}")
+    @GET("/restaurants/{user-id}/{restaurant-id}")
     fun getRestaurantInfo(
         @Path("user-id") userId: Long?,
         @Path("restaurant-id") restaurantId: Long?,
@@ -111,15 +113,13 @@ interface ServerRetrofit {
         @Query("latitude") latitude: Double?,
     ): Call<GetRestaurantInfoResult>
 
-    @POST("/test/restaurants/bottomlist/{user-id}")
-//    @POST("/restaurants/bottomlist/{user-id}")
+    @POST("/restaurants/bottomlist/{user-id}")
     fun getRestaurantsBottom(
         @Path("user-id") userId: Long?,
         @Body request: GetRestaurantsBottomRequest,
     ): Call<GetRestaurantsBottomResult>
 
-    @GET("/test/restaurants/search/{user-id}")
-//    @GET("/restaurants/search/{user-id}")
+    @GET("/restaurants/search/{user-id}")
     fun getRestaurantsSearch(
         @Path("user-id") userId: Long?,
         @Query("q") q: String?,

@@ -33,6 +33,7 @@ class PartyFragment : Fragment() {
     private lateinit var myPartyListDatabase: DatabaseReference
     lateinit var valueEventListener: ValueEventListener
 
+    var currentUserId: String = UserId.toString()
 
     private val TAG = "PartyFragment"
 
