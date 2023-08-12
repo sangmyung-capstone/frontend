@@ -48,7 +48,6 @@ class RatingReceiver() : BroadcastReceiver() {
 
 
         val intent2 = Intent(context, LoginActivity::class.java)
-        intent2.putExtra("Activity","Rating")
         val requestCode = intent?.extras!!.getInt("alarm_rqCode")
         val title = intent.extras!!.getString("content")
         val userid = intent.extras!!.getLong("userid")
@@ -62,6 +61,7 @@ class RatingReceiver() : BroadcastReceiver() {
                     response: Response<PatchPartyDoneResponse>
                 ) {
                     if (response.isSuccessful) {
+                        intent2.putExtra("Activity", "Rating")
                     } else {
                         // handle error response
                         Log.d("bap", "onResponse 실패 $response")

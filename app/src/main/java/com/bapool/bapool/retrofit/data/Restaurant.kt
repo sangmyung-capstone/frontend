@@ -38,7 +38,7 @@ data class GetRestaurantLogResponse(
         val party_id: Int,
         val party_name: String,
         val restaurant_name: String,
-        val imgUrl: String,
+        val restaurant_img_url: String,
         val restaurant_address: String,
         val category: String,
         val rating_complete: Boolean

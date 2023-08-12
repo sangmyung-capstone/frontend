@@ -713,7 +713,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                             partyId.toInt(),
                             "맛있게 드셨나요? 유저평가 부탁드립니다."
                         )
-                        Log.d("closeparty","$result")
+                        Log.d("closeparty", "$result")
                     } else {
                         Log.d("closeParty", response.errorBody().toString())
                     }
@@ -805,10 +805,10 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val receiverIntent = Intent(context, RatingReceiver::class.java) //리시버로 전달될 인텐트 설정
         receiverIntent.apply {
-            putExtra("alarm_rqCode", alarm_code*1000) //요청 코드를 리시버에 전달
+            putExtra("alarm_rqCode", alarm_code * 1000) //요청 코드를 리시버에 전달
             putExtra("content", content) //수정_일정 제목을 리시버에 전달
             putExtra("userid", UserId)
-            putExtra("partyid",alarm_code)
+            putExtra("partyid", alarm_code)
         }
 
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -840,7 +840,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         Log.d("Formatted Time", formattedTime)
         val calendar = Calendar.getInstance()
         calendar.time = datetime
-        calendar.add(Calendar.MINUTE, 2)//테스트를 위해 2분으로 설정 나중에 수정필요
+        calendar.add(Calendar.MINUTE, 1)//테스트를 위해 2분으로 설정 나중에 수정필요
         Log.d("알림", "$calendar")
 
         //API 23(android 6.0) 이상(해당 api 레벨부터 도즈모드 도입으로 setExact 사용 시 알람이 울리지 않음)
