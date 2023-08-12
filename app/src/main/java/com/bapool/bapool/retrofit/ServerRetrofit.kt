@@ -155,10 +155,12 @@ interface ServerRetrofit {
         @Path("party-id") partyId: Long,
     ): Call<PatchEditPartyInfoResponse>
 
-    @GET("/users/profile/{user-id}")
+    @GET("/users/profile/{user-id}/{other-user-id}")
     fun checkUserProfile(
         @Path("user-id") userId: Long,
-    ): Call<CheckUserProfileResponse>
+        @Path("other-user-id") otherUserId: Long,
+
+        ): Call<CheckUserProfileResponse>
 
     @POST("/users/block/{user-id}")
     fun BlockUser(
