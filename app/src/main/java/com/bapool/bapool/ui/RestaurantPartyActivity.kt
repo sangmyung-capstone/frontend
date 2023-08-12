@@ -24,6 +24,12 @@ import java.time.format.DateTimeFormatter
 class RestaurantPartyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRestaurantPartyBinding
     private lateinit var resGrpAdapter: RestaurantPartyAdapter
+
+    companion object {
+        var RestaurantPartyActivityCompanion: RestaurantPartyActivity? = null
+    }
+
+
     lateinit var resGrpRv: RecyclerView
     lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
     var restaurantPartiesInfo: List<ResPartyList> = arrayListOf()
@@ -33,6 +39,8 @@ class RestaurantPartyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRestaurantPartyBinding.inflate(layoutInflater)
+        RestaurantPartyActivityCompanion = this
+
         setContentView(binding.root)
         restaurantPartyInfoObject =
             intent.getSerializableExtra("restaurantInfoObject") as goToRestaurantPartyList
@@ -177,11 +185,14 @@ class RestaurantPartyActivity : AppCompatActivity() {
                     response: Response<PatchEditPartyInfoResponse>,
                 ) {
                     if (response.isSuccessful) {
+
+
+
                         val result = response.body()
                         val intent = Intent(this@RestaurantPartyActivity,
                             ChattingAndPartyInfoMFActivity::class.java)
                         intent.putExtra("partyId", party_id)
-
+                        intent.putExtra("joinUserId",UserId.toString())
                         startActivity(intent)
 
                     } else {

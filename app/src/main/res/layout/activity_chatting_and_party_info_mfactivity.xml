@@ -8,6 +8,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ChattingAndPartyInfoMFActivity">
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -48,16 +51,22 @@
 
 
 
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_marginTop="115dp"
-            android:id="@+id/chattingRv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="@id/chattingInputZone"
             android:layout_marginBottom="60dp"
-            android:paddingBottom="5dp"
-            tools:itemCount="20"
-            tools:listitem="@layout/chatitem_my" />
+            android:paddingBottom="5dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chattingRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
         <LinearLayout

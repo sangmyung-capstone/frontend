@@ -17,6 +17,7 @@ import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import java.text.SimpleDateFormat
 
 
@@ -28,6 +29,9 @@ class PartyFragment : Fragment() {
     lateinit var myPartyRv: RecyclerView
 
     var myPartyListModel = arrayListOf<MyPartyListModel>()
+
+    private lateinit var myPartyListDatabase: DatabaseReference
+    lateinit var valueEventListener: ValueEventListener
 
     var currentUserId: String = UserId.toString()
 
@@ -45,6 +49,8 @@ class PartyFragment : Fragment() {
         _binding = FragmentPartyBinding.inflate(inflater, container, false)
         getUserPartyData()
         initializeVari()
+
+
 
 
 //            // 채팅 더미데이터 추가
@@ -114,6 +120,22 @@ class PartyFragment : Fragment() {
 //            val testObject = FirebaseTest("수정 1", hashtaglist, 12)
 //            database.getReference("Groups").child("33").child("groupInfo").setValue(testObject)
 
+
+//        binding.dummy.setOnClickListener {
+//            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    val token = task.result
+//                    // Use the FCM token as needed
+//                    // For example, send it to your server to target specific devices
+//                    // or subscribe to topics
+//                    println("FCM Token: $token")
+//                    Log.d("sdfasdfsafadsfasdfasdf",token)
+//                } else {
+//                    println("Failed to get FCM token: ${task.exception}")
+//                }
+//            }
+//        }
+
         return binding.root
     }
 
@@ -126,86 +148,85 @@ class PartyFragment : Fragment() {
 
     //recyclerView adapter
     fun adapter(context: Context, list: List<MyPartyListModel>) {
-        myPartyAdapter = MyPartyListAdapter(context, list, UserId.toString())
+        myPartyAdapter = MyPartyListAdapter(context, list)
         myPartyRv.adapter = myPartyAdapter
         myPartyRv.layoutManager = LinearLayoutManager(context)
     }
 
     fun getUserPartyData() {
-        FirebaseDatabase.getInstance().getReference("test").child("Groups")
-            .orderByChild("groupUsers/${UserId.toString()}")
-            .equalTo(true)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    myPartyListModel.clear()
-                    for (data in snapshot.children) {
-                        Log.d(TAG, data.value.toString())
-                        Log.d(TAG, data.key.toString())
-                        val partyData = data.getValue(FirebaseParty::class.java)
-                        val partyInfo = partyData?.groupInfo
-                        var partyMessageMap: Map<String, FirebasePartyMessage>? =
-                            partyData?.groupMessages
-                        val partyMessage: Collection<FirebasePartyMessage> =
-                            partyMessageMap!!.values
-                        val sortedMessage = partyMessage.sortedBy { it.sendedDate }
+        myPartyListDatabase = FirebaseDatabase.getInstance().getReference("test").child("Groups")
+        valueEventListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                myPartyListModel.clear()
+                for (data in snapshot.children) {
+                    Log.d(TAG, data.value.toString())
+                    Log.d(TAG, data.key.toString())
+                    val partyData = data.getValue(FirebaseParty::class.java)
+                    val partyInfo = partyData?.groupInfo
+                    var partyMessageMap: Map<String, FirebasePartyMessage>? =
+                        partyData?.groupMessages
+                    val partyMessage: Collection<FirebasePartyMessage> =
+                        partyMessageMap!!.values
+                    val sortedMessage = partyMessage.sortedBy { it.sendedDate }
 
 
-                        val lastChatItem: FirebasePartyMessage =
-                            if (sortedMessage.isNullOrEmpty()) {
-                                FirebasePartyMessage()
-                            } else {
-                                sortedMessage[sortedMessage.lastIndex]
-                            }
-
-                        var notReadChatNumber = 0
-
-                        for (data in sortedMessage) {
-                            if (!(UserId.toString() in data.confirmed))
-                                notReadChatNumber += 1
-                        }
-
-                        val grpId = data.key.toString()
-                        val resName: String = partyInfo?.restaurantName ?: ""
-                        val grpName = partyInfo?.groupName ?: ""
-                        val participants = partyInfo?.curNumberOfPeople ?: 0
-                        val lastChat: String = if (lastChatItem.type == 1) {
-                            "사진"
+                    val lastChatItem: FirebasePartyMessage =
+                        if (sortedMessage.isNullOrEmpty()) {
+                            FirebasePartyMessage()
                         } else {
-                            lastChatItem.content
+                            sortedMessage[sortedMessage.lastIndex]
                         }
-                        val lastChatTime: String = lastChatItem.sendedDate
 
-                        val dataModel = MyPartyListModel(
-                            grpId,
-                            resName,
-                            grpName, participants, lastChat, notReadChatNumber, lastChatTime
-                        )
-                        myPartyListModel.add(dataModel)
+                    var notReadChatNumber = 0
 
+                    for (data in sortedMessage) {
+                        if (!(UserId.toString() in data.confirmed))
+                            notReadChatNumber += 1
                     }
 
+                    val grpId = data.key.toString()
+                    val resName: String = partyInfo?.restaurantName ?: ""
+                    val grpName = partyInfo?.groupName ?: ""
+                    val participants = partyInfo?.curNumberOfPeople ?: 0
+                    val restaurantImgUrl = partyInfo?.restaurantImgUrl ?: ""
+                    val lastChat: String = if (lastChatItem.type == 1) {
+                        "사진"
+                    } else {
+                        lastChatItem.content
+                    }
+                    val lastChatTime: String = lastChatItem.sendedDate
 
-                    Log.d("채팅방확인소트전", myPartyListModel.toString())
-                    val sortedMyPartyListModel =
-                        myPartyListModel.sortedByDescending { it.lastChatTime }
-                    Log.d("채팅방확인소트후", sortedMyPartyListModel.toString())
-                    adapter(requireContext(), sortedMyPartyListModel)
-                    myPartyAdapter.notifyDataSetChanged()
+                    val dataModel = MyPartyListModel(
+                        grpId,
+                        resName,
+                        grpName, participants, lastChat, notReadChatNumber, lastChatTime,restaurantImgUrl
+                    )
+                    myPartyListModel.add(dataModel)
 
                 }
 
 
-                override fun onCancelled(error: DatabaseError) {
+                Log.d("채팅방확인소트전", myPartyListModel.toString())
+                val sortedMyPartyListModel =
+                    myPartyListModel.sortedByDescending { it.lastChatTime }
+                Log.d("채팅방확인소트후", sortedMyPartyListModel.toString())
+                adapter(requireContext(), sortedMyPartyListModel)
+                myPartyAdapter.notifyDataSetChanged()
+            }
 
-                }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        }
+        myPartyListDatabase
+            .orderByChild("groupUsers/${UserId.toString()}")
+            .equalTo(true).addValueEventListener(valueEventListener)
 
-
-            })
     }
 
     //뷰바인딩 생명주기 관리
     override fun onDestroyView() {
         super.onDestroyView()
+        myPartyListDatabase.removeEventListener(valueEventListener)
         _binding = null
     }
 

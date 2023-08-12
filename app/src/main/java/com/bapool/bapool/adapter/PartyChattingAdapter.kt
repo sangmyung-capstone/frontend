@@ -55,14 +55,17 @@ class PartyChattingAdapter(
     var messages: ArrayList<FirebasePartyMessage> = arrayListOf()
     var messageKey: ArrayList<String> = arrayListOf()
     var imageResource: MutableMap<String, Uri> = HashMap()
-    var imageResourceBool = true
+    private var imageResourceBool = true
+    private var chattingResourceBool = true
 
     var initPageControl = 0
 
     var currentPage = 0
-    var itemsPerPage = 10
+    var itemsPerPage = 5
+    var firstKey = ""
 
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var updateChattingReference: DatabaseReference
     lateinit var childEventListener: ChildEventListener
 
 
@@ -70,15 +73,15 @@ class PartyChattingAdapter(
 
         recyclerView.postDelayed({
             recyclerView.scrollToPosition(messages.size - 1)
-
         }, 1000)
-
         getMessageData()
+        databaseReference.limitToLast(itemsPerPage+1)
+            .addChildEventListener(childEventListener)
+
     }
 
 
-
-    fun getMessageData(){
+    fun getMessageData() {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("test").child("Groups")
             .child(groupId).child("groupMessages")
@@ -148,24 +151,24 @@ class PartyChattingAdapter(
                             .child("confirmed")
                             .updateChildren(testMap)
                             .addOnCompleteListener {
-                                if(initPageControl==0){
+                                if (initPageControl == 0) {
                                     recyclerView.scrollToPosition(messageKey.size - 1)
 
                                 }
                             }
                     } else {
-                        if(initPageControl==0){
+                        if (initPageControl == 0) {
                             recyclerView.scrollToPosition(messageKey.size - 1)
 
                         }
                     }
                 }
-                if(initPageControl==0){
+                if (initPageControl == 0) {
                     recyclerView.scrollToPosition(messageKey.size - 1)
 
                 }
                 Log.d("들어와있는지확인후", messages.toString())
-
+                firstKey = messageKey.first()
                 diffResult.dispatchUpdatesTo(this@PartyChattingAdapter)
 
             }
@@ -181,10 +184,7 @@ class PartyChattingAdapter(
                     messages[messageIndex] = changeMessageObject
                     notifyItemChanged(messageIndex)
                 }
-
                 notifyItemChanged(messageIndex)
-
-
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -198,7 +198,86 @@ class PartyChattingAdapter(
 
             }
         }
-        databaseReference.addChildEventListener(childEventListener)
+
+
+
+    }
+
+
+    fun updateChatting(){
+        updateChattingReference = FirebaseDatabase.getInstance().getReference("test").child("Groups")
+            .child(groupId).child("groupMessages")
+
+
+        updateChattingReference.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+//                val readUsers: MutableMap<String, FirebasePartyMessage> = HashMap()
+
+                for(data in snapshot.children){
+
+                    Log.d("sdfsafsadfadsfasd",data.value.toString())
+                    Log.d("sdfsafsadfadsfasd",data.key.toString())
+//                    val messageObject: FirebasePartyMessage =
+//                        data.getValue(FirebasePartyMessage::class.java)!!
+//                    val messageObject_modify: FirebasePartyMessage =
+//                        data.getValue(FirebasePartyMessage::class.java)!!
+//                    val messageKeyObject = data.key.toString()
+//
+//                    messageKey.add(messageKeyObject)
+//                    messageObject_modify.confirmed.put(currentUserId, true)
+//                    readUsers.put(messageKeyObject, messageObject_modify)
+//                    messages.add(messageObject)
+//
+//                    if (messageObject.type == 1) {
+//                        val storageReference =
+//                            Firebase.storage.reference.child(groupId).child(messageKeyObject)
+//
+//                        storageReference.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
+//                            if (task.isSuccessful) {
+//                                imageResourceBool = true
+//                                imageResource[messageKeyObject] = task.result
+//                                notifyDataSetChanged()
+//                            } else {
+//                            }
+//                        })
+//
+//                    }
+//                    val testMap: Map<String, Boolean> = mapOf(currentUserId to true)
+//                    if (messages.size > 0) {
+//                        if (!messages[messages.size - 1].confirmed.containsKey(currentUserId)) {
+//                            FirebaseDatabase.getInstance().getReference("test").child("Groups")
+//                                .child(groupId).child("groupMessages").child(messageKeyObject)
+//                                .child("confirmed")
+//                                .updateChildren(testMap)
+//                                .addOnCompleteListener {
+//                                    if (initPageControl == 0) {
+//                                        recyclerView.scrollToPosition(messageKey.size - 1)
+//
+//                                    }
+//                                }
+//                        } else {
+//                            if (initPageControl == 0) {
+//                                recyclerView.scrollToPosition(messageKey.size - 1)
+//
+//                            }
+//                        }
+//                    }
+//                    if (initPageControl == 0) {
+//                        recyclerView.scrollToPosition(messageKey.size - 1)
+//
+//                    }
+//                    Log.d("들어와있는지확인후", messages.toString())
+//                    firstKey = messageKey.first()
+//
+//
+
+                }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 
 
@@ -248,10 +327,9 @@ class PartyChattingAdapter(
             } else {
                 return 2
             }
-        } else if(messages[position].senderId.equals("공지") ){
+        } else if (messages[position].senderId.equals("공지")) {
             return 5
-        }
-        else {
+        } else {
             if (messages[position].type == 0) {
                 return 3
             } else {
@@ -458,10 +536,11 @@ class PartyChattingAdapter(
 
                     if (imageResourceBool) {
                         recyclerView.postDelayed({
-                            if(initPageControl==0){
+                            if (initPageControl == 0) {
                                 recyclerView.scrollToPosition(messageKey.size - 1)
 
-                            }                        }, 1000)
+                            }
+                        }, 1000)
 
                         imageResourceBool = false
                     }
@@ -525,6 +604,19 @@ class PartyChattingAdapter(
         databaseReference.removeEventListener(childEventListener)
     }
 
+    fun upadateChatting() {
+
+        itemsPerPage += 5
+        updateChatting()
+        notifyDataSetChanged()
+
+
+//
+//        recyclerView.postDelayed({
+//            recyclerView.scrollToPosition()
+//        }, 1000)
+
+    }
 
 
 }

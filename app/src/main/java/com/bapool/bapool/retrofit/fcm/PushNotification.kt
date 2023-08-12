@@ -4,3 +4,4 @@ class PushNotification(
     val data: NotiModel,
     val to: String,
 )
+

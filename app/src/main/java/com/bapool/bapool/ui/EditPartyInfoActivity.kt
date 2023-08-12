@@ -133,11 +133,11 @@ class EditPartyInfoActivity : AppCompatActivity() {
 //        }
 
 
-        hashtagClickListener(binding.hash1,0)
-        hashtagClickListener(binding.hash2,1)
-        hashtagClickListener(binding.hash3,2)
-        hashtagClickListener(binding.hash4,3)
-        hashtagClickListener(binding.hash5,4)
+        hashtagClickListener(binding.hash1, 0)
+        hashtagClickListener(binding.hash2, 1)
+        hashtagClickListener(binding.hash3, 2)
+        hashtagClickListener(binding.hash4, 3)
+        hashtagClickListener(binding.hash5, 4)
 
         //모임시작 날짜 정하기
         binding.startDate.setOnClickListener {
@@ -152,24 +152,24 @@ class EditPartyInfoActivity : AppCompatActivity() {
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
 
-            Log.d("asdfasdfadsf",binding.grpNameText.text.length.toString())
-            Log.d("asdfasdfadsf",binding.menuText.text.isNullOrBlank().toString())
+            Log.d("asdfasdfadsf", binding.grpNameText.text.length.toString())
+            Log.d("asdfasdfadsf", binding.menuText.text.isNullOrBlank().toString())
 
-            Log.d("asdfasdfadsf",binding.menuText.text.length.toString())
+            Log.d("asdfasdfadsf", binding.menuText.text.length.toString())
 
             if (binding.grpNameText.text.isNullOrBlank()) {
                 alterDialog("파티명을 입력해주세요.")
 
-            }else if(binding.grpNameText.length() > 10){
+            } else if (binding.grpNameText.length() > 10) {
                 alterDialog("파티명은 10글자까지 가능합니다.")
 
-            }else if(binding.menuText.text.isNullOrBlank()){
+            } else if (binding.menuText.text.isNullOrBlank()) {
                 alterDialog("메뉴를 입력해주세요.")
 
-            }else if(binding.menuText.length() > 10){
+            } else if (binding.menuText.length() > 10) {
                 alterDialog("메뉴명은 10글자까지 가능합니다.")
 
-            }else if(binding.maxPeople.value < receivePartyInfo.curNumberOfPeople){
+            } else if (binding.maxPeople.value < receivePartyInfo.curNumberOfPeople) {
                 alterDialog("현재 인원보다 적은 정원을 선택할 수 없습니다.")
             } else if (binding.startDateText.text.toString() == "시작날짜") {
                 alterDialog("시작날짜를 입력해주세요.")
@@ -182,6 +182,23 @@ class EditPartyInfoActivity : AppCompatActivity() {
                 val startDateLocal =
                     binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
 
+
+                var hashtagList = arrayListOf<Int>()
+                var count = 0
+                for(data in hastagList){
+                    count++
+                    if(data != 0){
+                        when (count) {
+                            1 -> hashtagList.add(1)
+                            2 -> hashtagList.add(2)
+                            3 -> hashtagList.add(3)
+                            4 -> hashtagList.add(4)
+                            5 -> hashtagList.add(5)
+                        }                    }
+
+                }
+
+
                 val editPartyInstance =
                     PatchEditPartyInfoRequest(
                         partyId.toLong(),
@@ -191,7 +208,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
                         endDateLocal,
                         binding.menuText.text.toString(),
                         binding.detail.text.toString(),
-                        hastagList
+                        hashtagList
                     )
                 Log.d(TAG, editPartyInstance.toString())
 
@@ -242,8 +259,8 @@ class EditPartyInfoActivity : AppCompatActivity() {
                         Toast.makeText(
                             this@EditPartyInfoActivity,
                             "그룹 생성 오류 fail",
-                            Toast.LENGTH_SHORT ).show()
-
+                            Toast.LENGTH_SHORT
+                        ).show()
 
 
                     }
@@ -362,39 +379,38 @@ class EditPartyInfoActivity : AppCompatActivity() {
         val image4 = binding.hash4
         val image5 = binding.hash5
 
-        var count = 0
+        Log.d("asdfasdfasdf",receiveHashtag.toString())
+
         for (data in receiveHashtag) {
-            count++
-            if(data == 1){
-                when (count) {
-                    1 -> {
-                        image1.setBackgroundResource(R.drawable.custom_img_bg)
-                        hastagList.set(0, 1)
+            when (data) {
+                1 -> {
+                    image1.setBackgroundResource(R.drawable.custom_img_bg)
+                    hastagList.set(0, 1)
 
-                    }
-
-                    2 -> {
-                        image2.setBackgroundResource(R.drawable.custom_img_bg)
-                        hastagList.set(1, 1)
-
-                    }
-                    3 -> {
-                        image3.setBackgroundResource(R.drawable.custom_img_bg)
-                        hastagList.set(2, 1)
-
-                    }
-                    4 -> {
-                        image4.setBackgroundResource(R.drawable.custom_img_bg)
-                        hastagList.set(3, 1)
-
-                    }
-                    5 -> {
-                        image5.setBackgroundResource(R.drawable.custom_img_bg)
-                        hastagList.set(4, 1)
-
-                    }
-                    else -> Log.d("EditPartyInfoActivity", "error")
                 }
+
+                2 -> {
+                    image2.setBackgroundResource(R.drawable.custom_img_bg)
+                    hastagList.set(1, 1)
+
+                }
+                3 -> {
+                    image3.setBackgroundResource(R.drawable.custom_img_bg)
+                    hastagList.set(2, 1)
+
+                }
+                4 -> {
+                    image4.setBackgroundResource(R.drawable.custom_img_bg)
+                    hastagList.set(3, 1)
+
+                }
+                5 -> {
+                    image5.setBackgroundResource(R.drawable.custom_img_bg)
+                    hastagList.set(4, 1)
+
+                }
+                else -> Log.d("EditPartyInfoActivity", "error")
+
             }
 
         }

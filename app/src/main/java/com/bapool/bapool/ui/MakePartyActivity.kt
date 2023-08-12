@@ -1,5 +1,6 @@
 package com.bapool.bapool.ui
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -7,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +21,7 @@ import com.bapool.bapool.retrofit.data.PostMakePartyRequest
 import com.bapool.bapool.retrofit.data.PostMakePartyResponse
 import com.bapool.bapool.retrofit.data.goToRestaurantPartyList
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
+import com.bapool.bapool.ui.RestaurantPartyActivity.Companion.RestaurantPartyActivityCompanion
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -139,16 +142,16 @@ class MakePartyActivity : AppCompatActivity() {
             if (binding.grpNameText.text.isNullOrBlank()) {
                 alterDialog("파티명을 입력해주세요.")
 
-            }else if(binding.grpNameText.length() > 10){
+            } else if (binding.grpNameText.length() > 10) {
                 alterDialog("파티명은 10글자까지 가능합니다.")
 
-            }else if(binding.menuText.text.isNullOrBlank()){
+            } else if (binding.menuText.text.isNullOrBlank()) {
                 alterDialog("메뉴를 입력해주세요.")
 
-            }else if(binding.grpNameText.length() > 10){
+            } else if (binding.grpNameText.length() > 10) {
                 alterDialog("메뉴명은 10글자까지 가능합니다.")
 
-            }else if (binding.startDateText.text.toString() == "시작날짜") {
+            } else if (binding.startDateText.text.toString() == "시작날짜") {
                 alterDialog("시작날짜를 입력해주세요.")
 
             } else if (binding.startTimeText.text.toString() == "시작시간") {
@@ -162,6 +165,22 @@ class MakePartyActivity : AppCompatActivity() {
                 Log.d("LocalDateEndStart", endDateLocal)
                 Log.d("LocalDateEndStart", startDateLocal)
 
+                var hashtagList = arrayListOf<Int>()
+                var count = 0
+                for(data in hastagList){
+                    count++
+                    if(data != 0){
+                        when (count) {
+                            1 -> hashtagList.add(1)
+                            2 -> hashtagList.add(2)
+                            3 -> hashtagList.add(3)
+                            4 -> hashtagList.add(4)
+                            5 -> hashtagList.add(5)
+                        }                    }
+
+                }
+
+
                 val makeGrpInstance =
                     PostMakePartyRequest(
                         binding.grpNameText.text.toString(),
@@ -169,13 +188,10 @@ class MakePartyActivity : AppCompatActivity() {
                         startDateLocal,
                         endDateLocal,
                         binding.menuText.text.toString(),
-                        hastagList,
+                        hashtagList,
                         binding.detail.text.toString(),
                         restaurantPartyInfoObject
                     )
-
-                Log.d("MakePartyInfo", makeGrpInstance.toString())
-
 
                 retrofit(makeGrpInstance)
             }
@@ -206,9 +222,13 @@ class MakePartyActivity : AppCompatActivity() {
                                 this@MakePartyActivity,
                                 ChattingAndPartyInfoMFActivity::class.java
                             )
-                        intent.putExtra("partyId", result!!.result.party_id.toString()) // result 안의 party_id 값으로 value값 교체
-                        startActivity(intent)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
+                        intent.putExtra("partyId",
+                            result!!.result.party_id.toString()) // result 안의 party_id 값으로 value값 교체
+                        startActivity(intent)
+                        RestaurantPartyActivityCompanion?.finish()
+                        finish()
                     } else {
 
                         Toast.makeText(this@MakePartyActivity, "그룹 생성 오류", Toast.LENGTH_SHORT)
