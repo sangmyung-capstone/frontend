@@ -15,6 +15,7 @@ import com.bapool.bapool.databinding.JoinpartyCustomDialogBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
+import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -193,6 +194,10 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
                         intent.putExtra("joinUserId",UserId.toString())
                         startActivity(intent)
+
+                        val active = mapOf<String,String>(UserId.toString() to "active")
+                        FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(party_id)
+                            .updateChildren(active)
                         finish()
 
                     } else {

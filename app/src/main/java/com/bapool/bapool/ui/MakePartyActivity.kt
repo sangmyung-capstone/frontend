@@ -22,6 +22,7 @@ import com.bapool.bapool.retrofit.data.PostMakePartyResponse
 import com.bapool.bapool.retrofit.data.goToRestaurantPartyList
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.RestaurantPartyActivity.Companion.RestaurantPartyActivityCompanion
+import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -227,6 +228,11 @@ class MakePartyActivity : AppCompatActivity() {
                         intent.putExtra("partyId",
                             result!!.result.party_id.toString()) // result 안의 party_id 값으로 value값 교체
                         startActivity(intent)
+
+                        val active = mapOf<String,String>(userId to "active")
+                        FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(result!!.result.party_id.toString())
+                            .setValue(active)
+
                         RestaurantPartyActivityCompanion?.finish()
                         finish()
                     } else {
