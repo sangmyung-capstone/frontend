@@ -162,9 +162,6 @@ class MakePartyActivity : AppCompatActivity() {
                 val startDateLocal =
                     binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
 
-                Log.d("LocalDateEndStart", endDateLocal)
-                Log.d("LocalDateEndStart", startDateLocal)
-
                 var hashtagList = arrayListOf<Int>()
                 var count = 0
                 for(data in hastagList){
@@ -178,7 +175,11 @@ class MakePartyActivity : AppCompatActivity() {
                             5 -> hashtagList.add(5)
                         }                    }
 
+
                 }
+                Log.d("sdfsdadsafdaf",hastagList.toString())
+
+                Log.d("sdfsdadsafdaf",hashtagList.toString())
 
 
                 val makeGrpInstance =
@@ -214,9 +215,6 @@ class MakePartyActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         var result: PostMakePartyResponse? =
                             response.body()
-                        Log.d("MKRetrofit", "onRequest 성공: $makeParty")
-                        Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
-
                         val intent =
                             Intent(
                                 this@MakePartyActivity,
@@ -224,23 +222,21 @@ class MakePartyActivity : AppCompatActivity() {
                             )
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
+                        intent.putExtra("whereAreYouFrom","make")
+                        intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
                         intent.putExtra("partyId",
                             result!!.result.party_id.toString()) // result 안의 party_id 값으로 value값 교체
                         startActivity(intent)
                         RestaurantPartyActivityCompanion?.finish()
                         finish()
                     } else {
-
                         Toast.makeText(this@MakePartyActivity, "그룹 생성 오류", Toast.LENGTH_SHORT)
                             .show()
-
                     }
                 }
 
 
                 override fun onFailure(call: Call<PostMakePartyResponse>, t: Throwable) {
-                    Log.d("MKRetrofit", "그룹생성 레트로핏 fail")
-                    Log.d("MKRetrofit", "onResponse 실패 :" + t.toString())
                 }
             })
 

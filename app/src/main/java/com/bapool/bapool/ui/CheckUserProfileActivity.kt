@@ -38,6 +38,8 @@ class CheckUserProfileActivity : AppCompatActivity() {
     }
 
     fun checkUserProfileRetrofit() {
+        Log.d("checkUserProfile1232",UserId.toString())
+        Log.d("checkUserProfile1232", opponentUserId.toString())
 
         retro.checkUserProfile(UserId!!.toLong(), opponentUserId.toLong())
             .enqueue(object : Callback<CheckUserProfileResponse> {
@@ -49,9 +51,6 @@ class CheckUserProfileActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val result = response.body()
                         val userInfo = result!!.result
-
-                        Log.d("asdfasfasdfasf", userInfo.toString())
-
                         val imageName = "image${userInfo.profileImg}"
                         val resourceId = resources.getIdentifier(imageName, "drawable", packageName)
                         binding.userImage.setImageResource(resourceId)
@@ -106,7 +105,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<CheckUserProfileResponse>, t: Throwable) {
-                    Log.d("checkUserProfile1232", "실패")
+                    Log.d("checkUserProfile1232", t.toString())
                 }
             })
 

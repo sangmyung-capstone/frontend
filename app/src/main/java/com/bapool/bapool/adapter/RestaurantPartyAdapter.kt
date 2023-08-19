@@ -68,7 +68,23 @@ class RestaurantPartyAdapter(val context: Context) :
 
         val joinButton: Button = binding.joinGrp
         fun bindItem(item: ResPartyList) {
+            binding.hash1.visibility = View.GONE
+            binding.hash2.visibility = View.GONE
+            binding.hash3.visibility = View.GONE
+            binding.hash4.visibility = View.GONE
+            binding.hash5.visibility = View.GONE
 
+            binding.joinGrp.text = "참여"
+            binding.joinGrp.isEnabled = true
+
+            binding.menu.text = ""
+            binding.date.text = ""
+            binding.participantsNum.text = ""
+            binding.grpName.text = ""
+            binding.detail.text = ""
+            binding.rating.text = ""
+
+            Log.d("dsafasdgsagadsg",item.toString())
             //차단유저 보이게하기
             if (item.has_block_user) {
                 binding.ban.visibility = View.VISIBLE
@@ -79,6 +95,7 @@ class RestaurantPartyAdapter(val context: Context) :
                 if (hashtagList.isNotEmpty()) {
                     binding.hashtagVisible.visibility = View.VISIBLE
                     for (item in hashtagList) {
+                        Log.d("dsafasdgsagadsg",item.toString())
                         when (item) {
                             1 -> binding.hash1.visibility = View.VISIBLE
                             2 -> binding.hash2.visibility = View.VISIBLE
@@ -86,8 +103,6 @@ class RestaurantPartyAdapter(val context: Context) :
                             4 -> binding.hash4.visibility = View.VISIBLE
                             5 -> binding.hash5.visibility = View.VISIBLE
                         }
-
-
                     }
                 }
             }
@@ -108,12 +123,14 @@ class RestaurantPartyAdapter(val context: Context) :
             val allNum = partiNum(item.participants, item.max_people)
             val allDate = dateRange(item.start_date)
 
+            val value = item.user_rating.toDouble()
+            val formattedValue = String.format("%.1f", value)
             binding.menu.text = item.menu
             binding.date.text = allDate
             binding.participantsNum.text = allNum
             binding.grpName.text = item.party_name
             binding.detail.text = item.detail
-            binding.rating.text = item.user_rating?.toString()
+            binding.rating.text = formattedValue
 
 
         }

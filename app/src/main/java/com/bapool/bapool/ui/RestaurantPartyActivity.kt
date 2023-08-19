@@ -166,9 +166,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<GetResPartyListResponse>, t: Throwable) {
-
-                    Log.d("hghkhk",t.toString())
-
                 }
             })
     }
@@ -192,8 +189,11 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         val intent = Intent(this@RestaurantPartyActivity,
                             ChattingAndPartyInfoMFActivity::class.java)
                         intent.putExtra("partyId", party_id)
+                        intent.putExtra("whereAreYouFrom","join")
+                        intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
                         intent.putExtra("joinUserId",UserId.toString())
                         startActivity(intent)
+                        finish()
 
                     } else {
 
