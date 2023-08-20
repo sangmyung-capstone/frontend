@@ -22,7 +22,6 @@ class PartyUserInfoAdapter(
     init {
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ChattingAndPartyUserItemBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -48,6 +47,8 @@ class PartyUserInfoAdapter(
         fun bindItems(item: Map<String, FirebaseUserInfo>) {
 
             Log.d("sadfasdfadsf", partyUserInfo.toString())
+            Log.d("sadfasdfadsf", item.toString())
+
 
             val userInfo = item.values.firstOrNull()
 

@@ -59,8 +59,6 @@ class PartyChattingAdapter(
     private var chattingResourceBool = true
 
     var initPageControl = 0
-
-    var currentPage = 0
     var itemsPerPage = 5
     var firstKey = ""
 
@@ -75,7 +73,7 @@ class PartyChattingAdapter(
             recyclerView.scrollToPosition(messages.size - 1)
         }, 1000)
         getMessageData()
-        databaseReference.limitToLast(itemsPerPage+1)
+        databaseReference
             .addChildEventListener(childEventListener)
 
     }
@@ -137,7 +135,6 @@ class PartyChattingAdapter(
                         if (task.isSuccessful) {
                             imageResourceBool = true
                             imageResource[messageKeyObject] = task.result
-                            notifyDataSetChanged()
                         } else {
                         }
                     })
@@ -175,16 +172,16 @@ class PartyChattingAdapter(
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
 
-                val changeMessageKey = snapshot.key.toString()
-                val changeMessageObject =
-                    snapshot.getValue(FirebasePartyMessage::class.java)
-
-                val messageIndex = messageKey.indexOf(changeMessageKey)
-                if (changeMessageObject != null) {
-                    messages[messageIndex] = changeMessageObject
-                    notifyItemChanged(messageIndex)
-                }
-                notifyItemChanged(messageIndex)
+//                val changeMessageKey = snapshot.key.toString()
+//                val changeMessageObject =
+//                    snapshot.getValue(FirebasePartyMessage::class.java)
+//
+//                val messageIndex = messageKey.indexOf(changeMessageKey)
+//                if (changeMessageObject != null) {
+//                    messages[messageIndex] = changeMessageObject
+//                    notifyItemChanged(messageIndex)
+//                }
+//                notifyItemChanged(messageIndex)
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -200,23 +197,23 @@ class PartyChattingAdapter(
         }
 
 
-
     }
 
 
-    fun updateChatting(){
-        updateChattingReference = FirebaseDatabase.getInstance().getReference("test").child("Groups")
-            .child(groupId).child("groupMessages")
+    fun updateChatting() {
+        updateChattingReference =
+            FirebaseDatabase.getInstance().getReference("test").child("Groups")
+                .child(groupId).child("groupMessages")
 
 
-        updateChattingReference.addListenerForSingleValueEvent(object : ValueEventListener{
+        updateChattingReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 //                val readUsers: MutableMap<String, FirebasePartyMessage> = HashMap()
 
-                for(data in snapshot.children){
+                for (data in snapshot.children) {
 
-                    Log.d("sdfsafsadfadsfasd",data.value.toString())
-                    Log.d("sdfsafsadfadsfasd",data.key.toString())
+                    Log.d("sdfsafsadfadsfasd", data.value.toString())
+                    Log.d("sdfsafsadfadsfasd", data.key.toString())
 //                    val messageObject: FirebasePartyMessage =
 //                        data.getValue(FirebasePartyMessage::class.java)!!
 //                    val messageObject_modify: FirebasePartyMessage =
@@ -435,32 +432,37 @@ class PartyChattingAdapter(
 
     //읽은 사람 숫자
     fun readCount(items: FirebasePartyMessage, readcount_text: TextView) {
+        Log.d("dsafkjesfkjadshfkjasdhf", peopleCount.toString())
         if (peopleCount == 0) {
-            FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
-                .child("groupUsers")
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        var users: Map<String, Boolean> = HashMap()
-                        users = snapshot.getValue() as Map<String, Boolean>
-                        peopleCount = users.size
-                        var count: Int = peopleCount - items.confirmed.size
+            val readCountDatabase =
+                FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
+                    .child("groupUsers")
+            val readCountListener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var users: Map<String, Boolean> = HashMap()
+                    users = snapshot.getValue() as Map<String, Boolean>
+                    peopleCount = users.size
+                    var count: Int = peopleCount - items.confirmed.size
 
-                        if (count > 0) {
-                            readcount_text.setText(count.toString())
-                            readcount_text.visibility = View.VISIBLE
-                        } else {
-                            readcount_text.visibility = View.GONE
-                        }
-                        Log.d("dsafkjesfkjadshfkjasdhf", snapshot.value.toString())
+                    if (count > 0) {
+                        readcount_text.setText(count.toString())
+                        readcount_text.visibility = View.VISIBLE
+                    } else {
+                        readcount_text.visibility = View.GONE
                     }
+                }
 
-                    override fun onCancelled(error: DatabaseError) {
-                    }
+                override fun onCancelled(error: DatabaseError) {
+                }
 
-                })
+            }
+            readCountDatabase.orderByValue().equalTo(true).addListenerForSingleValueEvent(readCountListener)
+
         } else {
-            var count: Int = peopleCount - items.confirmed.size
+            val filterValue = items.confirmed.filterValues { it == true }
+            var count: Int = peopleCount - filterValue.size
 
+            Log.d("asdfasdfdsafadsfdsafadsf",filterValue.toString())
             if (count > 0) {
                 readcount_text.setText(count.toString())
                 readcount_text.visibility = View.VISIBLE

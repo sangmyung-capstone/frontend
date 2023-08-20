@@ -15,6 +15,7 @@ import com.bapool.bapool.databinding.JoinpartyCustomDialogBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
+import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -166,9 +167,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<GetResPartyListResponse>, t: Throwable) {
-
-                    Log.d("hghkhk",t.toString())
-
                 }
             })
     }
@@ -192,8 +190,12 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         val intent = Intent(this@RestaurantPartyActivity,
                             ChattingAndPartyInfoMFActivity::class.java)
                         intent.putExtra("partyId", party_id)
+                        intent.putExtra("whereAreYouFrom","join")
+                        intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
                         intent.putExtra("joinUserId",UserId.toString())
                         startActivity(intent)
+
+                        finish()
 
                     } else {
 

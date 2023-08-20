@@ -69,70 +69,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
     }
 
     fun listener() {
-        //hashtag 선택 listener
-//        binding.hash1.setOnClickListener {
-//            val image1 = binding.hash1
-//            val currentState = image1.background.constantState
-//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-//            if (currentState == normalState) {
-//                image1.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-//                hastagList.set(0, 0)
-//            } else {
-//                image1.setBackgroundResource(R.drawable.custom_img_bg)
-//                hastagList.set(0, 1)
-//            }
-//        }
-//        binding.hash2.setOnClickListener {
-//            val image2 = binding.hash2
-//            val currentState = image2.background.constantState
-//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-//            if (currentState == normalState) {
-//                image2.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-//                hastagList.set(1, 0)
-//            } else {
-//                image2.setBackgroundResource(R.drawable.custom_img_bg)
-//                hastagList.set(1, 1)
-//            }
-//        }
-//
-//        binding.hash3.setOnClickListener {
-//            val image3 = binding.hash3
-//            val currentState = image3.background.constantState
-//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-//            if (currentState == normalState) {
-//                image3.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-//                hastagList.set(2, 0)
-//            } else {
-//                image3.setBackgroundResource(R.drawable.custom_img_bg)
-//                hastagList.set(2, 1)
-//            }
-//        }
-//        binding.hash4.setOnClickListener {
-//            val image4 = binding.hash4
-//            val currentState = image4.background.constantState
-//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-//            if (currentState == normalState) {
-//                image4.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-//                hastagList.set(3, 0)
-//            } else {
-//                image4.setBackgroundResource(R.drawable.custom_img_bg)
-//                hastagList.set(3, 1)
-//            }
-//        }
-//        binding.hash5.setOnClickListener {
-//            val image5 = binding.hash5
-//            val currentState = image5.background.constantState
-//            val normalState = getDrawable(R.drawable.custom_img_bg)?.constantState
-//            if (currentState == normalState) {
-//                image5.setBackgroundResource(R.drawable.custom_img_bg_pressed)
-//                hastagList.set(4, 0)
-//            } else {
-//                image5.setBackgroundResource(R.drawable.custom_img_bg)
-//                hastagList.set(4, 1)
-//            }
-//        }
-
-
         hashtagClickListener(binding.hash1, 0)
         hashtagClickListener(binding.hash2, 1)
         hashtagClickListener(binding.hash3, 2)
@@ -194,7 +130,8 @@ class EditPartyInfoActivity : AppCompatActivity() {
                             3 -> hashtagList.add(3)
                             4 -> hashtagList.add(4)
                             5 -> hashtagList.add(5)
-                        }                    }
+                        }
+                    }
 
                 }
 
@@ -238,7 +175,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
     fun retrofit(editParty: PatchEditPartyInfoRequest) {
         Log.d("MKRetrofit", editParty.toString())
         Log.d("MKRetrofit", userId.toString())
-        retro.editParty(7, editParty)
+        retro.editParty(UserId!!.toLong(), editParty)
             .enqueue(object : Callback<PatchEditPartyInfoResponse> {
                 override fun onResponse(
                     call: Call<PatchEditPartyInfoResponse>,
@@ -254,14 +191,11 @@ class EditPartyInfoActivity : AppCompatActivity() {
                         Log.d("MKRetrofit", "onResponse 실패: " + response.body()?.code.toString())
                         Log.d("MKRetrofit", "onResponse 실패: " + response.body()?.message.toString())
 
-
-
                         Toast.makeText(
                             this@EditPartyInfoActivity,
                             "그룹 생성 오류 fail",
                             Toast.LENGTH_SHORT
                         ).show()
-
 
                     }
 

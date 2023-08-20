@@ -42,7 +42,6 @@ class SelectPartyLeaderDialog(context: Context) : Dialog(context) {
         setContentView(R.layout.select_partyleader_dialog)
 
 
-
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         val adapter = SelectPartyLeaderAdapter(
             context,
@@ -64,28 +63,5 @@ class SelectPartyLeaderDialog(context: Context) : Dialog(context) {
             }
         }
     }
-//
-//    //파티장 바뀌었다고 채팅창에 알림  fcm X
-//    fun sendNotificationChangePartyLeader() {
-//        var partyLeaderNickName = partyUserInfo[groupOnerId]?.nickName
-//        val notificationText = "파티장이 ${partyLeaderNickName}로 바뀌었습니다"
-//        var items = mutableListOf<String>()
-//        for (data in partyUserInfo.values) {
-//            items.add(data.firebaseToken.toString())
-//        }
-//        if (notificationText != "") {
-//            val group_messages =
-//                FirebasePartyMessage("공지", getTime(), notificationText, 2)
-//            database.child("test").child("Groups").child(partyId.toString()).child("groupMessages")
-//                .push()
-//                .setValue(group_messages)
-//            for (data in items) {
-//                sendNotificationFcm(data, notificationText)
-//                Log.d("asdfsdfsadasdf", data)
-//            }
-//        }
-//    }
-
-
 
 }

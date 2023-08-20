@@ -26,7 +26,9 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         var UserToken: String? = null
         var UserId: Long? = null
+
     }
+
 
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
@@ -346,8 +348,6 @@ class LoginActivity : AppCompatActivity() {
         binding.kakaoLoginButton.setOnClickListener {
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
                 UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
-
-
             } else {
                 UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
             }

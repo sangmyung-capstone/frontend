@@ -38,6 +38,7 @@ class MyPartyListAdapter(
         holder.goToChattingBtn.setOnClickListener{
             val intent =
                 Intent(context, ChattingAndPartyInfoMFActivity::class.java)
+            intent.putExtra("whereAreYouFrom","party")
             intent.putExtra("partyId", myPartyList[position].grpId.toString())
 
             context.startActivity(intent)
