@@ -59,8 +59,6 @@ class PartyChattingAdapter(
     private var chattingResourceBool = true
 
     var initPageControl = 0
-
-    var currentPage = 0
     var itemsPerPage = 5
     var firstKey = ""
 
@@ -137,7 +135,6 @@ class PartyChattingAdapter(
                         if (task.isSuccessful) {
                             imageResourceBool = true
                             imageResource[messageKeyObject] = task.result
-                            notifyDataSetChanged()
                         } else {
                         }
                     })
@@ -175,16 +172,16 @@ class PartyChattingAdapter(
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
 
-                val changeMessageKey = snapshot.key.toString()
-                val changeMessageObject =
-                    snapshot.getValue(FirebasePartyMessage::class.java)
-
-                val messageIndex = messageKey.indexOf(changeMessageKey)
-                if (changeMessageObject != null) {
-                    messages[messageIndex] = changeMessageObject
-                    notifyItemChanged(messageIndex)
-                }
-                notifyItemChanged(messageIndex)
+//                val changeMessageKey = snapshot.key.toString()
+//                val changeMessageObject =
+//                    snapshot.getValue(FirebasePartyMessage::class.java)
+//
+//                val messageIndex = messageKey.indexOf(changeMessageKey)
+//                if (changeMessageObject != null) {
+//                    messages[messageIndex] = changeMessageObject
+//                    notifyItemChanged(messageIndex)
+//                }
+//                notifyItemChanged(messageIndex)
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {

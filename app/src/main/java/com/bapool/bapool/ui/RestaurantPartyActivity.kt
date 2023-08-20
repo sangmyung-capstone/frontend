@@ -195,9 +195,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         intent.putExtra("joinUserId",UserId.toString())
                         startActivity(intent)
 
-                        val active = mapOf<String,String>(UserId.toString() to "active")
-                        FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(party_id)
-                            .updateChildren(active)
                         finish()
 
                     } else {
