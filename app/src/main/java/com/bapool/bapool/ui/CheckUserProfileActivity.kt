@@ -63,16 +63,10 @@ class CheckUserProfileActivity : AppCompatActivity() {
                         if (userInfo.hashtag != null) {
                             if (userInfo.hashtag.isNotEmpty()) {
                                 binding.hashtagVisible.visibility = View.VISIBLE
-                                for (item in userInfo.hashtag) {
-                                    when (item) {
-                                        1 -> binding.hash1.visibility = View.VISIBLE
-                                        2 -> binding.hash2.visibility = View.VISIBLE
-                                        3 -> binding.hash3.visibility = View.VISIBLE
-                                        4 -> binding.hash4.visibility = View.VISIBLE
-                                        5 -> binding.hash5.visibility = View.VISIBLE
-                                    }
-                                }
-
+                                binding.talkcount.text = result.result.hashtag.find { it.hashtag_id == 1 }?.count.toString()
+                                binding.kindcount.text = result.result.hashtag.find { it.hashtag_id == 2 }?.count.toString()
+                                binding.mannercount.text = result.result.hashtag.find { it.hashtag_id == 3 }?.count.toString()
+                                binding.quietcount.text = result.result.hashtag.find { it.hashtag_id == 4 }?.count.toString()
                             }
                         }
                         if (UserId.toString() == opponentUserId) {

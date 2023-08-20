@@ -230,7 +230,7 @@ data class CheckUserProfileResult(
     val nickname: String,
     var is_block: Boolean,
     val rating: Double,
-    val hashtag: List<Int>,
+    val hashtag: List<GetMypageResponse.Hashtag>,
 )
 
 //유저 프로필 화면에서 유저 차단
