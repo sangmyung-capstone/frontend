@@ -1,7 +1,6 @@
 package com.bapool.bapool.ui
 
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -11,13 +10,13 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.bapool.bapool.R
-import com.bapool.bapool.RetrofitService
+import androidx.fragment.app.FragmentTransaction
 import com.bapool.bapool.databinding.ActivityRegisterBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.PatchChangeProfileRequest
 import com.bapool.bapool.retrofit.data.PatchChangeProfileResponse
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
+import com.bapool.bapool.ui.fragment.MypageFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

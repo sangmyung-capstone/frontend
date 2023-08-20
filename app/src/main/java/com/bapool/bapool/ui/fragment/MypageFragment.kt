@@ -59,13 +59,21 @@ class MypageFragment : Fragment() {
                             }
                             binding.nickname.text = result.result.nickname
                             binding.rating.rating = result.result.rating.toFloat()
+                            binding.talkcount.text = result.result.hashtag.find { it.hashtag_id == 1 }?.count.toString()
+                            binding.kindcount.text = result.result.hashtag.find { it.hashtag_id == 2 }?.count.toString()
+                            binding.mannercount.text = result.result.hashtag.find { it.hashtag_id == 3 }?.count.toString()
+                            binding.quietcount.text = result.result.hashtag.find { it.hashtag_id == 4 }?.count.toString()
+
                         }
                     } else {
+                        Log.d("bap", "onResponse 실패: " + response)
                         // handle error response
                     }
                 }
 
                 override fun onFailure(call: Call<GetMypageResponse>, t: Throwable) {
+                    Log.d("bap", "onResponse 실패: $call $t")
+
                     // handle network or unexpected error
                 }
             })

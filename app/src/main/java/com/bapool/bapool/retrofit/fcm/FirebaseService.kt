@@ -42,10 +42,10 @@ class FirebaseService : FirebaseMessagingService() {
         val userToken = message.data["userToken"].toString()
         var alarm_code = message.data["alarm_code"]
 
-        val intent = Intent(applicationContext,ChattingAndPartyInfoMFActivity::class.java)
+        val intent = Intent(applicationContext, ChattingAndPartyInfoMFActivity::class.java)
         intent.putExtra("partyId", partyId)
-        intent.putExtra("notificationUserId",userId)
-        intent.putExtra("notificationUserToken",userToken)
+        intent.putExtra("notificationUserId", userId)
+        intent.putExtra("notificationUserToken", userToken)
         intent.apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -58,7 +58,7 @@ class FirebaseService : FirebaseMessagingService() {
 
 
         createNotificationChannel()
-        sendNotification(title, body,pendingIntent,alarm_code!!.toInt())
+        sendNotification(title, body, pendingIntent, alarm_code!!.toInt())
 
     }
 
@@ -66,8 +66,6 @@ class FirebaseService : FirebaseMessagingService() {
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-
-
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -85,7 +83,12 @@ class FirebaseService : FirebaseMessagingService() {
     }
 
 
-    private fun sendNotification(title: String, body: String, pendingIntent: PendingIntent, alarm_code: Int = 123) {
+    private fun sendNotification(
+        title: String,
+        body: String,
+        pendingIntent: PendingIntent,
+        alarm_code: Int = 123
+    ) {
         if (alarm_code != 123) {
             val intent = Intent(this, LoginActivity::class.java)
             val pendingIntent =

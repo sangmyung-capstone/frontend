@@ -40,7 +40,12 @@ data class GetMypageResponse(
         val nickname: String,
         val profileImg: Int,
         val rating: Double,
-        val hashtag: List<Int>,
+        val hashtag: List<Hashtag>,
+    )
+
+    data class Hashtag(
+        val hashtag_id: Int,
+        val count: Int
     )
 }
 
