@@ -13,6 +13,12 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.bapool.bapool.R
+import com.bapool.bapool.retrofit.fcm.NotiModel
+import com.bapool.bapool.retrofit.fcm.PushNotification
+import com.bapool.bapool.retrofit.fcm.RetrofitInstance
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MyReceiver() : BroadcastReceiver() {
 
@@ -27,6 +33,7 @@ class MyReceiver() : BroadcastReceiver() {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onReceive(context: Context?, intent: Intent?) {
+
         manager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         //NotificationChannel 인스턴스를 createNotificationChannel()에 전달하여 앱 알림 채널을 시스템에 등록
@@ -43,21 +50,29 @@ class MyReceiver() : BroadcastReceiver() {
         val intent2 = Intent(context, LoginActivity::class.java)
         val requestCode = intent?.extras!!.getInt("alarm_rqCode")
         val title = intent.extras!!.getString("content")
+        val groupname = intent.extras!!.getString("group_name")
+        val items = intent.extras!!.getStringArrayList("key_list")
 
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(
                 context,
                 requestCode,
                 intent2,
-                PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_MUTABLE
             ) //Activity를 시작하는 인텐트 생성
         } else {
             PendingIntent.getActivity(
                 context,
                 requestCode,
                 intent2,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_MUTABLE
             )
+        }
+
+        if (items != null) {
+            for (data in items) {
+                sendNotificationFcm(groupname.toString(), data, title.toString(), requestCode)
+            }
         }
 
         val notification = builder.setContentTitle(title)
@@ -70,5 +85,24 @@ class MyReceiver() : BroadcastReceiver() {
         Log.d("알림", "$notification")
 
         manager.notify(requestCode, notification)
+    }
+
+    fun sendNotificationFcm(
+        groupname: String,
+        firebaseToken: String,
+        notificationText: String,
+        requestCode: Int
+    ) {
+
+        val notiModel = NotiModel(groupname, notificationText, requestCode)
+
+        val pushModel = PushNotification(notiModel, firebaseToken)
+
+        fcmPush(pushModel)
+    }
+
+    //fcm 보내기
+    private fun fcmPush(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        RetrofitInstance.api.postNotification(notification)
     }
 }

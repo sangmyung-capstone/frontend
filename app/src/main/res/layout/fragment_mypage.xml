@@ -27,7 +27,6 @@
                 android:text="마이페이지"
                 android:textColor="@color/black"
                 android:textSize="25sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textLine"
                 app:layout_constraintStart_toStartOf="@+id/textLine"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -59,49 +58,218 @@
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:progressTint="@color/main"
                 android:layout_gravity="center"
                 android:numStars="5"
-                android:rating="0.8"/>
+                android:rating="0.8"
+                android:isIndicator="true"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    >
+
+                    <ImageView
+                        android:id="@+id/talkimageview"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/talk"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"/>
+
+                    <TextView
+                        android:id="@+id/talktext"
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:fontFamily="sans-serif-medium"
+                        android:background="@drawable/view_border"
+                        android:text="대화가\n많아요"
+                        android:textAlignment="center"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/talkcount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:text="290"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    >
+
+                    <ImageView
+                        android:id="@+id/kindimage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/kind"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"/>
+
+                    <TextView
+                        android:id="@+id/kindtext"
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/view_border"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="친절해요"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/kindcount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:text="290"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    >
+
+                    <ImageView
+                        android:id="@+id/mannerimage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/manner"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"/>
+
+                    <TextView
+                        android:id="@+id/mannertext"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="sans-serif-medium"
+                        android:background="@drawable/view_border"
+                        android:text="매너가\n좋아요"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/mannercount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:text="290"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    >
+
+                    <ImageView
+                        android:id="@+id/quietimage"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/quiet"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"/>
+
+                    <TextView
+                        android:id="@+id/quiettext"
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:fontFamily="sans-serif-medium"
+                        android:background="@drawable/view_border"
+                        android:text="조용해요"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/quietcount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:text="290"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="10dp">
 
                 <Button
                     android:id="@+id/change_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="닉네임/프로필 이미지 변경"
-                    android:layout_marginBottom="10dp"/>
+                    android:textColor="@color/black"
+                    android:backgroundTint="@color/white"
+                    android:drawableLeft="@drawable/drawable_change_icon"
+                    android:gravity="left|center_vertical"/>
 
                 <Button
                     android:id="@+id/block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="차단관리"
-                    android:layout_marginBottom="10dp"/>
+                    android:textColor="@color/black"
+                    android:backgroundTint="@color/white"
+                    android:drawableLeft="@drawable/drawable_ban_icon"
+                    android:gravity="left|center_vertical"/>
 
                 <Button
                     android:id="@+id/restarurantlog"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="먹었던정보"
-                    android:layout_marginBottom="10dp"/>
-
-                <Button
-                    android:id="@+id/logout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="로그아웃"
-                    android:layout_marginBottom="10dp"/>
+                    android:textColor="@color/black"
+                    android:backgroundTint="@color/white"
+                    android:drawableLeft="@drawable/drawable_history_icon"
+                    android:gravity="left|center_vertical"/>
 
                 <Button
                     android:id="@+id/delete_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
                     android:text="회원탈퇴"
-                    android:layout_marginBottom="10dp"/>
+                    android:textColor="@color/black"
+                    android:drawableLeft="@drawable/drawable_delete_icon"
+                    android:gravity="left|center_vertical"/>
+
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:text="로그아웃"
+                    android:textColor="@color/black"
+                    android:drawableLeft="@drawable/drawable_logout_icon"
+                    android:gravity="left|center_vertical"/>
             </LinearLayout>
 
         </LinearLayout>

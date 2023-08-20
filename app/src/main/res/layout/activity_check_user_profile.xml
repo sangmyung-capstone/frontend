@@ -112,4 +112,158 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/banBtn">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+
+            <ImageView
+                android:id="@+id/talkimageview"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/talk"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/talktext"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-medium"
+                android:background="@drawable/view_border"
+                android:text="대화가\n많아요"
+                android:textAlignment="center"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/talkcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="290"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+
+            <ImageView
+                android:id="@+id/kindimage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/kind"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/kindtext"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/view_border"
+                android:fontFamily="sans-serif-medium"
+                android:text="친절해요"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/kindcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="290"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+
+            <ImageView
+                android:id="@+id/mannerimage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/manner"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/mannertext"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-medium"
+                android:background="@drawable/view_border"
+                android:text="매너가\n좋아요"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/mannercount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="290"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+
+            <ImageView
+                android:id="@+id/quietimage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/quiet"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/quiettext"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-medium"
+                android:background="@drawable/view_border"
+                android:text="조용해요"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/quietcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="290"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

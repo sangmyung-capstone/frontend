@@ -24,9 +24,11 @@ class PartyUserInfoAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ChattingAndPartyUserItemBinding.inflate(LayoutInflater.from(parent.context),
+        val binding = ChattingAndPartyUserItemBinding.inflate(
+            LayoutInflater.from(parent.context),
             parent,
-            false)
+            false
+        )
 
         return ViewHolder(binding)
     }
@@ -45,7 +47,7 @@ class PartyUserInfoAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bindItems(item: Map<String, FirebaseUserInfo>) {
 
-            Log.d("sadfasdfadsf",partyUserInfo.toString())
+            Log.d("sadfasdfadsf", partyUserInfo.toString())
 
             val userInfo = item.values.firstOrNull()
 
@@ -63,14 +65,14 @@ class PartyUserInfoAdapter(
             if (partyLeaderId == item.keys.firstOrNull().toString()) {
                 val image = binding.userImage
                 image.setBackgroundResource(R.drawable.custom_img_bg)
-            } else{
+            } else {
                 val image = binding.userImage
                 image.setBackgroundResource(R.drawable.custom_img_bg_pressed)
             }
             binding.userNameImageBackground.setOnClickListener {
-                    val intent = Intent(context, CheckUserProfileActivity::class.java)
-                    intent.putExtra("opponentUserId",item.keys.firstOrNull().toString())
-                    context.startActivity(intent)
+                val intent = Intent(context, CheckUserProfileActivity::class.java)
+                intent.putExtra("opponentUserId", item.keys.firstOrNull().toString())
+                context.startActivity(intent)
 
             }
 
