@@ -70,7 +70,7 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image1" />
+            android:src="@drawable/image9" />
 
         <ImageButton
             android:id="@+id/button2"
@@ -136,7 +136,7 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image7" />
+            android:src="@drawable/image10" />
 
         <ImageButton
             android:id="@+id/button8"

@@ -2,12 +2,15 @@ package com.bapool.bapool.retrofit.fcm
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.bapool.bapool.R
+import com.bapool.bapool.ui.LoginActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -30,9 +33,10 @@ class FirebaseService : FirebaseMessagingService() {
 
         val title = message.data["title"].toString()
         val body = message.data["content"].toString()
+        var alarm_code = message.data["alarm_code"]
 
         createNotificationChannel()
-        sendNotification(title, body)
+        sendNotification(title, body, alarm_code!!.toInt())
 
 
     }
@@ -55,14 +59,37 @@ class FirebaseService : FirebaseMessagingService() {
         }
     }
 
-    private fun sendNotification(title: String, body: String) {
+    private fun sendNotification(title: String, body: String, alarm_code: Int = 123) {
+        if (alarm_code != 123) {
+            val intent = Intent(this, LoginActivity::class.java)
+            val pendingIntent =
+                PendingIntent.getActivity(
+                    this,
+                    alarm_code,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+
+            val builder = NotificationCompat.Builder(this, "Test_Channel")
+                .setSmallIcon(R.drawable.bapool)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+
+            with(NotificationManagerCompat.from(this)) {
+                notify(alarm_code, builder.build())
+            }
+        }
+
         var builder = NotificationCompat.Builder(this, "Test_Channel")
             .setSmallIcon(R.drawable.bapool)
             .setContentTitle(title)
             .setContentText(body)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         with(NotificationManagerCompat.from(this)) {
-            notify(123, builder.build())
+            notify(alarm_code, builder.build())
         }
     }
 
