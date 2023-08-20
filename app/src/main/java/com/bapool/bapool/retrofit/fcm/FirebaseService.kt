@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.bapool.bapool.R
+
 import com.bapool.bapool.ui.ChattingAndPartyInfoMFActivity
 import com.bapool.bapool.ui.LoginActivity
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -39,6 +40,7 @@ class FirebaseService : FirebaseMessagingService() {
         val partyId = message.data["partyId"].toString()
         val userId = message.data["userId"].toString()
         val userToken = message.data["userToken"].toString()
+        var alarm_code = message.data["alarm_code"]
 
         val intent = Intent(applicationContext,ChattingAndPartyInfoMFActivity::class.java)
         intent.putExtra("partyId", partyId)
@@ -56,8 +58,7 @@ class FirebaseService : FirebaseMessagingService() {
 
 
         createNotificationChannel()
-        sendNotification(title, body,pendingIntent)
-
+        sendNotification(title, body,pendingIntent,alarm_code!!.toInt())
 
     }
 
@@ -83,8 +84,30 @@ class FirebaseService : FirebaseMessagingService() {
         }
     }
 
-    private fun sendNotification(title: String, body: String, pendingIntent: PendingIntent) {
 
+    private fun sendNotification(title: String, body: String, pendingIntent: PendingIntent, alarm_code: Int = 123) {
+        if (alarm_code != 123) {
+            val intent = Intent(this, LoginActivity::class.java)
+            val pendingIntent =
+                PendingIntent.getActivity(
+                    this,
+                    alarm_code,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+
+            val builder = NotificationCompat.Builder(this, "Test_Channel")
+                .setSmallIcon(R.drawable.bapool)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+
+            with(NotificationManagerCompat.from(this)) {
+                notify(alarm_code, builder.build())
+            }
+        }
 
         var builder = NotificationCompat.Builder(this, "Test_Channel")
             .setSmallIcon(R.drawable.bapool)
@@ -95,7 +118,7 @@ class FirebaseService : FirebaseMessagingService() {
             .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(this)) {
-            notify(123, builder.build())
+            notify(alarm_code, builder.build())
         }
     }
 

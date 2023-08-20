@@ -9,7 +9,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -333,7 +332,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                             }
                         }
                     getUserInfoInsideDatabaseReference.addValueEventListener(
-                        getUserInfoInsideValueEventListener)
+                        getUserInfoInsideValueEventListener
+                    )
                 }
                 GroupInfoAdapter()
                 ChattingAdapter()
@@ -734,7 +734,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     //마감되었다고 채팅창에 알림  fcm O
     fun sendNotificationChatting() {
-
         val startTime = formatNotificationTime(currentPartyInfo.startDate)
         val notificationText = "파티 모임 시간이 ${startTime} 으로 확정되었습니다."
 
@@ -762,7 +761,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 }
 
         }
-
     }
 
     //파티 참여 인원 채팅창에 알림
@@ -905,10 +903,17 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     // 식사시간 전 알람 notifiction (연수)
     fun callAlarm(context: Context, time: String, alarm_code: Int, content: String) {//식전 알람 보내는 함수
         val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val receiverIntent = Intent(context, MyReceiver::class.java) //리시버로 전달될 인텐트 설정
+        val receiverIntent = Intent(context, MyReceiver::class.java)
+
+        var items = mutableListOf<String>()
+        for ((key, userInfo) in fcmUserInfo.entries) {
+            items.add(userInfo.firebaseToken.toString())
+        }//리시버로 전달될 인텐트 설정
         receiverIntent.apply {
             putExtra("alarm_rqCode", alarm_code) //요청 코드를 리시버에 전달
             putExtra("content", content) //수정_일정 제목을 리시버에 전달
+            putExtra("group_name", currentPartyInfo.groupName)
+            putStringArrayListExtra("key_list", ArrayList(items))
         }
 
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -956,24 +961,34 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     ) {//유저평가 알림 보내는 함수
         val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val receiverIntent = Intent(context, RatingReceiver::class.java) //리시버로 전달될 인텐트 설정
+        var alarm_code2 = alarm_code * 1000
+
+        var items = mutableListOf<String>()
+        for ((key, userInfo) in fcmUserInfo.entries) {
+            items.add(userInfo.firebaseToken.toString())
+        }
+
         receiverIntent.apply {
-            putExtra("alarm_rqCode", alarm_code * 1000) //요청 코드를 리시버에 전달
+            putExtra("alarm_rqCode", alarm_code2 * 1000) //요청 코드를 리시버에 전달
             putExtra("content", content) //수정_일정 제목을 리시버에 전달
-            putExtra("userid", currentUserId)
-            putExtra("partyid", alarm_code)
+            putExtra("userid", UserId)
+            putExtra("realpartyid", alarm_code)
+            putExtra("partyid", alarm_code2)
+            putExtra("group_name", currentPartyInfo.groupName)
+            putStringArrayListExtra("key_list", ArrayList(items))
         }
 
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getBroadcast(
                 context,
-                alarm_code,
+                alarm_code2,
                 receiverIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
         } else {
             PendingIntent.getBroadcast(
                 context,
-                alarm_code,
+                alarm_code2,
                 receiverIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -1324,7 +1339,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             }
             initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
             getUserInfoInsideDatabaseReference.removeEventListener(
-                getUserInfoInsideValueEventListener)
+                getUserInfoInsideValueEventListener
+            )
             getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
             chattingRVA.removeChildEventListener()
 

@@ -23,9 +23,11 @@ class PartyUserInfoAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ChattingAndPartyUserItemBinding.inflate(LayoutInflater.from(parent.context),
+        val binding = ChattingAndPartyUserItemBinding.inflate(
+            LayoutInflater.from(parent.context),
             parent,
-            false)
+            false
+        )
 
         return ViewHolder(binding)
     }
@@ -46,6 +48,7 @@ class PartyUserInfoAdapter(
 
             Log.d("sadfasdfadsf", partyUserInfo.toString())
             Log.d("sadfasdfadsf", item.toString())
+
 
             val userInfo = item.values.firstOrNull()
 

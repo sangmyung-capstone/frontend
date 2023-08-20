@@ -25,7 +25,6 @@
         <item name="bottomSheetStyle">@style/Widget.Material3.BottomSheet.Modal</item>
         <item name="bottomSheetDialogTheme">@style/Theme.Material3.DayNight.BottomSheetDialog</item>
         <item name="bottomSheetDragHandleStyle">@style/Widget.MaterialComponents.BottomSheet.DragHandle</item>
-
     </style>
 
 </resources>

@@ -73,9 +73,7 @@ class ChangeProfileActivity : AppCompatActivity() {
                             Log.d("bap", "onResponse 성공: " + result?.toString());
                             // handle successful response
                             if (result != null) {
-                                val intent =
-                                    Intent(this@ChangeProfileActivity, HomeActivity::class.java)
-                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                finish()
                             }
                         } else {
                             // handle error response
