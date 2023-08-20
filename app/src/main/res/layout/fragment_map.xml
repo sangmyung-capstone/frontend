@@ -75,27 +75,20 @@
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="1dp"
+        android:elevation="3dp"
         android:layout_gravity="bottom"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
     </FrameLayout>
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+
+    <com.google.android.material.search.SearchBar
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:background="#00FFFFFF">
+        android:hint="@string/searchbar_hint"
 
-        <com.google.android.material.search.SearchBar
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/searchbar_hint"
-
-            app:elevation="1dp"
-            tools:ignore="SpeakableTextPresentCheck" />
-    </com.google.android.material.appbar.AppBarLayout>
+        app:elevation="1dp"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <com.google.android.material.search.SearchView
         android:id="@+id/search_view"
