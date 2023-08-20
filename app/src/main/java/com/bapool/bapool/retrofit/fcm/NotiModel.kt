@@ -6,7 +6,7 @@ data class NotiModel(
     val content: String = "",
     val partyId: String = "",
     val userId: String = "",
-    val userToken: String = ""
+    val userToken: String = "",
     var alarm_code: Int = 123
 )
 

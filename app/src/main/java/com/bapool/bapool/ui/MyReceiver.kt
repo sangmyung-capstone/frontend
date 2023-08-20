@@ -16,6 +16,8 @@ import com.bapool.bapool.R
 import com.bapool.bapool.retrofit.fcm.NotiModel
 import com.bapool.bapool.retrofit.fcm.PushNotification
 import com.bapool.bapool.retrofit.fcm.RetrofitInstance
+import com.bapool.bapool.ui.LoginActivity.Companion.UserId
+import com.bapool.bapool.ui.LoginActivity.Companion.UserToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -94,8 +96,10 @@ class MyReceiver() : BroadcastReceiver() {
         requestCode: Int
     ) {
 
-        val notiModel = NotiModel(groupname, notificationText, requestCode)
-
+        val notiModel = NotiModel(
+            groupname, notificationText, requestCode.toString(),
+            UserId.toString(), UserToken.toString(), requestCode
+        )
         val pushModel = PushNotification(notiModel, firebaseToken)
 
         fcmPush(pushModel)
