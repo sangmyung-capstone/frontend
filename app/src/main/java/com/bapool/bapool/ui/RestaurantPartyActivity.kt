@@ -151,6 +151,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         response.body()?.let { result ->
                             val partyResult = result?.result
 
+                            Log.d("getResPartyList",partyResult?.parties.toString())
                             if (partyResult?.parties.isNullOrEmpty()) {
                                 binding.notifyNoParty.visibility = View.VISIBLE
                             }

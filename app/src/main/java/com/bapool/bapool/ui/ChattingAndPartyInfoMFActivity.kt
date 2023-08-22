@@ -131,7 +131,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         getPartyUserInfo()
 
 
-
 //
 //        binding.dummy.setOnClickListener {
 //            dummyFirebase()
@@ -289,7 +288,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         peopleCount++
 
                     }
-                    Log.d("peopleCount",peopleCount.toString())
+                    Log.d("peopleCount", peopleCount.toString())
                     var userInfo: FirebaseUserInfo
 
                     getUserInfoInsideDatabaseReference =
@@ -335,6 +334,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         getUserInfoInsideValueEventListener
                     )
                 }
+
                 GroupInfoAdapter()
                 ChattingAdapter()
                 partyUserMenuRVA.notifyDataSetChanged()
@@ -351,11 +351,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     //testid를 userid로 바꾸고
     fun dummyFirebase() {
-        testId = "99"
-        Log.d("dummyFirebaseIn", "hi")
-        FirebaseDatabase.getInstance().getReference("test").child("Groups").child(partyId)
-            .child("groupUsers")
-            .child(testId).setValue(false)
+
 //        val dummy = FirebaseDatabase.getInstance().getReference("test").child("Groups")
 //            .child(partyId.toString()).child("groupMessages")
 //        val dummyListener = object : ValueEventListener {
@@ -378,42 +374,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 //        }
 //        dummy.orderByChild("confirmed/${testId}").equalTo(true)
 //            .addListenerForSingleValueEvent(dummyListener)
-
-    }
-
-    // 이건 그냥 삭제하면 될듯
-    fun dummy2() {
-
-        testId = "99"
-        FirebaseDatabase.getInstance().getReference("test").child("Groups").child(partyId)
-            .child("groupUsers")
-            .child(testId).setValue(true)
-        val dummy = FirebaseDatabase.getInstance().getReference("test").child("Groups")
-            .child(partyId.toString()).child("groupMessages")
-        val dummyListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                for (data in snapshot.children) {
-
-                    Log.d("dummyFirebaseIn", data.toString())
-
-                    val item = data.key.toString()
-                    FirebaseDatabase.getInstance().getReference("test").child("Groups")
-                        .child(partyId)
-                        .child("groupMessages").child(item).child("confirmed").child(testId)
-                        .setValue(true)
-                }
-
-            }
-
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        }
-        dummy.orderByChild("confirmed/${testId}").equalTo(false)
-            .addListenerForSingleValueEvent(dummyListener)
-
 
     }
 
@@ -634,7 +594,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                     val opponentUserId = data.key.toString()
                                     if (activeOrInactive.equals("inactive")) {
                                         val userInfo = partyUserInfo[opponentUserId]
-                                        sendFcm(userInfo!!,text)
+                                        sendFcm(userInfo!!, text)
                                     }
 
                                 }
@@ -693,14 +653,15 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                 )
                             ImgRef.setValue(group_messages)
                             FirebaseDatabase.getInstance().getReference("test").child("InTheParty")
-                                .child(partyId).addListenerForSingleValueEvent(object : ValueEventListener {
+                                .child(partyId)
+                                .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         for (data in snapshot.children) {
                                             val activeOrInactive = data.value.toString()
                                             val opponentUserId = data.key.toString()
                                             if (activeOrInactive.equals("inactive")) {
                                                 val userInfo = partyUserInfo[opponentUserId]
-                                                sendFcm(userInfo!!,"사진")
+                                                sendFcm(userInfo!!, "사진")
                                             }
 
                                         }
@@ -751,10 +712,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                     val opponentUserId = data.key.toString()
                                     if (activeOrInactive.equals("inactive")) {
                                         val userInfo = partyUserInfo[opponentUserId]
-                                        sendNotificationFcm(userInfo!!.firebaseToken.toString(), notificationText)
+                                        sendNotificationFcm(userInfo!!.firebaseToken.toString(),
+                                            notificationText)
                                     }
                                 }
                             }
+
                             override fun onCancelled(error: DatabaseError) {
                             }
                         })
@@ -766,11 +729,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     //파티 참여 인원 채팅창에 알림
     fun sendNotificationParticipate(nickName: String) {
         val notificationText = "${nickName}님이 파티에 참여하셨습니다."
-        var items = mutableListOf<String>()
-        for ((key, userInfo) in fcmUserInfo.entries) {
-            items.add(userInfo.firebaseToken.toString())
-        }
-        Log.d("FirebaseService", items.toString())
 
         if (notificationText != "") {
             val group_messages =
@@ -786,10 +744,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                     val opponentUserId = data.key.toString()
                                     if (activeOrInactive.equals("inactive")) {
                                         val userInfo = partyUserInfo[opponentUserId]
-                                        sendNotificationFcm(userInfo!!.firebaseToken.toString(), notificationText)
+                                        sendNotificationFcm(userInfo!!.firebaseToken.toString(),
+                                            notificationText)
                                     }
                                 }
                             }
+
                             override fun onCancelled(error: DatabaseError) {
                             }
                         })
@@ -807,23 +767,58 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         }
         if (notificationText != "") {
             if (!items.isNullOrEmpty()) {
+
+                whereAreYouFrom = "GetOut"
                 val group_messages = FirebasePartyMessage("공지", getTime(), notificationText, 2)
                 database.child("test").child("Groups").child(partyId.toString())
                     .child("groupMessages")
                     .push()
                     .setValue(group_messages).addOnSuccessListener {
+                        val dummy =
+                            FirebaseDatabase.getInstance().getReference("test").child("Groups")
+                                .child(partyId.toString()).child("groupMessages")
+                        val dummyListener = object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+
+                                for (data in snapshot.children) {
+
+                                    Log.d("dummyFirebaseIn", data.toString())
+
+                                    val item = data.key.toString()
+                                    FirebaseDatabase.getInstance().getReference("test")
+                                        .child("Groups")
+                                        .child(partyId)
+                                        .child("groupMessages").child(item).child("confirmed")
+                                        .child(currentUserId)
+                                        .setValue(false)
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                            }
+
+                        }
+                        dummy.orderByChild("confirmed/${currentUserId}").equalTo(true)
+                            .addListenerForSingleValueEvent(dummyListener)
+
+
+
                         FirebaseDatabase.getInstance().getReference("test").child("InTheParty")
-                            .child(partyId).addListenerForSingleValueEvent(object : ValueEventListener {
+                            .child(partyId)
+                            .addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
                                     for (data in snapshot.children) {
                                         val activeOrInactive = data.value.toString()
                                         val opponentUserId = data.key.toString()
                                         if (activeOrInactive.equals("inactive")) {
                                             val userInfo = partyUserInfo[opponentUserId]
-                                            sendNotificationFcm(userInfo!!.firebaseToken.toString(), notificationText)
+                                            sendNotificationFcm(userInfo?.firebaseToken.toString()
+                                                ?: "",
+                                                notificationText)
                                         }
                                     }
                                 }
+
                                 override fun onCancelled(error: DatabaseError) {
                                 }
                             })
@@ -836,7 +831,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     //그룹장이 바뀌었다고 알림
     fun sendNotificationChangePartyLeader(nickName: String) {
-        val notificationText = "그룹장이 ${nickName}님으로 바뀌었습니다."
+        val notificationText = "파티장 ${nickName}님으로 바뀌었습니다."
         var items = mutableListOf<String>()
         for (data in partyUserInfo.values) {
             items.add(data.firebaseToken.toString())
@@ -855,10 +850,12 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                     val opponentUserId = data.key.toString()
                                     if (activeOrInactive.equals("inactive")) {
                                         val userInfo = partyUserInfo[opponentUserId]
-                                        sendNotificationFcm(userInfo!!.firebaseToken.toString(), notificationText)
+                                        sendNotificationFcm(userInfo!!.firebaseToken.toString(),
+                                            notificationText)
                                     }
                                 }
                             }
+
                             override fun onCancelled(error: DatabaseError) {
                             }
                         })
@@ -869,7 +866,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
 
     //채팅 fcm 보내기
-    fun sendFcm(userInfo: FirebaseUserInfo, messageText : String) {
+    fun sendFcm(userInfo: FirebaseUserInfo, messageText: String) {
         val getterToken = userInfo.firebaseToken.toString()
         val msgText: String = messageText
         val notiModel =
@@ -1193,7 +1190,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         alertDialogBuilder.setPositiveButton("나가기") { dialog, _ ->
             if (!(currentPartyInfo.curNumberOfPeople == 1)) {
                 if (currentUserId.equals(currentPartyInfo.groupLeaderId.toString())) {
-                    alterDialog("파티를 나가시려면 그룹장을 변경해주세요.")
+                    alterDialog("파티를 나가시려면 파티장을 변경해주세요.")
                     dialog.dismiss()
                 } else recessionParty()
             } else {
@@ -1278,12 +1275,24 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
-            .updateChildren(inactive)
-        chattingRVA.removeChildEventListener()
-        initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
-        getUserInfoInsideDatabaseReference.removeEventListener(getUserInfoInsideValueEventListener)
-        getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
+        if (whereAreYouFrom.equals("GetOut")) {
+            FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
+                .child(currentUserId).removeValue()
+            chattingRVA.removeChildEventListener()
+            initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
+            getUserInfoInsideDatabaseReference.removeEventListener(
+                getUserInfoInsideValueEventListener)
+            getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
+        } else {
+            FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
+                .updateChildren(inactive)
+            chattingRVA.removeChildEventListener()
+            initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
+            getUserInfoInsideDatabaseReference.removeEventListener(
+                getUserInfoInsideValueEventListener)
+            getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
+        }
+
     }
 
     // Navigation Drawer가 열려있을 경우, 뒤로가기 버튼으로 닫기
@@ -1326,7 +1335,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     chattingRVA.removeChildEventListener()
                 }
                 else -> {
-
                     val intent = Intent(this, HomeActivity::class.java)
                     startActivity(intent)
                     finish()

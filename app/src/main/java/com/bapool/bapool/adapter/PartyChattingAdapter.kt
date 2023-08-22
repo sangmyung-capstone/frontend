@@ -150,13 +150,11 @@ class PartyChattingAdapter(
                             .addOnCompleteListener {
                                 if (initPageControl == 0) {
                                     recyclerView.scrollToPosition(messageKey.size - 1)
-
                                 }
                             }
                     } else {
                         if (initPageControl == 0) {
                             recyclerView.scrollToPosition(messageKey.size - 1)
-
                         }
                     }
                 }
@@ -432,7 +430,6 @@ class PartyChattingAdapter(
 
     //읽은 사람 숫자
     fun readCount(items: FirebasePartyMessage, readcount_text: TextView) {
-        Log.d("dsafkjesfkjadshfkjasdhf", peopleCount.toString())
         if (peopleCount == 0) {
             val readCountDatabase =
                 FirebaseDatabase.getInstance().getReference("Groups").child(groupId)
@@ -441,6 +438,7 @@ class PartyChattingAdapter(
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var users: Map<String, Boolean> = HashMap()
                     users = snapshot.getValue() as Map<String, Boolean>
+                    Log.d("dsafkjesfkjadshfkjasdhf", users.toString())
                     peopleCount = users.size
                     var count: Int = peopleCount - items.confirmed.size
 
