@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,14 @@ import com.bapool.bapool.databinding.JoinpartyCustomDialogBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,7 +58,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
         retrofit()
 
 
-
     }
 
     //버튼초기화
@@ -60,7 +67,8 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
 
         binding.resName.setText(restaurantPartyInfoObject.name)
-        binding.restaurantLocation.setText(restaurantPartyInfoObject.address)
+        binding.resAddress.setText(restaurantPartyInfoObject.address)
+        getImgData(binding.restaurantImage,restaurantPartyInfoObject.img_url)
 
         retrofit()
 
@@ -92,7 +100,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
     }
 
     //정원 초과 알려주는 dialog
-    fun overCapacityDialog(){
+    fun overCapacityDialog() {
         val mBuilder = AlertDialog.Builder(this@RestaurantPartyActivity)
             .setMessage("파티의 인원이 꽉찼습니다!")
             .setNegativeButton("취소") { dialog, _ ->
@@ -151,7 +159,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
                         response.body()?.let { result ->
                             val partyResult = result?.result
 
-                            Log.d("getResPartyList",partyResult?.parties.toString())
                             if (partyResult?.parties.isNullOrEmpty()) {
                                 binding.notifyNoParty.visibility = View.VISIBLE
                             }
@@ -186,14 +193,32 @@ class RestaurantPartyActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
 
 
-
                         val result = response.body()
                         val intent = Intent(this@RestaurantPartyActivity,
                             ChattingAndPartyInfoMFActivity::class.java)
                         intent.putExtra("partyId", party_id)
-                        intent.putExtra("whereAreYouFrom","join")
+                        intent.putExtra("whereAreYouFrom", "join")
                         intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
-                        intent.putExtra("joinUserId",UserId.toString())
+                        intent.putExtra("joinUserId", UserId.toString())
+
+                        FirebaseDatabase.getInstance().getReference("test")
+                            .child("Groups")
+                            .child(party_id)
+                            .child("groupMessages").addListenerForSingleValueEvent(object : ValueEventListener{
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    for(data in snapshot.children){
+                                        FirebaseDatabase.getInstance().getReference("test")
+                                            .child("Groups")
+                                            .child(party_id)
+                                            .child("groupMessages").child(data.key.toString()).child("confirmed")
+                                            .child(UserId.toString()).setValue(true)
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                }
+                            })
+
                         startActivity(intent)
 
                         finish()
@@ -220,17 +245,14 @@ class RestaurantPartyActivity : AppCompatActivity() {
         val hashtagList: List<Int> = item.party_hashtag
         if (hashtagList.isNotEmpty()) {
             binding.hashtagVisible.visibility = View.VISIBLE
-            var count = 0
             for (item in hashtagList) {
-                count++
-                if (item == 1)
-                    when (count) {
-                        1 -> binding.hash1.visibility = View.VISIBLE
-                        2 -> binding.hash2.visibility = View.VISIBLE
-                        3 -> binding.hash3.visibility = View.VISIBLE
-                        4 -> binding.hash4.visibility = View.VISIBLE
-                        5 -> binding.hash5.visibility = View.VISIBLE
-                    }
+                when (item) {
+                    1 -> binding.hash1.visibility = View.VISIBLE
+                    2 -> binding.hash2.visibility = View.VISIBLE
+                    3 -> binding.hash3.visibility = View.VISIBLE
+                    4 -> binding.hash4.visibility = View.VISIBLE
+                    5 -> binding.hash5.visibility = View.VISIBLE
+                }
             }
         }
 
@@ -264,6 +286,21 @@ class RestaurantPartyActivity : AppCompatActivity() {
         return allNum
     }
 
+
+    fun getImgData(partyRestaurantImage: ImageView, restaurantImgUrl: String) {
+//// RequestOptions to customize Glide's behavior
+        val requestOptions = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache the image
+            .transform(RoundedCorners(50))//
+        //          .placeholder(R.drawable.placeholder_image) // Placeholder image while loading
+//            .error(R.drawable.error_image) // Image to display on error
+
+// Load the image using Glide
+        Glide.with(this)
+            .load(restaurantImgUrl)
+            .fitCenter()
+            .into(partyRestaurantImage)
+    }
 }
 
 

@@ -133,7 +133,17 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
 //
 //        binding.dummy.setOnClickListener {
-//            dummyFirebase()
+//        val database = Firebase.database
+//        val myRef = database.getReference("test").child("Groups").child(partyId).child("groupUsers")
+//
+//            myRef.updateChildren(mapOf("97" to true))
+//
+//            myRef.updateChildren(mapOf("98" to true))
+//            myRef.updateChildren(mapOf("99" to true))
+//            val myRef2 = database.getReference("test").child("InTheParty").child(partyId)
+//            myRef2.updateChildren(mapOf("97" to "active"))
+//            myRef2.updateChildren(mapOf("98" to "active"))
+//            myRef2.updateChildren(mapOf("99" to "active"))
 //        }
 //        binding.dummy2.setOnClickListener {
 //            dummy2()
@@ -155,17 +165,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 //        FirebaseDatabase.getInstance().getReference("test").child("Groups").child(partyId.toString())
 //            .child("groupUsers").updateChildren(user3)
 
-//                    val database = Firebase.database
-//            val myRef = database.getReference("test").child("Users")
-//            val banUsers = mutableListOf<String>()
-//            banUsers.add("22")
-//            banUsers.add("21")
-//            val userInfo = FirebaseUserInfo(3, "99이에용", banUsers,"token")
-//            myRef.child("99").setValue(userInfo)
-//            val userInfo2 = FirebaseUserInfo(4, "98이에용", banUsers,"token")
-//            myRef.child("98").setValue(userInfo2)
-//            val userInfo3 = FirebaseUserInfo(5, "97이에용", banUsers,"token")
-//            myRef.child("97").setValue(userInfo3)
+
+
     }
 
 
@@ -288,7 +289,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         peopleCount++
 
                     }
-                    Log.d("peopleCount", peopleCount.toString())
                     var userInfo: FirebaseUserInfo
 
                     getUserInfoInsideDatabaseReference =
@@ -349,33 +349,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         getUserInfoDatabaseReference.addValueEventListener(getUserInfoValueEventListener)
     }
 
-    //testid를 userid로 바꾸고
-    fun dummyFirebase() {
-
-//        val dummy = FirebaseDatabase.getInstance().getReference("test").child("Groups")
-//            .child(partyId.toString()).child("groupMessages")
-//        val dummyListener = object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//
-//                for (data in snapshot.children) {
-//
-//                    Log.d("dummyFirebaseIn", data.toString())
-//
-//                    val item = data.key.toString()
-//                    FirebaseDatabase.getInstance().getReference("test").child("Groups")
-//                        .child(partyId)
-//                        .child("groupMessages").child(item).child("confirmed").child(testId)
-//                        .setValue(false)
-//                }
-//            }
-//            override fun onCancelled(error: DatabaseError) {
-//            }
-//
-//        }
-//        dummy.orderByChild("confirmed/${testId}").equalTo(true)
-//            .addListenerForSingleValueEvent(dummyListener)
-
-    }
 
     //그룹 이름 데이터베이스에서 가져와서 넣기
     fun initGroupName() {
@@ -471,6 +444,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     //파티 나가기 Retrofit
     fun recessionParty() {
+
         retro.recessionParty(currentUserId.toLong(), partyId.toLong())
             .enqueue(object : Callback<PatchEditPartyInfoResponse> {
                 override fun onResponse(
@@ -483,15 +457,11 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                         }
                         finish()
                     } else {
-
                     }
                 }
-
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
-
                 }
             })
-
     }
 
     //파티 마감하기 Retrofit
@@ -781,16 +751,13 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                             override fun onDataChange(snapshot: DataSnapshot) {
 
                                 for (data in snapshot.children) {
-
-                                    Log.d("dummyFirebaseIn", data.toString())
-
                                     val item = data.key.toString()
                                     FirebaseDatabase.getInstance().getReference("test")
                                         .child("Groups")
                                         .child(partyId)
                                         .child("groupMessages").child(item).child("confirmed")
                                         .child(currentUserId)
-                                        .setValue(false)
+                                        .removeValue()
                                 }
                             }
 
@@ -1026,8 +993,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val currentDate = Calendar.getInstance().get(Calendar.DATE)
         val targetMonth = cal.get(Calendar.MONTH)
         val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
-        Log.d("currentDate", targetMonth.toString())
-        Log.d("currentDate", currentMonth.toString())
 
 
 
@@ -1122,7 +1087,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     //파티 마감 다이얼로그
     fun closePartyDialog() {
         val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setMessage("파티를 마감하시겠습니까? 확정된 시간은 변경할 수 없습니다.") // Set the dialog message
+        alertDialogBuilder.setMessage("파티를 확정하시겠습니까? 확정된 시간과 파티원은 변경할 수 없습니다.") // Set the dialog message
         alertDialogBuilder.setPositiveButton("확인") { dialog, _ ->
             closePartyRetrofit()
         }
@@ -1189,11 +1154,16 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         alertDialogBuilder.setMessage("나가기를 하면 대화내용이 모두 삭제되고 채팅목록에서도 삭제됩니다.")
         alertDialogBuilder.setPositiveButton("나가기") { dialog, _ ->
             if (!(currentPartyInfo.curNumberOfPeople == 1)) {
+                Log.d("showExitDialog","2")
                 if (currentUserId.equals(currentPartyInfo.groupLeaderId.toString())) {
+                    Log.d("showExitDialog","파티장")
+
                     alterDialog("파티를 나가시려면 파티장을 변경해주세요.")
                     dialog.dismiss()
                 } else recessionParty()
             } else {
+                Log.d("showExitDialog","1")
+
                 recessionParty()
             }
 
@@ -1215,7 +1185,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         copyPartyUserInfoMenu.addAll(partyUserInfoMenu)
 
         var notCurrentUserPartyUsers = removeMapByUID(currentUserId, copyPartyUserInfoMenu)
-
         selectPartyLeader.setPartyUserInfoMenu(notCurrentUserPartyUsers)
         selectPartyLeader.setPartyId(partyId)
         selectPartyLeader.show()
@@ -1274,8 +1243,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         if (whereAreYouFrom.equals("GetOut")) {
+            super.onDestroy()
             FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
                 .child(currentUserId).removeValue()
             chattingRVA.removeChildEventListener()
@@ -1283,7 +1252,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             getUserInfoInsideDatabaseReference.removeEventListener(
                 getUserInfoInsideValueEventListener)
             getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
+            finish()
         } else {
+            super.onDestroy()
             FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
                 .updateChildren(inactive)
             chattingRVA.removeChildEventListener()
@@ -1291,6 +1262,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             getUserInfoInsideDatabaseReference.removeEventListener(
                 getUserInfoInsideValueEventListener)
             getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
+            finish()
+
         }
 
     }
@@ -1347,8 +1320,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             }
             initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
             getUserInfoInsideDatabaseReference.removeEventListener(
-                getUserInfoInsideValueEventListener
-            )
+                getUserInfoInsideValueEventListener)
             getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
             chattingRVA.removeChildEventListener()
 

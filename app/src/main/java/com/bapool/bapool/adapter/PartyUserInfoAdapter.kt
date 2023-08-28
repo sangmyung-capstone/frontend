@@ -46,10 +46,6 @@ class PartyUserInfoAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bindItems(item: Map<String, FirebaseUserInfo>) {
 
-            Log.d("sadfasdfadsf", partyUserInfo.toString())
-            Log.d("sadfasdfadsf", item.toString())
-
-
             val userInfo = item.values.firstOrNull()
 
             if (userInfo != null) {
@@ -61,8 +57,7 @@ class PartyUserInfoAdapter(
                 binding.userImage.setImageResource(resourceId)
 
             }
-            Log.d("asdfsaf", partyLeaderId)
-            Log.d("asdfsaf", item.keys.firstOrNull().toString())
+
             if (partyLeaderId == item.keys.firstOrNull().toString()) {
                 val image = binding.userImage
                 image.setBackgroundResource(R.drawable.custom_img_bg)

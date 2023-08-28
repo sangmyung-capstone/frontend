@@ -178,9 +178,6 @@ class MakePartyActivity : AppCompatActivity() {
 
 
                 }
-                Log.d("sdfsdadsafdaf",hastagList.toString())
-
-                Log.d("sdfsdadsafdaf",hashtagList.toString())
 
 
                 val makeGrpInstance =
@@ -236,7 +233,7 @@ class MakePartyActivity : AppCompatActivity() {
                         RestaurantPartyActivityCompanion?.finish()
                         finish()
                     } else {
-                        Toast.makeText(this@MakePartyActivity, "그룹 생성 오류", Toast.LENGTH_SHORT)
+                        Toast.makeText(this@MakePartyActivity, "파티 생성 오류", Toast.LENGTH_SHORT)
                             .show()
                     }
                 }

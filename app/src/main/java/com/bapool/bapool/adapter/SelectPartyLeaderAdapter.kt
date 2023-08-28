@@ -46,7 +46,7 @@ class SelectPartyLeaderAdapter(
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d("asdfasdfasdf", partyUserInfo[position].keys.toString())
+
         if (!partyUserInfo[position].keys.toString().equals(currentUserId)) {
             holder.bindItems(partyUserInfo[position])
 
@@ -92,7 +92,7 @@ class SelectPartyLeaderAdapter(
 
     fun confirmDialog(nickName: String, opponentUserId: String?) {
         val alertDialogBuilder = AlertDialog.Builder(context)
-        alertDialogBuilder.setMessage("${nickName}님을 그룹장으로 임명하시겠습니까?") // Set the dialog message
+        alertDialogBuilder.setMessage("${nickName}님을 파티장으로 임명하시겠습니까?") // Set the dialog message
         alertDialogBuilder.setPositiveButton("확인") { dialog, _ ->
             changePartyLeaderRetrofit(opponentUserId)
             //그룹장 임명 api 후 그룹장이 변경되었습니다 알람.
@@ -120,13 +120,10 @@ class SelectPartyLeaderAdapter(
                     if (response.isSuccessful) {
                         val result = response.body()
                         confirmChangePartyLeaderDialog()
-                        Log.d("changePartyLeaderRetrofit", response.body().toString())
                     } else {
-                        Log.d("changePartyLeaderRetrofit", response.errorBody().toString())
                     }
                 }
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
-                    Log.d("changePartyLeaderRetrofit", "실패")
                 }
             })
         }
@@ -134,7 +131,7 @@ class SelectPartyLeaderAdapter(
 
     fun confirmChangePartyLeaderDialog() {
         val alertDialogBuilder = AlertDialog.Builder(context)
-        alertDialogBuilder.setMessage("그룹장이 변경되었습니다.") // Set the dialog message
+        alertDialogBuilder.setMessage("파티장이 변경되었습니다.") // Set the dialog message
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
 

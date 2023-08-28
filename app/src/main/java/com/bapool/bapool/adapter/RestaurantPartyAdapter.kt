@@ -84,7 +84,6 @@ class RestaurantPartyAdapter(val context: Context) :
             binding.detail.text = ""
             binding.rating.text = ""
 
-            Log.d("dsafasdgsagadsg",item.toString())
             //차단유저 보이게하기
             if (item.has_block_user) {
                 binding.ban.visibility = View.VISIBLE
@@ -95,7 +94,6 @@ class RestaurantPartyAdapter(val context: Context) :
                 if (hashtagList.isNotEmpty()) {
                     binding.hashtagVisible.visibility = View.VISIBLE
                     for (item in hashtagList) {
-                        Log.d("dsafasdgsagadsg",item.toString())
                         when (item) {
                             1 -> binding.hash1.visibility = View.VISIBLE
                             2 -> binding.hash2.visibility = View.VISIBLE
@@ -109,13 +107,11 @@ class RestaurantPartyAdapter(val context: Context) :
 
             //만약 참여중인 파티이라면 button을 다르게 표시
             if (item.is_participate) {
-                Log.d("is_participate", (!item.is_participate).toString())
                 binding.joinGrp.isEnabled = false
                 binding.joinGrp.text = "참여중"
             }
             //마감된파티
             if (!item.is_recruiting) {
-                Log.d("is_participate", (!item.is_participate).toString())
                 binding.joinGrp.isEnabled = false
                 binding.joinGrp.text = "마감"
             }
@@ -142,7 +138,7 @@ class RestaurantPartyAdapter(val context: Context) :
     fun dateRange(startDate: String): String {
         val start_date = LocalDateTime.parse(startDate)
 
-        val formatterStart = DateTimeFormatter.ofPattern("MMM d일, H시 mm분")
+        val formatterStart = DateTimeFormatter.ofPattern("MMM d일 H시 mm분")
         val range: String =
             "${start_date.format(formatterStart)}"
         return range
