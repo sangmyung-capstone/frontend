@@ -67,6 +67,18 @@ class CheckUserProfileActivity : AppCompatActivity() {
                                 binding.kindcount.text = result.result.hashtag.find { it.hashtag_id == 2 }?.count.toString()
                                 binding.mannercount.text = result.result.hashtag.find { it.hashtag_id == 3 }?.count.toString()
                                 binding.quietcount.text = result.result.hashtag.find { it.hashtag_id == 4 }?.count.toString()
+                                if (binding.talkcount.text.equals("null")) {
+                                    binding.talkcount.text = "0"
+                                }
+                                if (binding.kindcount.text.equals("null")) {
+                                    binding.kindcount.text = "0"
+                                }
+                                if (binding.mannercount.text.equals("null")) {
+                                    binding.mannercount.text = "0"
+                                }
+                                if (binding.quietcount.text.equals("null")) {
+                                    binding.quietcount.text = "0"
+                                }
                             }
                         }
                         if (UserId.toString() == opponentUserId) {

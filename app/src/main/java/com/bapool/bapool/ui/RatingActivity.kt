@@ -72,8 +72,8 @@ class RatingActivity : AppCompatActivity() {
                 user.rating == 0.0f || user.hashtag.isEmpty()
             }
 
-            if (invalidUsers.isNotEmpty()) {
-                Toast.makeText(this@RatingActivity, "토스트 메세지 띄우기 입니다.", Toast.LENGTH_SHORT).show()
+            if (invalidUsers.isNotEmpty() || selectedUsers.isEmpty()) {
+                Toast.makeText(this@RatingActivity, "모든 유저평가를 완료해주세요.", Toast.LENGTH_SHORT).show()
             } else {
                 retro.PostRatingUser(UserId!!, partyid.toLong(), postRatingUserRequest)
                     .enqueue(object : Callback<PostRatingUserResponse> {

@@ -11,6 +11,7 @@ import com.bapool.bapool.databinding.ActivityRestaurantLogBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.GetRestaurantLogResponse
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
+import com.bapool.bapool.ui.LoginActivity.Companion.UserToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +24,14 @@ class RestaurantLogActivity : AppCompatActivity() {
 
         val retro = ServerRetrofit.create()
         val RestaurantsLogList = mutableListOf<GetRestaurantLogResponse.parties>()
+
+        if (intent.getStringExtra("notificationUserId") != null) {
+            UserId = intent.getStringExtra("notificationUserId")!!.toLong()
+        }
+        if(intent.getStringExtra("notificationUsertoken")!= null){
+            UserToken = intent.getStringExtra("notificationUserToken")!!
+
+        }
 
         retro.GetrestaurantsLog(UserId!!)
             .enqueue(object : Callback<GetRestaurantLogResponse> {

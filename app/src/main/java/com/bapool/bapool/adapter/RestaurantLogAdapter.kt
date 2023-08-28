@@ -1,6 +1,8 @@
 package com.bapool.bapool.adapter
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,7 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
         return RestaurantLogViewHolder(binding)
     }
 
+
     override fun onBindViewHolder(holder: RestaurantLogViewHolder, position: Int) {
         val Loglist = datas[position]
         val binding = holder.binding
@@ -43,6 +46,9 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
         }
 
         binding.ratingbutton.isEnabled = !Loglist.rating_complete
+        if(binding.ratingbutton.isEnabled == false){
+            binding.ratingbutton.setBackgroundColor(Color.parseColor("#808080"))
+        }
 
         binding.ratingbutton.setOnClickListener {
             val intent = Intent(context, RatingActivity::class.java)
