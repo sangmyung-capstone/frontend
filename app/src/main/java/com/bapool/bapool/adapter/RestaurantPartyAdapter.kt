@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.bapool.bapool.R
 import com.bapool.bapool.databinding.JoinpartyCustomDialogBinding
 import com.bapool.bapool.databinding.RestaurantpartylistItemsBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
@@ -73,9 +74,12 @@ class RestaurantPartyAdapter(val context: Context) :
             binding.hash3.visibility = View.GONE
             binding.hash4.visibility = View.GONE
             binding.hash5.visibility = View.GONE
+            binding.ban.visibility = View.GONE
 
             binding.joinGrp.text = "참여"
             binding.joinGrp.isEnabled = true
+            binding.joinGrp.setTextColor(context.resources.getColor(R.color.main))
+            binding.joinGrp.setBackgroundColor(context.resources.getColor(R.color.white))
 
             binding.menu.text = ""
             binding.date.text = ""
@@ -109,11 +113,16 @@ class RestaurantPartyAdapter(val context: Context) :
             if (item.is_participate) {
                 binding.joinGrp.isEnabled = false
                 binding.joinGrp.text = "참여중"
+                binding.joinGrp.setBackgroundColor(context.resources.getColor(R.color.gray))
+                binding.joinGrp.setTextColor(context.resources.getColor(R.color.black))
+
             }
             //마감된파티
             if (!item.is_recruiting) {
                 binding.joinGrp.isEnabled = false
                 binding.joinGrp.text = "마감"
+                binding.joinGrp.setBackgroundColor(context.resources.getColor(R.color.gray))
+                binding.joinGrp.setTextColor(context.resources.getColor(R.color.black))
             }
 
             val allNum = partiNum(item.participants, item.max_people)
