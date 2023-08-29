@@ -170,14 +170,14 @@
         app:layout_constraintStart_toEndOf="@+id/menu_text"
         app:layout_constraintTop_toTopOf="@+id/menu_text" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/joinGrp"
         android:layout_width="90dp"
         android:layout_height="50dp"
-        android:background="@android:color/transparent"
+        android:background="@color/main"
         android:text="참여하기"
-        android:textColor="@color/main"
-        android:textSize="10dp"
+        android:textColor="@color/white"
+        android:textSize="11dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/detail"

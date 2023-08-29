@@ -12,4 +12,6 @@
     <color name="main">#fdc500</color>
     <color name="background">#F1F1F1</color>
     <color name="transparent">#00000000</color>
+    <color name="lightgray">#CDCDCD</color>
+
 </resources>
