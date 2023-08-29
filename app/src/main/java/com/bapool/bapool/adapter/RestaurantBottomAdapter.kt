@@ -41,17 +41,18 @@ class RestaurantBottomAdapter(
         Log.d("bottom_view_holder", "view holder${position} run")
         Log.d("bottom_view_holder", "image list ${position} run")
 
-        if (imageList[position] == null)
-            // 이미지 없음 빈 이미지
+        if (imageList[position] == "a")
+        // 이미지 없음 빈 이미지
 //            Glide.with(holder.context)
 ////            .load(itemList[position].imgURL)
 //                .load(R.drawable.bapool)
 //                .into(holder.restaurant_img)
-        else    // adapter.notifyItemChanged(position) 호출 시
+        else {    // adapter.notifyItemChanged(position) 호출 시
             Glide.with(holder.context)
                 .load(imageList[position])
-                .error(R.drawable.hashtag5)
                 .into(holder.restaurant_img)
+        }
+
         holder.restaurant_img.clipToOutline = true
 
 
