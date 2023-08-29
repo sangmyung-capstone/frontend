@@ -9,7 +9,6 @@
         android:id="@+id/cardView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,18 +26,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:text=""
         android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/opponentContent"
         app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toTopOf="@+id/cardView" />
+        app:layout_constraintTop_toTopOf="@+id/cardView"
+ />
 
     <TextView
         android:id="@+id/opponentContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="13dp"
         android:background="@drawable/chatitem_roundbackground_opponent"
         android:padding="10dp"
         android:maxWidth="270dp"

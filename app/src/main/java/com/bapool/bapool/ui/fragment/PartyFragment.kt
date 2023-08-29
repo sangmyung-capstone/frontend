@@ -206,10 +206,8 @@ class PartyFragment : Fragment() {
                 }
 
 
-                Log.d("채팅방확인소트전", myPartyListModel.toString())
                 val sortedMyPartyListModel =
                     myPartyListModel.sortedByDescending { it.lastChatTime }
-                Log.d("채팅방확인소트후", sortedMyPartyListModel.toString())
                 adapter(requireContext(), sortedMyPartyListModel)
                 myPartyAdapter.notifyDataSetChanged()
             }

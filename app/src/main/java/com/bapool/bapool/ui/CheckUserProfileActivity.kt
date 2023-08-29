@@ -38,9 +38,6 @@ class CheckUserProfileActivity : AppCompatActivity() {
     }
 
     fun checkUserProfileRetrofit() {
-        Log.d("checkUserProfile1232",UserId.toString())
-        Log.d("checkUserProfile1232", opponentUserId.toString())
-
         retro.checkUserProfile(UserId!!.toLong(), opponentUserId.toLong())
             .enqueue(object : Callback<CheckUserProfileResponse> {
                 override fun onResponse(
@@ -106,12 +103,12 @@ class CheckUserProfileActivity : AppCompatActivity() {
                         }
 
                     } else {
-                        Log.d("checkUserProfile1232", response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<CheckUserProfileResponse>, t: Throwable) {
-                    Log.d("checkUserProfile1232", t.toString())
+                    Log.d("checkUserProfileRetrofit",t.toString())
+
                 }
             })
 
@@ -129,14 +126,11 @@ class CheckUserProfileActivity : AppCompatActivity() {
                     response: Response<BlockUserChattingProfileResponse>,
                 ) {
                     if (response.isSuccessful) {
-                        Log.d("BlockUserCheck", response.body().toString())
                     } else {
-                        Log.d("BlockUserCheck", response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<BlockUserChattingProfileResponse>, t: Throwable) {
-                    Log.d("BlockUserCheck", t.toString())
                 }
             })
     }

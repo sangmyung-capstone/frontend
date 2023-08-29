@@ -88,11 +88,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
 
-            Log.d("asdfasdfadsf", binding.grpNameText.text.length.toString())
-            Log.d("asdfasdfadsf", binding.menuText.text.isNullOrBlank().toString())
-
-            Log.d("asdfasdfadsf", binding.menuText.text.length.toString())
-
             if (binding.grpNameText.text.isNullOrBlank()) {
                 alterDialog("파티명을 입력해주세요.")
 
@@ -147,7 +142,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
                         binding.detail.text.toString(),
                         hashtagList
                     )
-                Log.d(TAG, editPartyInstance.toString())
 
                 retrofit(editPartyInstance)
             }
@@ -173,8 +167,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
 
     fun retrofit(editParty: PatchEditPartyInfoRequest) {
-        Log.d("MKRetrofit", editParty.toString())
-        Log.d("MKRetrofit", userId.toString())
+
         retro.editParty(UserId!!.toLong(), editParty)
             .enqueue(object : Callback<PatchEditPartyInfoResponse> {
                 override fun onResponse(
@@ -184,16 +177,12 @@ class EditPartyInfoActivity : AppCompatActivity() {
                     var result: PatchEditPartyInfoResponse? = response.body()
 
                     if (response.isSuccessful) {
-                        Log.d("MKRetrofit", "onRequest 성공: $editParty")
-                        Log.d("MKRetrofit", "onResponse 성공: " + result?.toString())
                         finish()
                     } else {
-                        Log.d("MKRetrofit", "onResponse 실패: " + response.body()?.code.toString())
-                        Log.d("MKRetrofit", "onResponse 실패: " + response.body()?.message.toString())
-
                         Toast.makeText(
                             this@EditPartyInfoActivity,
-                            "그룹 생성 오류 fail",
+                            "파티" +
+                                    " 생성 오류 fail",
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -203,7 +192,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
 
-                    Toast.makeText(this@EditPartyInfoActivity, "그룹 생성 오류", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@EditPartyInfoActivity, "파티 생성 오류", Toast.LENGTH_SHORT)
                         .show()
                 }
             })
@@ -283,10 +272,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
         val inputDateTime = receivePartyInfo.startDate
 
-
-        Log.d("sadfasfadsfasdfasdf", receivePartyInfo.toString())
-        Log.d("sadfasfadsfasdfasdf", receivePartyInfo.startDate)
-
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
         val dateTime = LocalDateTime.parse(inputDateTime, formatter)
 
@@ -312,8 +297,6 @@ class EditPartyInfoActivity : AppCompatActivity() {
         val image3 = binding.hash3
         val image4 = binding.hash4
         val image5 = binding.hash5
-
-        Log.d("asdfasdfasdf",receiveHashtag.toString())
 
         for (data in receiveHashtag) {
             when (data) {

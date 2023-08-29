@@ -55,7 +55,6 @@ class SelectPartyLeaderDialog(context: Context) : Dialog(context) {
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter.itemClick = object : SelectPartyLeaderAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
-                Toast.makeText(context, "adsfasfasdf", Toast.LENGTH_SHORT).show()
                 dismiss()
                 val userInfo = partyUserInfoMenu[position].values.firstOrNull()
                 val key = partyUserInfoMenu[position].keys.first()

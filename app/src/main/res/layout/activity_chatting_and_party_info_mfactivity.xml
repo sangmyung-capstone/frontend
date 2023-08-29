@@ -163,20 +163,21 @@
         android:layout_gravity="end"
         android:fitsSystemWindows="true">
 
+
         <!-- LinearLayout 추가 -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-
             <LinearLayout
                 android:id="@+id/hashtagVisible"
                 android:layout_width="120dp"
                 android:layout_height="20dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/partyNameNv">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/hash1"
@@ -230,15 +231,14 @@
             <TextView
                 android:id="@+id/partyNameNv"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:gravity="center"
                 android:text="그룹명"
-                android:textSize="30sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
 
             <TextView
                 android:id="@+id/partyMenuNv"
@@ -246,66 +246,112 @@
                 android:layout_height="40dp"
                 android:gravity="center"
                 android:text="메뉴"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
+                app:layout_constraintTop_toBottomOf="@+id/partyNameNv" />
 
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginTop="20dp"
                 android:weightSum="2"
                 app:layout_constraintTop_toBottomOf="@+id/partyMenuNv">
 
-                <ImageView
+                <LinearLayout
                     android:id="@+id/detailIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/speakericon" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
-                <ImageView
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/detailIcon2"
+                        android:layout_width="30dp"
+                        android:layout_gravity="center"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/speakericon" />
+
+                    <TextView
+                        android:text="공지사항"
+                        android:textSize="11sp"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/restaurantIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/restauranticon" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/restaurantIcon2"
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:src="@drawable/restauranticon" />
+                    <TextView
+                        android:text="식당정보"
+                        android:textSize="11sp"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+
+                </LinearLayout>
+
 
             </LinearLayout>
-
+            <TextView
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="0.9dp"
+                android:background="#DFDFDF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
             <ImageView
                 android:id="@+id/imageView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
                 android:src="@drawable/calendaricon"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+                app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
             <Button
                 android:id="@+id/closePartyBtn"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:visibility="gone"
                 android:text="파티 시간,인원 확정하기"
                 android:textSize="10sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
                 android:src="@drawable/locationicon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/closePartyBtn" />
+                app:layout_constraintStart_toStartOf="@+id/imageView6"
+                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
             <ImageView
                 android:id="@+id/imageView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
                 android:src="@drawable/personicon"
                 app:layout_constraintStart_toStartOf="@+id/imageView7"
                 app:layout_constraintTop_toBottomOf="@+id/imageView7" />
@@ -318,7 +364,7 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:text="dsfasfsadf"
-
+                android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView6"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
                 app:layout_constraintTop_toTopOf="@+id/imageView6" />
@@ -326,11 +372,14 @@
             <TextView
                 android:id="@+id/restaruantLocationTextNv"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
+                android:layout_height="40dp"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-
-                android:text="dsfasfsadf"
+                android:maxLines="2"
+                android:layout_marginLeft="10dp"
+                android:maxWidth="300dp"
+                android:textSize="11sp"
+                android:text="asdgsadfgadgasdgsdgasdgasdgasdgasdgsadfgadgasdgsdgasdgasdgasdgasdgsadfgadgasdgsdgasdgasdgasdgasdgsadfgadgasdgsdgasdgasdgasdg"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView7"
                 app:layout_constraintStart_toEndOf="@+id/imageView7"
                 app:layout_constraintTop_toTopOf="@+id/imageView7" />
@@ -342,24 +391,29 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:text="dsfasfsadf"
+                android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView8"
                 app:layout_constraintStart_toEndOf="@+id/imageView8"
-                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+                app:layout_constraintTop_toTopOf="@+id/imageView8" />
 
             <TextView
                 android:id="@+id/textJoinPeople"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
                 android:layout_marginBottom="10dp"
-                android:text="참여중인 사람"
+                android:text="파티원"
                 app:layout_constraintBottom_toTopOf="@+id/userRv"
                 app:layout_constraintStart_toStartOf="parent" />
             <!-- RecyclerView 추가 -->
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/userRv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/textLine2" />
+                android:maxHeight="300dp"
+                app:layout_constraintBottom_toTopOf="@+id/closePartyBtn"
+                tools:layout_editor_absoluteX="-16dp" />
 
             <TextView
                 android:id="@+id/textLine2"
@@ -379,29 +433,29 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <ImageView
-                    android:visibility="gone"
                     android:id="@+id/menuEditPartyInfo"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="15dp"
-                    android:src="@drawable/party_info_edit_item" />
+                    android:src="@drawable/party_info_edit_item"
+                    android:visibility="gone" />
 
 
                 <ImageView
-                    android:visibility="gone"
                     android:id="@+id/changPartyLeader"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="15dp"
-                    android:src="@drawable/changpartyleader_icon" />
+                    android:src="@drawable/changpartyleader_icon"
+                    android:visibility="gone" />
 
 
                 <ImageView
                     android:id="@+id/menuPartyOut"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="15dp"
                     android:src="@drawable/get_out_party_item" />
@@ -411,6 +465,7 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

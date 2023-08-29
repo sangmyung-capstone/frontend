@@ -6,78 +6,92 @@
     android:layout_height="match_parent"
     tools:context=".ui.RestaurantPartyActivity">
 
-    <TextView
-        android:id="@+id/resName"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginLeft="12dp"
-        android:gravity="center_vertical"
-        android:text="식당이름"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView4"
+    <LinearLayout
+        android:id="@+id/restaurantInfo"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            app:cardCornerRadius="10dp">
+
+            <ImageView
+                android:id="@+id/restaurantImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/restauranticon" />
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/resName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="식당이름"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/resAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="식당 주소"
+            android:textColor="@color/gray"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="의 파티"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="@+id/resName"
-        app:layout_constraintStart_toEndOf="@+id/resName"
-        app:layout_constraintTop_toTopOf="@+id/resName" />
-
-    <TextView
-        android:id="@+id/textLine"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@+id/resName" />
-
-
-    <TextView
-        android:id="@+id/textLine2"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="2dp"
-        android:background="#EEEEEE"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/restaurantInfo" />
 
-    <TextView
-        android:id="@+id/restaurantLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="7dp"
-        android:text="식당 주소"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLine" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/resGrpRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="301dp"
         android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@+id/textLine2"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantInfo"
+        app:layout_constraintVertical_bias="0.693" />
 
-    <android.widget.Button
+    <ImageView
         android:id="@+id/goToMakeGrp"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="12dp"
+        android:background="@drawable/background_circle"
+        android:elevation="8dp"
         android:layout_margin="20dp"
-        android:layout_height="wrap_content"
-        android:background="@color/main"
-        android:text="파티 생성"
+        android:src="@drawable/makepartybtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <TextView
         android:id="@+id/notifyNoParty"
@@ -87,9 +101,11 @@
         android:textColor="#BCBCBC"
         android:textSize="20sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/goToMakeGrp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/resGrpRv"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/resGrpRv" />
+        app:layout_constraintTop_toBottomOf="@+id/restaurantInfo" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
