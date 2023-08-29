@@ -81,7 +81,6 @@
         <activity
             android:name=".ui.ChattingAndPartyInfoMFActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.app.lib_name"

@@ -13,13 +13,13 @@
 
         <TextView
             android:id="@+id/partiGroup"
-            android:text="참여한 파티"
-            android:layout_marginLeft="12dp"
-            android:textSize="25sp"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"
             android:layout_width="match_parent"
-            android:layout_height="60dp"/>
+            android:layout_height="60dp"
+            android:layout_marginLeft="12dp"
+            android:gravity="center_vertical"
+            android:text="파티"
+            android:textColor="@color/black"
+            android:textSize="25sp" />
         <TextView
             android:id="@+id/textLine"
             android:layout_below="@+id/partiGroup"

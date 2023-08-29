@@ -76,10 +76,10 @@ class RestaurantPartyAdapter(val context: Context) :
             binding.hash5.visibility = View.GONE
             binding.ban.visibility = View.GONE
 
-            binding.joinGrp.text = "참여"
+            binding.joinGrp.text = "참여하기"
             binding.joinGrp.isEnabled = true
-            binding.joinGrp.setTextColor(context.resources.getColor(R.color.main))
-            binding.joinGrp.setBackgroundColor(context.resources.getColor(R.color.white))
+            binding.joinGrp.setTextColor(context.resources.getColor(R.color.white))
+            binding.joinGrp.setBackgroundColor(context.resources.getColor(R.color.main))
 
             binding.menu.text = ""
             binding.date.text = ""
@@ -113,7 +113,7 @@ class RestaurantPartyAdapter(val context: Context) :
             if (item.is_participate) {
                 binding.joinGrp.isEnabled = false
                 binding.joinGrp.text = "참여중"
-                binding.joinGrp.setBackgroundColor(context.resources.getColor(R.color.gray))
+                binding.joinGrp.setBackgroundColor(context.resources.getColor(R.color.lightgray))
                 binding.joinGrp.setTextColor(context.resources.getColor(R.color.black))
 
             }
@@ -121,7 +121,7 @@ class RestaurantPartyAdapter(val context: Context) :
             if (!item.is_recruiting) {
                 binding.joinGrp.isEnabled = false
                 binding.joinGrp.text = "마감"
-                binding.joinGrp.setBackgroundColor(context.resources.getColor(R.color.gray))
+                binding.joinGrp.setBackgroundColor(context.resources.getColor(R.color.lightgray))
                 binding.joinGrp.setTextColor(context.resources.getColor(R.color.black))
             }
 
