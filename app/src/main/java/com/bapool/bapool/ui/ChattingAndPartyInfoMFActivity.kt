@@ -1123,25 +1123,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     // 공지 다이얼로그 사용할 때 사용하는 함수
     fun dialogBinding(item: FirebasePartyInfo, binding: PartyinfoCustomDialogBinding) {
         //hashtag 보이게하기
-        val hashtagList: List<Int> = item.hashTag
-        if (hashtagList.isNotEmpty()) {
-            binding.hashtagVisible.visibility = View.VISIBLE
-            for (item in hashtagList) {
-                when (item) {
-                    1 -> binding.hash1.visibility = View.VISIBLE
-                    2 -> binding.hash2.visibility = View.VISIBLE
-                    3 -> binding.hash3.visibility = View.VISIBLE
-                    4 -> binding.hash4.visibility = View.VISIBLE
-                    5 -> binding.hash5.visibility = View.VISIBLE
-                }
-
-            }
-        }
-        binding.partyName.text = item.groupName
-        binding.partyMenu.text = item.menu
-        binding.dateTime.text = item.startDate
-        binding.participantsNum.text = " ${item.curNumberOfPeople}  /  ${item.maxNumberOfPeople}"
-        binding.restaurantLocation.text = item.restaurantName
         binding.detailText.text = item.groupDetail
     }
 
