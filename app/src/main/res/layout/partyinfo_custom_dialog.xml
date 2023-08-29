@@ -1,206 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
 
-
-
-    <TextView
-        android:id="@+id/partyName"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
-
-    <TextView
-        android:id="@+id/partyMenu"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/partyName"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <ImageView
-        android:id="@+id/textView"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/personicon"
-        android:text="참여인원/정원"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/partyMenu" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/calendaricon"
-        app:layout_constraintBottom_toBottomOf="@+id/participantsNum"
-        app:layout_constraintStart_toEndOf="@+id/participantsNum"
-        app:layout_constraintTop_toTopOf="@+id/participantsNum" />
-
-    <TextView
-        android:id="@+id/dateTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="만나는 시간"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/locationicon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <TextView
-        android:id="@+id/restaurantLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="만나는 시간"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/imageView4" />
-
-    <ImageView
-        android:id="@+id/imageView9"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ratingicon"
-        app:layout_constraintBottom_toBottomOf="@+id/restaurantLocation"
-        app:layout_constraintStart_toEndOf="@+id/restaurantLocation"
-        app:layout_constraintTop_toTopOf="@+id/restaurantLocation" />
-
-    <TextView
-        android:id="@+id/rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="만나는 시간"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
-        app:layout_constraintStart_toEndOf="@+id/imageView9"
-        app:layout_constraintTop_toTopOf="@+id/imageView9" />
-
     <TextView
         android:id="@+id/textView5"
         android:layout_width="60dp"
         android:layout_height="20dp"
-        android:gravity="center_vertical"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/background_detailtext"
+        android:gravity="center_vertical"
         android:text="공지사항"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="350dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginEnd="30dp"
         android:background="#00D8D8D8"
         android:paddingBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5">
 
         <TextView
+<<<<<<< Updated upstream
             android:text=""
+=======
+>>>>>>> Stashed changes
             android:id="@+id/detailText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:text="dsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkl" />
 
     </ScrollView>
-
-    <TextView
-        android:id="@+id/participantsNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:text="참여인원/정원"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
-
-    <LinearLayout
-        android:id="@+id/hashtagVisible"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_width="120dp"
-        android:layout_height="20dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/hash1"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag1"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/hash2"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag2"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/hash1"
-            app:layout_constraintStart_toEndOf="@+id/hash1"
-            app:layout_constraintTop_toTopOf="@+id/hash1" />
-
-        <ImageView
-            android:id="@+id/hash3"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag3"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/hash2"
-            app:layout_constraintStart_toEndOf="@+id/hash2"
-            app:layout_constraintTop_toTopOf="@+id/hash2" />
-
-        <ImageView
-            android:id="@+id/hash4"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag4"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/hash3"
-            app:layout_constraintStart_toEndOf="@+id/hash3"
-            app:layout_constraintTop_toTopOf="@+id/hash3" />
-
-        <ImageView
-            android:id="@+id/hash5"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag5"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/hash4"
-            app:layout_constraintStart_toEndOf="@+id/hash4"
-            app:layout_constraintTop_toTopOf="@+id/hash4" />
-
-    </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/ban"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="* 그룹에 차단한 사용자가 포함되어 있습니다. *"
-        android:textColor="#FF0000"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/textView5"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
