@@ -96,10 +96,9 @@ class MyReceiver() : BroadcastReceiver() {
         requestCode: Int
     ) {
 
-        val notiModel = NotiModel(
-            groupname, notificationText, requestCode.toString(),
-            UserId.toString(), UserToken.toString(), requestCode
-        )
+        val notiModel = NotiModel(groupname, notificationText, requestCode.toString(),
+            UserId.toString(), UserToken.toString(), requestCode,2)
+
         val pushModel = PushNotification(notiModel, firebaseToken)
 
         fcmPush(pushModel)

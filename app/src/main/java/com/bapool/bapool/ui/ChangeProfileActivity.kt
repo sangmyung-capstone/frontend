@@ -11,13 +11,16 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.bapool.bapool.R
-import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityRegisterBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.PatchChangeProfileRequest
 import com.bapool.bapool.retrofit.data.PatchChangeProfileResponse
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
+import com.bapool.bapool.ui.fragment.MypageFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,6 +33,7 @@ class ChangeProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
+        var mypageFragment: MypageFragment = MypageFragment()
         var count = 0
         var textInputEditText = binding.nicknameEditText
 
@@ -46,6 +50,7 @@ class ChangeProfileActivity : AppCompatActivity() {
             binding.button7,
             binding.button8
         )
+        binding.resName.text = "닉네임 변경"
 
         //버튼 선택 이벤트 부여
         for ((index, button) in buttons.withIndex()) {
@@ -73,6 +78,10 @@ class ChangeProfileActivity : AppCompatActivity() {
                             Log.d("bap", "onResponse 성공: " + result?.toString());
                             // handle successful response
                             if (result != null) {
+                                val intent = Intent(this@ChangeProfileActivity, MypageFragment::class.java)
+                                intent.putExtra("nickname", nickname)
+                                intent.putExtra("profileimg", userInfo.profileImg)
+                                setResult(RESULT_OK,intent)
                                 finish()
                             }
                         } else {
@@ -110,10 +119,11 @@ class ChangeProfileActivity : AppCompatActivity() {
     private fun selectButton(selectedButton: ImageButton, buttons: List<ImageButton>) {
         for (button in buttons) {
             if (button == selectedButton) {
-                button.setColorFilter(Color.parseColor("#ffff0000"), PorterDuff.Mode.MULTIPLY);
+                button.setBackgroundResource(R.drawable.background_circle)
             } else {
-                button.setColorFilter(null);
+                button.setBackgroundResource(R.color.transparent)
             }
         }
     }
+
 }

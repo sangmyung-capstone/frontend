@@ -21,9 +21,11 @@ class SearchViewAdapter(val itemList: List<RestaurantSearch>, val naverMap: Nave
     }
 
     override fun onBindViewHolder(holder: SearchViewViewHolder, position: Int) {
+
+
         holder.restaurant_name.text = itemList[position].restaurant_name
         holder.restaurant_address.text = itemList[position].restaurant_address
-        holder.restaurant_category.text = itemList[position].category
+        holder.restaurant_category.text = itemList[position].category.split(" > ").last()
         holder.restaurant_group_number.text = itemList[position].num_of_party.toString()
 
         holder.itemView.setOnClickListener {

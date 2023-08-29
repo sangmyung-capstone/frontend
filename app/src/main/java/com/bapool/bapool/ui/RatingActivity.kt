@@ -72,14 +72,8 @@ class RatingActivity : AppCompatActivity() {
                 user.rating == 0.0f || user.hashtag.isEmpty()
             }
 
-            if (invalidUsers.isNotEmpty()) {
-                val builder = AlertDialog.Builder(this)
-                    .setMessage("모든 유저 평가를 완료해주세요 ")
-                    .setPositiveButton("확인",
-                        DialogInterface.OnClickListener{ _, _ ->
-                            Toast.makeText(this, "확인", Toast.LENGTH_SHORT).show()
-                        })
-                builder.show()
+            if (invalidUsers.isNotEmpty() || selectedUsers.isEmpty()) {
+                Toast.makeText(this@RatingActivity, "모든 유저평가를 완료해주세요.", Toast.LENGTH_SHORT).show()
             } else {
                 retro.PostRatingUser(UserId!!, partyid.toLong(), postRatingUserRequest)
                     .enqueue(object : Callback<PostRatingUserResponse> {

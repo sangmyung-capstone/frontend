@@ -4,15 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/background_circle.xml" value="0.1575" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/background_round.xml" value="0.1875" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/blocklist_border.xml" value="0.164" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/chatitem_roundbackground_my.xml" value="0.1285" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/chatitem_roundbackground_opponent.xml" value="0.1285" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/custom_img_bg.xml" value="0.1285" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1285" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/restaurant_partylist_item_corner.xml" value="0.1875" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/drawable/round_background.xml" value="0.1575" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/font/custom_font_family.xml" value="0.209375" />
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_block_list.xml" value="0.22" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_block_list.xml" value="0.3333333333333333" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_chatting_and_party_info.xml" value="0.22" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_chatting_and_party_info_mfactivity.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_evaluateuser.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_finish.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_home.xml" value="0.17916666666666667" />
@@ -22,11 +25,11 @@
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_make_grp.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_make_party.xml" value="0.22" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_register.xml" value="0.22" />
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_restaurant_log.xml" value="0.17916666666666667" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_restaurant_log.xml" value="0.22" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/activity_restaurant_party.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/blocklist_items.xml" value="0.3333333333333333" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/bottom_item.xml" value="0.22" />
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/bottom_marker_info.xml" value="0.16666666666666666" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/bottom_marker_info.xml" value="0.16111111111111112" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/bottom_party_list.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/bottom_restaurant_list.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/bottom_sheet.xml" value="0.1764102564102564" />
@@ -35,13 +38,13 @@
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_bottomsheet.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_chatting.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_group.xml" value="0.17916666666666667" />
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_map.xml" value="0.1" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_map.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_mypage.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/fragment_party.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/mypartylist_items.xml" value="0.17916666666666667" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/restaurant_recycler_view.xml" value="0.22" />
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/restaurantpartylist_items.xml" value="0.17916666666666667" />
-        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/search_item.xml" value="0.3333333333333333" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/restaurantpartylist_items.xml" value="0.3333333333333333" />
+        <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/layout/search_item.xml" value="0.5" />
         <entry key="..\:/Android/AndroidStudioProjects/Bapool/app/src/main/res/menu/home_menu.xml" value="0.22" />
       </map>
     </option>

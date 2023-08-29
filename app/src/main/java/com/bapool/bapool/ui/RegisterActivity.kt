@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityRegisterBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
@@ -290,9 +291,9 @@ class RegisterActivity : AppCompatActivity() {
     private fun selectButton(selectedButton: ImageButton, buttons: List<ImageButton>) {
         for (button in buttons) {
             if (button == selectedButton) {
-                button.setColorFilter(Color.parseColor("#ffff0000"), PorterDuff.Mode.MULTIPLY);
+                button.setBackgroundResource(R.drawable.background_circle)
             } else {
-                button.setColorFilter(null)
+                button.setBackgroundResource(R.color.transparent)
             }
         }
     }

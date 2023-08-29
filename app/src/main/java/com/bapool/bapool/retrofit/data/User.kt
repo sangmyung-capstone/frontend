@@ -40,7 +40,12 @@ data class GetMypageResponse(
         val nickname: String,
         val profileImg: Int,
         val rating: Double,
-        val hashtag: List<Int>,
+        val hashtag: List<Hashtag>,
+    )
+
+    data class Hashtag(
+        val hashtag_id: Int,
+        val count: Int
     )
 }
 
@@ -225,7 +230,7 @@ data class CheckUserProfileResult(
     val nickname: String,
     var is_block: Boolean,
     val rating: Double,
-    val hashtag: List<Int>,
+    val hashtag: List<GetMypageResponse.Hashtag>,
 )
 
 //유저 프로필 화면에서 유저 차단
