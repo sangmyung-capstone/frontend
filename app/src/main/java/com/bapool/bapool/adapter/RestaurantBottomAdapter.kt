@@ -34,9 +34,13 @@ class RestaurantBottomAdapter(
 
     override fun onBindViewHolder(holder: RestaurantViewHolder, position: Int) {
         holder.restaurant_name.text = itemList[position].restaurant_name
-        holder.restaurant_category.text = itemList[position].category
+        holder.restaurant_category.text = itemList[position].category.split(" > ").last()
         holder.restaurant_address.text = itemList[position].restaurant_address
-        holder.restaurant_group_number.text = itemList[position].num_of_party.toString()
+        if (itemList[position].num_of_party > 0)
+            Glide.with(holder.context)
+                .load(R.drawable.group_icon)
+                .into(holder.restaurant_group_image)
+
 
         Log.d("bottom_view_holder", "view holder${position} run")
         Log.d("bottom_view_holder", "image list ${position} run")
@@ -86,7 +90,7 @@ class RestaurantBottomAdapter(
         val restaurant_img = itemView.findViewById<ImageView>(R.id.bottom_restaurant_image)
         val restaurant_category = itemView.findViewById<TextView>(R.id.bottom_restaurant_category)
         val restaurant_address = itemView.findViewById<TextView>(R.id.bottom_restaurant_address)
-        val restaurant_group_number =
-            itemView.findViewById<TextView>(R.id.bottom_restaurant_group_number)
+        val restaurant_group_image =
+            itemView.findViewById<ImageView>(R.id.bottom_restaurant_group)
     }
 }
