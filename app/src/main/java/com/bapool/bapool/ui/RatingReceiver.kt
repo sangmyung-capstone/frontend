@@ -127,7 +127,7 @@ class RatingReceiver() : BroadcastReceiver() {
     ) {
 
         val notiModel = NotiModel(groupname, notificationText, (requestCode/1000).toString(),
-            LoginActivity.UserId.toString(), LoginActivity.UserToken.toString(), requestCode)
+            LoginActivity.UserId.toString(), LoginActivity.UserToken.toString(), requestCode,3)
 
         val pushModel = PushNotification(notiModel, firebaseToken)
 

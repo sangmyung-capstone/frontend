@@ -44,7 +44,8 @@
             android:id="@+id/nicknameEditText"
             android:layout_width="179dp"
             android:layout_height="wrap_content"
-            android:hint="닉네임" />
+            android:hint="닉네임"
+            tools:ignore="TouchTargetSizeCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <GridLayout
@@ -70,7 +71,9 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image1" />
+            android:src="@drawable/image1"
+            android:padding="1dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/button2"
@@ -81,7 +84,9 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image2" />
+            android:src="@drawable/image2"
+            android:padding="1dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/button3"
@@ -92,7 +97,9 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image3" />
+            android:src="@drawable/image3"
+            android:padding="1dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/button4"
@@ -103,7 +110,9 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image4" />
+            android:src="@drawable/image4"
+            android:padding="1dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/button5"
@@ -114,7 +123,9 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image5" />
+            android:src="@drawable/image5"
+            android:padding="1dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/button6"
@@ -125,7 +136,9 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image6" />
+            android:src="@drawable/image6"
+            android:padding="1dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/button7"
@@ -136,7 +149,9 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image7" />
+            android:src="@drawable/image7"
+            android:padding="1dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/button8"
@@ -147,7 +162,9 @@
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/image8" />
+            android:src="@drawable/image8"
+            android:padding="1dp"
+            tools:ignore="SpeakableTextPresentCheck" />
 
 
     </GridLayout>
