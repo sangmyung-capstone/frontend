@@ -63,6 +63,10 @@ class ChangeProfileActivity : AppCompatActivity() {
         binding.finish.setOnClickListener {
             var nickname: String = textInputEditText.text.toString()
             var userInfo = PatchChangeProfileRequest(nickname, count)
+            if(nickname == null){
+                Toast.makeText(this, "닉네임을 입력해주세요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             val retro = ServerRetrofit.create()
 
