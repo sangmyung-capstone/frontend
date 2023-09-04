@@ -149,7 +149,7 @@ class MakePartyActivity : AppCompatActivity() {
             } else if (binding.menuText.text.isNullOrBlank()) {
                 alterDialog("메뉴를 입력해주세요.")
 
-            } else if (binding.grpNameText.length() > 10) {
+            } else if (binding.menuText.length() > 10) {
                 alterDialog("메뉴명은 10글자까지 가능합니다.")
 
             } else if (binding.startDateText.text.toString() == "시작날짜") {

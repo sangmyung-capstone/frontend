@@ -67,6 +67,7 @@
 
     </LinearLayout>
 
+
     <TextView
         android:id="@+id/partyNameNv"
         android:layout_width="match_parent"
@@ -106,20 +107,20 @@
             android:layout_weight="1">
 
             <ImageView
-                android:layout_marginLeft="10dp"
                 android:id="@+id/detailIcon2"
                 android:layout_width="30dp"
-                android:layout_gravity="center"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/speakericon" />
 
             <TextView
-                android:text="공지사항"
-                android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
 
                 android:gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:text="공지사항"
+                android:textSize="10sp" />
 
         </LinearLayout>
 
@@ -130,18 +131,19 @@
             android:layout_weight="1">
 
             <ImageView
-                android:layout_marginLeft="10dp"
                 android:id="@+id/restaurantIcon2"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/restauranticon" />
+
             <TextView
-                android:text="식당정보"
-                android:textSize="10sp"
-                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="식당정보"
+                android:textSize="10sp" />
 
         </LinearLayout>
 
@@ -151,10 +153,10 @@
     <TextView
         android:id="@+id/divider5"
         android:layout_width="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
         android:layout_height="0.9dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
         android:background="#DFDFDF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
@@ -215,13 +217,13 @@
         android:id="@+id/restaruantLocationTextNv"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
-        android:maxLines="2"
-        android:layout_marginLeft="10dp"
         android:maxWidth="300dp"
-        android:textSize="10sp"
+        android:maxLines="2"
         android:text="asdgsadfgadgasdgsdgasdgasdgasdgasdgsadfgadgasdgsdgasdgasdgasdgasdgsadfgadgasdgsdgasdgasdgasdgasdgsadfgadgasdgsdgasdgasdgasdg"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView7"
         app:layout_constraintStart_toEndOf="@+id/imageView7"
         app:layout_constraintTop_toTopOf="@+id/imageView7" />
@@ -304,6 +306,7 @@
 
 
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

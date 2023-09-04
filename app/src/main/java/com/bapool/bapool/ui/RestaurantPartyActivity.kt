@@ -156,6 +156,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
                     if (response.isSuccessful) {
                         // 정상적으로 통신이 성공된 경우
+                        Log.d("getResPartyList",response.body().toString())
                         response.body()?.let { result ->
                             val partyResult = result?.result
 
