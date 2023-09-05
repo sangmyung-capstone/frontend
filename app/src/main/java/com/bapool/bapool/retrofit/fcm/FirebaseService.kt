@@ -60,7 +60,7 @@ class FirebaseService : FirebaseMessagingService() {
             createNotificationChannel()
             sendNotification(title, body, pendingIntent, alarm_code!!.toInt())
         } else if (requestcode == 3) {//식후 알람일때
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, RestaurantLogActivity::class.java)
             intent.putExtra("Activity", "Rating")
             val pendingIntent =
                 PendingIntent.getActivity(

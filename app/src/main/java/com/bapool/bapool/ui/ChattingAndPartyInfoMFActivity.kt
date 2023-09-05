@@ -25,6 +25,8 @@ import com.bapool.bapool.adapter.PartyChattingAdapter
 import com.bapool.bapool.adapter.PartyUserInfoAdapter
 import com.bapool.bapool.databinding.ActivityChattingAndPartyInfoMfactivityBinding
 import com.bapool.bapool.databinding.PartyinfoCustomDialogBinding
+import com.bapool.bapool.receiver.MyReceiver
+import com.bapool.bapool.receiver.RatingReceiver
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.retrofit.fcm.NotiModel
@@ -164,7 +166,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 //        val user3 = mapOf<String,Boolean>("98" to true)
 //        FirebaseDatabase.getInstance().getReference("test").child("Groups").child(partyId.toString())
 //            .child("groupUsers").updateChildren(user3)
-
 
 
     }
@@ -459,6 +460,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     } else {
                     }
                 }
+
                 override fun onFailure(call: Call<PatchEditPartyInfoResponse>, t: Throwable) {
                 }
             })
@@ -682,8 +684,10 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                     val opponentUserId = data.key.toString()
                                     if (activeOrInactive.equals("inactive")) {
                                         val userInfo = partyUserInfo[opponentUserId]
-                                        sendNotificationFcm(userInfo!!.firebaseToken.toString(),
-                                            notificationText)
+                                        sendNotificationFcm(
+                                            userInfo!!.firebaseToken.toString(),
+                                            notificationText
+                                        )
                                     }
                                 }
                             }
@@ -714,8 +718,10 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                     val opponentUserId = data.key.toString()
                                     if (activeOrInactive.equals("inactive")) {
                                         val userInfo = partyUserInfo[opponentUserId]
-                                        sendNotificationFcm(userInfo!!.firebaseToken.toString(),
-                                            notificationText)
+                                        sendNotificationFcm(
+                                            userInfo!!.firebaseToken.toString(),
+                                            notificationText
+                                        )
                                     }
                                 }
                             }
@@ -779,9 +785,11 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                         val opponentUserId = data.key.toString()
                                         if (activeOrInactive.equals("inactive")) {
                                             val userInfo = partyUserInfo[opponentUserId]
-                                            sendNotificationFcm(userInfo?.firebaseToken.toString()
-                                                ?: "",
-                                                notificationText)
+                                            sendNotificationFcm(
+                                                userInfo?.firebaseToken.toString()
+                                                    ?: "",
+                                                notificationText
+                                            )
                                         }
                                     }
                                 }
@@ -817,8 +825,10 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                                     val opponentUserId = data.key.toString()
                                     if (activeOrInactive.equals("inactive")) {
                                         val userInfo = partyUserInfo[opponentUserId]
-                                        sendNotificationFcm(userInfo!!.firebaseToken.toString(),
-                                            notificationText)
+                                        sendNotificationFcm(
+                                            userInfo!!.firebaseToken.toString(),
+                                            notificationText
+                                        )
                                     }
                                 }
                             }
@@ -847,11 +857,13 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     //마감 fcm 보내기
     fun sendNotificationFcm(firebaseToken: String, notificationText: String) {
 
-        val notiModel = NotiModel(currentPartyInfo.groupName,
+        val notiModel = NotiModel(
+            currentPartyInfo.groupName,
             notificationText,
             partyId,
             currentUserId,
-            currentUserToken)
+            currentUserToken
+        )
 
         val pushModel = PushNotification(notiModel, firebaseToken)
 
@@ -1135,15 +1147,15 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         alertDialogBuilder.setMessage("나가기를 하면 대화내용이 모두 삭제되고 채팅목록에서도 삭제됩니다.")
         alertDialogBuilder.setPositiveButton("나가기") { dialog, _ ->
             if (!(currentPartyInfo.curNumberOfPeople == 1)) {
-                Log.d("showExitDialog","2")
+                Log.d("showExitDialog", "2")
                 if (currentUserId.equals(currentPartyInfo.groupLeaderId.toString())) {
-                    Log.d("showExitDialog","파티장")
+                    Log.d("showExitDialog", "파티장")
 
                     alterDialog("파티를 나가시려면 파티장을 변경해주세요.")
                     dialog.dismiss()
                 } else recessionParty()
             } else {
-                Log.d("showExitDialog","1")
+                Log.d("showExitDialog", "1")
 
                 recessionParty()
             }
@@ -1231,7 +1243,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             chattingRVA.removeChildEventListener()
             initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
             getUserInfoInsideDatabaseReference.removeEventListener(
-                getUserInfoInsideValueEventListener)
+                getUserInfoInsideValueEventListener
+            )
             getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
             finish()
         } else {
@@ -1241,7 +1254,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             chattingRVA.removeChildEventListener()
             initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
             getUserInfoInsideDatabaseReference.removeEventListener(
-                getUserInfoInsideValueEventListener)
+                getUserInfoInsideValueEventListener
+            )
             getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
             finish()
 
@@ -1262,7 +1276,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     super.onBackPressed()
                     initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
                     getUserInfoInsideDatabaseReference.removeEventListener(
-                        getUserInfoInsideValueEventListener)
+                        getUserInfoInsideValueEventListener
+                    )
                     getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
                     chattingRVA.removeChildEventListener()
                 }
@@ -1273,7 +1288,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     finish()
                     initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
                     getUserInfoInsideDatabaseReference.removeEventListener(
-                        getUserInfoInsideValueEventListener)
+                        getUserInfoInsideValueEventListener
+                    )
                     getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
                     chattingRVA.removeChildEventListener()
                 }
@@ -1284,7 +1300,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     finish()
                     initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
                     getUserInfoInsideDatabaseReference.removeEventListener(
-                        getUserInfoInsideValueEventListener)
+                        getUserInfoInsideValueEventListener
+                    )
                     getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
                     chattingRVA.removeChildEventListener()
                 }
@@ -1294,14 +1311,16 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     finish()
                     initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
                     getUserInfoInsideDatabaseReference.removeEventListener(
-                        getUserInfoInsideValueEventListener)
+                        getUserInfoInsideValueEventListener
+                    )
                     getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
                     chattingRVA.removeChildEventListener()
                 }
             }
             initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
             getUserInfoInsideDatabaseReference.removeEventListener(
-                getUserInfoInsideValueEventListener)
+                getUserInfoInsideValueEventListener
+            )
             getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
             chattingRVA.removeChildEventListener()
 

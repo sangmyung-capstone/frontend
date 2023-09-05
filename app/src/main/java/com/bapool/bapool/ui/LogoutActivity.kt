@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import com.bapool.bapool.R
+import com.bapool.bapool.preference.MyApplication
 import com.kakao.sdk.user.UserApiClient
 
 class LogoutActivity : AppCompatActivity() {
@@ -27,6 +28,7 @@ class LogoutActivity : AppCompatActivity() {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
+
             }
         }
 

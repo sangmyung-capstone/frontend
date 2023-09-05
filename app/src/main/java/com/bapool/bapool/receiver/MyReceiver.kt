@@ -1,14 +1,12 @@
-package com.bapool.bapool.ui
+package com.bapool.bapool.receiver
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -16,6 +14,7 @@ import com.bapool.bapool.R
 import com.bapool.bapool.retrofit.fcm.NotiModel
 import com.bapool.bapool.retrofit.fcm.PushNotification
 import com.bapool.bapool.retrofit.fcm.RetrofitInstance
+import com.bapool.bapool.ui.LoginActivity
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.LoginActivity.Companion.UserToken
 import kotlinx.coroutines.CoroutineScope
@@ -76,17 +75,6 @@ class MyReceiver() : BroadcastReceiver() {
                 sendNotificationFcm(groupname.toString(), data, title.toString(), requestCode)
             }
         }
-
-        val notification = builder.setContentTitle(title)
-            .setContentText("$title")
-            .setSmallIcon(R.drawable.bapool)
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-            .build()
-
-        Log.d("알림", "$notification")
-
-        manager.notify(requestCode, notification)
     }
 
     fun sendNotificationFcm(

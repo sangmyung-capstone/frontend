@@ -19,14 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bapool"
-        tools:targetApi="31">
-        <activity
-            android:name=".ui.TestActivity"
-            android:exported="true">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+        tools:targetApi="31"
+        android:name=".preference.MyApplication">
 
         <service
             android:name=".ui.AlarmService"
@@ -34,11 +28,11 @@
             android:exported="true" />
 
         <receiver
-            android:name=".ui.MyReceiver"
+            android:name=".receiver.MyReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name=".ui.RatingReceiver"
+            android:name=".receiver.RatingReceiver"
             android:enabled="true"
             android:exported="true" />
         <activity

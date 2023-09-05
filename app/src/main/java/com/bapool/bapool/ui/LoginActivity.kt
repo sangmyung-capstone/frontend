@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.databinding.ActivityLoginBinding
 import com.bapool.bapool.RetrofitService
+import com.bapool.bapool.preference.MyApplication
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.kakao.sdk.auth.model.OAuthToken
@@ -143,8 +144,17 @@ class LoginActivity : AppCompatActivity() {
                                                         var result: PostKakaoSigninResponse? =
                                                             response.body()
                                                         if (result != null) {
+                                                            //전역변수 할당
                                                             UserToken = result.result.access_token
                                                             UserId = result.result.user_id
+                                                            //sharedpreferences 정보 저장
+                                                            MyApplication.prefs.setString(
+                                                                "prefstoken",
+                                                                UserToken!!
+                                                            )
+                                                            MyApplication.prefs.setString("prefsid",
+                                                                UserId!!.toString()
+                                                            )
                                                         }
                                                         Toast.makeText(
                                                             this@LoginActivity,
@@ -263,8 +273,17 @@ class LoginActivity : AppCompatActivity() {
                                                         var result: PostNaverSigninResponse? =
                                                             response.body()
                                                         if (result != null) {
+                                                            //전역변수 할당
                                                             UserToken = result.result.access_token
                                                             UserId = result.result.user_id
+                                                            //sharedpreferences 정보 저장
+                                                            MyApplication.prefs.setString(
+                                                                "prefstoken",
+                                                                UserToken!!
+                                                            )
+                                                            MyApplication.prefs.setString("prefsid",
+                                                                UserId!!.toString()
+                                                            )
                                                         }
                                                         Toast.makeText(
                                                             this@LoginActivity,

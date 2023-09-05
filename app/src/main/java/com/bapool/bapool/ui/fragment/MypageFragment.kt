@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.FragmentMypageBinding
+import com.bapool.bapool.preference.MyApplication
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.DeleteUserResponse
 import com.bapool.bapool.retrofit.data.GetMypageResponse
@@ -112,6 +113,8 @@ class MypageFragment : Fragment() {
     fun listener() {
 
         binding.logout.setOnClickListener {
+            MyApplication.prefs.setString("prefstoken", "")
+            MyApplication.prefs.setString("prefsid", "")
             val intent = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
