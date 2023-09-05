@@ -1,13 +1,18 @@
 package com.bapool.bapool.ui.fragment
 
 import android.Manifest
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
+import android.transition.Transition
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -32,6 +37,7 @@ import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.RestaurantPartyActivity
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.search.SearchView
 import com.gun0912.tedpermission.PermissionListener
@@ -47,6 +53,7 @@ import com.naver.maps.map.util.FusedLocationSource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.util.*
 
 
@@ -73,6 +80,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     val markerImage = OverlayImage.fromResource(R.drawable.marker_icon)
     val markerImageEmpty = OverlayImage.fromResource(R.drawable.marker_icon_empty)
+    val markerPinImage = OverlayImage.fromResource(R.drawable.marker_pin)
+    val markerPinImageEmpty = OverlayImage.fromResource(R.drawable.marker_pin_empty)
+
+    val markerSize = 70
+    val markerPinSize = 150
 
 
     //    val retro = RetrofitService.create()  // MOCK SERVER
@@ -87,6 +99,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     init {
         instance = this
     }
+
+    private var lastMarker : Marker? = null
 
 
     override fun onCreateView(
@@ -252,7 +266,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 초기 지도 옵션
         val options = NaverMapOptions()
 //            .maxZoom(19.0)
-            .symbolScale(0f)
+//            .symbolScale(0f)  // 심벌 숨기기
             .minZoom(4.5)
             .logoMargin(0, 0, 0, -50)   // 기본 네이버 로고 숨기기
             .compassEnabled(true)
@@ -315,7 +329,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         true
                     )
                     BottomSheetBehavior.from(binding.bottomSheet).isDraggable = true
-                    BottomSheetBehavior.from(binding.bottomSheet).peekHeight = dpToPx(300f, context).toInt()
+                    BottomSheetBehavior.from(binding.bottomSheet).peekHeight =
+                        dpToPx(300f, context).toInt()
 
                     restaurantsList = response.body()!!.result.restaurants.toMutableList()
 
@@ -353,7 +368,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             ) {
                                 if (response.isSuccessful) {
 
-                                    // 3개 호출이므로 0, 1, 2
+                                    // 5개 호출이므로 0, 1, 2, 3, 4
                                     restaurantImageList[0] =
                                         response.body()!!.result.restaurant_img_urls[0]
                                     restaurantImageList[1] =
@@ -516,7 +531,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     // 마커 생성
                     for (i in 0 until response.body()!!.result.restaurants.size) { // 리스폰스로 받은 사이즈 만큼
                         markerList.add(i, Marker()) // 마커 할당
-                        if (response.body()!!.result.restaurants[i].num_of_party != 0) // group이 있는 마커 표현
+                        if (response.body()!!.result.restaurants[i].num_of_party != 0)  // 파티가 있는 마커 표현
                             markerList[i].icon = markerImage
                         else
                             markerList[i].icon = markerImageEmpty
@@ -528,8 +543,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                 response.body()!!.result.restaurants[i].restaurant_longitude
                             )
                         markerList[i].map = naverMap    // 생성 마커들 지도에 출력
-                        markerList[i].width = 75
-                        markerList[i].height = 75
+                        markerList[i].width = markerSize
+                        markerList[i].height = markerSize
                         markerList[i].captionText =
                             response.body()!!.result.restaurants[i].restaurant_name
                         markerList[i].setCaptionAligns(
@@ -596,8 +611,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(marker.position, 20.0))
 
         // 마커 크기 변경 // 애니메이션 추가
-        marker.width = 100
-        marker.height = 100
+        marker.width = markerPinSize
+        marker.height = markerPinSize
     }
 
     fun searchMarkerGoEvent(
@@ -616,7 +631,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             markerList.clear()
         }
         markerList.add(0, Marker()) // 마커 할당
-        if (isParty) // group이 있는 마커 표현
+        if (isParty)  // 파티가 있는 마커 표현
             markerList[0].icon = markerImage
         else
             markerList[0].icon = markerImageEmpty
@@ -624,8 +639,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         markerList[0].isHideCollidedCaptions = true
         markerList[0].position = LatLng(lati, long)  // 마커 위치 정보
         markerList[0].map = naverMap    // 생성 마커들 지도에 출력
-        markerList[0].width = 50
-        markerList[0].height = 50
+        markerList[0].width = markerSize
+        markerList[0].height = markerSize
         markerList[0].captionText = restaurant_name
         // 해당 마커 클릭 이벤트
         markerClickEvent(markerList[0], id, long, lati)
@@ -658,15 +673,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 해당 마커 위치로 지도 이동
         naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(markerList[0].position, 20.0))
 
-        // 마커 크기 변경 // 애니메이션 추가
-        markerList[0].width = 100
-        markerList[0].height = 100
+        // 마커 크기 변경 // 이미지 교체?
+        markerList[0].width = markerPinSize
+        markerList[0].height = markerPinSize
         // 위의 markerGoEvent와 디자인패턴 이용??
     }
 
     private fun markerClickEvent(marker: Marker, id: Long, long: Double, lati: Double) {
         marker.setOnClickListener {
-
+            if (lastMarker != null) {
+                if (lastMarker!!.icon == markerPinImage)
+                    lastMarker!!.icon = markerImage
+                else if (lastMarker!!.icon == markerPinImageEmpty)
+                    lastMarker!!.icon = markerImageEmpty
+                lastMarker!!.width = markerSize
+                lastMarker!!.height = markerSize
+            }
 
             Log.d("MARKER_INFO", "lati: $lati long: $long")
             Log.d("MARKER_INFO", "Restaurant id : $id")
@@ -697,14 +719,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 })
 
 
-            // 해당 마커 위치로 지도 이동
-            naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(marker.position, 20.0))
+            if (marker.icon == markerImage)
+                marker.icon = markerPinImage
+            else if (marker.icon == markerImageEmpty)
+                marker.icon = markerPinImageEmpty
 
-            // 마커 크기 변경 // 애니메이션 추가
-            marker.width = 100
-            marker.height = 100
+            marker.width = markerPinSize
+            marker.height = markerPinSize
 
-
+            lastMarker = marker
 
             true
         }

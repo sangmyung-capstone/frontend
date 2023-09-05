@@ -38,19 +38,17 @@ class RestaurantBottomAdapter(
         holder.restaurant_address.text = itemList[position].restaurant_address
         if (itemList[position].num_of_party > 0)
             Glide.with(holder.context)
-                .load(R.drawable.group_icon)
-                .into(holder.restaurant_group_image)
+                .load(R.drawable.party_icon)
+                .into(holder.restaurant_party_image)
 
 
         Log.d("bottom_view_holder", "view holder${position} run")
         Log.d("bottom_view_holder", "image list ${position} run")
 
         if (imageList[position] == "a")
-        // 이미지 없음 빈 이미지
-//            Glide.with(holder.context)
-////            .load(itemList[position].imgURL)
-//                .load(R.drawable.bapool)
-//                .into(holder.restaurant_img)
+            Glide.with(holder.context)
+                .load(R.raw.bapool_img_loading)
+                .into(holder.restaurant_img)
         else {    // adapter.notifyItemChanged(position) 호출 시
             Glide.with(holder.context)
                 .load(imageList[position])
@@ -90,7 +88,7 @@ class RestaurantBottomAdapter(
         val restaurant_img = itemView.findViewById<ImageView>(R.id.bottom_restaurant_image)
         val restaurant_category = itemView.findViewById<TextView>(R.id.bottom_restaurant_category)
         val restaurant_address = itemView.findViewById<TextView>(R.id.bottom_restaurant_address)
-        val restaurant_group_image =
-            itemView.findViewById<ImageView>(R.id.bottom_restaurant_group)
+        val restaurant_party_image =
+            itemView.findViewById<ImageView>(R.id.bottom_restaurant_party)
     }
 }
