@@ -47,7 +47,7 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
 
         binding.ratingbutton.isEnabled = !Loglist.rating_complete
         if(binding.ratingbutton.isEnabled == false){
-            binding.ratingbutton.setBackgroundColor(Color.parseColor("#808080"))
+            binding.ratingbutton.setText("유저평가 완료")
         }
 
         binding.ratingbutton.setOnClickListener {

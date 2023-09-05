@@ -37,7 +37,8 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/loglist_items"/>
+            tools:listitem="@layout/loglist_items"
+            android:background="@color/gray"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -40,31 +40,97 @@
                 app:layout_constraintTop_toBottomOf="@+id/resName" />
 
 
-            <ImageView
-                android:id="@+id/profileimg"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                tools:src="@tools:sample/avatars"
-                android:scaleType="centerInside"/>
-
-            <TextView
-                android:id="@+id/nickname"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="닉네임"
-                android:gravity="center"/>
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp">
 
-            <RatingBar
-                android:id="@+id/rating"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileimg"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/image1"
+                    app:civ_border_color="@color/black"
+                    app:civ_border_overlay="true"
+                    app:civ_border_width="1dp" />
+
+                <TextView
+                    android:id="@+id/nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="닉네임" />
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/divider10"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                android:layout_marginBottom="5dp"/>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:progressTint="@color/main"
-                android:rating="1.5"
-                android:stepSize="0.5" />
+                android:layout_marginBottom="5dp">
+
+                <ImageView
+                    android:id="@+id/angry"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/angry"
+                    android:layout_marginRight="10dp"/>
+
+                <ImageView
+                    android:id="@+id/sad"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/sad"
+                    android:layout_marginRight="10dp"/>
+
+                <ImageView
+                    android:id="@+id/meh"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/meh"
+                    android:layout_marginRight="10dp"/>
+
+                <ImageView
+                    android:id="@+id/smile"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/smile"
+                    android:layout_marginRight="10dp"/>
+
+                <ImageView
+                    android:id="@+id/happy"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/happy"
+                    android:layout_marginRight="10dp"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider11"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
 
             <LinearLayout
                 android:layout_width="match_parent"

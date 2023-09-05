@@ -207,8 +207,8 @@ data class PostRatingUserRequest(
 
 data class UserData(
     val user_id: Long,
-    val rating: Float,
-    val hashtag: List<Int>,
+    var rating: Float,
+    var hashtag: List<Int>,
 )
 
 data class PostRatingUserResponse(

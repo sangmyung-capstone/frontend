@@ -1,16 +1,16 @@
 package com.bapool.bapool.ui
 
 import android.content.Intent
-import android.os.Build.VERSION_CODES.M
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.navigation.findNavController
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
-import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.adapter.RestaurantLogAdapter
 import com.bapool.bapool.databinding.ActivityRestaurantLogBinding
 import com.bapool.bapool.preference.MyApplication
@@ -22,7 +22,29 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class RestaurantLogActivity : AppCompatActivity() {
+
+    class CustomItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            with(outRect) {
+                left = 0
+                right = 0
+                bottom = space
+
+                // Add top margin only for the first item to avoid double space between items
+                if (parent.getChildLayoutPosition(view) == 0) {
+                    top = space
+                }
+            }
+        }
+    }
+
     //뒤로가기 콜백 선언
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -37,6 +59,8 @@ class RestaurantLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityRestaurantLogBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.spacing)
+        binding.recyclerView.addItemDecoration(CustomItemDecoration(spacingInPixels))
 
         val retro = ServerRetrofit.create()
         val RestaurantsLogList = mutableListOf<GetRestaurantLogResponse.parties>()
@@ -78,5 +102,6 @@ class RestaurantLogActivity : AppCompatActivity() {
                 LinearLayoutManager.VERTICAL
             )
         )
+
     }
 }
