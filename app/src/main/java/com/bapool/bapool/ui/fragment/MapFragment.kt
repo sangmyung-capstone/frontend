@@ -713,28 +713,30 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     fun createMarkerInfo(result: RestaurantInfo?) {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
 
-        binding.bottomSheet.removeAllViews()
+//        binding.bottomSheet.removeAllViews()
+        binding.bottomSheet.visibility = View.INVISIBLE
+        // bottomsheet 2 필요 !!!
         layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
         BottomSheetBehavior.from(binding.bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
         BottomSheetBehavior.from(binding.bottomSheet).isDraggable = false
 
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (binding.bottomSheet.isNotEmpty()) binding.bottomSheet.removeAllViews()
-                else {
-                    if (System.currentTimeMillis() - waitTime >= 1500) {
-                        waitTime = System.currentTimeMillis()
-                        Toast.makeText(context, "버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
-                    } else {
-                        finishAffinity(requireActivity())
-                    }
-                }
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            binding.bottomSheet.findViewTreeLifecycleOwner()!!,
-            callback
-        )
+//        val callback = object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                if (binding.bottomSheet.isNotEmpty()) binding.bottomSheet.removeAllViews()
+//                else {
+//                    if (System.currentTimeMillis() - waitTime >= 1500) {
+//                        waitTime = System.currentTimeMillis()
+//                        Toast.makeText(context, "버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        finishAffinity(requireActivity())
+//                    }
+//                }
+//            }
+//        }
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            binding.bottomSheet.findViewTreeLifecycleOwner()!!,
+//            callback
+//        )
 
         // 이미지
         Glide.with(this)
