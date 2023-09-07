@@ -251,6 +251,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("MARKER_INIT", "rect : $rect")
         Log.d("MARKER_INIT", "now bounds : ${naverMap.contentBounds}")
         Log.d("MARKER_INIT", "now camera : $cameraPosition")
+
+        binding.bottomRestaurantList.removeAllViews()
+
+        binding.bottomRestaurantList.visibility = View.VISIBLE
+        binding.bottomMarkerInfo.visibility = View.GONE
+
         //------------------------------------
         retro.getRestaurants(UserId, rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
@@ -258,6 +264,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 response: Response<GetRestaurantsResult>,
             ) {
                 if (response.isSuccessful) {
+                    restaurantsList = response.body()!!.result.restaurants.toMutableList()
+
                     // 식당링크 모음  // 현위치에서 재검색 이후 리스트 사이즈만큼 api 요청 필요 및 바인딩
                     restaurantIdList.clear()
                     for (idx in response.body()!!.result.restaurants)
@@ -266,26 +274,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     Log.d("BOTTOM_ID_LIST", restaurantIdList.toString())
 
                     // bottomSheet에 식당바텀리스트 레이아웃 할당
-                    binding.bottomSheet.removeAllViews()
                     layoutInflater.inflate(
                         R.layout.bottom_restaurant_list,
-                        binding.bottomSheet,
+                        binding.bottomRestaurantList,
                         true
                     )
-                    BottomSheetBehavior.from(binding.bottomSheet).isDraggable = true
-                    BottomSheetBehavior.from(binding.bottomSheet).peekHeight =
+                    BottomSheetBehavior.from(binding.bottomRestaurantList).isDraggable = true
+                    BottomSheetBehavior.from(binding.bottomRestaurantList).peekHeight =
                         dpToPx(300f, context).toInt()
 
-                    restaurantsList = response.body()!!.result.restaurants.toMutableList()
-
                     // 식당바텀리스트 어댑터 바인딩
-                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
+                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
                         RestaurantBottomAdapter(
                             response.body()!!.result.restaurants,
                             restaurantImageList,
                             naverMap
                         )
-                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
+                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
 
@@ -311,7 +316,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                             restaurantImageList[idx] =
                                                 response.body()!!.result.restaurant_img_urls[idx]
 
-                                        binding.bottomSheet.findViewById<RecyclerView>(
+                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
                                             R.id.bottom_recyclerview
                                         ).adapter =
                                             RestaurantBottomAdapter(
@@ -374,7 +379,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                         restaurantImageList[4] =
                                             response.body()!!.result.restaurant_img_urls[4]
 
-                                        binding.bottomSheet.findViewById<RecyclerView>(
+                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
                                             R.id.bottom_recyclerview
                                         ).adapter =
                                             RestaurantBottomAdapter(
@@ -404,7 +409,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             })
 
                         // 스크롤 페이징 리스너
-                        binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview)
+                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview)
                             .addOnScrollListener(object : RecyclerView.OnScrollListener() {
                                 override fun onScrolled(
                                     recyclerView: RecyclerView,
@@ -414,7 +419,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                     super.onScrolled(recyclerView, dx, dy)
 
                                     val firstVisibleItemPosition =
-                                        (binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                                        (binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
                                     // 3 간격 아이템 '진입 시'
                                     if ((firstVisibleItemPosition + 1) % 3 == 0 && !loggedPositions.contains(
@@ -461,7 +466,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                                                     restaurantImageList[cnt + idx] =
                                                                         response.body()!!.result.restaurant_img_urls[idx]
 
-                                                                binding.bottomSheet.findViewById<RecyclerView>(
+                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
                                                                     R.id.bottom_recyclerview
                                                                 ).adapter =
                                                                     RestaurantBottomAdapter(
@@ -531,7 +536,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                                                     response.body()!!.result.restaurant_img_urls[4]
 
 
-                                                                binding.bottomSheet.findViewById<RecyclerView>(
+                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
                                                                     R.id.bottom_recyclerview
                                                                 ).adapter =
                                                                     RestaurantBottomAdapter(
@@ -583,7 +588,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                     }
 
                                     // 최하단
-                                    if (!binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview)
+                                    if (!binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview)
                                             .canScrollVertically(1)
                                     ) {   //최하단에 오면
                                         //원하는 동작
@@ -757,7 +762,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun markerClickEvent(marker: Marker, id: Long, long: Double, lati: Double) {
         marker.setOnClickListener {
 
-
             Log.d("MARKER_INFO", "lati: $lati long: $long")
             Log.d("MARKER_INFO", "Restaurant id : $id")
 
@@ -803,12 +807,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     fun createMarkerInfo(result: RestaurantInfo?) {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
 
-        binding.bottomSheet.removeAllViews()
-//        binding.bottomSheet.visibility = View.INVISIBLE
-        // bottomsheet 2 필요 !!!
-        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
-        BottomSheetBehavior.from(binding.bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
-        BottomSheetBehavior.from(binding.bottomSheet).isDraggable = false
+        binding.bottomMarkerInfo.removeAllViews()
+
+        binding.bottomRestaurantList.visibility = View.GONE
+        binding.bottomMarkerInfo.visibility = View.VISIBLE
+
+        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomMarkerInfo, true)
+        BottomSheetBehavior.from(binding.bottomMarkerInfo).state = BottomSheetBehavior.STATE_COLLAPSED
+        BottomSheetBehavior.from(binding.bottomMarkerInfo).isDraggable = false
 
 //        val callback = object : OnBackPressedCallback(true) {
 //            override fun handleOnBackPressed() {
@@ -831,8 +837,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 이미지
         Glide.with(this)
             .load(result?.img_url)
-            .into(binding.bottomSheet.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
-        binding.bottomSheet.findViewById<Button>(R.id.bottomButtonParty).setOnClickListener {
+            .into(binding.bottomMarkerInfo.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
+        binding.bottomMarkerInfo.findViewById<Button>(R.id.bottomButtonParty).setOnClickListener {
             val intent = Intent(requireContext(), RestaurantPartyActivity::class.java)
             val goToRestaurantPartyList = goToRestaurantPartyList(
                 result?.restaurant_id, result?.restaurant_name, result?.restaurant_address,
@@ -846,16 +852,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             startActivity(intent)
         }
         // 스트링
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextName).text =
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).text =
             result?.restaurant_name
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextName).setOnClickListener {
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(result?.link)))
         }
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextAddress).text =
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextAddress).text =
             result?.restaurant_address
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextPhone).text =
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextPhone).text =
             result?.phone
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextCategory).text =
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextCategory).text =
             result?.category
         Log.d("MARKER_INFO", "menu : ${result?.menu.toString()}")
         if ((result?.menu != null) && (result.menu.isNotEmpty())) {
@@ -864,13 +870,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 if (idx.price == null) text += "${idx.name} \n"
                 else text += "${idx.name} : ${idx.price} \n"
                 text.substring(0, text.length - 1)
-                binding.bottomSheet.findViewById<TextView>(R.id.bottomTextMenu).text = text
+                binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextMenu).text = text
             }
         } else {
-            binding.bottomSheet.findViewById<TextView>(R.id.bottomTextMenu).text =
+            binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextMenu).text =
                 "메뉴 미제공 \n"
         }
-        binding.bottomSheet.findViewById<Button>(R.id.bottomButtonParty).text =
+        binding.bottomMarkerInfo.findViewById<Button>(R.id.bottomButtonParty).text =
             "${result?.num_of_party.toString()} 파티!"
 
         // view 부착

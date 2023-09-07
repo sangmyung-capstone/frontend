@@ -73,11 +73,20 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
-        android:id="@+id/bottomSheet"
+        android:id="@+id/bottomRestaurantList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:elevation="3dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/bottomMarkerInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:elevation="3dp"
+        android:visibility="gone"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
     </FrameLayout>
 
