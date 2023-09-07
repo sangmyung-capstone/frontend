@@ -54,6 +54,7 @@ class RestaurantBottomAdapter(
         else {    // adapter.notifyItemChanged(position) 호출 시
             Glide.with(holder.context)
                 .load(imageList[position])
+                .error(R.drawable.bapool)
                 .into(holder.restaurant_img)
         }
 
