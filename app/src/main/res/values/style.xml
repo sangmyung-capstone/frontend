@@ -10,5 +10,16 @@
         <!--Alpha can be added optionally to achieve nice color blend-->
         <item name="android:alpha">0.3</item>
     </style>
+    <style name="CustomChipChoice"
+        parent="@style/Widget.MaterialComponents.Chip.Filter">
+        <item name ="chipBackgroundColor">@color/chip_background_state_list</item>
+        <item name ="android:textColor">@color/chip_text_state_list</item>
+    </style>
+
+    <style name="customCloseBtn"
+        parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/main</item>
+    </style>
 
 </resources>

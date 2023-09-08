@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -129,44 +130,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         initializeVari()
         listener()
         getPartyUserInfo()
-
-
-//
-//        binding.dummy.setOnClickListener {
-//        val database = Firebase.database
-//        val myRef = database.getReference("test").child("Groups").child(partyId).child("groupUsers")
-//
-//            myRef.updateChildren(mapOf("97" to true))
-//
-//            myRef.updateChildren(mapOf("98" to true))
-//            myRef.updateChildren(mapOf("99" to true))
-//            val myRef2 = database.getReference("test").child("InTheParty").child(partyId)
-//            myRef2.updateChildren(mapOf("97" to "active"))
-//            myRef2.updateChildren(mapOf("98" to "active"))
-//            myRef2.updateChildren(mapOf("99" to "active"))
-//        }
-//        binding.dummy2.setOnClickListener {
-//            dummy2()
-//        }
-
-
-//
-//        val user = mapOf<String,Boolean>("99" to true)
-//
-//
-//        FirebaseDatabase.getInstance().getReference("test").child("Groups").child(partyId.toString())
-//            .child("groupUsers").updateChildren(user)
-//
-//        val user2 = mapOf<String,Boolean>("97" to true)
-//        FirebaseDatabase.getInstance().getReference("test").child("Groups").child(partyId.toString())
-//            .child("groupUsers").updateChildren(user2)
-//
-//        val user3 = mapOf<String,Boolean>("98" to true)
-//        FirebaseDatabase.getInstance().getReference("test").child("Groups").child(partyId.toString())
-//            .child("groupUsers").updateChildren(user3)
-
-
-
     }
 
 
@@ -381,7 +344,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     }
                     if (!(item.status.equals("RECRUITING"))) {
                         binding.closePartyBtn.isEnabled = false
-                        binding.closePartyBtn.text = "확정 완료"
+                        binding.closePartyBtn.text = "마감 완료"
 
                     }
                     if (item.status.equals("DEADLINE")) {

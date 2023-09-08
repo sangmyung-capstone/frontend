@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#F3F3F3"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:foregroundTint="#000000">
 
 
-    <TextView
+    <com.google.android.material.chip.Chip
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +15,6 @@
         android:layout_marginTop="20dp"
         android:gravity="center_vertical"
         android:text="공지사항"
-        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +35,7 @@
             android:id="@+id/detailText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="dsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkldsjkflasjdfkladsfklasjdflkadsjfkl" />
+            android:text="" />
 
     </ScrollView>
 
