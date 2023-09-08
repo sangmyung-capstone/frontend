@@ -76,9 +76,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomRestaurantList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="600dp"
         android:elevation="3dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

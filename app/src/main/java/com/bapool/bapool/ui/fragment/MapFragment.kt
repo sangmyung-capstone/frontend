@@ -266,7 +266,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     )
                     BottomSheetBehavior.from(binding.bottomRestaurantList).isDraggable = true
                     BottomSheetBehavior.from(binding.bottomRestaurantList).peekHeight =
-                        dpToPx(300f, context).toInt()
+                        dpToPx(180f, context).toInt()
+                    BottomSheetBehavior.from(binding.bottomRestaurantList).saveFlags =
+                            BottomSheetBehavior.SAVE_ALL
 
                     // 식당바텀리스트 어댑터 바인딩
                     binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
