@@ -324,8 +324,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                                 restaurantsList,
                                                 restaurantImageList,
                                                 naverMap
-                                            ).notifyItemRangeChanged(0, restaurantIdList.size)
-
+                                            )
+                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+                                        RestaurantBottomAdapter(
+                                            restaurantsList,
+                                            restaurantImageList,
+                                            naverMap
+                                        ).notifyItemRangeChanged(0, restaurantIdList.size)
                                     }
                                 }
 

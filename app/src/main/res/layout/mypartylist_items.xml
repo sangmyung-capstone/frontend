@@ -79,7 +79,7 @@
         android:layout_width="13dp"
         android:layout_height="13dp"
         android:layout_marginLeft="10dp"
-        android:src="@drawable/group_icon"
+        android:src="@drawable/party_icon"
         app:layout_constraintBottom_toBottomOf="@+id/grpName"
         app:layout_constraintStart_toEndOf="@+id/grpName"
         app:layout_constraintTop_toTopOf="@+id/grpName" />
