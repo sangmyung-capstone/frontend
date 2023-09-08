@@ -67,6 +67,7 @@ class RatingActivity : AppCompatActivity() {
         binding.recyclerView.adapter = RatingUserAdapter(ratingUsersList, postRatingUserRequest)
         binding.ratingcomplete.setOnClickListener {
             val selectedUsers = postRatingUserRequest.users
+            Log.d("해쉬태그", "$selectedUsers")
 
             val invalidUsers = selectedUsers.filter { user ->
                 user.rating == 0.0f || user.hashtag.isEmpty()

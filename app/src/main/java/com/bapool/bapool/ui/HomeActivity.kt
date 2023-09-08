@@ -53,6 +53,11 @@ class HomeActivity : AppCompatActivity() {
         refreshFirebaseToken()
 
         this.onBackPressedDispatcher.addCallback(this, callback) //위에서 생성한 콜백 인스턴스 붙여주기
+
+        val destination = intent.getStringExtra("destination")
+        if (destination == "MypageFragment") {
+            binding.mainBottomNav.selectedItemId = R.id.mypageFragment
+        }
     }
 
     private fun initBottomNavigation() {
@@ -60,6 +65,7 @@ class HomeActivity : AppCompatActivity() {
 //        mapFragment = MapFragment()
 //        supportFragmentManager.beginTransaction()
 //            .replace(R.id.fragmentContainerView2, mapFragment!!).commit()
+
 
         binding.mainBottomNav.setOnItemSelectedListener {
 

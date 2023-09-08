@@ -3,7 +3,10 @@ package com.bapool.bapool.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bapool.bapool.R
 import com.bapool.bapool.databinding.RatinguserItemBinding
 import com.bapool.bapool.retrofit.data.*
 
@@ -32,14 +35,14 @@ class RatingUserAdapter(
         // Set the data to the views
         binding.nickname.text = Loglist.nickname
 
-        fun updateUserData(userData: UserData) {
-            val updatedList = postRatingUserRequest.users.toMutableList()
-            val index = postRatingUserRequest.users.indexOfFirst { it.user_id == userData.user_id }
-            if (index != -1) {
-                updatedList[index] = userData
-            } else {
-                updatedList.add(userData)
-            }
+        var userData = postRatingUserRequest.users.find { it.user_id == Loglist.user_id }
+            ?: UserData(user_id = Loglist.user_id, rating = 0f, hashtag = listOf())
+
+
+        fun updateUserData(updatedData: UserData) {
+            val updatedList =
+                postRatingUserRequest.users.filterNot { it.user_id == updatedData.user_id }
+                    .plus(updatedData)
             postRatingUserRequest.users = updatedList.toList()
         }
 
@@ -53,24 +56,70 @@ class RatingUserAdapter(
                     selectedHashtags.add(hashtag)
                 }
 
-                val userData = UserData(
-                    user_id = Loglist.user_id,
-                    rating = binding.ratingBar.rating,
-                    hashtag = selectedHashtags.toList()
-                )
+                userData.hashtag = selectedHashtags.toList()
 
                 updateUserData(userData)
             }
         }
 
-        binding.ratingBar.setOnRatingBarChangeListener { _, rating, _ ->
-            val userData = UserData(
-                user_id = Loglist.user_id,
-                rating = rating,
-                hashtag = selectedHashtags.toList()
-            )
+        fun updateRating(userId: Long, newRating: Float) {
+            val userDataToUpdate =
+                postRatingUserRequest.users.find { it.user_id == userId }?.copy(rating = newRating)
 
+            if (userDataToUpdate != null) {
+                updateUserData(userDataToUpdate)
+            }
+        }
+
+        // Add listeners for image buttons
+        binding.angrybutton.setOnClickListener {
+            userData.rating = 1f // Set rating to 1 when angry button is clicked
             updateUserData(userData)
+            binding.angrybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.main))
+            binding.sadbutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.muebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.smilebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.happybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+        }
+
+        binding.sadbutton.setOnClickListener {
+            userData.rating = 2f // Set rating to 2 when sad button is clicked
+            updateUserData(userData)
+            binding.angrybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.sadbutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.main))
+            binding.muebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.smilebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.happybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+        }
+
+        binding.muebutton.setOnClickListener {
+            userData.rating = 3f // Set rating to 3 when meh button is clicked
+            updateUserData(userData)
+            binding.angrybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.sadbutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.muebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.main))
+            binding.smilebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.happybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+        }
+
+        binding.smilebutton.setOnClickListener {
+            userData.rating = 4f // Set rating to 4 when smile button is clicked
+            updateUserData(userData)
+            binding.angrybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.sadbutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.muebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.smilebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.main))
+            binding.happybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+        }
+
+        binding.happybutton.setOnClickListener {
+            userData.rating = 5f // Set rating to 5 when happy button is clicked
+            updateUserData(userData)
+            binding.angrybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.sadbutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.muebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.smilebutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            binding.happybutton.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.main))
         }
 
         binding.chip.setOnClickListener {

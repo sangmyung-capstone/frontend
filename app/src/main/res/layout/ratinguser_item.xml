@@ -23,23 +23,70 @@
             android:layout_marginTop="16dp"
             android:text="nickname" />
 
-        <RatingBar
-            android:id="@+id/ratingBar"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="36dp"
-            android:contentDescription="유저 평가"
-            android:progressTint="@color/main"
-            android:numStars="5"
-            android:stepSize="0.1"/>
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp">
+
+            <ImageButton
+                android:id="@+id/angrybutton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/angry"
+                android:background="@color/white"
+                android:layout_marginRight="10dp"/>
+
+            <ImageButton
+                android:id="@+id/sadbutton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/sad"
+                android:background="@color/white"
+                android:layout_marginRight="10dp"/>
+            <ImageButton
+                android:id="@+id/muebutton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/meh"
+                android:background="@color/white"
+                android:layout_marginRight="10dp"/>
+
+            <ImageButton
+                android:id="@+id/smilebutton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/smile"
+                android:background="@color/white"
+                android:layout_marginRight="10dp"/>
+
+            <ImageButton
+                android:id="@+id/happybutton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/happy"
+                android:background="@color/white"
+                android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="20dp"
             app:singleSelection="false">
 
             <com.google.android.material.chip.Chip

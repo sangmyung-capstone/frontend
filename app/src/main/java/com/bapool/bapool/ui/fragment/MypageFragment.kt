@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.FragmentMypageBinding
+import com.bapool.bapool.preference.MyApplication
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.DeleteUserResponse
 import com.bapool.bapool.retrofit.data.GetMypageResponse
@@ -64,8 +66,19 @@ class MypageFragment : Fragment() {
                                 7 -> binding.profileimg.setImageResource(R.drawable.image7)
                                 8 -> binding.profileimg.setImageResource(R.drawable.image8)
                             }
+                            if (result.result.rating.toFloat() < 1.0 && result.result.rating.toFloat() >= 0.0) {
+                                binding.angry.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
+                            } else if (result.result.rating.toFloat() < 2.0 && result.result.rating.toFloat() >= 1.0) {
+                                binding.sad.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
+                            } else if (result.result.rating.toFloat() < 3.0 && result.result.rating.toFloat() >=2.0) {
+                                binding.meh.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
+                            } else if(result.result.rating.toFloat() < 4.0 && result.result.rating.toFloat() >=3.0){
+                                binding.smile.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
+                            } else if(result.result.rating.toFloat() < 5.0 && result.result.rating.toFloat() >= 4.0){
+                                binding.happy.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
+                            }
                             binding.nickname.text = result.result.nickname
-                            binding.rating.rating = result.result.rating.toFloat()
+
                             binding.talkcount.text =
                                 result.result?.hashtag?.find { it.hashtag_id == 1 }?.count.toString()
                             binding.kindcount.text =
@@ -112,6 +125,8 @@ class MypageFragment : Fragment() {
     fun listener() {
 
         binding.logout.setOnClickListener {
+            MyApplication.prefs.setString("prefstoken", "")
+            MyApplication.prefs.setString("prefsid", "")
             val intent = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
@@ -164,7 +179,7 @@ class MypageFragment : Fragment() {
         ) { result ->
             if (result.resultCode == RESULT_OK) {
                 binding.nickname.text = result.data?.getStringExtra("nickname")
-                when (result.data?.getIntExtra("profileimg",1)) {
+                when (result.data?.getIntExtra("profileimg", 1)) {
                     1 -> binding.profileimg.setImageResource(R.drawable.image1)
                     2 -> binding.profileimg.setImageResource(R.drawable.image2)
                     3 -> binding.profileimg.setImageResource(R.drawable.image3)
