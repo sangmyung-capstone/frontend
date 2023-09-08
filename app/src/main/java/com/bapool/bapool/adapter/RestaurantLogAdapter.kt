@@ -1,15 +1,13 @@
 package com.bapool.bapool.adapter
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.LoglistItemsBinding
-import com.bapool.bapool.retrofit.data.*
+import com.bapool.bapool.retrofit.data.GetRestaurantLogResponse
 import com.bapool.bapool.ui.RatingActivity
 import com.bumptech.glide.Glide
 
@@ -38,6 +36,7 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
         binding.address.text = Loglist.restaurant_address
         binding.category.text = Loglist.category
         binding.groupname.text = Loglist.party_name
+        binding.ratingbutton.isEnabled = false
 
         //Glide 쓰는 과정
         if (Loglist.restaurant_img_url != null) {
@@ -46,7 +45,6 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
         } else if (Loglist.restaurant_img_url == null) {
             binding.restaurantImage.setImageResource(R.drawable.bapool_circle)
         }
-
         binding.ratingbutton.isEnabled = !Loglist.rating_complete
         if (binding.ratingbutton.isEnabled == false) {
             binding.ratingbutton.setText("유저평가 완료")
@@ -61,4 +59,8 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
     }
 
     override fun getItemCount(): Int = datas.size
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

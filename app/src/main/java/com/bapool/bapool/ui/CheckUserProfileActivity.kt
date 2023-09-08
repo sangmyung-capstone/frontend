@@ -54,6 +54,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
                         val imageName = "image${userInfo.profileImg}"
                         val resourceId = resources.getIdentifier(imageName, "drawable", packageName)
                         binding.userImage.setImageResource(resourceId)
+                        binding.nickName.text = result.result.nickname
 
                         //평점 binding
                         if (result.result.rating.toFloat() < 1.0 && result.result.rating.toFloat() >= 0.0) {

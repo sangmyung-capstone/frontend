@@ -71,6 +71,17 @@ class RatingReceiver() : BroadcastReceiver() {
                     if (response.isSuccessful) {
                         intent2.putExtra("Activity", "Rating")
 
+                        if (items != null) {
+                            for (data in items) {
+                                sendNotificationFcm(
+                                    groupname.toString(),
+                                    data,
+                                    title.toString(),
+                                    requestCode
+                                )
+                            }
+                        }
+
                     } else {
                         // handle error response
                         Log.d("bap", "onResponse 실패 $response")
@@ -83,11 +94,7 @@ class RatingReceiver() : BroadcastReceiver() {
                 }
             })
 
-        if (items != null) {
-            for (data in items) {
-                sendNotificationFcm(groupname.toString(), data, title.toString(), requestCode)
-            }
-        }
+
     }
 
     fun sendNotificationFcm(
@@ -97,8 +104,10 @@ class RatingReceiver() : BroadcastReceiver() {
         requestCode: Int
     ) {
 
-        val notiModel = NotiModel(groupname, notificationText, (requestCode/1000).toString(),
-            LoginActivity.UserId.toString(), LoginActivity.UserToken.toString(), requestCode,3)
+        val notiModel = NotiModel(
+            groupname, notificationText, (requestCode / 1000).toString(),
+            LoginActivity.UserId.toString(), LoginActivity.UserToken.toString(), requestCode, 3
+        )
 
         val pushModel = PushNotification(notiModel, firebaseToken)
 
