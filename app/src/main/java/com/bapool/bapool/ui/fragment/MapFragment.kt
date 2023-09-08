@@ -667,9 +667,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 해당 마커 위치로 지도 이동
         naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(marker.position, 20.0))
 
-        // 마커 크기 변경 // 애니메이션 추가
-        marker.width = 100
-        marker.height = 100
+        if (marker.icon == markerImage) {
+
+            marker.icon = markerPinImage
+            ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
+            ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+
+        } else if (marker.icon == markerImageEmpty) {
+
+            marker.icon = markerPinImageEmpty
+            ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
+            ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+
+        }
 
         retro.getRestaurantInfo(UserId, id, long, lati)
             .enqueue(object : Callback<GetRestaurantInfoResult> {
@@ -692,14 +702,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
             })
 
-
-        // 해당 마커 위치로 지도 이동
-        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(marker.position, 20.0))
-
-        // 마커 크기 변경 // 애니메이션 추가
-        marker.width = markerPinSize
-        marker.height = markerPinSize
-
+        lastMarker = marker
     }
 
     fun searchMarkerGoEvent(
@@ -740,8 +743,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(markerList[0].position, 20.0))
 
         // 마커 크기 변경 // 애니메이션 추가
-        markerList[0].width = markerPinSize
-        markerList[0].height = markerPinSize
+        if (markerList[0].icon == markerImage) {
+
+            markerList[0].icon = markerPinImage
+            ObjectAnimator.ofInt(markerList[0],"width", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0],"height", markerPinSize).start()
+
+        } else if (markerList[0].icon == markerImageEmpty) {
+
+            markerList[0].icon = markerPinImageEmpty
+            ObjectAnimator.ofInt(markerList[0],"width", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0],"height", markerPinSize).start()
+
+        }
 
 
         retro.getRestaurantInfo(UserId, id, long, lati)
