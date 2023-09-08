@@ -84,7 +84,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     val markerPinImageEmpty = OverlayImage.fromResource(R.drawable.marker_pin_empty)
 
     val markerSize = 70
-    val markerPinSize = 150
+    val markerPinSize = 160
 
 
     //    val retro = RetrofitService.create()  // MOCK SERVER
@@ -719,13 +719,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 })
 
 
-            if (marker.icon == markerImage)
-                marker.icon = markerPinImage
-            else if (marker.icon == markerImageEmpty)
-                marker.icon = markerPinImageEmpty
+            if (marker.icon == markerImage) {
 
-            marker.width = markerPinSize
-            marker.height = markerPinSize
+                marker.icon = markerPinImage
+                ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
+                ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+
+            } else if (marker.icon == markerImageEmpty) {
+
+                marker.icon = markerPinImageEmpty
+                ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
+                ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+
+            }
+
 
             lastMarker = marker
 
