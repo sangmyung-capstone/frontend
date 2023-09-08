@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/myPartyRoom"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="100dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp">
 
@@ -29,59 +29,88 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
+        android:textStyle="bold"
         android:ellipsize="end"
-        android:maxWidth="160dp"
+        android:maxWidth="180dp"
         android:maxLines="1"
         android:text="그룹명sdfasfsadfdsaasdfsadfasfasdfsadfsadfasdfasdf"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/partyRestaurantImage"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/partyRestaurantImage1"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageView
-        android:id="@+id/partyRestaurantImage"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/partyRestaurantImage1"
         android:layout_width="50dp"
-        android:layout_height="80dp"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/image1"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/partyRestaurantImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/restauranticon" />
+    </androidx.cardview.widget.CardView>
+
 
     <TextView
         android:id="@+id/lastChat"
         android:layout_width="0dp"
-        android:layout_height="13dp"
+        android:layout_height="20dp"
         android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxWidth="220dp"
         android:maxLines="1"
-        android:text=""
+        android:text="asdafsd"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/resName"
         app:layout_constraintTop_toBottomOf="@+id/resName" />
+
+    <ImageView
+        android:id="@+id/participantsImage"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/group_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/grpName"
+        app:layout_constraintStart_toEndOf="@+id/grpName"
+        app:layout_constraintTop_toTopOf="@+id/grpName" />
 
     <TextView
         android:id="@+id/participantsNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:text="참여인원"
         android:textColor="@color/black"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/grpName"
-        app:layout_constraintStart_toEndOf="@+id/grpName"
-        app:layout_constraintTop_toTopOf="@+id/grpName" />
+        android:layout_marginLeft="5dp"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/participantsImage"
+        app:layout_constraintStart_toEndOf="@+id/participantsImage"
+        app:layout_constraintTop_toTopOf="@+id/participantsImage" />
+
 
     <TextView
         android:id="@+id/notReadChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
+        android:background="@drawable/howmanychattingbackground"
         android:text="15"
-        android:textColor="@color/black"
-        android:textSize="25sp"
+        android:visibility="gone"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,8 +119,9 @@
     <TextView
         android:id="@+id/textView7"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="0.9dp"
         android:background="#EEEEEE"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/partyRestaurantImage" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
