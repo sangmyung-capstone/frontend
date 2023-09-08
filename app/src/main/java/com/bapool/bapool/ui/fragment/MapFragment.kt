@@ -88,6 +88,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         instance = this
     }
 
+    private var searchGoFlag = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -133,27 +135,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
             if (newState == SearchView.TransitionState.SHOWING) {
-                // 검색 결과 오픈 시 하단 네비게이션바 제거
-                //        (activity as HomeActivity).hideBottomNavi(true)
-
-                // 수정 필요
-//                val callback = object : OnBackPressedCallback(true) {
-//                    override fun handleOnBackPressed() {
-//                        if (newState == SearchView.TransitionState.SHOWING) searchView.hide()
-//                        else {
-//                            if (System.currentTimeMillis() - waitTime >= 1500) {
-//                                waitTime = System.currentTimeMillis()
-//                                Toast.makeText(context, "버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
-//                            } else {
-//                                finishAffinity(requireActivity())
-//                            }
-//                        }
-//                    }
-//                }
-//                requireActivity().onBackPressedDispatcher.addCallback(
-//                    binding.bottomSheet.findViewTreeLifecycleOwner()!!,
-//                    callback
-//                )
             }
         }
 
@@ -173,7 +154,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
 
-
         return binding.root
     }
 
@@ -190,11 +170,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         naverMap.addOnCameraChangeListener { reason, _ ->
             // 지도가 이동 상태 시 콜백함수
             if (reason == -1) binding.extendedFAB.show()   // 사용자 움직임 시 reason == -1
+
+
         }
 
         naverMap.addOnCameraIdleListener {
             // 지도가 이동 후 대기 상태 시 콜백함수
             Log.d("CAMERA", "now camera : ${naverMap.cameraPosition}")
+            Log.d("CAMERA", "bottomRestaurant : ${binding.bottomRestaurantList.visibility}")
+            Log.d("CAMERA", "bottomMarker : ${binding.bottomMarkerInfo.visibility}")
+
         }
 
 //        markerInit()  // 현 위치 구하기 필요  // 위에 naverMap을 this.naverMap.locationSource 이용??
@@ -664,6 +649,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 마커 클릭 시 하단 네비게이션바 제거
 //        (activity as HomeActivity).hideBottomNavi(true)
 
+        // 해당 마커 위치로 지도 이동
+        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(marker.position, 20.0))
+
+        // 마커 크기 변경 // 애니메이션 추가
+        marker.width = 100
+        marker.height = 100
 
         retro.getRestaurantInfo(UserId, id, long, lati)
             .enqueue(object : Callback<GetRestaurantInfoResult> {
@@ -686,13 +677,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
             })
 
-
-        // 해당 마커 위치로 지도 이동
-        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(marker.position, 20.0))
-
-        // 마커 크기 변경 // 애니메이션 추가
-        marker.width = 100
-        marker.height = 100
     }
 
     fun searchMarkerGoEvent(
@@ -704,6 +688,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         restaurant_name: String
     ) { // 인자로서 marker의 lati long 필요  // num of party   // name
         binding.searchView.hide()
+
+        searchGoFlag = 1
+
         // 추가적인 마커 생성 및 카메라 이동 필요
         if (markerList.size != 0) {
             Log.d("MARKER_INIT", "marker clear!!!")
@@ -722,10 +709,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         markerList[0].width = 50
         markerList[0].height = 50
         markerList[0].captionText = restaurant_name
-        // 해당 마커 클릭 이벤트
-        markerClickEvent(markerList[0], id, long, lati)
+
         // 마커 클릭 시 하단 네비게이션바 제거
 //        (activity as HomeActivity).hideBottomNavi(true)
+
+        // 해당 마커 위치로 지도 이동
+        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(markerList[0].position, 20.0))
+
+        // 마커 크기 변경 // 애니메이션 추가
+        markerList[0].width = 100
+        markerList[0].height = 100
 
 
         retro.getRestaurantInfo(UserId, id, long, lati)
@@ -749,18 +742,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
             })
 
+        // 해당 마커 클릭 이벤트
+        markerClickEvent(markerList[0], id, long, lati)
 
-        // 해당 마커 위치로 지도 이동
-        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(markerList[0].position, 20.0))
-
-        // 마커 크기 변경 // 애니메이션 추가
-        markerList[0].width = 100
-        markerList[0].height = 100
         // 위의 markerGoEvent와 디자인패턴 이용??
     }
 
     private fun markerClickEvent(marker: Marker, id: Long, long: Double, lati: Double) {
         marker.setOnClickListener {
+
 
             Log.d("MARKER_INFO", "lati: $lati long: $long")
             Log.d("MARKER_INFO", "Restaurant id : $id")
@@ -813,26 +803,36 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.bottomMarkerInfo.visibility = View.VISIBLE
 
         layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomMarkerInfo, true)
-        BottomSheetBehavior.from(binding.bottomMarkerInfo).state = BottomSheetBehavior.STATE_COLLAPSED
-        BottomSheetBehavior.from(binding.bottomMarkerInfo).isDraggable = false
 
-//        val callback = object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                if (binding.bottomSheet.isNotEmpty()) binding.bottomSheet.removeAllViews()
-//                else {
-//                    if (System.currentTimeMillis() - waitTime >= 1500) {
-//                        waitTime = System.currentTimeMillis()
-//                        Toast.makeText(context, "버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
-//                    } else {
-//                        finishAffinity(requireActivity())
-//                    }
-//                }
-//            }
-//        }
-//        requireActivity().onBackPressedDispatcher.addCallback(
-//            binding.bottomSheet.findViewTreeLifecycleOwner()!!,
-//            callback
-//        )
+        BottomSheetBehavior.from(binding.bottomMarkerInfo).state = BottomSheetBehavior.STATE_EXPANDED
+
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.bottomMarkerInfo.visibility == View.VISIBLE) {
+                    if (searchGoFlag == 1 ) {
+                        binding.searchView.show()
+                        searchGoFlag = 0
+                    }
+
+                    binding.bottomMarkerInfo.removeAllViews()
+
+                    binding.bottomRestaurantList.visibility = View.VISIBLE
+                    binding.bottomMarkerInfo.visibility = View.GONE
+                } else {
+                    if (System.currentTimeMillis() - waitTime >= 1500) {
+                        waitTime = System.currentTimeMillis()
+                        Toast.makeText(context, "버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        finishAffinity(requireActivity())
+                    }
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            binding.bottomMarkerInfo.findViewTreeLifecycleOwner()!!,
+            callback
+        )
 
         // 이미지
         Glide.with(this)
