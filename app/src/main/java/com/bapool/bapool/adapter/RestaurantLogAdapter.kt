@@ -42,7 +42,7 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
         if (Loglist.restaurant_img_url != null) {
             Glide.with(holder.itemView).load(Loglist.restaurant_img_url).into(binding.restaurantImage)
         } else if (Loglist.restaurant_img_url == null) {
-            binding.restaurantImage.setImageResource(R.drawable.restaurant_icon)
+            binding.restaurantImage.setImageResource(R.drawable.bapool_circle)
         }
 
         binding.ratingbutton.isEnabled = !Loglist.rating_complete

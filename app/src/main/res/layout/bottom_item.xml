@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/bottom_restaurant_category" />
 
     <ImageView
-        android:id="@+id/bottom_restaurant_group"
+        android:id="@+id/bottom_restaurant_party"
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:layout_marginStart="8dp"
