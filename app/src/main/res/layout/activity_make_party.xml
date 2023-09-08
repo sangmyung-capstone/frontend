@@ -284,12 +284,12 @@
         android:id="@+id/textview20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="30dp"
         android:text="공지사항"
         android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryChips" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryChips2" />
 
     <ScrollView
         android:id="@+id/detailInputText"
@@ -331,7 +331,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="30dp"
-        android:weightSum="5"
+        android:weightSum="3"
         app:layout_constraintStart_toStartOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/textView11">
 
@@ -339,36 +339,51 @@
             android:id="@+id/chip1"
             style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="end"
             android:text="1111" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip2"
             style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="2222" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip3"
             style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="3333" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/categoryChips2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="30dp"
+        app:layout_constraintStart_toStartOf="@+id/categoryChips"
+        app:layout_constraintTop_toBottomOf="@+id/categoryChips">
         <com.google.android.material.chip.Chip
             android:id="@+id/chip4"
             style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4444" />
-
         <com.google.android.material.chip.Chip
             android:id="@+id/chip5"
             style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5555" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
 
     </LinearLayout>
 

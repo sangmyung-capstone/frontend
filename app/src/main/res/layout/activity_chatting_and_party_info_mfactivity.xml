@@ -331,16 +331,13 @@
                 android:id="@+id/closePartyBtn"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:backgroundTint="#FFFFFF"
                 android:text="파티 시간,인원 확정하기"
                 android:textSize="10sp"
                 android:visibility="gone"
                 app:cornerRadius="10dp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:strokeColor="@color/main"
-                app:strokeWidth="2dp" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView7"

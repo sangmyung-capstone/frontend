@@ -260,6 +260,7 @@ class RestaurantPartyActivity : AppCompatActivity() {
         val allNum = partiNum(item.participants, item.max_people)
         val allDate = dateRange(item.start_date)
 
+        binding.restaurantLocation.text = restaurantPartyInfoObject.address
         binding.partyName.text = item.party_name
         binding.partyMenu.text = item.menu
         binding.dateTime.text = allDate

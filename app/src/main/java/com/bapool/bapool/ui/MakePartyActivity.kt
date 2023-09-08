@@ -41,7 +41,7 @@ class MakePartyActivity : AppCompatActivity() {
     val retro = ServerRetrofit.create()
     val userId: String = UserId.toString()   //companion userid로 변경필요.
     lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
-
+    var maxpeopeleInt: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,10 +91,10 @@ class MakePartyActivity : AppCompatActivity() {
                 // This method is called whenever the text is changed.
                 val charCount = charSequence?.length ?: 0
                 if(charCount <= 10){
-                    binding.menuEdit.text ="(${charCount} / 10)"
+                    binding.menuEdit.text ="(${charCount}/10)"
                     binding.menuEdit.setTextColor(Color.parseColor("#5B5BFB"))
                 }else if(charCount > 10){
-                    binding.menuEdit.text ="(${charCount} / 10)"
+                    binding.menuEdit.text ="(${charCount}/10)"
                     binding.menuEdit.setTextColor(Color.RED)
                 }
             }
@@ -110,63 +110,47 @@ class MakePartyActivity : AppCompatActivity() {
         binding.chip1.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 hastagList.set(0, 1)
-                Log.d("chip1",hastagList.toString())
-
             } else {
                 hastagList.set(0, 0)
-                Log.d("chip1",hastagList.toString())
-
             }
         }
         binding.chip2.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 hastagList.set(1, 1)
-                Log.d("chip1",hastagList.toString())
-
 
             } else {
                 hastagList.set(1, 0)
-                Log.d("chip1",hastagList.toString())
-
             }
         }
         binding.chip3.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 hastagList.set(2, 1)
-                Log.d("chip1",hastagList.toString())
-
             } else {
 
                 hastagList.set(2, 0)
-                Log.d("chip1",hastagList.toString())
-
             }
         }
         binding.chip4.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 hastagList.set(3, 1)
-                Log.d("chip1",hastagList.toString())
-
             } else {
                 hastagList.set(3, 0)
-                Log.d("chip1",hastagList.toString())
-
             }
         }
         binding.chip5.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 hastagList.set(4, 1)
-                Log.d("chip1",hastagList.toString())
 
             } else {
                 hastagList.set(4, 0)
-                Log.d("chip1",hastagList.toString())
             }
         }
 
 
+
         //모임시작 날짜 정하기
         binding.startDateConst.setOnClickListener {
+            binding.startDateConst.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
             datePickerDialogCustom(System.currentTimeMillis(), 1)
         }
         //모임 시작 시간 정하기
@@ -174,11 +158,14 @@ class MakePartyActivity : AppCompatActivity() {
             binding.startTimeConst.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
             timePickerDialogCustom(1)
         }
-
+        //모임 정원 정하기
+        binding.maxPeopleConst.setOnClickListener {
+            binding.maxPeopleConst.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
+            showMaxPeopleDialog()
+        }
 
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
         binding.makeGrpButton.setOnClickListener {
-
 
             if (binding.grpNameText.text.isNullOrBlank()) {
                 alterDialog("파티명을 입력해주세요.")
@@ -197,11 +184,17 @@ class MakePartyActivity : AppCompatActivity() {
 
             } else if (binding.startTimeText.text.toString().isNullOrBlank()) {
                 alterDialog("시작시간을 입력해주세요.")
-            } else {
+            } else if(binding.maxPeopleText.text.toString().isNullOrBlank()){
+                alterDialog("정원을 선택해주세요.")
+
+            }
+            else {
                 val endDateLocal =
                     binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
                 val startDateLocal =
                     binding.startDateText.text.toString() + " " + binding.startTimeText.text.toString() + ":00"
+
+
 
                 var hashtagList = arrayListOf<Int>()
                 var count = 0
@@ -224,7 +217,7 @@ class MakePartyActivity : AppCompatActivity() {
                 val makeGrpInstance =
                     PostMakePartyRequest(
                         binding.grpNameText.text.toString(),
-                        2,
+                        maxpeopeleInt,
                         startDateLocal,
                         endDateLocal,
                         binding.menuText.text.toString(),
@@ -357,16 +350,18 @@ class MakePartyActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    fun chageTimeForm(startTimeUnit: String, endTimeUnit: String): Int {
-        val timeFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
-        val calendar1 = Calendar.getInstance()
-        val calendar2 = Calendar.getInstance()
-
-        calendar1.time = timeFormat.parse(startTimeUnit)
-        calendar2.time = timeFormat.parse(endTimeUnit)
-
-        val cmp = calendar1.compareTo(calendar2)
-        return cmp
+    //모집인원 dialog
+    fun showMaxPeopleDialog(){
+        val num = resources.getStringArray(R.array.maxpeople)
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("모임 인원 선택")
+        builder.setItems(num){
+            p0,p1 ->
+            binding.maxPeopleText.setText(num[p1])
+            maxpeopeleInt = num[p1].toInt()
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
 
     }
 }
