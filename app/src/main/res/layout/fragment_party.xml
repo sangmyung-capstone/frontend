@@ -20,6 +20,7 @@
             android:text="파티"
             android:textColor="@color/black"
             android:textSize="20sp" />
+
         <TextView
             android:id="@+id/textLine"
             android:layout_below="@+id/partiGroup"

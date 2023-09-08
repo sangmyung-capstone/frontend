@@ -833,7 +833,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val receiverIntent = Intent(context, MyReceiver::class.java)
 
         var items = mutableListOf<String>()
-        for ((key, userInfo) in fcmUserInfo.entries) {
+        for ((key, userInfo) in partyUserInfo.entries) {
             items.add(userInfo.firebaseToken.toString())
         }//리시버로 전달될 인텐트 설정
         receiverIntent.apply {
@@ -891,7 +891,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         var alarm_code2 = alarm_code * 1000
 
         var items = mutableListOf<String>()
-        for ((key, userInfo) in fcmUserInfo.entries) {
+        for ((key, userInfo) in partyUserInfo.entries) {
             items.add(userInfo.firebaseToken.toString())
         }
 
