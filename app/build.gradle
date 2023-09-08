@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.bapool.bapool"
-        minSdk 29
+        minSdk 28       // 재웅이형 테스트 위해 28로 변경
         targetSdk 32
         versionCode 1
         versionName "1.0"
