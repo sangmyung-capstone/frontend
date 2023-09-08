@@ -39,7 +39,7 @@ class RestaurantLogActivity : AppCompatActivity() {
 
                 // Add top margin only for the first item to avoid double space between items
                 if (parent.getChildLayoutPosition(view) == 0) {
-                    top = space
+                    top = 0
                 }
             }
         }

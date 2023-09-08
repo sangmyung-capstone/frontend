@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import com.bapool.bapool.R
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.databinding.ActivityCheckUserProfileBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.*
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
+import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,17 +56,56 @@ class CheckUserProfileActivity : AppCompatActivity() {
                         binding.userImage.setImageResource(resourceId)
 
                         //평점 binding
-                        binding.rating.rating = userInfo.rating.toFloat()
-                        binding.nickName.text = userInfo.nickname
+                        if (result.result.rating.toFloat() < 1.0 && result.result.rating.toFloat() >= 0.0) {
+                            binding.angry.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.main
+                                )
+                            )
+                        } else if (result.result.rating.toFloat() < 2.0 && result.result.rating.toFloat() >= 1.0) {
+                            binding.sad.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.main
+                                )
+                            )
+                        } else if (result.result.rating.toFloat() < 3.0 && result.result.rating.toFloat() >= 2.0) {
+                            binding.meh.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.main
+                                )
+                            )
+                        } else if (result.result.rating.toFloat() < 4.0 && result.result.rating.toFloat() >= 3.0) {
+                            binding.smile.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.main
+                                )
+                            )
+                        } else if (result.result.rating.toFloat() < 5.0 && result.result.rating.toFloat() >= 4.0) {
+                            binding.happy.setColorFilter(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.main
+                                )
+                            )
+                        }
+
 
                         //hashtag binding
                         if (userInfo.hashtag != null) {
                             if (userInfo.hashtag.isNotEmpty()) {
                                 binding.hashtagVisible.visibility = View.VISIBLE
-                                binding.talkcount.text = result.result.hashtag.find { it.hashtag_id == 1 }?.count.toString()
-                                binding.kindcount.text = result.result.hashtag.find { it.hashtag_id == 2 }?.count.toString()
-                                binding.mannercount.text = result.result.hashtag.find { it.hashtag_id == 3 }?.count.toString()
-                                binding.quietcount.text = result.result.hashtag.find { it.hashtag_id == 4 }?.count.toString()
+                                binding.talkcount.text =
+                                    result.result.hashtag.find { it.hashtag_id == 1 }?.count.toString()
+                                binding.kindcount.text =
+                                    result.result.hashtag.find { it.hashtag_id == 2 }?.count.toString()
+                                binding.mannercount.text =
+                                    result.result.hashtag.find { it.hashtag_id == 3 }?.count.toString()
+                                binding.quietcount.text =
+                                    result.result.hashtag.find { it.hashtag_id == 4 }?.count.toString()
                                 if (binding.talkcount.text.equals("null")) {
                                     binding.talkcount.text = "0"
                                 }
@@ -107,7 +149,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<CheckUserProfileResponse>, t: Throwable) {
-                    Log.d("checkUserProfileRetrofit",t.toString())
+                    Log.d("checkUserProfileRetrofit", t.toString())
 
                 }
             })

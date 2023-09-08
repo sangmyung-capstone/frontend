@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.LoglistItemsBinding
@@ -40,14 +41,16 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
 
         //Glide 쓰는 과정
         if (Loglist.restaurant_img_url != null) {
-            Glide.with(holder.itemView).load(Loglist.restaurant_img_url).into(binding.restaurantImage)
+            Glide.with(holder.itemView).load(Loglist.restaurant_img_url)
+                .into(binding.restaurantImage)
         } else if (Loglist.restaurant_img_url == null) {
             binding.restaurantImage.setImageResource(R.drawable.restaurant_icon)
         }
 
         binding.ratingbutton.isEnabled = !Loglist.rating_complete
-        if(binding.ratingbutton.isEnabled == false){
+        if (binding.ratingbutton.isEnabled == false) {
             binding.ratingbutton.setText("유저평가 완료")
+            binding.ratingbutton.setBackgroundColor(ContextCompat.getColor(context, R.color.main))
         }
 
         binding.ratingbutton.setOnClickListener {
