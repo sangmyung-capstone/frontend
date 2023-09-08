@@ -78,15 +78,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     //    val retro = RetrofitService.create()  // MOCK SERVER
     val retro = ServerRetrofit.create()
 
-    var restaurantsList: MutableList<Restaurant> = mutableListOf()  // restaurant 리스트 생성
-    var restaurantIdList: MutableList<Long> = mutableListOf()    // id 리스트 생성
-    var restaurantImageList: MutableList<String> = mutableListOf()  // image url 리스트 생성
+    var restaurantsList = mutableListOf<Restaurant>()  // restaurant 리스트 생성
+    var restaurantIdList = mutableListOf<Long>()    // id 리스트 생성
+    var restaurantImageList = mutableListOf<String>()  // image url 리스트 생성
 
     var waitTime = 0L
 
     init {
         instance = this
     }
+
+    private var searchGoFlag = 0
 
 
     override fun onCreateView(
@@ -133,27 +135,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
             if (newState == SearchView.TransitionState.SHOWING) {
-                // 검색 결과 오픈 시 하단 네비게이션바 제거
-                //        (activity as HomeActivity).hideBottomNavi(true)
-
-                // 수정 필요
-//                val callback = object : OnBackPressedCallback(true) {
-//                    override fun handleOnBackPressed() {
-//                        if (newState == SearchView.TransitionState.SHOWING) searchView.hide()
-//                        else {
-//                            if (System.currentTimeMillis() - waitTime >= 1500) {
-//                                waitTime = System.currentTimeMillis()
-//                                Toast.makeText(context, "버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
-//                            } else {
-//                                finishAffinity(requireActivity())
-//                            }
-//                        }
-//                    }
-//                }
-//                requireActivity().onBackPressedDispatcher.addCallback(
-//                    binding.bottomSheet.findViewTreeLifecycleOwner()!!,
-//                    callback
-//                )
             }
         }
 
@@ -170,49 +151,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 .withEndAction {
                     binding.extendedFAB.hide()
                 }
-        }
-
-        val bottomBehavior = BottomSheetBehavior.from(binding.bottomSheet)
-        // behavior 속성
-        bottomBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-//        bottomBehavior.peekHeight = dpToPx(180f, context).toInt()    // dp -> px변환
-
-
-//        bottomBehavior.apply {
-//            addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-//                override fun onStateChanged(bottomSheet: View, newState: Int) {
-//                    when (newState) {
-//                        BottomSheetBehavior.STATE_COLLAPSED -> { //접힘
-////                            binding.bottomSheet.findViewById<TextView>(R.id.bottomTextPartyList).text =
-////                                "OPEN"
-//                        }
-//                        BottomSheetBehavior.STATE_EXPANDED -> {  //펼쳐짐
-////                            binding.bottomSheet.findViewById<TextView>(R.id.bottomTextPartyList).text =
-////                                "CLOSE"
-//                        }
-//                        BottomSheetBehavior.STATE_HIDDEN -> {}    //숨겨짐
-//                        BottomSheetBehavior.STATE_HALF_EXPANDED -> {} //절반 펼쳐짐
-//                        BottomSheetBehavior.STATE_DRAGGING -> {}  //드래그하는 중
-//                        BottomSheetBehavior.STATE_SETTLING -> {}  //(움직이다가) 안정화되는 중
-//                    }
-//                }
-//
-//                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-//                    //슬라이드 될때 offset / hide -1.0 ~ collapsed 0.0 ~ expended 1.0
-//                    // 커스텀 위젯의 마진 동기화 작업 중...
-//                    val layoutParams = binding.logoView.layoutParams as ViewGroup.MarginLayoutParams
-//                    layoutParams.bottomMargin += (binding.bottomSheet.height * slideOffset).toInt()
-//                    binding.logoView.layoutParams = layoutParams
-//                }
-//            })
-//        }
-
-        binding.bottomSheet.setOnClickListener {
-            bottomBehavior.state =
-                if (bottomBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
-                    BottomSheetBehavior.STATE_EXPANDED
-                } else
-                    BottomSheetBehavior.STATE_COLLAPSED
         }
 
 
@@ -232,11 +170,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         naverMap.addOnCameraChangeListener { reason, _ ->
             // 지도가 이동 상태 시 콜백함수
             if (reason == -1) binding.extendedFAB.show()   // 사용자 움직임 시 reason == -1
+
+
         }
 
         naverMap.addOnCameraIdleListener {
             // 지도가 이동 후 대기 상태 시 콜백함수
             Log.d("CAMERA", "now camera : ${naverMap.cameraPosition}")
+            Log.d("CAMERA", "bottomRestaurant : ${binding.bottomRestaurantList.visibility}")
+            Log.d("CAMERA", "bottomMarker : ${binding.bottomMarkerInfo.visibility}")
+
         }
 
 //        markerInit()  // 현 위치 구하기 필요  // 위에 naverMap을 this.naverMap.locationSource 이용??
@@ -293,6 +236,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d("MARKER_INIT", "rect : $rect")
         Log.d("MARKER_INIT", "now bounds : ${naverMap.contentBounds}")
         Log.d("MARKER_INIT", "now camera : $cameraPosition")
+
+        binding.bottomRestaurantList.removeAllViews()
+
+        binding.bottomRestaurantList.visibility = View.VISIBLE
+        binding.bottomMarkerInfo.visibility = View.GONE
+
         //------------------------------------
         retro.getRestaurants(UserId, rect).enqueue(object : Callback<GetRestaurantsResult> {
             override fun onResponse(
@@ -300,6 +249,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 response: Response<GetRestaurantsResult>,
             ) {
                 if (response.isSuccessful) {
+                    restaurantsList = response.body()!!.result.restaurants.toMutableList()
+
                     // 식당링크 모음  // 현위치에서 재검색 이후 리스트 사이즈만큼 api 요청 필요 및 바인딩
                     restaurantIdList.clear()
                     for (idx in response.body()!!.result.restaurants)
@@ -308,25 +259,25 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     Log.d("BOTTOM_ID_LIST", restaurantIdList.toString())
 
                     // bottomSheet에 식당바텀리스트 레이아웃 할당
-                    binding.bottomSheet.removeAllViews()
                     layoutInflater.inflate(
                         R.layout.bottom_restaurant_list,
-                        binding.bottomSheet,
+                        binding.bottomRestaurantList,
                         true
                     )
-                    BottomSheetBehavior.from(binding.bottomSheet).isDraggable = true
-                    BottomSheetBehavior.from(binding.bottomSheet).peekHeight = dpToPx(300f, context).toInt()
-
-                    restaurantsList = response.body()!!.result.restaurants.toMutableList()
+                    BottomSheetBehavior.from(binding.bottomRestaurantList).isDraggable = true
+                    BottomSheetBehavior.from(binding.bottomRestaurantList).peekHeight =
+                        dpToPx(180f, context).toInt()
+                    BottomSheetBehavior.from(binding.bottomRestaurantList).saveFlags =
+                            BottomSheetBehavior.SAVE_ALL
 
                     // 식당바텀리스트 어댑터 바인딩
-                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
+                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
                         RestaurantBottomAdapter(
                             response.body()!!.result.restaurants,
                             restaurantImageList,
                             naverMap
                         )
-                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
+                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
 
@@ -334,176 +285,307 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
                     Log.d("BOTTOM_RESTAURANTS", restaurantsList.toString())
 
-                    retro.getRestaurantsBottom(
-                        UserId,
-                        GetRestaurantsBottomRequest(
-                            listOf(
-                                restaurantIdList[0],
-                                restaurantIdList[1],
-                                restaurantIdList[2],
-                                restaurantIdList[3],
-                                restaurantIdList[4]
+                    // 식당이 5개 미만일 경우
+                    if (restaurantIdList.size < 5) {
+                        retro.getRestaurantsBottom(
+                            UserId,
+                            GetRestaurantsBottomRequest(
+                                restaurantIdList
                             )
                         )
-                    )
-                        .enqueue(object : Callback<GetRestaurantsBottomResult> {
-                            override fun onResponse(
-                                call: Call<GetRestaurantsBottomResult>,
-                                response: Response<GetRestaurantsBottomResult>,
-                            ) {
-                                if (response.isSuccessful) {
+                            .enqueue(object : Callback<GetRestaurantsBottomResult> {
+                                override fun onResponse(
+                                    call: Call<GetRestaurantsBottomResult>,
+                                    response: Response<GetRestaurantsBottomResult>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        for (idx in 0 until restaurantIdList.size)
+                                            restaurantImageList[idx] =
+                                                response.body()!!.result.restaurant_img_urls[idx]
 
-                                    // 3개 호출이므로 0, 1, 2
-                                    restaurantImageList[0] =
-                                        response.body()!!.result.restaurant_img_urls[0]
-                                    restaurantImageList[1] =
-                                        response.body()!!.result.restaurant_img_urls[1]
-                                    restaurantImageList[2] =
-                                        response.body()!!.result.restaurant_img_urls[2]
-                                    restaurantImageList[3] =
-                                        response.body()!!.result.restaurant_img_urls[3]
-                                    restaurantImageList[4] =
-                                        response.body()!!.result.restaurant_img_urls[4]
-
-                                    binding.bottomSheet.findViewById<RecyclerView>(
-                                        R.id.bottom_recyclerview
-                                    ).adapter =
+                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
+                                            R.id.bottom_recyclerview
+                                        ).adapter =
+                                            RestaurantBottomAdapter(
+                                                restaurantsList,
+                                                restaurantImageList,
+                                                naverMap
+                                            )
+                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
                                         RestaurantBottomAdapter(
                                             restaurantsList,
                                             restaurantImageList,
                                             naverMap
-                                        )
-                                    // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-                                    RestaurantBottomAdapter(
-                                        restaurantsList,
-                                        restaurantImageList,
-                                        naverMap
-                                    ).notifyItemRangeChanged(0, 5)
+                                        ).notifyItemRangeChanged(0, restaurantIdList.size)
 
+                                    }
                                 }
-                            }
 
-                            override fun onFailure(
-                                call: Call<GetRestaurantsBottomResult>,
-                                t: Throwable,
-                            ) {
-                                // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                                Log.d("BOTTOM", "onResponse 실패")
-                                Log.d("BOTTOM", response.body().toString())
-                            }
-
-                        })
-
-                    binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview)
-                        .addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                                super.onScrolled(recyclerView, dx, dy)
-
-                                val firstVisibleItemPosition =
-                                    (binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-
-                                // 3 간격 아이템 '진입 시'
-                                if ((firstVisibleItemPosition + 1) % 3 == 0 && !loggedPositions.contains(
-                                        firstVisibleItemPosition
-                                    )
+                                override fun onFailure(
+                                    call: Call<GetRestaurantsBottomResult>,
+                                    t: Throwable
                                 ) {
-                                    loggedPositions.add(firstVisibleItemPosition)
-                                    Log.d(
-                                        "paging",
-                                        "Scrolled to position $firstVisibleItemPosition"
-                                    )
-                                    Log.d(
-                                        "paging",
-                                        "my page ${(firstVisibleItemPosition + 1) / 3 * 5}"
-                                    )
+                                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                                    Log.d("BOTTOM", "onResponse 실패")
+                                    Log.d("BOTTOM", response.body().toString())
+                                }
 
-                                    val cnt = (firstVisibleItemPosition + 1) / 3 * 5
+                            })
 
-                                    // 식당바텀리스트 통신 2차
-                                    if (cnt <= 40) {
-                                        Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
-                                        Log.d("BOTTOM_RESTAURANTS", restaurantsList.toString())
+                    }
 
-                                        retro.getRestaurantsBottom(
-                                            UserId,
-                                            GetRestaurantsBottomRequest(
-                                                listOf(
-                                                    restaurantIdList[cnt + 0],
-                                                    restaurantIdList[cnt + 1],
-                                                    restaurantIdList[cnt + 2],
-                                                    restaurantIdList[cnt + 3],
-                                                    restaurantIdList[cnt + 4]
-                                                )
+                    // 식당이 5개 이상일 경우
+                    else {
+                        retro.getRestaurantsBottom(
+                            UserId,
+                            GetRestaurantsBottomRequest(
+                                listOf(
+                                    restaurantIdList[0],
+                                    restaurantIdList[1],
+                                    restaurantIdList[2],
+                                    restaurantIdList[3],
+                                    restaurantIdList[4]
+                                )
+                            )
+                        )
+                            .enqueue(object : Callback<GetRestaurantsBottomResult> {
+                                override fun onResponse(
+                                    call: Call<GetRestaurantsBottomResult>,
+                                    response: Response<GetRestaurantsBottomResult>,
+                                ) {
+                                    if (response.isSuccessful) {
+                                        // 5개 호출이므로 0, 1, 2, 3, 4
+                                        restaurantImageList[0] =
+                                            response.body()!!.result.restaurant_img_urls[0]
+                                        restaurantImageList[1] =
+                                            response.body()!!.result.restaurant_img_urls[1]
+                                        restaurantImageList[2] =
+                                            response.body()!!.result.restaurant_img_urls[2]
+                                        restaurantImageList[3] =
+                                            response.body()!!.result.restaurant_img_urls[3]
+                                        restaurantImageList[4] =
+                                            response.body()!!.result.restaurant_img_urls[4]
+
+                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
+                                            R.id.bottom_recyclerview
+                                        ).adapter =
+                                            RestaurantBottomAdapter(
+                                                restaurantsList,
+                                                restaurantImageList,
+                                                naverMap
                                             )
+                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+                                        RestaurantBottomAdapter(
+                                            restaurantsList,
+                                            restaurantImageList,
+                                            naverMap
+                                        ).notifyItemRangeChanged(0, 5)
+
+                                    }
+                                }
+
+                                override fun onFailure(
+                                    call: Call<GetRestaurantsBottomResult>,
+                                    t: Throwable,
+                                ) {
+                                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                                    Log.d("BOTTOM", "onResponse 실패")
+                                    Log.d("BOTTOM", response.body().toString())
+                                }
+
+                            })
+
+                        // 스크롤 페이징 리스너
+                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview)
+                            .addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                                override fun onScrolled(
+                                    recyclerView: RecyclerView,
+                                    dx: Int,
+                                    dy: Int
+                                ) {
+                                    super.onScrolled(recyclerView, dx, dy)
+
+                                    val firstVisibleItemPosition =
+                                        (binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+                                    // 3 간격 아이템 '진입 시'
+                                    if ((firstVisibleItemPosition + 1) % 3 == 0 && !loggedPositions.contains(
+                                            firstVisibleItemPosition
                                         )
-                                            .enqueue(object : Callback<GetRestaurantsBottomResult> {
-                                                override fun onResponse(
-                                                    call: Call<GetRestaurantsBottomResult>,
-                                                    response: Response<GetRestaurantsBottomResult>,
-                                                ) {
-                                                    if (response.isSuccessful) {
+                                    ) {
+                                        loggedPositions.add(firstVisibleItemPosition)
+                                        Log.d(
+                                            "paging",
+                                            "Scrolled to position $firstVisibleItemPosition"
+                                        )
+                                        Log.d(
+                                            "paging",
+                                            "my page ${(firstVisibleItemPosition + 1) / 3 * 5}"
+                                        )
 
-                                                        // 5개 호출이므로 0, 1, 2, 3, 4
-                                                        restaurantImageList[cnt + 0] =
-                                                            response.body()!!.result.restaurant_img_urls[0]
-                                                        restaurantImageList[cnt + 1] =
-                                                            response.body()!!.result.restaurant_img_urls[1]
-                                                        restaurantImageList[cnt + 2] =
-                                                            response.body()!!.result.restaurant_img_urls[2]
-                                                        restaurantImageList[cnt + 3] =
-                                                            response.body()!!.result.restaurant_img_urls[3]
-                                                        restaurantImageList[cnt + 4] =
-                                                            response.body()!!.result.restaurant_img_urls[4]
+                                        val cnt = (firstVisibleItemPosition + 1) / 3 * 5
 
+                                        // 식당바텀리스트 통신 2차
+                                        if (cnt < restaurantIdList.size) {
 
-                                                        binding.bottomSheet.findViewById<RecyclerView>(
-                                                            R.id.bottom_recyclerview
-                                                        ).adapter =
-                                                            RestaurantBottomAdapter(
-                                                                restaurantsList,
-                                                                restaurantImageList,
-                                                                naverMap
+                                            Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
+                                            Log.d("BOTTOM_RESTAURANTS", restaurantsList.toString())
+
+                                            if (restaurantIdList.size - cnt < 5) {  // 마지막 페이징 시 // size가 17 24 등의 경우
+
+                                                var lastRestaurantIdList = mutableListOf<Long>()
+                                                for(idx in 0 until restaurantIdList.size - cnt)
+                                                    lastRestaurantIdList.add(restaurantIdList[cnt + idx])
+
+                                                retro.getRestaurantsBottom(
+                                                    UserId,
+                                                    GetRestaurantsBottomRequest(lastRestaurantIdList)
+                                                )
+                                                    .enqueue(object :
+                                                        Callback<GetRestaurantsBottomResult> {
+                                                        override fun onResponse(
+                                                            call: Call<GetRestaurantsBottomResult>,
+                                                            response: Response<GetRestaurantsBottomResult>,
+                                                        ) {
+                                                            if (response.isSuccessful) {
+
+                                                                for(idx in 0 until restaurantIdList.size - cnt)
+                                                                    restaurantImageList[cnt + idx] =
+                                                                        response.body()!!.result.restaurant_img_urls[idx]
+
+                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
+                                                                    R.id.bottom_recyclerview
+                                                                ).adapter =
+                                                                    RestaurantBottomAdapter(
+                                                                        restaurantsList,
+                                                                        restaurantImageList,
+                                                                        naverMap
+                                                                    )
+                                                                // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+                                                                RestaurantBottomAdapter(
+                                                                    restaurantsList,
+                                                                    restaurantImageList,
+                                                                    naverMap
+                                                                ).notifyItemRangeChanged(cnt, restaurantIdList.size - cnt)
+
+                                                                Log.d(
+                                                                    "RESTAURANT_IMG",
+                                                                    restaurantImageList.toString()
+                                                                )
+
+                                                            }
+
+                                                        }
+
+                                                        override fun onFailure(
+                                                            call: Call<GetRestaurantsBottomResult>,
+                                                            t: Throwable,
+                                                        ) {
+                                                            // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                                                            Log.d("BOTTOM", "onResponse 실패")
+                                                            Log.d(
+                                                                "BOTTOM",
+                                                                response.body().toString()
                                                             )
-                                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-                                                        RestaurantBottomAdapter(
-                                                            restaurantsList,
-                                                            restaurantImageList,
-                                                            naverMap
-                                                        ).notifyItemRangeChanged(cnt, 5)
-
-                                                        Log.d(
-                                                            "RESTAURANT_IMG",
-                                                            restaurantImageList.toString()
+                                                        }
+                                                    })
+                                            } else {  // 5개 통신
+                                                retro.getRestaurantsBottom(
+                                                    UserId,
+                                                    GetRestaurantsBottomRequest(
+                                                        listOf(
+                                                            restaurantIdList[cnt + 0],
+                                                            restaurantIdList[cnt + 1],
+                                                            restaurantIdList[cnt + 2],
+                                                            restaurantIdList[cnt + 3],
+                                                            restaurantIdList[cnt + 4]
                                                         )
+                                                    )
+                                                )
+                                                    .enqueue(object :
+                                                        Callback<GetRestaurantsBottomResult> {
+                                                        override fun onResponse(
+                                                            call: Call<GetRestaurantsBottomResult>,
+                                                            response: Response<GetRestaurantsBottomResult>,
+                                                        ) {
+                                                            if (response.isSuccessful) {
 
-                                                    }
+                                                                // 5개 호출이므로 0, 1, 2, 3, 4
+                                                                restaurantImageList[cnt + 0] =
+                                                                    response.body()!!.result.restaurant_img_urls[0]
+                                                                restaurantImageList[cnt + 1] =
+                                                                    response.body()!!.result.restaurant_img_urls[1]
+                                                                restaurantImageList[cnt + 2] =
+                                                                    response.body()!!.result.restaurant_img_urls[2]
+                                                                restaurantImageList[cnt + 3] =
+                                                                    response.body()!!.result.restaurant_img_urls[3]
+                                                                restaurantImageList[cnt + 4] =
+                                                                    response.body()!!.result.restaurant_img_urls[4]
 
-                                                }
 
-                                                override fun onFailure(
-                                                    call: Call<GetRestaurantsBottomResult>,
-                                                    t: Throwable,
-                                                ) {
-                                                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                                                    Log.d("BOTTOM", "onResponse 실패")
-                                                    Log.d("BOTTOM", response.body().toString())
-                                                }
+                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
+                                                                    R.id.bottom_recyclerview
+                                                                ).adapter =
+                                                                    RestaurantBottomAdapter(
+                                                                        restaurantsList,
+                                                                        restaurantImageList,
+                                                                        naverMap
+                                                                    )
+                                                                // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+                                                                RestaurantBottomAdapter(
+                                                                    restaurantsList,
+                                                                    restaurantImageList,
+                                                                    naverMap
+                                                                ).notifyItemRangeChanged(cnt, 5)
 
-                                            })
+                                                                Log.d(
+                                                                    "RESTAURANT_IMG",
+                                                                    restaurantImageList.toString()
+                                                                )
+
+                                                            }
+
+                                                        }
+
+                                                        override fun onFailure(
+                                                            call: Call<GetRestaurantsBottomResult>,
+                                                            t: Throwable,
+                                                        ) {
+                                                            // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                                                            Log.d("BOTTOM", "onResponse 실패")
+                                                            Log.d(
+                                                                "BOTTOM",
+                                                                response.body().toString()
+                                                            )
+                                                        }
+                                                    })
+                                            }
+
+                                        } else {
+                                            Log.d("PAGING END", "cnt : $cnt !! PAGING END !!")
+                                        }
+
+
+
+                                        if (cnt <= 40) {    // cnt = 5, 10, 15 ~
+
+
+                                        }
+
+                                    }
+
+                                    // 최하단
+                                    if (!binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview)
+                                            .canScrollVertically(1)
+                                    ) {   //최하단에 오면
+                                        //원하는 동작
+                                        Log.d("paging", "bottom?")
                                     }
 
                                 }
+                            })
 
-                                // 최하단
-                                if (!binding.bottomSheet.findViewById<RecyclerView>(R.id.bottom_recyclerview)
-                                        .canScrollVertically(1)
-                                ) {   //최하단에 오면
-                                    //원하는 동작
-                                    Log.d("paging", "bottom?")
-                                }
-
-                            }
-                        })
+                    }
 
 
                     // 기존 마커 존재 시 전부 삭제
@@ -569,6 +651,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 마커 클릭 시 하단 네비게이션바 제거
 //        (activity as HomeActivity).hideBottomNavi(true)
 
+        // 해당 마커 위치로 지도 이동
+        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(marker.position, 20.0))
+
+        // 마커 크기 변경 // 애니메이션 추가
+        marker.width = 100
+        marker.height = 100
 
         retro.getRestaurantInfo(UserId, id, long, lati)
             .enqueue(object : Callback<GetRestaurantInfoResult> {
@@ -591,13 +679,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
             })
 
-
-        // 해당 마커 위치로 지도 이동
-        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(marker.position, 20.0))
-
-        // 마커 크기 변경 // 애니메이션 추가
-        marker.width = 100
-        marker.height = 100
     }
 
     fun searchMarkerGoEvent(
@@ -609,6 +690,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         restaurant_name: String
     ) { // 인자로서 marker의 lati long 필요  // num of party   // name
         binding.searchView.hide()
+
+        searchGoFlag = 1
+
         // 추가적인 마커 생성 및 카메라 이동 필요
         if (markerList.size != 0) {
             Log.d("MARKER_INIT", "marker clear!!!")
@@ -627,10 +711,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         markerList[0].width = 50
         markerList[0].height = 50
         markerList[0].captionText = restaurant_name
-        // 해당 마커 클릭 이벤트
-        markerClickEvent(markerList[0], id, long, lati)
+
         // 마커 클릭 시 하단 네비게이션바 제거
 //        (activity as HomeActivity).hideBottomNavi(true)
+
+        // 해당 마커 위치로 지도 이동
+        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(markerList[0].position, 20.0))
+
+        // 마커 크기 변경 // 애니메이션 추가
+        markerList[0].width = 100
+        markerList[0].height = 100
 
 
         retro.getRestaurantInfo(UserId, id, long, lati)
@@ -654,13 +744,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
             })
 
+        // 해당 마커 클릭 이벤트
+        markerClickEvent(markerList[0], id, long, lati)
 
-        // 해당 마커 위치로 지도 이동
-        naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(markerList[0].position, 20.0))
-
-        // 마커 크기 변경 // 애니메이션 추가
-        markerList[0].width = 100
-        markerList[0].height = 100
         // 위의 markerGoEvent와 디자인패턴 이용??
     }
 
@@ -713,15 +799,29 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     fun createMarkerInfo(result: RestaurantInfo?) {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
 
-        binding.bottomSheet.removeAllViews()
-        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomSheet, true)
-        BottomSheetBehavior.from(binding.bottomSheet).state = BottomSheetBehavior.STATE_COLLAPSED
-        BottomSheetBehavior.from(binding.bottomSheet).isDraggable = false
+        binding.bottomMarkerInfo.removeAllViews()
+
+        binding.bottomRestaurantList.visibility = View.GONE
+        binding.bottomMarkerInfo.visibility = View.VISIBLE
+
+        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomMarkerInfo, true)
+
+        BottomSheetBehavior.from(binding.bottomMarkerInfo).state = BottomSheetBehavior.STATE_EXPANDED
+
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (binding.bottomSheet.isNotEmpty()) binding.bottomSheet.removeAllViews()
-                else {
+                if (binding.bottomMarkerInfo.visibility == View.VISIBLE) {
+                    if (searchGoFlag == 1 ) {
+                        binding.searchView.show()
+                        searchGoFlag = 0
+                    }
+
+                    binding.bottomMarkerInfo.removeAllViews()
+
+                    binding.bottomRestaurantList.visibility = View.VISIBLE
+                    binding.bottomMarkerInfo.visibility = View.GONE
+                } else {
                     if (System.currentTimeMillis() - waitTime >= 1500) {
                         waitTime = System.currentTimeMillis()
                         Toast.makeText(context, "버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
@@ -732,15 +832,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(
-            binding.bottomSheet.findViewTreeLifecycleOwner()!!,
+            binding.bottomMarkerInfo.findViewTreeLifecycleOwner()!!,
             callback
         )
 
         // 이미지
         Glide.with(this)
             .load(result?.img_url)
-            .into(binding.bottomSheet.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
-        binding.bottomSheet.findViewById<Button>(R.id.bottomButtonParty).setOnClickListener {
+            .into(binding.bottomMarkerInfo.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
+        binding.bottomMarkerInfo.findViewById<Button>(R.id.bottomButtonParty).setOnClickListener {
             val intent = Intent(requireContext(), RestaurantPartyActivity::class.java)
             val goToRestaurantPartyList = goToRestaurantPartyList(
                 result?.restaurant_id, result?.restaurant_name, result?.restaurant_address,
@@ -754,16 +854,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             startActivity(intent)
         }
         // 스트링
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextName).text =
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).text =
             result?.restaurant_name
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextName).setOnClickListener {
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(result?.link)))
         }
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextAddress).text =
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextAddress).text =
             result?.restaurant_address
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextPhone).text =
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextPhone).text =
             result?.phone
-        binding.bottomSheet.findViewById<TextView>(R.id.bottomTextCategory).text =
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextCategory).text =
             result?.category
         Log.d("MARKER_INFO", "menu : ${result?.menu.toString()}")
         if ((result?.menu != null) && (result.menu.isNotEmpty())) {
@@ -772,13 +872,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 if (idx.price == null) text += "${idx.name} \n"
                 else text += "${idx.name} : ${idx.price} \n"
                 text.substring(0, text.length - 1)
-                binding.bottomSheet.findViewById<TextView>(R.id.bottomTextMenu).text = text
+                binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextMenu).text = text
             }
         } else {
-            binding.bottomSheet.findViewById<TextView>(R.id.bottomTextMenu).text =
+            binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextMenu).text =
                 "메뉴 미제공 \n"
         }
-        binding.bottomSheet.findViewById<Button>(R.id.bottomButtonParty).text =
+        binding.bottomMarkerInfo.findViewById<Button>(R.id.bottomButtonParty).text =
             "${result?.num_of_party.toString()} 파티!"
 
         // view 부착
