@@ -113,7 +113,7 @@ interface ServerRetrofit {
         @Query("latitude") latitude: Double?,
     ): Call<GetRestaurantInfoResult>
 
-    @POST("/restaurants/bottomlist/{user-id}")
+    @POST("/restaurants/bottomlist/{user-id}")  // 식당바텀리스트의 이미지 요청
     fun getRestaurantsBottom(
         @Path("user-id") userId: Long?,
         @Body request: GetRestaurantsBottomRequest,
