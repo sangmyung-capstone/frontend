@@ -172,9 +172,9 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/joinGrp"
-        android:layout_width="90dp"
-        android:layout_height="50dp"
-        android:background="@color/main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/joinbtn_background"
         android:text="참여하기"
         android:textColor="@color/white"
         android:textSize="11dp"

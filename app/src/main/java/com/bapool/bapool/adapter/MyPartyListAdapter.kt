@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.RoundedCorner
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -60,14 +61,15 @@ class MyPartyListAdapter(
             binding.resName.text = item.resName
             binding.grpName.text = item.grpName
             binding.lastChat.text = item.lastChat
-            if(item.notReadChat==0){
-                binding.notReadChat.text = ""
+            if(item.notReadChat== 0){
+                binding.notReadChat.visibility = View.GONE
             }else{
+                binding.notReadChat.visibility = View.VISIBLE
                 binding.notReadChat.text = item.notReadChat.toString()
 
             }
-            binding.participantsNum.text = "(${item.participants})"
-            getImgData(binding.partyRestaurantImage,item.restaurantImgUrl)
+            binding.participantsNum.text = "${item.participants}"
+            getImgData(binding.partyRestaurantImage, item.restaurantImgUrl)
         }
     }
 
