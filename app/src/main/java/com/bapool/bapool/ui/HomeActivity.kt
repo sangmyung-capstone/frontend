@@ -1,22 +1,27 @@
 package com.bapool.bapool.ui
 
-import android.app.Fragment
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
+import androidx.core.app.NotificationManagerCompat
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.ActivityHomeBinding
+import com.bapool.bapool.receiver.MyReceiver.Companion.CHANNEL_ID
+import com.bapool.bapool.receiver.MyReceiver.Companion.CHANNEL_NAME
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.fragment.MapFragment
 import com.bapool.bapool.ui.fragment.MypageFragment
 import com.bapool.bapool.ui.fragment.PartyFragment
-import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
 
 class HomeActivity : AppCompatActivity() {
@@ -57,6 +62,16 @@ class HomeActivity : AppCompatActivity() {
         val destination = intent.getStringExtra("destination")
         if (destination == "MypageFragment") {
             binding.mainBottomNav.selectedItemId = R.id.mypageFragment
+        }
+
+
+
+        createNotificationChannel()
+
+        // Check if the notification permission is granted
+        if (!isNotificationPermissionGranted()) {
+            // If not granted, request permission
+            requestNotificationPermission()
         }
     }
 
@@ -141,19 +156,58 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
-    fun refreshFirebaseToken(){
+    fun refreshFirebaseToken() {
+        FirebaseDatabase.getInstance().getReference("test").child("Users").child(UserId.toString())
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.exists()){
+                        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val token = task.result
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val token = task.result
+                                FirebaseDatabase.getInstance().getReference("test").child("Users")
+                                    .child(UserId.toString()).child("firebaseToken")
+                                    .setValue(token)
+                            } else {
+                                println("Failed to get FCM token: ${task.exception}")
+                            }
+                        }
+                    }
+                }
 
-                FirebaseDatabase.getInstance().getReference("test").child("Users").child(UserId.toString()).child("firebaseToken")
-                    .setValue(token)
-            } else {
-                println("Failed to get FCM token: ${task.exception}")
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+
+
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "My Channel"
+            val descriptionText = "My Notification Channel"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
+                description = descriptionText
             }
+
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
+
+    private fun isNotificationPermissionGranted(): Boolean {
+        // Check if the notification permission is granted
+        return NotificationManagerCompat.from(this)
+            .areNotificationsEnabled()
+    }
+
+    private fun requestNotificationPermission() {
+        Toast.makeText(this,"알림권한 허용해줭",Toast.LENGTH_SHORT).show()
+    }
+
 
 
 }

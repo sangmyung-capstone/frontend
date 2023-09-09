@@ -76,25 +76,35 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
         resGrpAdapter.itemClick = object : RestaurantPartyAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
-                val joinPartyDialog =
-                    JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(this@RestaurantPartyActivity))
-                dialogBinding(restaurantPartiesInfo[position], joinPartyDialog)
-
-                val mBuilder = AlertDialog.Builder(this@RestaurantPartyActivity)
-                    .setView(joinPartyDialog.root)
-                    .setNegativeButton("취소") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .setPositiveButton("참여") { dialog, _ ->
-
-                        if (restaurantPartiesInfo[position].participants == restaurantPartiesInfo[position].max_people) {
-                            overCapacityDialog()
-                        } else {
-                            confirmParticipatePartyDialog(restaurantPartiesInfo[position].party_id.toString())
+                if(restaurantPartiesInfo[position].participants.equals(restaurantPartiesInfo[position].max_people)){
+                    val mBuilder = AlertDialog.Builder(this@RestaurantPartyActivity)
+                        .setMessage("정원이 가득찬 파티입니다.")
+                        .setNegativeButton("취소") { dialog, _ ->
+                            dialog.dismiss()
                         }
+                    mBuilder.show()
+                }else{
+                    val joinPartyDialog =
+                        JoinpartyCustomDialogBinding.inflate(LayoutInflater.from(this@RestaurantPartyActivity))
+                    dialogBinding(restaurantPartiesInfo[position], joinPartyDialog)
 
-                    }
-                mBuilder.show()
+                    val mBuilder = AlertDialog.Builder(this@RestaurantPartyActivity)
+                        .setView(joinPartyDialog.root)
+                        .setNegativeButton("취소") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .setPositiveButton("참여") { dialog, _ ->
+
+                            if (restaurantPartiesInfo[position].participants == restaurantPartiesInfo[position].max_people) {
+                                overCapacityDialog()
+                            } else {
+                                confirmParticipatePartyDialog(restaurantPartiesInfo[position].party_id.toString())
+                            }
+
+                        }
+                    mBuilder.show()
+                }
+
             }
         }
     }
@@ -260,13 +270,16 @@ class RestaurantPartyActivity : AppCompatActivity() {
         val allNum = partiNum(item.participants, item.max_people)
         val allDate = dateRange(item.start_date)
 
+        val value = item.user_rating.toDouble()
+        val formattedValue = String.format("%.1f", value)
+
         binding.restaurantLocation.text = restaurantPartyInfoObject.address
         binding.partyName.text = item.party_name
         binding.partyMenu.text = item.menu
         binding.dateTime.text = allDate
         binding.participantsNum.text = allNum
         binding.detailText.text = item.detail
-        binding.rating.text = item.user_rating.toString()
+        binding.rating.text = formattedValue
 
 
     }

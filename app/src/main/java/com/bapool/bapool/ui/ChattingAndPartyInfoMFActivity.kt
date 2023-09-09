@@ -315,9 +315,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
 
-    //그룹 이름 데이터베이스에서 가져와서 넣기
+    //그룹정보 데이터베이스에서 가져오기
     fun initGroupName() {
-        //그룹 이름 가져오기
+
         initPartyDatabaseReference = FirebaseDatabase.getInstance().getReference("test")
             .child("Groups").child(partyId.toString()).child("groupInfo")
         initPartyValueEventListener = object : ValueEventListener {
@@ -631,7 +631,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     //마감되었다고 채팅창에 알림  fcm O
     fun sendNotificationChatting() {
-        val startTime = formatNotificationTime(currentPartyInfo.startDate)
+        val startTime = formatNotificationTimeChatting(currentPartyInfo.startDate)
         val notificationText = "파티 모임 시간이 ${startTime} 으로 확정되었습니다."
 
         if (notificationText != "") {
@@ -770,7 +770,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     //그룹장이 바뀌었다고 알림
     fun sendNotificationChangePartyLeader(nickName: String) {
-        val notificationText = "파티장 ${nickName}님으로 바뀌었습니다."
+        val notificationText = "파티장이 ${nickName}님으로 바뀌었습니다."
         var items = mutableListOf<String>()
         for (data in partyUserInfo.values) {
             items.add(data.firebaseToken.toString())
@@ -811,7 +811,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         val getterToken = userInfo.firebaseToken.toString()
         val msgText: String = messageText
         val notiModel =
-            NotiModel(currentUserNickName, msgText, partyId, currentUserId, currentUserToken)
+            NotiModel(currentUserNickName, msgText, partyId)
 
         val pushModel = PushNotification(notiModel, getterToken)
 
@@ -825,8 +825,6 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             currentPartyInfo.groupName,
             notificationText,
             partyId,
-            currentUserId,
-            currentUserToken
         )
 
         val pushModel = PushNotification(notiModel, firebaseToken)
@@ -995,40 +993,16 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         }
     }
 
-    fun formatNotificationTime(dateTimeString: String): String {
+    fun formatNotificationTimeChatting(dateTimeString: String): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
         val date = sdf.parse(dateTimeString)
-        val currentTime = Calendar.getInstance().time
-
-
         val cal = Calendar.getInstance()
         cal.time = date
-        val targetMonth = cal.get(Calendar.MONTH)
-        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
-        val targetDate = cal.get(Calendar.DATE)
-        val currentDate = Calendar.getInstance().get(Calendar.DATE)
 
-        return when {
-            targetMonth != currentMonth -> {
-                val sdfOutput = SimpleDateFormat("MM월 dd일    HH시 mm분", Locale.getDefault())
-                sdfOutput.format(date)
-            }
-            targetDate == currentDate -> {
-                // Same day
-                val sdfOutput = SimpleDateFormat("HH시 mm분", Locale.getDefault())
-                "오늘 ${sdfOutput.format(date)}"
-            }
-            targetDate == currentDate + 1 -> {
-                // Next day
-                val sdfOutput = SimpleDateFormat("HH시 mm분", Locale.getDefault())
-                "내일 ${sdfOutput.format(date)}"
-            }
-            else -> {
-                // Other dates
-                val sdfOutput = SimpleDateFormat("MM월 dd일 HH시 mm분", Locale.getDefault())
-                sdfOutput.format(date)
-            }
-        }
+        val sdfOutput = SimpleDateFormat("MM월 dd일 HH시 mm분", Locale.getDefault())
+
+        return sdfOutput.format(date)
+
     }
 
     //시간 변환 함수
@@ -1244,49 +1218,47 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     )
                     getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
                     chattingRVA.removeChildEventListener()
+                    finish()
                 }
                 "make" -> {
-                    val intent = Intent(this, RestaurantPartyActivity::class.java)
-                    intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
-                    startActivity(intent)
-                    finish()
                     initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
                     getUserInfoInsideDatabaseReference.removeEventListener(
                         getUserInfoInsideValueEventListener
                     )
                     getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
                     chattingRVA.removeChildEventListener()
+
+                    val intent = Intent(this, RestaurantPartyActivity::class.java)
+                    intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
+                    startActivity(intent)
+                    finish()
                 }
                 "join" -> {
-                    val intent = Intent(this, RestaurantPartyActivity::class.java)
-                    intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
-                    startActivity(intent)
-                    finish()
                     initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
                     getUserInfoInsideDatabaseReference.removeEventListener(
                         getUserInfoInsideValueEventListener
                     )
                     getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
                     chattingRVA.removeChildEventListener()
+                    val intent = Intent(this, RestaurantPartyActivity::class.java)
+                    intent.putExtra("restaurantInfoObject", restaurantPartyInfoObject)
+                    startActivity(intent)
+                    finish()
+
                 }
                 else -> {
+                    initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
+                    getUserInfoInsideDatabaseReference.removeEventListener(
+                        getUserInfoInsideValueEventListener
+                    )
+                    getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
+                    chattingRVA.removeChildEventListener()
                     val intent = Intent(this, HomeActivity::class.java)
                     startActivity(intent)
                     finish()
-                    initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
-                    getUserInfoInsideDatabaseReference.removeEventListener(
-                        getUserInfoInsideValueEventListener
-                    )
-                    getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
-                    chattingRVA.removeChildEventListener()
+
                 }
             }
-            initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
-            getUserInfoInsideDatabaseReference.removeEventListener(
-                getUserInfoInsideValueEventListener
-            )
-            getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
-            chattingRVA.removeChildEventListener()
 
         }
     }
