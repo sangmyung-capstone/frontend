@@ -26,6 +26,7 @@ import com.bapool.bapool.adapter.PartyChattingAdapter
 import com.bapool.bapool.adapter.PartyUserInfoAdapter
 import com.bapool.bapool.databinding.ActivityChattingAndPartyInfoMfactivityBinding
 import com.bapool.bapool.databinding.PartyinfoCustomDialogBinding
+import com.bapool.bapool.preference.MyApplication
 import com.bapool.bapool.receiver.MyReceiver
 import com.bapool.bapool.receiver.RatingReceiver
 import com.bapool.bapool.retrofit.ServerRetrofit
@@ -67,9 +68,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     var testId = ""
 
-    //chatting active inactive
-    private val active = mapOf<String, String>(UserId.toString() to "active")
-    private val inactive = mapOf<String, String>(UserId.toString() to "inactive")
+
 
 
     //user Img nickname 에 넣을 데이터
@@ -115,6 +114,11 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     private lateinit var currentUserNickName: String
 
 
+    //chatting active inactive
+    private var active = mapOf<String, String>(currentUserId.toString() to "active")
+    private var inactive = mapOf<String, String>(currentUserId.toString() to "inactive")
+
+
     //파이어베이스 데이터처리함수
     private lateinit var initPartyDatabaseReference: DatabaseReference
     private lateinit var getUserInfoDatabaseReference: DatabaseReference
@@ -137,11 +141,14 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     fun initializeVari() {
 
+
+
         database = Firebase.database.reference
         chattingRecyclerView = binding.chattingRv
         partyUserMenuRecyclerView = binding.userRv
         //intent로 받아올 userId랑 partyId
         whereAreYouFrom = intent.getStringExtra("whereAreYouFrom").toString()
+
         val restaurantPartyInfoObject2 =
             intent.getSerializableExtra("restaurantInfoObject") as? goToRestaurantPartyList
         if (restaurantPartyInfoObject2 != null) {
@@ -149,19 +156,19 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         }
         partyId = intent.getStringExtra("partyId").toString()
         joinUserId = intent.getStringExtra("joinUserId").toString()
-        val notificationUserId = intent.getStringExtra("notificationUserId")?.toString()
-        if (notificationUserId != null) {
-            currentUserId = notificationUserId
-
-        }
-        val notificationUserToken = intent.getStringExtra("notificationUserToken")?.toString()
-        if (notificationUserToken != null) {
-            currentUserToken = notificationUserToken
-        }
 
         FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
             .updateChildren(active)
         initGroupName()
+
+
+        if(whereAreYouFrom.equals("fcm")){
+            UserToken = MyApplication.prefs.getString("prefstoken", "")
+            UserId = MyApplication.prefs.getString("prefsid", "").toLong()
+            currentUserId = UserId.toString()
+            active = mapOf<String, String>(currentUserId.toString() to "active")
+            inactive = mapOf<String, String>(currentUserId.toString() to "inactive")
+        }
     }
 
 
@@ -1163,14 +1170,24 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     // Called when the activity is destroyed
     override fun onResume() {
         super.onResume()
-        FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
-            .updateChildren(active)
+
+        if(!(active.keys == null)){
+            Log.d("activeinactive",active.keys.toString())
+            FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
+                .updateChildren(active)
+        }
+
     }
 
     override fun onPause() {
         super.onPause()
-        FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
-            .updateChildren(inactive)
+
+        if(!(inactive.keys == null)){
+            Log.d("activeinactive",inactive.keys.toString())
+            FirebaseDatabase.getInstance().getReference("test").child("InTheParty").child(partyId)
+                .updateChildren(inactive)
+        }
+
     }
 
     override fun onDestroy() {
@@ -1245,6 +1262,18 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
 
+                }
+                "fcm" -> {
+                    initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)
+                    getUserInfoInsideDatabaseReference.removeEventListener(
+                        getUserInfoInsideValueEventListener
+                    )
+                    getUserInfoDatabaseReference.removeEventListener(getUserInfoValueEventListener)
+                    chattingRVA.removeChildEventListener()
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("destination", "PartyFragment")
+                    startActivity(intent)
+                    finish()
                 }
                 else -> {
                     initPartyDatabaseReference.removeEventListener(initPartyValueEventListener)

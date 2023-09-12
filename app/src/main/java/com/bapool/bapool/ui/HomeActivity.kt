@@ -62,6 +62,9 @@ class HomeActivity : AppCompatActivity() {
         val destination = intent.getStringExtra("destination")
         if (destination == "MypageFragment") {
             binding.mainBottomNav.selectedItemId = R.id.mypageFragment
+        } else if(destination == "PartyFragment"){
+            binding.mainBottomNav.selectedItemId = R.id.partyFragment
+
         }
 
 

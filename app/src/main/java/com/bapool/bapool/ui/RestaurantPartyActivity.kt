@@ -286,7 +286,6 @@ class RestaurantPartyActivity : AppCompatActivity() {
 
     fun dateRange(startDate: String): String {
         val start_date = LocalDateTime.parse(startDate)
-
         val formatterStart = DateTimeFormatter.ofPattern("MMM d일 H시 mm분")
         val range: String =
             "${start_date.format(formatterStart)}"
