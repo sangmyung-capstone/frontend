@@ -5,9 +5,11 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -38,6 +40,8 @@ class MakePartyActivity : AppCompatActivity() {
     val userId: String = UserId.toString()   //companion userid로 변경필요.
     lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
     var maxpeopeleInt: Int = 0
+    var isKeyboardShowing = false
+    var keypadBaseHeight = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +52,39 @@ class MakePartyActivity : AppCompatActivity() {
 
         initializeVari()
         listener()
-
+        keyboard()
     }
 
+    fun keyboard(){
+        val rootView = binding.detail
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            rootView.getWindowVisibleDisplayFrame(r)
+            val screenHeight = rootView.rootView.height
+
+            val keypadHeight = screenHeight - r.bottom
+
+            if (keypadBaseHeight == 0) {
+                keypadBaseHeight = keypadHeight
+            }
+            Log.d("keypadHeight",keypadHeight.toString())
+            if (keypadHeight > screenHeight * 0.15) {
+                if (!isKeyboardShowing) {
+                    isKeyboardShowing = true
+                    rootView.setPadding(0, 0, 0, 126)
+                    val height = keypadHeight - keypadBaseHeight
+                }
+            } else {
+                if (isKeyboardShowing) {
+                    isKeyboardShowing = false
+                    rootView.setPadding(0, 0, 0, 0)
+                }
+            }
+
+            Log.d("keyboardMake",isKeyboardShowing.toString())
+
+        }
+    }
 
     fun initializeVari() {
 
@@ -111,6 +145,9 @@ class MakePartyActivity : AppCompatActivity() {
 
 
 
+//        binding.detail.setOnClickListener {
+//            keyboard()
+//        }
 
         //모임시작 날짜 정하기
         binding.startDateConst.setOnClickListener {

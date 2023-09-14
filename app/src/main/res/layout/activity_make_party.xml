@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rootView"
     tools:context=".ui.MakePartyActivity">
+
 
     <LinearLayout
         android:id="@+id/linearLayout5"
@@ -294,20 +296,32 @@
     <ScrollView
         android:id="@+id/detailInputText"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginLeft="30dp"
+        android:layout_height="120dp"
         android:layout_marginTop="7dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/make_party_text_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview20">
 
-        <EditText
-            android:id="@+id/detail"
+        <LinearLayout
+            android:id="@+id/detailLinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="7dp"
-            android:background="@android:color/transparent"
-            android:textSize="13sp" />
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/detail"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="7dp"
+                android:background="@android:color/transparent"
+                android:fillViewport="true"
+                android:gravity="start"
+                android:maxHeight="100000dp"
+                android:textSize="13sp" />
+        </LinearLayout>
 
     </ScrollView>
 

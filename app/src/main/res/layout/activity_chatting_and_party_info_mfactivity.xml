@@ -64,20 +64,21 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refreshLayout"
-            android:layout_marginTop="115dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="@id/chattingInputZone"
+            android:layout_marginTop="115dp"
             android:layout_marginBottom="60dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="@id/chattingInputZone"
+            app:layout_constraintTop_toBottomOf="@+id/detailOnChattingBackground">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/chattingRv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:fillViewport="true" />
 
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

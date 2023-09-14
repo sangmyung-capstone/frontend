@@ -9,326 +9,142 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-        <LinearLayout
-            android:id="@+id/hashtagVisible"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginTop="10dp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:visibility="visible"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/hashtag_icon"
-                android:layout_width="12dp"
-                android:layout_height="12dp"/>
-
-
-            <TextView
-                android:id="@+id/hash1"
-                android:text="1111"
-                android:textSize="11sp"
-                android:layout_gravity="center_vertical"
-                android:textColor="#B1B1B1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/hash2"
-                android:layout_marginLeft="3dp"
-                android:textSize="11sp"
-                android:textColor="#B1B1B1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="#2222"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/hash1"
-                app:layout_constraintStart_toEndOf="@+id/hash1"
-                app:layout_constraintTop_toTopOf="@+id/hash1" />
-
-            <TextView
-                android:id="@+id/hash3"
-                android:text="#3333"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:textSize="11sp"
-                android:textColor="#B1B1B1"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/hash2"
-                app:layout_constraintStart_toEndOf="@+id/hash2"
-                app:layout_constraintTop_toTopOf="@+id/hash2" />
-
-            <TextView
-                android:id="@+id/hash4"
-                android:text="#4444"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:textSize="11sp"
-                android:textColor="#B1B1B1"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/hash3"
-                app:layout_constraintStart_toEndOf="@+id/hash3"
-                app:layout_constraintTop_toTopOf="@+id/hash3" />
-
-            <TextView
-                android:id="@+id/hash5"
-                android:text="#5555"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:textSize="11sp"
-                android:textColor="#B1B1B1"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/hash4"
-                app:layout_constraintStart_toEndOf="@+id/hash4"
-                app:layout_constraintTop_toTopOf="@+id/hash4" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/partyNameNv"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="그룹명"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hashtagVisible" />
-
-        <TextView
-            android:id="@+id/partyMenuNv"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="메뉴"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/partyNameNv" />
-
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_marginTop="20dp"
-            android:weightSum="2"
-            app:layout_constraintTop_toBottomOf="@+id/partyMenuNv">
-
-            <LinearLayout
-                android:id="@+id/detailIcon"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/detailIcon2"
-                    android:layout_width="30dp"
-                    android:layout_gravity="center"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/speakericon" />
-
-                <TextView
-                    android:text="공지사항"
-                    android:textSize="11sp"
-                    android:gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/restaurantIcon"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/restaurantIcon2"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:src="@drawable/restauranticon" />
-                <TextView
-                    android:text="식당정보"
-                    android:textSize="11sp"
-                    android:gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-        <TextView
-            android:id="@+id/divider5"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_height="0.9dp"
-            android:background="#DFDFDF"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/calendaricon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider5" />
-
-    <Button
-        android:id="@+id/closePartyBtn"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:text="파티 시간,인원 확정하기"
-        android:textSize="10sp"
-        android:visibility="visible"
-        app:cornerRadius="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:src="@drawable/locationicon"
-            app:layout_constraintStart_toStartOf="@+id/imageView6"
-            app:layout_constraintTop_toBottomOf="@+id/imageView6" />
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:src="@drawable/personicon"
-            app:layout_constraintStart_toStartOf="@+id/imageView7"
-            app:layout_constraintTop_toBottomOf="@+id/imageView7" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/startDateTextNv"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:text="보여?????" />
+
+    </LinearLayout>
+
+        <TextView
+            android:id="@+id/GrpName"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginLeft="12dp"
             android:gravity="center_vertical"
-            android:text="dsfasfsadf"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView6"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toTopOf="@+id/imageView6" />
+            android:maxWidth="200dp"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
-            android:id="@+id/restaruantLocationTextNv"
-            android:layout_width="wrap_content"
+            android:id="@+id/textLine"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="#EEEEEE"
+            app:layout_constraintTop_toBottomOf="@+id/GrpName" />
+
+
+        <ImageView
+            android:id="@+id/menu_button"
+            android:layout_width="30dp"
             android:layout_height="40dp"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="2"
-            android:layout_marginLeft="10dp"
-            android:maxWidth="300dp"
-            android:textSize="11sp"
-            android:text="asdgsadfgadgasdgsdgasdgasdgasdgasdgsadfgadgasdgsdgasdgasdgasdgasdgsadfgadgasdgsdgasdgasdgasdgasdgsadfgadgasdgsdgasdgasdgasdg"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
-            app:layout_constraintStart_toEndOf="@+id/imageView7"
-            app:layout_constraintTop_toTopOf="@+id/imageView7" />
+            android:src="@drawable/chatting_menu_button"
+            android:layout_marginRight="10dp"
+            android:text="취소"
+            app:layout_constraintBottom_toTopOf="@+id/textLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/currentMaxPeople"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center_vertical"
-            android:text="dsfasfsadf"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-            app:layout_constraintStart_toEndOf="@+id/imageView8"
-            app:layout_constraintTop_toTopOf="@+id/imageView8" />
 
-        <TextView
-            android:id="@+id/textJoinPeople"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:layout_marginBottom="10dp"
-            android:text="파티원"
-            app:layout_constraintBottom_toTopOf="@+id/userRv"
-            app:layout_constraintStart_toStartOf="parent" />
-        <!-- RecyclerView 추가 -->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userRv"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_marginTop="115dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="300dp"
-            app:layout_constraintBottom_toTopOf="@+id/closePartyBtn"
-            tools:layout_editor_absoluteX="-16dp" />
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="@id/chattingInputZone"
+            android:layout_marginBottom="60dp"
+            android:paddingBottom="5dp">
 
-        <TextView
-            android:id="@+id/textLine2"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#CDCDCD"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chattingRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/chattingInputZone"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="#EDECEC"
-            android:gravity="right"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageButton
+                android:id="@+id/sendImgBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@color/white"
+                android:src="@drawable/plus_img_btn"
+                />
+
+            <EditText
+                android:id="@+id/sendMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="90"
+                android:paddingStart="15dp" />
+
+            <ImageButton
+                android:id="@+id/sendIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_weight="10"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:src="@drawable/send_chat_icon" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/detailOnChattingBackground"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/chatting_detail_on_chatting_background"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textLine">
             <ImageView
-                android:id="@+id/menuEditPartyInfo"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/party_info_edit_item"
-                android:visibility="gone" />
-
-
-            <ImageView
-                android:id="@+id/changPartyLeader"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/speakericon"
                 android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/changpartyleader_icon"
-                android:visibility="gone" />
-
-
-            <ImageView
-                android:id="@+id/menuPartyOut"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/get_out_party_item" />
-
+                android:layout_height="30dp"/>
+            <TextView
+                android:id="@+id/detailOnChattingBackgroundText"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:layout_marginRight="17dp"
+                android:padding="7dp"
+                android:text=""
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
         </LinearLayout>
 
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>

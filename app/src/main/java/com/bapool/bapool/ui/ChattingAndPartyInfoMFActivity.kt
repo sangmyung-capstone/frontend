@@ -6,7 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +14,8 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +23,7 @@ import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.utils.Utils
 import com.bapool.bapool.R
 import com.bapool.bapool.adapter.PartyChattingAdapter
 import com.bapool.bapool.adapter.PartyUserInfoAdapter
@@ -36,6 +39,7 @@ import com.bapool.bapool.retrofit.fcm.PushNotification
 import com.bapool.bapool.retrofit.fcm.RetrofitInstance
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.LoginActivity.Companion.UserToken
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -52,8 +56,6 @@ import java.io.ByteArrayOutputStream
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
@@ -68,8 +70,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
     var testId = ""
 
-
-
+    //keyboard 올라와있는지 확인
+    var keyboardView: Boolean = false
+    var imm: InputMethodManager? = null
 
     //user Img nickname 에 넣을 데이터
     var partyChattingUserInfo: MutableMap<String, FirebaseUserInfo> = HashMap()//4명 전부 다 들어있음.
@@ -136,11 +139,14 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
         initializeVari()
         listener()
         getPartyUserInfo()
+
     }
 
 
     fun initializeVari() {
 
+
+        imm= getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager?
 
 
         database = Firebase.database.reference
@@ -175,6 +181,8 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     fun listener() {
         binding.sendIcon.setOnClickListener {
             sendMessage()
+            Log.d("recyclerviewItemCount",chattingRVA.itemCount.toString())
+
         }
         //사진 채팅창에 등록 버튼
         binding.sendImgBtn.setOnClickListener {
@@ -182,6 +190,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
         }
 
+        keyboardSensor()
         toggle = ActionBarDrawerToggle(
             this@ChattingAndPartyInfoMFActivity,
             binding.drawerNavigationLayout,
@@ -195,6 +204,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
 
         binding.menuButton.setOnClickListener {
             binding.drawerNavigationLayout.openDrawer(GravityCompat.END)
+            if(!keyboardView){
+                imm?.hideSoftInputFromWindow(binding.sendMessage.windowToken,0)
+            }
         }
 
         binding.changPartyLeader.setOnClickListener {
@@ -237,6 +249,9 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
             Toast.makeText(this, "새로고침", Toast.LENGTH_SHORT).show()
         }
 
+        binding.sendMessage.setOnClickListener {
+
+        }
 
     }
     //////////////////////////////////////////////////// 파이어베이스 모음//////////////////////////////////////////////////////////
@@ -962,7 +977,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
 
-    //////////////////////////////////////////////////// 데이터 형식 변환 함수들 모음//////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////// 데이터 형식 변환 함수들 모음(키보드)//////////////////////////////////////////////////////////
     fun formatDateTime(dateTimeString: String): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
         val date = sdf.parse(dateTimeString)
@@ -1164,6 +1179,29 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
     }
 
 
+
+    //키보드가 올라와있는지 확인
+    fun keyboardSensor(){
+        val rootView = binding.drawerNavigationLayout
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+                val r = Rect()
+                rootView.getWindowVisibleDisplayFrame(r)
+                val screenHeight = rootView.height
+                val keypadHeight = screenHeight - r.bottom
+
+            if (keypadHeight > 0) { // Adjust this threshold as needed
+                keyboardView = true
+                Log.d("keyboardHere",keyboardView.toString())
+            } else {
+                keyboardView = false
+                Log.d("keyboardHere",keyboardView.toString())
+            }
+
+        }
+    }
+
+
+//
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
