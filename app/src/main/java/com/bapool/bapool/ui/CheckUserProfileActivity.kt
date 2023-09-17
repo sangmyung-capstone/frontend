@@ -55,45 +55,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
                         val resourceId = resources.getIdentifier(imageName, "drawable", packageName)
                         binding.userImage.setImageResource(resourceId)
                         binding.nickName.text = result.result.nickname
-
-                        //평점 binding
-                        if (result.result.rating.toFloat() < 1.0 && result.result.rating.toFloat() >= 0.0) {
-                            binding.angry.setColorFilter(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.main
-                                )
-                            )
-                        } else if (result.result.rating.toFloat() < 2.0 && result.result.rating.toFloat() >= 1.0) {
-                            binding.sad.setColorFilter(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.main
-                                )
-                            )
-                        } else if (result.result.rating.toFloat() < 3.0 && result.result.rating.toFloat() >= 2.0) {
-                            binding.meh.setColorFilter(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.main
-                                )
-                            )
-                        } else if (result.result.rating.toFloat() < 4.0 && result.result.rating.toFloat() >= 3.0) {
-                            binding.smile.setColorFilter(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.main
-                                )
-                            )
-                        } else if (result.result.rating.toFloat() < 5.0 && result.result.rating.toFloat() >= 4.0) {
-                            binding.happy.setColorFilter(
-                                ContextCompat.getColor(
-                                    context,
-                                    R.color.main
-                                )
-                            )
-                        }
-
+                        binding.rating.text = result.result.rating.toString()
 
                         //hashtag binding
                         if (userInfo.hashtag != null) {

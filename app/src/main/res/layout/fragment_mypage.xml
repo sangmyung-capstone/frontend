@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="659dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -59,91 +59,77 @@
                     app:civ_border_width="1dp"
                     android:layout_marginRight="10dp"/>
 
-                <TextView
-                    android:id="@+id/nickname"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:text="닉네임" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="닉네임"
+                        android:textSize="30sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView13"
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/star"
+                            android:layout_marginRight="5dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="rating"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-
-            <View
-                android:id="@+id/divider10"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                android:layout_marginTop="5dp"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp">
-
-                <ImageView
-                    android:id="@+id/angry"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/angry"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:id="@+id/sad"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/sad"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:id="@+id/meh"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/meh"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:id="@+id/smile"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/smile"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:id="@+id/happy"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/happy"
-                    android:layout_marginRight="10dp"/>
-
-            </LinearLayout>
 
             <View
                 android:id="@+id/divider11"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="?android:attr/listDivider" />
+                android:background="?android:attr/listDivider"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="2dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="받은매너평가"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="13dp">
+                    android:paddingLeft="13dp"
+                    android:layout_marginBottom="2dp">
+
 
                     <ImageView
                         android:id="@+id/hashtageimage1"
@@ -156,22 +142,27 @@
                         android:id="@+id/talkcount"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="100" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/hashtagechip1"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:checkable="false"
-                        android:text="대화가 많아요"
-                        android:textAlignment="center" />
+                    <TextView
+                        android:id="@+id/talktext"
+                        android:layout_width="100dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/background_hashtag"
+                        android:layout_gravity="center"
+                        android:backgroundTint="#EEEEEE"
+                        android:textAlignment="center"
+                        android:text="대화가 많아요" />
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="13dp">
+                    android:paddingLeft="13dp"
+                    android:layout_marginBottom="2dp">
 
                     <ImageView
                         android:id="@+id/hashtageimage2"
@@ -184,22 +175,27 @@
                         android:id="@+id/kindcount"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="100" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/hashtagechip2"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:checkable="false"
-                        android:text="친절해요"
-                        android:textAlignment="center" />
+                    <TextView
+                        android:id="@+id/kindtext"
+                        android:layout_width="100dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/background_hashtag"
+                        android:backgroundTint="#EEEEEE"
+                        android:textAlignment="center"
+                        android:layout_gravity="center"
+                        android:text="친절해요" />
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="13dp">
+                    android:paddingLeft="13dp"
+                    android:layout_marginBottom="2dp">
 
                     <ImageView
                         android:id="@+id/hashtageimage3"
@@ -212,15 +208,19 @@
                         android:id="@+id/mannercount"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="100" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/hashtagechip3"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
-                        android:checkable="false"
-                        android:text="예절이 좋아요"
-                        android:textAlignment="center" />
+                    <TextView
+                        android:id="@+id/mannertext"
+                        android:layout_width="100dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/background_hashtag"
+                        android:backgroundTint="#EEEEEE"
+                        android:textAlignment="center"
+                        android:layout_gravity="center"
+                        android:text="예절이 좋아요" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -240,14 +240,19 @@
                         android:id="@+id/quietcount"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
-                        android:text="100" />
+                        android:text="100"
+                        android:layout_gravity="center"/>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/hashtagechip4"
-                        android:layout_width="120dp"
-                        android:layout_height="40dp"
+                    <TextView
+                        android:id="@+id/quiettext"
+                        android:layout_width="100dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/background_hashtag"
+                        android:backgroundTint="#EEEEEE"
+                        android:textAlignment="center"
                         android:text="조용해요"
-                        android:textAlignment="center" />
+                        android:layout_gravity="center"/>
+
                 </LinearLayout>
 
                 <View
@@ -255,7 +260,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="?android:attr/listDivider"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="5dp"/>
 
             </LinearLayout>
 
@@ -273,7 +278,9 @@
                     android:drawableLeft="@drawable/drawable_change_icon"
                     android:gravity="left|center_vertical"
                     android:text="닉네임/프로필 이미지 변경"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"/>
 
                 <View
                     android:id="@+id/divider4"
@@ -289,7 +296,9 @@
                     android:textColor="@color/black"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/drawable_ban_icon"
-                    android:gravity="left|center_vertical"/>
+                    android:gravity="left|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"/>
 
                 <View
                     android:id="@+id/divider6"
@@ -305,7 +314,9 @@
                     android:textColor="@color/black"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/drawable_history_icon"
-                    android:gravity="left|center_vertical"/>
+                    android:gravity="left|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"/>
 
                 <View
                     android:id="@+id/divider7"
@@ -321,7 +332,9 @@
                     android:text="회원탈퇴"
                     android:textColor="@color/black"
                     android:drawableLeft="@drawable/drawable_delete_icon"
-                    android:gravity="left|center_vertical"/>
+                    android:gravity="left|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"/>
 
                 <View
                     android:id="@+id/divider8"
@@ -337,7 +350,16 @@
                     android:text="로그아웃"
                     android:textColor="@color/black"
                     android:drawableLeft="@drawable/drawable_logout_icon"
-                    android:gravity="left|center_vertical"/>
+                    android:gravity="left|center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"/>
+
+                <View
+                    android:id="@+id/divider10"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
+
             </LinearLayout>
 
         </LinearLayout>

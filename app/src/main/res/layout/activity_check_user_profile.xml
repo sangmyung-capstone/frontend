@@ -28,59 +28,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userImage" />
 
-    <LinearLayout
-        android:id="@+id/rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nickName">
-
-        <ImageView
-            android:id="@+id/angry"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@drawable/angry"
-            android:layout_marginRight="10dp"/>
-
-        <ImageView
-            android:id="@+id/sad"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@drawable/sad"
-            android:layout_marginRight="10dp"/>
-
-        <ImageView
-            android:id="@+id/meh"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:src="@drawable/meh"
-            android:layout_marginRight="10dp"/>
-
-        <ImageView
-            android:id="@+id/smile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@drawable/smile"
-            android:layout_marginRight="10dp"/>
-
-        <ImageView
-            android:id="@+id/happy"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:src="@drawable/happy"
-            android:layout_marginRight="10dp"/>
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/hashtagVisible"
@@ -90,7 +37,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rating">
+        app:layout_constraintTop_toBottomOf="@+id/userImage">
 
         <ImageView
             android:id="@+id/hash1"
@@ -141,6 +88,30 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ratinglayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nickName">
+
+        <ImageView
+            android:id="@+id/imageView15"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/star"
+            android:layout_marginRight="3dp"/>
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/banBtn"
         android:layout_width="wrap_content"
@@ -157,13 +128,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/rating"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratinglayout"
         android:layout_marginTop="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <ImageView
                 android:id="@+id/hashtageimage1"
@@ -178,18 +152,22 @@
                 android:layout_height="wrap_content"
                 android:text="100" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/hashtagechip1"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:text="대화가 많아요"
-                android:textAlignment="center" />
+            <TextView
+                android:id="@+id/talktext"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="@drawable/background_hashtag"
+                android:layout_gravity="center"
+                android:backgroundTint="#EEEEEE"
+                android:textAlignment="center"
+                android:text="대화가 많아요" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <ImageView
                 android:id="@+id/hashtageimage2"
@@ -204,18 +182,22 @@
                 android:layout_height="wrap_content"
                 android:text="100" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/hashtagechip2"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:text="친절해요"
-                android:textAlignment="center" />
+            <TextView
+                android:id="@+id/kindtext"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="@drawable/background_hashtag"
+                android:layout_gravity="center"
+                android:backgroundTint="#EEEEEE"
+                android:textAlignment="center"
+                android:text="친절해요" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <ImageView
                 android:id="@+id/hashtageimage3"
@@ -230,12 +212,15 @@
                 android:layout_height="wrap_content"
                 android:text="100" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/hashtagechip3"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:text="예절이 좋아요"
-                android:textAlignment="center"/>
+            <TextView
+                android:id="@+id/mannertext"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="@drawable/background_hashtag"
+                android:layout_gravity="center"
+                android:backgroundTint="#EEEEEE"
+                android:textAlignment="center"
+                android:text="예절이 좋아요" />
         </LinearLayout>
 
         <LinearLayout
@@ -256,13 +241,19 @@
                 android:layout_height="wrap_content"
                 android:text="100" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/hashtagechip4"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:text="조용해요"
-                android:textAlignment="center"/>
+            <TextView
+                android:id="@+id/quiettext"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="@drawable/background_hashtag"
+                android:layout_gravity="center"
+                android:backgroundTint="#EEEEEE"
+                android:textAlignment="center"
+                android:text="조용해요" />
         </LinearLayout>
     </LinearLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

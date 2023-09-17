@@ -1,15 +1,19 @@
 package com.bapool.bapool.ui.fragment
 
 import android.app.Activity.RESULT_OK
+import android.app.ProgressDialog.show
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -66,18 +70,8 @@ class MypageFragment : Fragment() {
                                 7 -> binding.profileimg.setImageResource(R.drawable.image7)
                                 8 -> binding.profileimg.setImageResource(R.drawable.image8)
                             }
-                            if (result.result.rating.toFloat() < 1.0 && result.result.rating.toFloat() >= 0.0) {
-                                binding.angry.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
-                            } else if (result.result.rating.toFloat() < 2.0 && result.result.rating.toFloat() >= 1.0) {
-                                binding.sad.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
-                            } else if (result.result.rating.toFloat() < 3.0 && result.result.rating.toFloat() >=2.0) {
-                                binding.meh.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
-                            } else if(result.result.rating.toFloat() < 4.0 && result.result.rating.toFloat() >=3.0){
-                                binding.smile.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
-                            } else if(result.result.rating.toFloat() < 5.0 && result.result.rating.toFloat() >= 4.0){
-                                binding.happy.setColorFilter(ContextCompat.getColor(requireContext(), R.color.main))
-                            }
                             binding.nickname.text = result.result.nickname
+                            binding.rating.text = result.result.rating.toString()
 
                             binding.talkcount.text =
                                 result.result?.hashtag?.find { it.hashtag_id == 1 }?.count.toString()
@@ -125,41 +119,60 @@ class MypageFragment : Fragment() {
     fun listener() {
 
         binding.logout.setOnClickListener {
-            MyApplication.prefs.setString("prefstoken", "")
-            MyApplication.prefs.setString("prefsid", "")
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            AlertDialog.Builder(requireView().context).apply {
+                setMessage("로그아웃 하시겠습니까?")
+                setPositiveButton("예", DialogInterface.OnClickListener { dialog, which ->
+                    MyApplication.prefs.setString("prefstoken", "")
+                    MyApplication.prefs.setString("prefsid", "")
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                })
+                setNegativeButton("아니오", DialogInterface.OnClickListener { dialog, which ->
+                    return@OnClickListener
+                })
+                show()
+            }
         }
         binding.changeProfile.setOnClickListener {
             val intent = Intent(requireContext(), ChangeProfileActivity::class.java)
             resultLauncher.launch(intent)
         }
         binding.deleteUser.setOnClickListener {
-            val retro = ServerRetrofit.create()
+            AlertDialog.Builder(requireView().context).apply {
+                setMessage("회원탈퇴 하시겠습니까?")
+                setPositiveButton("예", DialogInterface.OnClickListener { dialog, which ->
+                    val retro = ServerRetrofit.create()
 
-            retro.DeleteUser(UserId!!)
-                .enqueue(object : Callback<DeleteUserResponse> {
-                    override fun onResponse(
-                        call: Call<DeleteUserResponse>,
-                        response: Response<DeleteUserResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            var result: DeleteUserResponse? = response.body()
-                            Log.d("bap", "onResponse 성공: " + result?.toString())
-                            // handle successful response
-                            val intent = Intent(requireContext(), LoginActivity::class.java)
-                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                    retro.DeleteUser(UserId!!)
+                        .enqueue(object : Callback<DeleteUserResponse> {
+                            override fun onResponse(
+                                call: Call<DeleteUserResponse>,
+                                response: Response<DeleteUserResponse>
+                            ) {
+                                if (response.isSuccessful) {
+                                    var result: DeleteUserResponse? = response.body()
+                                    Log.d("bap", "onResponse 성공: " + result?.toString())
+                                    // handle successful response
+                                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 
 
-                        } else {
-                            // handle error response
-                        }
-                    }
+                                } else {
+                                    // handle error response
+                                }
+                            }
 
-                    override fun onFailure(call: Call<DeleteUserResponse>, t: Throwable) {
-                        // handle network or unexpected error
-                    }
+                            override fun onFailure(call: Call<DeleteUserResponse>, t: Throwable) {
+                                // handle network or unexpected error
+                            }
+                        })
                 })
+                setNegativeButton("아니오", DialogInterface.OnClickListener { dialog, which ->
+                    return@OnClickListener
+                })
+                show()
+            }
+
             //통신과정
 
         }

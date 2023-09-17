@@ -72,6 +72,10 @@ class RegisterActivity : AppCompatActivity() {
         binding.finish.setOnClickListener {
             if (intent.getStringExtra("company").equals("naver")) {
                 var nickname: String = textInputEditText.text.toString()
+                if (nickname == null) {
+                    Toast.makeText(this, "닉네임을 입력해주세요", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 var userInfo =
                     PostNaverSignupRequest(
                         intent.getStringExtra("token").toString(),
@@ -293,7 +297,7 @@ class RegisterActivity : AppCompatActivity() {
             if (button == selectedButton) {
                 button.setBackgroundResource(R.drawable.background_circle)
             } else {
-                button.setBackgroundResource(R.color.transparent)
+                button.setBackgroundResource(R.drawable.background_register)
             }
         }
     }
