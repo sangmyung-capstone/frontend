@@ -11,6 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -56,35 +57,14 @@ class MakePartyActivity : AppCompatActivity() {
     }
 
     fun keyboard(){
-        val rootView = binding.detail
-        rootView.viewTreeObserver.addOnGlobalLayoutListener {
-            val r = Rect()
-            rootView.getWindowVisibleDisplayFrame(r)
-            val screenHeight = rootView.rootView.height
-
-            val keypadHeight = screenHeight - r.bottom
-
-            if (keypadBaseHeight == 0) {
-                keypadBaseHeight = keypadHeight
-            }
-            Log.d("keypadHeight",keypadHeight.toString())
-            if (keypadHeight > screenHeight * 0.15) {
-                if (!isKeyboardShowing) {
-                    isKeyboardShowing = true
-                    rootView.setPadding(0, 0, 0, 126)
-                    val height = keypadHeight - keypadBaseHeight
-                }
-            } else {
-                if (isKeyboardShowing) {
-                    isKeyboardShowing = false
-                    rootView.setPadding(0, 0, 0, 0)
-                }
-            }
-
-            Log.d("keyboardMake",isKeyboardShowing.toString())
-
+        val scrollviewMain = binding.rootView
+        binding.detail.setOnTouchListener { view, motionEvent ->
+            scrollviewMain.requestDisallowInterceptTouchEvent(true)
+            false
         }
+
     }
+
 
     fun initializeVari() {
 

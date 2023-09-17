@@ -50,6 +50,18 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
         initializeVari()
         listener()
+        keyboard()
+    }
+
+    fun keyboard(){
+
+            val scrollviewMain = binding.rootView
+            binding.detail.setOnTouchListener { view, motionEvent ->
+                scrollviewMain.requestDisallowInterceptTouchEvent(true)
+                false
+            }
+
+
     }
 
 

@@ -74,12 +74,11 @@
             app:layout_constraintBottom_toBottomOf="@id/chattingInputZone"
             app:layout_constraintTop_toBottomOf="@+id/detailOnChattingBackground">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/chattingRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true" />
-
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/chattingRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

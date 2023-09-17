@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.recyclerview.widget.RecyclerView
@@ -59,11 +60,9 @@ class PartyUserInfoAdapter(
             }
 
             if (partyLeaderId == item.keys.firstOrNull().toString()) {
-                val image = binding.userImage
-                image.setBackgroundResource(R.drawable.custom_img_bg)
+                binding.crown.visibility = View.VISIBLE
             } else {
-                val image = binding.userImage
-                image.setBackgroundResource(R.drawable.custom_img_bg_pressed)
+                binding.crown.visibility = View.GONE
             }
             binding.userNameImageBackground.setOnClickListener {
                 val intent = Intent(context, CheckUserProfileActivity::class.java)

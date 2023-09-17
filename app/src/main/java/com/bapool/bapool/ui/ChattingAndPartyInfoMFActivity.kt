@@ -1189,7 +1189,7 @@ class ChattingAndPartyInfoMFActivity : AppCompatActivity() {
                 val screenHeight = rootView.height
                 val keypadHeight = screenHeight - r.bottom
 
-            if (keypadHeight > 0) { // Adjust this threshold as needed
+            if (keypadHeight > screenHeight*0.1) { // Adjust this threshold as needed
                 keyboardView = true
                 Log.d("keyboardHere",keyboardView.toString())
             } else {
