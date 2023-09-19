@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
 import com.bapool.bapool.adapter.RestaurantBottomAdapter
+import com.bapool.bapool.adapter.RestaurantBottomListAdapter
 import com.bapool.bapool.adapter.SearchViewAdapter
 import com.bapool.bapool.databinding.FragmentMapBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
@@ -93,6 +94,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     var restaurantsList = mutableListOf<Restaurant>()  // restaurant 리스트 생성
     var restaurantIdList = mutableListOf<Long>()    // id 리스트 생성
     var restaurantImageList = mutableListOf<String>()  // image url 리스트 생성
+
+    private lateinit var adapter: RestaurantBottomListAdapter
 
     var waitTime = 0L
 
@@ -285,15 +288,26 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             BottomSheetBehavior.SAVE_ALL
 
                     // 식당바텀리스트 어댑터 바인딩
-                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
-                        RestaurantBottomAdapter(
-                            response.body()!!.result.restaurants,
-                            restaurantImageList,
-                            naverMap
-                        )
+//                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
+//                        RestaurantBottomAdapter(
+//                            response.body()!!.result.restaurants,
+//                            restaurantImageList,
+//                            naverMap
+//                        )
+//                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
+//                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+                    adapter = RestaurantBottomListAdapter(
+                        response.body()!!.result.restaurants,
+                        restaurantImageList,
+                        naverMap
+                    )
+
+                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
                     binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+                    adapter.submitList(restaurantImageList)
 
                     // 식당바텀리스트 통신 1차
                     Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
@@ -317,20 +331,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                             restaurantImageList[idx] =
                                                 response.body()!!.result.restaurant_img_urls[idx]
 
-                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
-                                            R.id.bottom_recyclerview
-                                        ).adapter =
-                                            RestaurantBottomAdapter(
-                                                restaurantsList,
-                                                restaurantImageList,
-                                                naverMap
-                                            )
-                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-                                        RestaurantBottomAdapter(
-                                            restaurantsList,
-                                            restaurantImageList,
-                                            naverMap
-                                        ).notifyItemRangeChanged(0, restaurantIdList.size)
+//                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
+//                                            R.id.bottom_recyclerview
+//                                        ).adapter =
+//                                            RestaurantBottomAdapter(
+//                                                restaurantsList,
+//                                                restaurantImageList,
+//                                                naverMap
+//                                            )
+//                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+//                                        RestaurantBottomAdapter(
+//                                            restaurantsList,
+//                                            restaurantImageList,
+//                                            naverMap
+//                                        ).notifyItemRangeChanged(0, restaurantIdList.size)
+
+                                        adapter.submitList(restaurantImageList)
+                                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
+
                                     }
                                 }
 
@@ -379,20 +397,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                         restaurantImageList[4] =
                                             response.body()!!.result.restaurant_img_urls[4]
 
-                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
-                                            R.id.bottom_recyclerview
-                                        ).adapter =
-                                            RestaurantBottomAdapter(
-                                                restaurantsList,
-                                                restaurantImageList,
-                                                naverMap
-                                            )
-                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-                                        RestaurantBottomAdapter(
-                                            restaurantsList,
-                                            restaurantImageList,
-                                            naverMap
-                                        ).notifyItemRangeChanged(0, 5)
+//                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
+//                                            R.id.bottom_recyclerview
+//                                        ).adapter =
+//                                            RestaurantBottomAdapter(
+//                                                restaurantsList,
+//                                                restaurantImageList,
+//                                                naverMap
+//                                            )
+//                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+//                                        RestaurantBottomAdapter(
+//                                            restaurantsList,
+//                                            restaurantImageList,
+//                                            naverMap
+//                                        ).notifyItemRangeChanged(0, 5)
+
+                                        adapter.submitList(restaurantImageList)
+                                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
+
 
                                     }
                                 }
@@ -466,20 +488,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                                                     restaurantImageList[cnt + idx] =
                                                                         response.body()!!.result.restaurant_img_urls[idx]
 
-                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
-                                                                    R.id.bottom_recyclerview
-                                                                ).adapter =
-                                                                    RestaurantBottomAdapter(
-                                                                        restaurantsList,
-                                                                        restaurantImageList,
-                                                                        naverMap
-                                                                    )
-                                                                // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-                                                                RestaurantBottomAdapter(
-                                                                    restaurantsList,
-                                                                    restaurantImageList,
-                                                                    naverMap
-                                                                ).notifyItemRangeChanged(cnt, restaurantIdList.size - cnt)
+//                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
+//                                                                    R.id.bottom_recyclerview
+//                                                                ).adapter =
+//                                                                    RestaurantBottomAdapter(
+//                                                                        restaurantsList,
+//                                                                        restaurantImageList,
+//                                                                        naverMap
+//                                                                    )
+//                                                                // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+//                                                                RestaurantBottomAdapter(
+//                                                                    restaurantsList,
+//                                                                    restaurantImageList,
+//                                                                    naverMap
+//                                                                ).notifyItemRangeChanged(cnt, restaurantIdList.size - cnt)
+
+                                                                adapter.submitList(restaurantImageList)
+
 
                                                                 Log.d(
                                                                     "RESTAURANT_IMG",
@@ -536,20 +561,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                                                     response.body()!!.result.restaurant_img_urls[4]
 
 
-                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
-                                                                    R.id.bottom_recyclerview
-                                                                ).adapter =
-                                                                    RestaurantBottomAdapter(
-                                                                        restaurantsList,
-                                                                        restaurantImageList,
-                                                                        naverMap
-                                                                    )
-                                                                // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-                                                                RestaurantBottomAdapter(
-                                                                    restaurantsList,
-                                                                    restaurantImageList,
-                                                                    naverMap
-                                                                ).notifyItemRangeChanged(cnt, 5)
+//                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
+//                                                                    R.id.bottom_recyclerview
+//                                                                ).adapter =
+//                                                                    RestaurantBottomAdapter(
+//                                                                        restaurantsList,
+//                                                                        restaurantImageList,
+//                                                                        naverMap
+//                                                                    )
+//                                                                // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
+//                                                                RestaurantBottomAdapter(
+//                                                                    restaurantsList,
+//                                                                    restaurantImageList,
+//                                                                    naverMap
+//                                                                ).notifyItemRangeChanged(cnt, 5)
+
+                                                                adapter.submitList(restaurantImageList)
+
 
                                                                 Log.d(
                                                                     "RESTAURANT_IMG",
