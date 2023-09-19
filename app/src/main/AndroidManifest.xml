@@ -81,7 +81,7 @@
             android:name=".ui.ChattingAndPartyInfoMFActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.app.lib_name"
