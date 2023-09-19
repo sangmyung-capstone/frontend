@@ -189,7 +189,7 @@
 
         <TextView
             android:id="@+id/hash1"
-            android:text="#1111"
+            android:text="#밥먹어요"
             android:textSize="11sp"
             android:textColor="#B1B1B1"
             android:layout_width="wrap_content"
@@ -203,7 +203,7 @@
             android:textColor="#B1B1B1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="#2222"
+            android:text="#소통해요"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/hash1"
             app:layout_constraintStart_toEndOf="@+id/hash1"
@@ -211,7 +211,7 @@
 
         <TextView
             android:id="@+id/hash3"
-            android:text="#3333"
+            android:text="#술먹어요"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
@@ -224,7 +224,7 @@
 
         <TextView
             android:id="@+id/hash4"
-            android:text="#4444"
+            android:text="#남자"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
@@ -237,7 +237,7 @@
 
         <TextView
             android:id="@+id/hash5"
-            android:text="#5555"
+            android:text="#여자"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"

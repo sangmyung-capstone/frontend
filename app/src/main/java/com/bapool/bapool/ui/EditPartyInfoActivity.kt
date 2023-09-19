@@ -53,13 +53,13 @@ class EditPartyInfoActivity : AppCompatActivity() {
         keyboard()
     }
 
-    fun keyboard(){
+    fun keyboard() {
 
-            val scrollviewMain = binding.rootView
-            binding.detail.setOnTouchListener { view, motionEvent ->
-                scrollviewMain.requestDisallowInterceptTouchEvent(true)
-                false
-            }
+        val scrollviewMain = binding.rootView
+        binding.detail.setOnTouchListener { view, motionEvent ->
+            scrollviewMain.requestDisallowInterceptTouchEvent(true)
+            false
+        }
 
 
     }
@@ -79,18 +79,28 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
 
         binding.grpNameText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int,
+            ) {
                 // This method is called before the text is changed.
             }
 
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int,
+            ) {
                 // This method is called whenever the text is changed.
                 val charCount = charSequence?.length ?: 0
-                if(charCount <= 10){
-                    binding.partyNameEdit.text ="(${charCount}/10)"
+                if (charCount <= 10) {
+                    binding.partyNameEdit.text = "(${charCount}/10)"
                     binding.partyNameEdit.setTextColor(Color.parseColor("#5B5BFB"))
-                }else if(charCount > 10){
-                    binding.partyNameEdit.text ="(${charCount}/10)"
+                } else if (charCount > 10) {
+                    binding.partyNameEdit.text = "(${charCount}/10)"
                     binding.partyNameEdit.setTextColor(Color.RED)
                 }
             }
@@ -101,18 +111,28 @@ class EditPartyInfoActivity : AppCompatActivity() {
         })
 
         binding.menuText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int,
+            ) {
                 // This method is called before the text is changed.
             }
 
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int,
+            ) {
                 // This method is called whenever the text is changed.
                 val charCount = charSequence?.length ?: 0
-                if(charCount <= 10){
-                    binding.menuEdit.text ="(${charCount}/10)"
+                if (charCount <= 10) {
+                    binding.menuEdit.text = "(${charCount}/10)"
                     binding.menuEdit.setTextColor(Color.parseColor("#5B5BFB"))
-                }else if(charCount > 10){
-                    binding.menuEdit.text ="(${charCount}/10)"
+                } else if (charCount > 10) {
+                    binding.menuEdit.text = "(${charCount}/10)"
                     binding.menuEdit.setTextColor(Color.RED)
                 }
             }
@@ -124,25 +144,28 @@ class EditPartyInfoActivity : AppCompatActivity() {
     }
 
     fun listener() {
-        hashtagClickListener(binding.chip1,0)
-        hashtagClickListener(binding.chip2,1)
-        hashtagClickListener(binding.chip3,2)
-        hashtagClickListener(binding.chip4,3)
-        hashtagClickListener(binding.chip5,4)
+        hashtagClickListener(binding.chip1, 0)
+        hashtagClickListener(binding.chip2, 1)
+        hashtagClickListener(binding.chip3, 2)
+        hashtagClickListener(binding.chip4, 3)
+        hashtagClickListener(binding.chip5, 4)
 
         //모임시작 날짜 정하기
         binding.startDateConst.setOnClickListener {
-            binding.startDateConst.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
+            binding.startDateConst.startAnimation(AnimationUtils.loadAnimation(this,
+                R.anim.fade_in))
             datePickerDialogCustom(System.currentTimeMillis(), 1)
         }
         //모임 시작 시간 정하기
         binding.startTimeConst.setOnClickListener {
-            binding.startTimeConst.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
+            binding.startTimeConst.startAnimation(AnimationUtils.loadAnimation(this,
+                R.anim.fade_in))
             timePickerDialogCustom(1)
         }
         //모임 정원 정하기
         binding.maxPeopleConst.setOnClickListener {
-            binding.maxPeopleConst.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
+            binding.maxPeopleConst.startAnimation(AnimationUtils.loadAnimation(this,
+                R.anim.fade_in))
             showMaxPeopleDialog()
         }
         //그룹생성버튼, 그룹생성정보를 retrofit post로 넘겨줌
@@ -164,7 +187,7 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
             } else if (binding.startTimeText.text.toString().isNullOrBlank()) {
                 alterDialog("시작시간을 입력해주세요.")
-            } else if(binding.maxPeopleText.text.toString().isNullOrBlank()){
+            } else if (binding.maxPeopleText.text.toString().isNullOrBlank()) {
                 alterDialog("정원을 선택해주세요.")
 
             } else {
@@ -176,9 +199,9 @@ class EditPartyInfoActivity : AppCompatActivity() {
 
                 var hashtagList = arrayListOf<Int>()
                 var count = 0
-                for(data in hastagList){
+                for (data in hastagList) {
                     count++
-                    if(data != 0){
+                    if (data != 0) {
                         when (count) {
                             1 -> hashtagList.add(1)
                             2 -> hashtagList.add(2)
@@ -348,12 +371,11 @@ class EditPartyInfoActivity : AppCompatActivity() {
     }
 
     //모집인원 dialog
-    fun showMaxPeopleDialog(){
+    fun showMaxPeopleDialog() {
         val num = resources.getStringArray(R.array.maxpeople)
         val builder = AlertDialog.Builder(this)
         builder.setTitle("모임 인원 선택")
-        builder.setItems(num){
-                p0,p1 ->
+        builder.setItems(num) { p0, p1 ->
             binding.maxPeopleText.setText(num[p1])
             maxpeopeleInt = num[p1].toInt()
         }

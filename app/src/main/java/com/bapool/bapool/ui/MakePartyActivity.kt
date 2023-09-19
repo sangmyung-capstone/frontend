@@ -41,8 +41,6 @@ class MakePartyActivity : AppCompatActivity() {
     val userId: String = UserId.toString()   //companion userid로 변경필요.
     lateinit var restaurantPartyInfoObject: goToRestaurantPartyList
     var maxpeopeleInt: Int = 0
-    var isKeyboardShowing = false
-    var keypadBaseHeight = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
