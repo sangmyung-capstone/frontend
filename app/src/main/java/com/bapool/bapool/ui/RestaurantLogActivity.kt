@@ -81,6 +81,8 @@ class RestaurantLogActivity : AppCompatActivity() {
                         // handle successful response
                         loglist?.let { RestaurantsLogList.addAll(it) }
                         binding.recyclerView.adapter?.notifyDataSetChanged()
+
+                        RestaurantsLogList.reverse()
                     } else {
                         // handle error response
                         Log.d("bap", "onResponse 실패 $response")
@@ -96,12 +98,6 @@ class RestaurantLogActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = RestaurantLogAdapter(RestaurantsLogList)
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                LinearLayoutManager.VERTICAL
-            )
-        )
 
     }
 }

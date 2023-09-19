@@ -1,6 +1,7 @@
 package com.bapool.bapool.adapter
 
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -48,7 +49,9 @@ class RestaurantLogAdapter(private val datas: MutableList<GetRestaurantLogRespon
         binding.ratingbutton.isEnabled = !Loglist.rating_complete
         if (binding.ratingbutton.isEnabled == false) {
             binding.ratingbutton.setText("유저평가 완료")
-            binding.ratingbutton.setBackgroundColor(ContextCompat.getColor(context, R.color.main))
+            binding.ratingbutton.setBackgroundColor(Color.parseColor("#adb5bd"))
+        } else {
+            binding.ratingbutton.setBackgroundColor(Color.parseColor("#fdc500"))
         }
 
         binding.ratingbutton.setOnClickListener {
