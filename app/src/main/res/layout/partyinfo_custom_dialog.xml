@@ -7,9 +7,11 @@
     android:foregroundTint="#000000">
 
 
-    <com.google.android.material.chip.Chip
+    <TextView
         android:id="@+id/textView5"
+        android:textSize="15sp"
         android:layout_width="wrap_content"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
@@ -21,7 +23,7 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
-        android:layout_height="350dp"
+        android:layout_height="200dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"

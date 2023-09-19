@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.databinding.ChattingAndPartyUserItemBinding
+import com.bapool.bapool.databinding.SelectPartyLeaderItemBinding
 import com.bapool.bapool.retrofit.ServerRetrofit
 import com.bapool.bapool.retrofit.data.FirebaseUserInfo
 import com.bapool.bapool.retrofit.data.PatchEditPartyInfoResponse
@@ -30,7 +31,7 @@ class SelectPartyLeaderAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            ChattingAndPartyUserItemBinding.inflate(
+            SelectPartyLeaderItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -65,7 +66,7 @@ class SelectPartyLeaderAdapter(
         return partyUserInfo.size
     }
 
-    inner class ViewHolder(private val binding: ChattingAndPartyUserItemBinding) :
+    inner class ViewHolder(private val binding: SelectPartyLeaderItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         val clickEvent = binding.userNameImageBackground

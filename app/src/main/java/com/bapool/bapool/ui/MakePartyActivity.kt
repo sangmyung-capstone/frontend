@@ -1,11 +1,11 @@
 package com.bapool.bapool.ui
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +13,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bapool.bapool.R
@@ -26,11 +25,11 @@ import com.bapool.bapool.retrofit.data.PostMakePartyResponse
 import com.bapool.bapool.retrofit.data.goToRestaurantPartyList
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.RestaurantPartyActivity.Companion.RestaurantPartyActivityCompanion
+import com.google.android.material.chip.Chip
 import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -52,6 +51,15 @@ class MakePartyActivity : AppCompatActivity() {
 
         initializeVari()
         listener()
+        keyboard()
+    }
+
+    fun keyboard(){
+        val scrollviewMain = binding.rootView
+        binding.detail.setOnTouchListener { view, motionEvent ->
+            scrollviewMain.requestDisallowInterceptTouchEvent(true)
+            false
+        }
 
     }
 
@@ -107,46 +115,17 @@ class MakePartyActivity : AppCompatActivity() {
 
     fun listener() {
         //category
-        binding.chip1.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                hastagList.set(0, 1)
-            } else {
-                hastagList.set(0, 0)
-            }
-        }
-        binding.chip2.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                hastagList.set(1, 1)
-
-            } else {
-                hastagList.set(1, 0)
-            }
-        }
-        binding.chip3.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                hastagList.set(2, 1)
-            } else {
-
-                hastagList.set(2, 0)
-            }
-        }
-        binding.chip4.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                hastagList.set(3, 1)
-            } else {
-                hastagList.set(3, 0)
-            }
-        }
-        binding.chip5.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                hastagList.set(4, 1)
-
-            } else {
-                hastagList.set(4, 0)
-            }
-        }
+        hashtagClickListener(binding.chip1,0)
+        hashtagClickListener(binding.chip2,1)
+        hashtagClickListener(binding.chip3,2)
+        hashtagClickListener(binding.chip4,3)
+        hashtagClickListener(binding.chip5,4)
 
 
+
+//        binding.detail.setOnClickListener {
+//            keyboard()
+//        }
 
         //모임시작 날짜 정하기
         binding.startDateConst.setOnClickListener {
@@ -364,4 +343,17 @@ class MakePartyActivity : AppCompatActivity() {
         alertDialog.show()
 
     }
+
+    //hashtag 클릭 리스너
+    fun hashtagClickListener(chip: Chip, i: Int) {
+        chip.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                hastagList.set(i, 1)
+
+            } else {
+                hastagList.set(i, 0)
+            }
+        }
+    }
+
 }

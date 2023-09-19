@@ -994,6 +994,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
             .check()
+
+
+
     }
 
 //    override fun onBackPressed() {

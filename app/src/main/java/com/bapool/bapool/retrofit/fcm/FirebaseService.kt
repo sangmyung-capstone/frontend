@@ -1,5 +1,6 @@
 package com.bapool.bapool.retrofit.fcm
 
+import android.app.Notification.DEFAULT_ALL
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -8,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
 import com.bapool.bapool.R
@@ -19,6 +21,7 @@ import com.bapool.bapool.ui.LoginActivity.Companion.UserToken
 import com.bapool.bapool.ui.RestaurantLogActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.messaging.RemoteMessage.Notification
 
 class FirebaseService : FirebaseMessagingService() {
 
@@ -74,8 +77,7 @@ class FirebaseService : FirebaseMessagingService() {
         } else {
             val intent = Intent(applicationContext, ChattingAndPartyInfoMFActivity::class.java)
             intent.putExtra("partyId", partyId)
-            intent.putExtra("notificationUserId", userId)
-            intent.putExtra("notificationUserToken", userToken)
+            intent.putExtra("whereAreYouFrom","fcm")
             intent.apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
@@ -100,10 +102,10 @@ class FirebaseService : FirebaseMessagingService() {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "name"
+            val name = "channel1"
             val descriptionText = "description"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("Test_Channel", name, importance).apply {
+            val channel = NotificationChannel("channel", name, importance).apply {
                 description = descriptionText
             }
             // Register the channel with the system
@@ -120,13 +122,15 @@ class FirebaseService : FirebaseMessagingService() {
         pendingIntent: PendingIntent,
         alarm_code: Int = 123
     ) {
-        var builder = NotificationCompat.Builder(this, "Test_Channel")
+        var builder = NotificationCompat.Builder(this, "channel")
             .setSmallIcon(R.drawable.bapool)
             .setContentTitle(title)
             .setContentText(body)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+
 
         with(NotificationManagerCompat.from(this)) {
             notify(alarm_code, builder.build())
