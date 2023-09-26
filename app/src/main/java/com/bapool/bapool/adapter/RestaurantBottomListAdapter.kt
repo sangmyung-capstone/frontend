@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
+import com.bapool.bapool.databinding.RestaurantpartylistItemsBinding
 import com.bapool.bapool.retrofit.data.Restaurant
 import com.bapool.bapool.ui.fragment.MapFragment
 import com.bumptech.glide.Glide
@@ -62,6 +63,7 @@ class RestaurantBottomListAdapter(
             .into(holder.restaurant_img)
 
         if (imageList[position] != "a") {
+            Log.d("GLIDE", "position: $position image change")
             Glide.with(holder.context)
                 .load(imageList[position])
                 .error(R.drawable.bapool)
@@ -93,7 +95,7 @@ class RestaurantBottomListAdapter(
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<String>() {
             override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-                return oldItem == newItem
+                return oldItem === newItem
             }
 
             override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {

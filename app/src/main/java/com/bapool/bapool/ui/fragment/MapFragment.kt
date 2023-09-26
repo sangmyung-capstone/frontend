@@ -284,8 +284,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     BottomSheetBehavior.from(binding.bottomRestaurantList).isDraggable = true
                     BottomSheetBehavior.from(binding.bottomRestaurantList).peekHeight =
                         dpToPx(180f, context).toInt()
-                    BottomSheetBehavior.from(binding.bottomRestaurantList).saveFlags =
-                            BottomSheetBehavior.SAVE_ALL
+//                    BottomSheetBehavior.from(binding.bottomRestaurantList).saveFlags =
+//                            BottomSheetBehavior.SAVE_NONE
 
                     // 식당바텀리스트 어댑터 바인딩
 //                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
@@ -299,7 +299,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                     adapter = RestaurantBottomListAdapter(
                         response.body()!!.result.restaurants,
-                        restaurantImageList,
+                        restaurantImageList.toList(),
                         naverMap
                     )
 
@@ -307,7 +307,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-                    adapter.submitList(restaurantImageList)
+
 
                     // 식당바텀리스트 통신 1차
                     Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
@@ -346,8 +346,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //                                            naverMap
 //                                        ).notifyItemRangeChanged(0, restaurantIdList.size)
 
-                                        adapter.submitList(restaurantImageList)
-                                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
+                                        adapter.submitList(restaurantImageList.toList())
+//                                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
 
                                     }
                                 }
@@ -412,8 +412,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //                                            naverMap
 //                                        ).notifyItemRangeChanged(0, 5)
 
-                                        adapter.submitList(restaurantImageList)
-                                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
+                                        adapter.submitList(restaurantImageList.toList())
+//                                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
+
 
 
                                     }
@@ -503,7 +504,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //                                                                    naverMap
 //                                                                ).notifyItemRangeChanged(cnt, restaurantIdList.size - cnt)
 
-                                                                adapter.submitList(restaurantImageList)
+                                                                adapter.submitList(restaurantImageList.toList())
 
 
                                                                 Log.d(
@@ -576,7 +577,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //                                                                    naverMap
 //                                                                ).notifyItemRangeChanged(cnt, 5)
 
-                                                                adapter.submitList(restaurantImageList)
+                                                                adapter.submitList(restaurantImageList.toList())
 
 
                                                                 Log.d(
