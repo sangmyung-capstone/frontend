@@ -103,7 +103,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         instance = this
     }
 
-    private var lastMarker : Marker? = null
+    private var lastMarker: Marker? = null
     private var searchGoFlag = 0
 
 
@@ -299,13 +299,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                     adapter = RestaurantBottomListAdapter(
                         response.body()!!.result.restaurants,
-                        restaurantImageList.toList(),
+                        restaurantImageList,
                         naverMap
                     )
 
                     binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
                     binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
 
 
 
@@ -415,8 +416,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                         adapter.submitList(restaurantImageList.toList())
 //                                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
 
-
-
                                     }
                                 }
 
@@ -464,13 +463,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                         // 식당바텀리스트 통신 2차
                                         if (cnt < restaurantIdList.size) {
 
-                                            Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
+                                            Log.d(
+                                                "BOTTOM_ID_SIZE",
+                                                restaurantIdList.size.toString()
+                                            )
                                             Log.d("BOTTOM_RESTAURANTS", restaurantsList.toString())
 
                                             if (restaurantIdList.size - cnt < 5) {  // 마지막 페이징 시 // size가 17 24 등의 경우
 
                                                 var lastRestaurantIdList = mutableListOf<Long>()
-                                                for(idx in 0 until restaurantIdList.size - cnt)
+                                                for (idx in 0 until restaurantIdList.size - cnt)
                                                     lastRestaurantIdList.add(restaurantIdList[cnt + idx])
 
                                                 retro.getRestaurantsBottom(
@@ -485,7 +487,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                                         ) {
                                                             if (response.isSuccessful) {
 
-                                                                for(idx in 0 until restaurantIdList.size - cnt)
+                                                                for (idx in 0 until restaurantIdList.size - cnt)
                                                                     restaurantImageList[cnt + idx] =
                                                                         response.body()!!.result.restaurant_img_urls[idx]
 
@@ -504,7 +506,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //                                                                    naverMap
 //                                                                ).notifyItemRangeChanged(cnt, restaurantIdList.size - cnt)
 
-                                                                adapter.submitList(restaurantImageList.toList())
+                                                                adapter.submitList(
+                                                                    restaurantImageList.toList()
+                                                                )
 
 
                                                                 Log.d(
@@ -577,7 +581,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //                                                                    naverMap
 //                                                                ).notifyItemRangeChanged(cnt, 5)
 
-                                                                adapter.submitList(restaurantImageList.toList())
+                                                                adapter.submitList(
+                                                                    restaurantImageList.toList()
+                                                                )
 
 
                                                                 Log.d(
@@ -699,14 +705,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (marker.icon == markerImage) {
 
             marker.icon = markerPinImage
-            ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
-            ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+            ObjectAnimator.ofInt(marker, "width", markerPinSize).start()
+            ObjectAnimator.ofInt(marker, "height", markerPinSize).start()
 
         } else if (marker.icon == markerImageEmpty) {
 
             marker.icon = markerPinImageEmpty
-            ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
-            ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+            ObjectAnimator.ofInt(marker, "width", markerPinSize).start()
+            ObjectAnimator.ofInt(marker, "height", markerPinSize).start()
 
         }
 
@@ -775,14 +781,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (markerList[0].icon == markerImage) {
 
             markerList[0].icon = markerPinImage
-            ObjectAnimator.ofInt(markerList[0],"width", markerPinSize).start()
-            ObjectAnimator.ofInt(markerList[0],"height", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0], "width", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0], "height", markerPinSize).start()
 
         } else if (markerList[0].icon == markerImageEmpty) {
 
             markerList[0].icon = markerPinImageEmpty
-            ObjectAnimator.ofInt(markerList[0],"width", markerPinSize).start()
-            ObjectAnimator.ofInt(markerList[0],"height", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0], "width", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0], "height", markerPinSize).start()
 
         }
 
@@ -858,14 +864,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             if (marker.icon == markerImage) {
 
                 marker.icon = markerPinImage
-                ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
-                ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+                ObjectAnimator.ofInt(marker, "width", markerPinSize).start()
+                ObjectAnimator.ofInt(marker, "height", markerPinSize).start()
 
             } else if (marker.icon == markerImageEmpty) {
 
                 marker.icon = markerPinImageEmpty
-                ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
-                ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+                ObjectAnimator.ofInt(marker, "width", markerPinSize).start()
+                ObjectAnimator.ofInt(marker, "height", markerPinSize).start()
 
             }
 
@@ -886,13 +892,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomMarkerInfo, true)
 
-        BottomSheetBehavior.from(binding.bottomMarkerInfo).state = BottomSheetBehavior.STATE_EXPANDED
+        BottomSheetBehavior.from(binding.bottomMarkerInfo).state =
+            BottomSheetBehavior.STATE_EXPANDED
 
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (binding.bottomMarkerInfo.visibility == View.VISIBLE) {
-                    if (searchGoFlag == 1 ) {
+                    if (searchGoFlag == 1) {
                         binding.searchView.show()
                         searchGoFlag = 0
                     }
@@ -995,7 +1002,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
             .check()
-
 
 
     }
