@@ -258,7 +258,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun requestNotificationPermission() {
-        Toast.makeText(this, "알림권한 허용해줭", Toast.LENGTH_SHORT).show()
     }
 
     override fun onResume() {
