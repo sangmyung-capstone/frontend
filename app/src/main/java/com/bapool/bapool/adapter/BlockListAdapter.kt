@@ -14,6 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 class BlockListViewHolder(val binding: BlocklistItemsBinding) :
     RecyclerView.ViewHolder(binding.root)
@@ -45,13 +46,24 @@ class BlockListAdapter(val datas: MutableList<GetBlockUserResponse.BlockedUser>)
         val blockedUser = datas[position]
         val binding = holder.binding
 
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
-        val dateTime = LocalDateTime.parse(blockedUser.block_date, formatter)
+        val formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+        val formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSS")
+
+        var dateTime: LocalDateTime? = null
+        try {
+            dateTime = LocalDateTime.parse(blockedUser.block_date, formatter1)
+        } catch (e: DateTimeParseException) {
+            try {
+                dateTime = LocalDateTime.parse(blockedUser.block_date, formatter2)
+            } catch (e: DateTimeParseException) {
+                // handle error here
+            }
+        }
 
         // Set the data to the views
         var blockdate = blockedUser.block_date.toString()
         binding.Blocnickname.text = blockedUser.nickname
-        binding.Blockdate.text = "${dateTime.year}-${dateTime.monthValue}-${dateTime.dayOfMonth}"
+        binding.Blockdate.text = "${dateTime?.year}-${dateTime?.monthValue}-${dateTime?.dayOfMonth}"
 
         binding.blockbutton.setOnClickListener {
             // Handle the button click event
