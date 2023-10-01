@@ -125,7 +125,7 @@ class ChangeProfileActivity : AppCompatActivity() {
             if (button == selectedButton) {
                 button.setBackgroundResource(R.drawable.background_circle)
             } else {
-                button.setBackgroundResource(R.color.transparent)
+                button.setBackgroundResource(R.drawable.background_register)
             }
         }
     }

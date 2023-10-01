@@ -82,6 +82,11 @@ class CheckUserProfileActivity : AppCompatActivity() {
                                     binding.quietcount.text = "0"
                                 }
                             }
+                        }else{
+                            binding.talkcount.text = "0"
+                            binding.kindcount.text = "0"
+                            binding.mannercount.text = "0"
+                            binding.quietcount.text = "0"
                         }
                         if (UserId.toString() == opponentUserId) {
                             binding.banBtn.visibility = View.GONE

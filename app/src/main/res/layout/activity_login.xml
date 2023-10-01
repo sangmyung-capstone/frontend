@@ -21,19 +21,20 @@
 
         <ImageButton
             android:id="@+id/naver_login_button"
-            android:layout_width="74dp"
-            android:layout_height="60dp"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:background="@android:color/transparent"
-            android:scaleType="centerInside"
-            android:src="@drawable/btnnaver" />
+            android:scaleType="fitXY"
+            android:src="@drawable/btnnaver"
+            android:layout_marginBottom="10dp"/>
 
         <ImageButton
             android:id="@+id/kakao_login_button"
-            android:layout_width="105dp"
-            android:layout_height="33dp"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:background="@android:color/transparent"
-            android:scaleType="centerInside"
-            android:src="@drawable/kakao_login_medium" />
+            android:scaleType="fitXY"
+            android:src="@drawable/kakao_login_large" />
     </LinearLayout>
 
     <TextView
