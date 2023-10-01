@@ -77,7 +77,7 @@
         android:id="@+id/bottomRestaurantList"
         android:layout_width="match_parent"
         android:layout_height="600dp"
-        android:elevation="3dp"
+        app:elevation="1dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -86,7 +86,7 @@
         android:id="@+id/bottomMarkerInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="3dp"
+        app:elevation="1dp"
         android:visibility="gone"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
     </androidx.constraintlayout.widget.ConstraintLayout>
