@@ -22,6 +22,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.UiThread
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
@@ -636,7 +637,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
-    // 식당바텀리스트에서 식당 클릭 시 마커정보화면 이동
+    // 식당바텀리스트에서 식당 클릭 시 식당정보화면 이동
     fun markerGoEvent(naverMap: NaverMap, marker: Marker, id: Long, long: Double, lati: Double) {
         Log.d("MARKER_INFO", "lati: $lati long: $long")
         Log.d("MARKER_INFO", "Restaurant id : $id")
@@ -683,7 +684,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         lastMarker = marker
     }
 
-    // 검색결과에서 식당 클릭 시 마커정보화면 이동
+    // 검색결과에서 식당 클릭 시 식당정보화면 이동
     fun searchMarkerGoEvent(
         naverMap: NaverMap,
         id: Long,
@@ -829,17 +830,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     fun createMarkerInfo(result: RestaurantInfo?) {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
 
-        binding.bottomMarkerInfo.removeAllViews()
-
-        binding.bottomRestaurantList.visibility = View.GONE
-        binding.bottomMarkerInfo.visibility = View.VISIBLE
-
-        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomMarkerInfo, true)
-
-        BottomSheetBehavior.from(binding.bottomMarkerInfo).state =
-            BottomSheetBehavior.STATE_EXPANDED
-
-
+        // 뒤로가기 콜백
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (binding.bottomMarkerInfo.visibility == View.VISIBLE) {
@@ -867,10 +858,26 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             callback
         )
 
+        binding.bottomMarkerInfo.removeAllViews()
+
+        binding.bottomRestaurantList.visibility = View.GONE
+        binding.bottomMarkerInfo.visibility = View.VISIBLE
+
+        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomMarkerInfo, true)
+
+        BottomSheetBehavior.from(binding.bottomMarkerInfo).state =
+            BottomSheetBehavior.STATE_EXPANDED
+
+
         // 이미지
-        Glide.with(this)
-            .load(result?.img_url)
-            .into(binding.bottomMarkerInfo.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
+        if (result?.img_url == null)
+            binding.bottomMarkerInfo.findViewById<CardView>(R.id.markerInfoCardView).visibility = View.GONE
+        else
+            Glide.with(this)
+                .load(result?.img_url)
+                .into(binding.bottomMarkerInfo.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
+
+        // 파티 버튼 클릭 리스너
         binding.bottomMarkerInfo.findViewById<Button>(R.id.bottomButtonParty).setOnClickListener {
             val intent = Intent(requireContext(), RestaurantPartyActivity::class.java)
             val goToRestaurantPartyList = goToRestaurantPartyList(
@@ -879,23 +886,25 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 result?.category ?: "",
                 result?.phone ?: ""
             )
-
             intent.putExtra("restaurantInfoObject", goToRestaurantPartyList)
-
             startActivity(intent)
         }
-        // 스트링
-        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).text =
-            result?.restaurant_name
+
+        // 식당이름 클릭 시 웹 이동
         binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(result?.link)))
         }
+
+        // 스트링
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).text =
+            result?.restaurant_name
         binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextAddress).text =
             result?.restaurant_address
         binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextPhone).text =
             result?.phone
         binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextCategory).text =
             result?.category
+        // 메뉴 3개로 축소
         Log.d("MARKER_INFO", "menu : ${result?.menu.toString()}")
         if ((result?.menu != null) && (result.menu.isNotEmpty())) {
             var text = ""
@@ -913,8 +922,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //            "${result?.num_of_party.toString()}   파티!"
             "파티!"
 
-        // view 부착
-//        binding.bottomSheet.addView(BottomMarkerInfoBinding.inflate(layoutInflater).root)
     }
 
     // 위치 권한 획득
