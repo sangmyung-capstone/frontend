@@ -180,6 +180,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.locationView.map = naverMap // 커스텀 위치 위젯 맵에 바인딩
         binding.scaleView.map = naverMap    // 커스텀 스케일 바 위젯
         binding.logoView.setMap(naverMap) // 커스텀 로고 위젯
+        binding.compassView.map = naverMap
 
         naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현 위치로 맵 시작
 
