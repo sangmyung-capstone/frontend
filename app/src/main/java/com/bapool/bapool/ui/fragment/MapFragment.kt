@@ -149,8 +149,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             false
         }
+
+        val searchViewCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                binding.searchView.hide()
+            }
+        }
+
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
             if (newState == SearchView.TransitionState.SHOWING) {
+                requireActivity().onBackPressedDispatcher.addCallback(searchViewCallback)
+            }
+            else if (newState == SearchView.TransitionState.HIDDEN) {
+                searchViewCallback.remove()
             }
         }
 
@@ -939,7 +950,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
     }
-
 
 
     //뷰바인딩 생명주기 관리

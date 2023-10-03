@@ -61,15 +61,17 @@ class RestaurantBottomListAdapter(
         Log.d("bottom_view_holder", "image list ${position} run")
 
 
-        Glide.with(holder.context)
-            .load(R.raw.bapool_img_loading)
-            .into(holder.restaurant_img)
+
 
         if (imageList[position] != "a") {
             Log.d("GLIDE", "position: $position image change")
             Glide.with(holder.context)
                 .load(imageList[position])
                 .error(R.drawable.bapool)
+                .into(holder.restaurant_img)
+        } else {
+            Glide.with(holder.context)
+                .load(R.raw.bapool_img_loading)
                 .into(holder.restaurant_img)
         }
 
