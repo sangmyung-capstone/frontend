@@ -283,14 +283,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         binding.bottomRestaurantList,
                         true
                     )
-
                     BottomSheetBehavior.from(binding.bottomRestaurantList).isDraggable = true
                     BottomSheetBehavior.from(binding.bottomRestaurantList).peekHeight =
                         dpToPx(190f, context).toInt()
-//                    BottomSheetBehavior.from(binding.bottomRestaurantList).saveFlags =
-//                            BottomSheetBehavior.SAVE_NONE
 
 
+                    // 식당바텀리스트화면에 리스트 연결 (리사이클러뷰)
                     adapter = RestaurantBottomListAdapter(
                         response.body()!!.result.restaurants,
                         restaurantImageList,
@@ -816,7 +814,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    // 마커 정보화면 생성
+    // 식당 정보화면 생성
     fun createMarkerInfo(result: RestaurantInfo?) {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
 

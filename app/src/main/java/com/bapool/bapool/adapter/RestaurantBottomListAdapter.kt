@@ -45,7 +45,10 @@ class RestaurantBottomListAdapter(
     }
 
     override fun onBindViewHolder(holder: RestaurantBottomListViewHolder, position: Int) {
-        holder.restaurant_name.text = itemList[position].restaurant_name
+        if (itemList[position].restaurant_name.length > 11)
+            holder.restaurant_name.text = itemList[position].restaurant_name.substring(0 until 11) + "..."
+        else
+            holder.restaurant_name.text = itemList[position].restaurant_name
         holder.restaurant_category.text = itemList[position].category.split(" > ").last()
         holder.restaurant_address.text = itemList[position].restaurant_address
         if (itemList[position].num_of_party > 0)
