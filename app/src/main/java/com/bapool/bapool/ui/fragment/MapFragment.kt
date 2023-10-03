@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -24,6 +25,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.UiThread
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.findViewTreeLifecycleOwner
@@ -189,12 +191,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
         naverMap.locationSource = locationSource // 실행된 네이버 지도에 locationSource 연결
+        naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현 위치로 맵 시작
+
         binding.locationView.map = naverMap // 커스텀 위치 위젯 맵에 바인딩
         binding.scaleView.map = naverMap    // 커스텀 스케일 바 위젯
         binding.logoView.setMap(naverMap) // 커스텀 로고 위젯
         binding.compassView.map = naverMap
 
-        naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현 위치로 맵 시작
 
         naverMap.addOnCameraChangeListener { reason, _ ->
             // 지도가 이동 상태 시 콜백함수
@@ -211,18 +214,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         }
 
-//        markerInit()  // 현 위치 구하기 필요  // 위에 naverMap을 this.naverMap.locationSource 이용??
         Handler(Looper.getMainLooper()).postDelayed({
             val cameraUpdate = CameraUpdate.zoomTo(16.0)
             naverMap.moveCamera(cameraUpdate)
             markerInit()
-        }, 1500)
+        }, 3000)
     }
 
     private fun mapInit() {
 
         // 초기 지도 옵션
         val options = NaverMapOptions()
+//            .camera( // 현 위치 구하는 중...
 //            .maxZoom(19.0)
 //            .symbolScale(0f)  // 심벌 숨기기
             .minZoom(4.5)
@@ -233,7 +236,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .locationButtonEnabled(false)
             .extent(LatLngBounds(LatLng(31.43, 122.37), LatLng(44.35, 132.0)))  // 한반도 인근으로 설정
 //            .indoorEnabled(true) // 실내 지도
-//            .camera( // 현 위치 구하는 중...
 //                CameraPosition(
 //                    LatLng(37.4924505, 126.724422),
 //                    19.0
