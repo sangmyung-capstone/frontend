@@ -285,7 +285,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                     BottomSheetBehavior.from(binding.bottomRestaurantList).isDraggable = true
                     BottomSheetBehavior.from(binding.bottomRestaurantList).peekHeight =
-                        dpToPx(180f, context).toInt()
+                        dpToPx(190f, context).toInt()
 //                    BottomSheetBehavior.from(binding.bottomRestaurantList).saveFlags =
 //                            BottomSheetBehavior.SAVE_NONE
 
@@ -900,8 +900,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 "메뉴 미제공 \n\n\n"
         }
         binding.bottomMarkerInfo.findViewById<Button>(R.id.bottomButtonParty).text =
-            "${result?.num_of_party.toString()}   파티!"
-//            "파티 !"
+//            "${result?.num_of_party.toString()}   파티!"
+            "파티!"
 
         // view 부착
 //        binding.bottomSheet.addView(BottomMarkerInfoBinding.inflate(layoutInflater).root)

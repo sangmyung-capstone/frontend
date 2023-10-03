@@ -10,12 +10,16 @@
 
     <TextView
         android:id="@+id/bottomTextName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:singleLine="true"
+        android:text="안정훈 수제족발 중동본점이다이마리야"
         android:textColor="@color/blue"
         android:textSize="25dp"
+        app:layout_constraintEnd_toStartOf="@+id/bottomImageMarkerInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="6dp"
+        android:text="주소"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -36,7 +41,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:maxLines="3"
-        android:text="a\nb\nc"
+        android:text="메뉴1\n메뉴2\n메뉴3"
         app:layout_constraintBottom_toBottomOf="@+id/divider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bottomTextCategory" />
@@ -47,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="6dp"
+        android:text="전화번호"
         app:layout_constraintStart_toEndOf="@+id/bottomTextAddress"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -56,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
+        android:text="카테고리"
         android:textColor="@color/gray"
         android:textSize="11dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +89,7 @@
         android:minWidth="0dp"
         android:minHeight="0dp"
         android:singleLine="true"
-        android:text="파티 !"
+        android:text="파티"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
