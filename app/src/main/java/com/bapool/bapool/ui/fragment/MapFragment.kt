@@ -240,6 +240,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
+    // 첫 실행 및 현위치에서 재검색 시
+    // 최대 45개 마커 생성 및 식당바텀리스트 생성
     private fun markerInit() {
         val loggedPositions = HashSet<Int>()
 
@@ -624,6 +626,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
+    // 식당바텀리스트에서 식당 클릭 시 마커정보화면 이동
     fun markerGoEvent(naverMap: NaverMap, marker: Marker, id: Long, long: Double, lati: Double) {
         Log.d("MARKER_INFO", "lati: $lati long: $long")
         Log.d("MARKER_INFO", "Restaurant id : $id")
@@ -670,6 +673,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         lastMarker = marker
     }
 
+    // 검색결과에서 식당 클릭 시 마커정보화면 이동
     fun searchMarkerGoEvent(
         naverMap: NaverMap,
         id: Long,
@@ -749,6 +753,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 위의 markerGoEvent와 디자인패턴 이용??
     }
 
+    // 마커 클릭 시
     private fun markerClickEvent(marker: Marker, id: Long, long: Double, lati: Double) {
         marker.setOnClickListener {
             if (lastMarker != null) {
@@ -810,6 +815,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    // 마커 정보화면 생성
     fun createMarkerInfo(result: RestaurantInfo?) {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
 
@@ -891,16 +897,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         } else {
             binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextMenu).text =
-                "메뉴 미제공 \n"
+                "메뉴 미제공 \n\n\n"
         }
         binding.bottomMarkerInfo.findViewById<Button>(R.id.bottomButtonParty).text =
-            "${result?.num_of_party.toString()} 파티!"
+            "${result?.num_of_party.toString()}   파티!"
+//            "파티 !"
 
         // view 부착
 //        binding.bottomSheet.addView(BottomMarkerInfoBinding.inflate(layoutInflater).root)
     }
 
-    // 위치 권한 획득 위함
+    // 위치 권한 획득
     private fun requestPermissions() {
         // 권한 리스너 선언
         val permissionlistener: PermissionListener = object : PermissionListener {

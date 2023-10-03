@@ -55,7 +55,7 @@ class CheckUserProfileActivity : AppCompatActivity() {
                         val resourceId = resources.getIdentifier(imageName, "drawable", packageName)
                         binding.userImage.setImageResource(resourceId)
                         binding.nickName.text = result.result.nickname
-                        binding.rating.text = result.result.rating.toString()
+                        binding.rating.text = String.format(" %.1f", result.result.rating)
 
                         //hashtag binding
                         if (userInfo.hashtag != null) {
