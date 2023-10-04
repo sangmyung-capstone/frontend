@@ -192,6 +192,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         this.naverMap = naverMap
         naverMap.locationSource = locationSource // 실행된 네이버 지도에 locationSource 연결
         naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현 위치로 맵 시작
+        naverMap.setContentPadding(50, 300, 50, 600)    // 지도 padding
 
         binding.locationView.map = naverMap // 커스텀 위치 위젯 맵에 바인딩
         binding.scaleView.map = naverMap    // 커스텀 스케일 바 위젯
@@ -225,7 +226,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 초기 지도 옵션
         val options = NaverMapOptions()
-//            .camera( // 현 위치 구하는 중...
 //            .maxZoom(19.0)
 //            .symbolScale(0f)  // 심벌 숨기기
             .minZoom(4.5)
@@ -236,11 +236,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .locationButtonEnabled(false)
             .extent(LatLngBounds(LatLng(31.43, 122.37), LatLng(44.35, 132.0)))  // 한반도 인근으로 설정
 //            .indoorEnabled(true) // 실내 지도
-//                CameraPosition(
-//                    LatLng(37.4924505, 126.724422),
-//                    19.0
-//                )
-//            )
 
         // Framelayout에 네이버 지도 띄우기
         val fm = childFragmentManager
