@@ -314,6 +314,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             itemAnimator = null
                         }
 
+                    adapter.submitList(restaurantImageList.toList())
+
 
                     // 식당바텀리스트 통신 1차
                     Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
