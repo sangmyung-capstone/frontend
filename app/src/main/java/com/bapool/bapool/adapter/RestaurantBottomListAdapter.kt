@@ -96,6 +96,10 @@ class RestaurantBottomListAdapter(
         }
     }
 
+    override fun getItemCount(): Int {
+        return itemList.count()
+    }
+
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<String>() {

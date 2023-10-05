@@ -162,8 +162,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
             if (newState == SearchView.TransitionState.SHOWING) {
                 requireActivity().onBackPressedDispatcher.addCallback(searchViewCallback)
-            }
-            else if (newState == SearchView.TransitionState.HIDDEN) {
+            } else if (newState == SearchView.TransitionState.HIDDEN) {
                 searchViewCallback.remove()
             }
         }
@@ -335,7 +334,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                     response: Response<GetRestaurantsBottomResult>
                                 ) {
                                     if (response.isSuccessful) {
-                                        for (idx in 0 until restaurantIdList.size)
+                                        for (idx in 0 until restaurantIdList.size - 1)
                                             restaurantImageList[idx] =
                                                 response.body()!!.result.restaurant_img_urls[idx]
 
@@ -870,7 +869,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // 이미지
         if (result?.img_url == null)
-            binding.bottomMarkerInfo.findViewById<CardView>(R.id.markerInfoCardView).visibility = View.GONE
+            binding.bottomMarkerInfo.findViewById<CardView>(R.id.markerInfoCardView).visibility =
+                View.GONE
         else
             Glide.with(this)
                 .load(result?.img_url)
@@ -928,7 +928,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 권한 리스너 선언
         val permissionlistener: PermissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
                 mapInit()
             }
 

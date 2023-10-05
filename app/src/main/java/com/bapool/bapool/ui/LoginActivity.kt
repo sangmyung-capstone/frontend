@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bapool.bapool.BuildConfig
 import com.bapool.bapool.databinding.ActivityLoginBinding
 import com.bapool.bapool.RetrofitService
 import com.bapool.bapool.preference.MyApplication
@@ -49,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.textVersion.text = BuildConfig.VERSION_NAME
 
         /*
         // 로그인 정보 확인
@@ -158,7 +160,8 @@ class LoginActivity : AppCompatActivity() {
                                                         }
                                                         Toast.makeText(
                                                             this@LoginActivity,
-                                                            "${result?.result?.nickname}님 환영합니다 ${result?.result?.user_id}",
+                                                            "${result?.result?.nickname}님 환영합니다!",
+//                                                            "${result?.result?.nickname}님 환영합니다 ${result?.result?.user_id}",
                                                             Toast.LENGTH_SHORT
                                                         ).show()
                                                         Log.d("bap", "onRequest 성공: $token");
@@ -287,7 +290,8 @@ class LoginActivity : AppCompatActivity() {
                                                         }
                                                         Toast.makeText(
                                                             this@LoginActivity,
-                                                            "${result?.result?.nickname}님 환영합니다 ${result?.result?.user_id}",
+                                                            "${result?.result?.nickname}님 환영합니다!",
+//                                                            "${result?.result?.nickname}님 환영합니다 ${result?.result?.user_id}",
                                                             Toast.LENGTH_SHORT
                                                         ).show()
                                                         Log.d("bap", "onRequest 성공: $token");
