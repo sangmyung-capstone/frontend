@@ -127,11 +127,13 @@
         android:id="@+id/hashtag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratinglayout"
         android:layout_marginTop="15dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -232,8 +234,8 @@
                 android:id="@+id/hashtageimage4"
                 android:layout_width="40dp"
                 android:layout_height="20dp"
-                android:src="@drawable/friend"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:src="@drawable/friend" />
 
             <TextView
                 android:id="@+id/quietcount"

@@ -47,56 +47,70 @@
 
     <LinearLayout
         android:id="@+id/hashtagVisible"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="3dp"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="21dp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <TextView
             android:id="@+id/hash1"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag1"
+            android:text="#밥먹어요"
+            android:textSize="11sp"
+            android:textColor="#B1B1B1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <ImageView
+        <TextView
             android:id="@+id/hash2"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag2"
+            android:layout_marginLeft="3dp"
+            android:textSize="11sp"
+            android:textColor="#B1B1B1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#소통해요"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/hash1"
             app:layout_constraintStart_toEndOf="@+id/hash1"
             app:layout_constraintTop_toTopOf="@+id/hash1" />
 
-        <ImageView
+        <TextView
             android:id="@+id/hash3"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag3"
+            android:text="#술먹어요"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:textSize="11sp"
+            android:textColor="#B1B1B1"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/hash2"
             app:layout_constraintStart_toEndOf="@+id/hash2"
             app:layout_constraintTop_toTopOf="@+id/hash2" />
 
-        <ImageView
+        <TextView
             android:id="@+id/hash4"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag4"
+            android:text="#남자"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:textSize="11sp"
+            android:textColor="#B1B1B1"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/hash3"
             app:layout_constraintStart_toEndOf="@+id/hash3"
             app:layout_constraintTop_toTopOf="@+id/hash3" />
 
-        <ImageView
+        <TextView
             android:id="@+id/hash5"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/hashtag5"
+            android:text="#여자"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:textSize="11sp"
+            android:textColor="#B1B1B1"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/hash4"
             app:layout_constraintStart_toEndOf="@+id/hash4"
@@ -170,7 +184,8 @@
         app:layout_constraintStart_toEndOf="@+id/menu_text"
         app:layout_constraintTop_toTopOf="@+id/menu_text" />
 
-    <androidx.appcompat.widget.AppCompatButton
+<!--    androidx.appcompat.widget.AppCompatButton-->
+    <Button
         android:id="@+id/joinGrp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

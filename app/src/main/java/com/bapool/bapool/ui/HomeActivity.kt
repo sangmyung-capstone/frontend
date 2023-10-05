@@ -1,23 +1,32 @@
 package com.bapool.bapool.ui
 
-import android.app.Fragment
-import androidx.appcompat.app.AppCompatActivity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.bapool.bapool.R
 import com.bapool.bapool.databinding.ActivityHomeBinding
+import com.bapool.bapool.receiver.MyReceiver.Companion.CHANNEL_ID
+import com.bapool.bapool.receiver.MyReceiver.Companion.CHANNEL_NAME
+import com.bapool.bapool.retrofit.data.FirebaseParty
+import com.bapool.bapool.retrofit.data.FirebasePartyMessage
+import com.bapool.bapool.retrofit.data.MyPartyListModel
 import com.bapool.bapool.ui.LoginActivity.Companion.UserId
 import com.bapool.bapool.ui.fragment.MapFragment
 import com.bapool.bapool.ui.fragment.MypageFragment
 import com.bapool.bapool.ui.fragment.PartyFragment
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.database.FirebaseDatabase
+import com.google.android.material.badge.BadgeDrawable
+import com.google.firebase.database.*
 import com.google.firebase.messaging.FirebaseMessaging
+
 
 class HomeActivity : AppCompatActivity() {
 
@@ -26,6 +35,11 @@ class HomeActivity : AppCompatActivity() {
     private var partyFragment: PartyFragment? = null
     private var mypageFragment: MypageFragment? = null
     private var waitTime = 0L
+
+
+    //채팅몇개 안봤는지 partyfragment icon에 표시해주기위한 firebase
+//    private lateinit var nonReadChatDatabase: DatabaseReference
+//    lateinit var valueEventListener: ValueEventListener
 
 
     private val callback = object : OnBackPressedCallback(true) {
@@ -49,6 +63,7 @@ class HomeActivity : AppCompatActivity() {
 //
 //        val navController = navigationFragment.navController
 
+
         initBottomNavigation()
         refreshFirebaseToken()
 
@@ -57,6 +72,19 @@ class HomeActivity : AppCompatActivity() {
         val destination = intent.getStringExtra("destination")
         if (destination == "MypageFragment") {
             binding.mainBottomNav.selectedItemId = R.id.mypageFragment
+        } else if (destination == "PartyFragment") {
+            binding.mainBottomNav.selectedItemId = R.id.partyFragment
+
+        }
+
+
+
+        createNotificationChannel()
+
+        // Check if the notification permission is granted
+        if (!isNotificationPermissionGranted()) {
+            // If not granted, request permission
+            requestNotificationPermission()
         }
     }
 
@@ -65,6 +93,46 @@ class HomeActivity : AppCompatActivity() {
 //        mapFragment = MapFragment()
 //        supportFragmentManager.beginTransaction()
 //            .replace(R.id.fragmentContainerView2, mapFragment!!).commit()
+
+//        nonReadChatDatabase = FirebaseDatabase.getInstance().getReference("test").child("Groups")
+//        valueEventListener = object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                var notReadChatNumber = 0
+//
+//                for (data in snapshot.children) {
+//                    val partyData = data.getValue(FirebaseParty::class.java)
+//                    val partyMessageMap: Map<String, FirebasePartyMessage>? =
+//                        partyData?.groupMessages
+//                    val partyMessage: Collection<FirebasePartyMessage> =
+//                        partyMessageMap!!.values
+//                    Log.d("partyMessage",partyMessage.toString())
+//                    Log.d("partyMessage",notReadChatNumber.toString())
+//
+//                    for (data in partyMessage) {
+//                        if (!(UserId.toString() in data.confirmed)){
+//                            notReadChatNumber += 1
+//                        }
+//                    }
+//
+//                }
+//                if(notReadChatNumber !=0){
+//                    Log.d("notReadChatNumber",notReadChatNumber.toString())
+//                    val badge: BadgeDrawable = binding.mainBottomNav.getOrCreateBadge(R.id.partyFragment)
+//                    badge.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.main));
+//                    badge.setBadgeTextColor(ContextCompat.getColor(baseContext, R.color.white));
+//                    badge.setNumber(notReadChatNumber); // 표시할 숫자 설정
+//                    badge.setMaxCharacterCount(3); // 최대 문자 수 설정
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//            }
+//        }
+//        nonReadChatDatabase
+//            .orderByChild("groupUsers/${UserId.toString()}")
+//            .equalTo(true).addValueEventListener(valueEventListener)
+//
+
 
 
         binding.mainBottomNav.setOnItemSelectedListener {
@@ -141,19 +209,72 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
-    fun refreshFirebaseToken(){
+    fun refreshFirebaseToken() {
+        FirebaseDatabase.getInstance().getReference("test").child("Users").child(UserId.toString())
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val token = task.result
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val token = task.result
+                                FirebaseDatabase.getInstance().getReference("test").child("Users")
+                                    .child(UserId.toString()).child("firebaseToken")
+                                    .setValue(token)
+                            } else {
+                                println("Failed to get FCM token: ${task.exception}")
+                            }
+                        }
+                    }
+                }
 
-                FirebaseDatabase.getInstance().getReference("test").child("Users").child(UserId.toString()).child("firebaseToken")
-                    .setValue(token)
-            } else {
-                println("Failed to get FCM token: ${task.exception}")
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+
+
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "My Channel"
+            val descriptionText = "My Notification Channel"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
+                description = descriptionText
             }
+
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
+    private fun isNotificationPermissionGranted(): Boolean {
+        // Check if the notification permission is granted
+        return NotificationManagerCompat.from(this)
+            .areNotificationsEnabled()
+    }
+
+    private fun requestNotificationPermission() {
+    }
+
+    override fun onResume() {
+        super.onResume()
+//        initBottomNavigation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+//        nonReadChatDatabase.removeEventListener(valueEventListener)
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("destroyHome","destroy")
+//        nonReadChatDatabase.removeEventListener(valueEventListener)
+    }
 
 }

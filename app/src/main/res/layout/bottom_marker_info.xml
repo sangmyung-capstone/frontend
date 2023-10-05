@@ -3,19 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="190dp"
     android:background="@drawable/background_round_top_only">
 
     <!-- Drag handle for accessibility -->
 
     <TextView
         android:id="@+id/bottomTextName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:singleLine="true"
+        android:text="안정훈 수제족발 중동본점이다이마리야"
         android:textColor="@color/blue"
         android:textSize="25dp"
+        app:layout_constraintEnd_toStartOf="@+id/markerInfoCardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
+        android:text="주소"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -36,6 +41,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:maxLines="3"
+        android:text="메뉴1\n메뉴2\n메뉴3"
         app:layout_constraintBottom_toBottomOf="@+id/divider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bottomTextCategory" />
@@ -45,7 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
+        android:text="전화번호"
         app:layout_constraintStart_toEndOf="@+id/bottomTextAddress"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -54,33 +61,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:textSize="12dp"
+        android:layout_marginTop="2dp"
+        android:text="카테고리"
+        android:textColor="@color/gray"
+        android:textSize="11dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bottomTextName" />
-
-    <ImageView
-        android:id="@+id/bottomImageMarkerInfo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/bapool_circle_red" />
 
     <Button
         android:id="@+id/bottomButtonParty"
         android:layout_width="80dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="2dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="1dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:minWidth="0dp"
         android:minHeight="0dp"
         android:singleLine="true"
-        android:textSize="10sp"
+        android:text="파티"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -88,9 +87,27 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/bottomTextMenu" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/markerInfoCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/bottomImageMarkerInfo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/bapool" />
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
