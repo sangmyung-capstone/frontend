@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -22,7 +23,9 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.UiThread
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isNotEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.findViewTreeLifecycleOwner
@@ -103,7 +106,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         instance = this
     }
 
-    private var lastMarker : Marker? = null
+    private var lastMarker: Marker? = null
     private var searchGoFlag = 0
 
 
@@ -149,8 +152,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             false
         }
+
+        val searchViewCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                binding.searchView.hide()
+            }
+        }
+
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
             if (newState == SearchView.TransitionState.SHOWING) {
+                requireActivity().onBackPressedDispatcher.addCallback(searchViewCallback)
+            } else if (newState == SearchView.TransitionState.HIDDEN) {
+                searchViewCallback.remove()
             }
         }
 
@@ -177,11 +190,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
         naverMap.locationSource = locationSource // 실행된 네이버 지도에 locationSource 연결
+        naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현 위치로 맵 시작
+        naverMap.setContentPadding(50, 300, 50, 600)    // 지도 padding
+
         binding.locationView.map = naverMap // 커스텀 위치 위젯 맵에 바인딩
         binding.scaleView.map = naverMap    // 커스텀 스케일 바 위젯
         binding.logoView.setMap(naverMap) // 커스텀 로고 위젯
+        binding.compassView.map = naverMap
 
-        naverMap.locationTrackingMode = LocationTrackingMode.Follow // 현 위치로 맵 시작
 
         naverMap.addOnCameraChangeListener { reason, _ ->
             // 지도가 이동 상태 시 콜백함수
@@ -198,12 +214,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         }
 
-//        markerInit()  // 현 위치 구하기 필요  // 위에 naverMap을 this.naverMap.locationSource 이용??
         Handler(Looper.getMainLooper()).postDelayed({
             val cameraUpdate = CameraUpdate.zoomTo(16.0)
             naverMap.moveCamera(cameraUpdate)
             markerInit()
-        }, 1500)
+        }, 3000)
     }
 
     private fun mapInit() {
@@ -219,13 +234,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .zoomControlEnabled(false)
             .locationButtonEnabled(false)
             .extent(LatLngBounds(LatLng(31.43, 122.37), LatLng(44.35, 132.0)))  // 한반도 인근으로 설정
-//            .indoorEnabled(true) // 테스트 필요
-//            .camera( // 현 위치 구하는 중...
-//                CameraPosition(
-//                    LatLng(37.4924505, 126.724422),
-//                    19.0
-//                )
-//            )
+//            .indoorEnabled(true) // 실내 지도
 
         // Framelayout에 네이버 지도 띄우기
         val fm = childFragmentManager
@@ -240,6 +249,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
+    // 첫 실행 및 현위치에서 재검색 시
+    // 최대 45개 마커 생성 및 식당바텀리스트 생성
     private fun markerInit() {
         val loggedPositions = HashSet<Int>()
 
@@ -280,34 +291,30 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         binding.bottomRestaurantList,
                         true
                     )
-
                     BottomSheetBehavior.from(binding.bottomRestaurantList).isDraggable = true
                     BottomSheetBehavior.from(binding.bottomRestaurantList).peekHeight =
-                        dpToPx(180f, context).toInt()
-                    BottomSheetBehavior.from(binding.bottomRestaurantList).saveFlags =
-                            BottomSheetBehavior.SAVE_ALL
+                        dpToPx(190f, context).toInt()
 
-                    // 식당바텀리스트 어댑터 바인딩
-//                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
-//                        RestaurantBottomAdapter(
-//                            response.body()!!.result.restaurants,
-//                            restaurantImageList,
-//                            naverMap
-//                        )
-//                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
-//                        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+                    // 식당바텀리스트화면에 리스트 연결 (리사이클러뷰)
                     adapter = RestaurantBottomListAdapter(
                         response.body()!!.result.restaurants,
                         restaurantImageList,
                         naverMap
                     )
 
-                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
+                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter =
+                        adapter
                     binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-                    adapter.submitList(restaurantImageList)
+                    binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview)
+                        .apply {
+                            itemAnimator = null
+                        }
+
+                    adapter.submitList(restaurantImageList.toList())
+
 
                     // 식당바텀리스트 통신 1차
                     Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
@@ -327,27 +334,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                     response: Response<GetRestaurantsBottomResult>
                                 ) {
                                     if (response.isSuccessful) {
-                                        for (idx in 0 until restaurantIdList.size)
+                                        for (idx in 0 until restaurantIdList.size - 1)
                                             restaurantImageList[idx] =
                                                 response.body()!!.result.restaurant_img_urls[idx]
 
-//                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
-//                                            R.id.bottom_recyclerview
-//                                        ).adapter =
-//                                            RestaurantBottomAdapter(
-//                                                restaurantsList,
-//                                                restaurantImageList,
-//                                                naverMap
-//                                            )
-//                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-//                                        RestaurantBottomAdapter(
-//                                            restaurantsList,
-//                                            restaurantImageList,
-//                                            naverMap
-//                                        ).notifyItemRangeChanged(0, restaurantIdList.size)
-
-                                        adapter.submitList(restaurantImageList)
-                                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
+                                        adapter.submitList(restaurantImageList.toList())
 
                                     }
                                 }
@@ -397,24 +388,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                         restaurantImageList[4] =
                                             response.body()!!.result.restaurant_img_urls[4]
 
-//                                        binding.bottomRestaurantList.findViewById<RecyclerView>(
-//                                            R.id.bottom_recyclerview
-//                                        ).adapter =
-//                                            RestaurantBottomAdapter(
-//                                                restaurantsList,
-//                                                restaurantImageList,
-//                                                naverMap
-//                                            )
-//                                        // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-//                                        RestaurantBottomAdapter(
-//                                            restaurantsList,
-//                                            restaurantImageList,
-//                                            naverMap
-//                                        ).notifyItemRangeChanged(0, 5)
-
-                                        adapter.submitList(restaurantImageList)
-                                        binding.bottomRestaurantList.findViewById<RecyclerView>(R.id.bottom_recyclerview).adapter = adapter
-
+                                        adapter.submitList(restaurantImageList.toList())
 
                                     }
                                 }
@@ -463,13 +437,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                         // 식당바텀리스트 통신 2차
                                         if (cnt < restaurantIdList.size) {
 
-                                            Log.d("BOTTOM_ID_SIZE", restaurantIdList.size.toString())
+                                            Log.d(
+                                                "BOTTOM_ID_SIZE",
+                                                restaurantIdList.size.toString()
+                                            )
                                             Log.d("BOTTOM_RESTAURANTS", restaurantsList.toString())
 
                                             if (restaurantIdList.size - cnt < 5) {  // 마지막 페이징 시 // size가 17 24 등의 경우
 
                                                 var lastRestaurantIdList = mutableListOf<Long>()
-                                                for(idx in 0 until restaurantIdList.size - cnt)
+                                                for (idx in 0 until restaurantIdList.size - cnt)
                                                     lastRestaurantIdList.add(restaurantIdList[cnt + idx])
 
                                                 retro.getRestaurantsBottom(
@@ -484,27 +461,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                                         ) {
                                                             if (response.isSuccessful) {
 
-                                                                for(idx in 0 until restaurantIdList.size - cnt)
+                                                                for (idx in 0 until restaurantIdList.size - cnt)
                                                                     restaurantImageList[cnt + idx] =
                                                                         response.body()!!.result.restaurant_img_urls[idx]
 
-//                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
-//                                                                    R.id.bottom_recyclerview
-//                                                                ).adapter =
-//                                                                    RestaurantBottomAdapter(
-//                                                                        restaurantsList,
-//                                                                        restaurantImageList,
-//                                                                        naverMap
-//                                                                    )
-//                                                                // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-//                                                                RestaurantBottomAdapter(
-//                                                                    restaurantsList,
-//                                                                    restaurantImageList,
-//                                                                    naverMap
-//                                                                ).notifyItemRangeChanged(cnt, restaurantIdList.size - cnt)
-
-                                                                adapter.submitList(restaurantImageList)
-
+                                                                adapter.submitList(
+                                                                    restaurantImageList.toList()
+                                                                )
 
                                                                 Log.d(
                                                                     "RESTAURANT_IMG",
@@ -561,22 +524,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                                                     response.body()!!.result.restaurant_img_urls[4]
 
 
-//                                                                binding.bottomRestaurantList.findViewById<RecyclerView>(
-//                                                                    R.id.bottom_recyclerview
-//                                                                ).adapter =
-//                                                                    RestaurantBottomAdapter(
-//                                                                        restaurantsList,
-//                                                                        restaurantImageList,
-//                                                                        naverMap
-//                                                                    )
-//                                                                // 이미지를 뷰홀더에 출력 // adapter.notifyItemChanged(idx)
-//                                                                RestaurantBottomAdapter(
-//                                                                    restaurantsList,
-//                                                                    restaurantImageList,
-//                                                                    naverMap
-//                                                                ).notifyItemRangeChanged(cnt, 5)
-
-                                                                adapter.submitList(restaurantImageList)
+                                                                adapter.submitList(
+                                                                    restaurantImageList.toList()
+                                                                )
 
 
                                                                 Log.d(
@@ -685,12 +635,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
+    // 식당바텀리스트에서 식당 클릭 시 식당정보화면 이동
     fun markerGoEvent(naverMap: NaverMap, marker: Marker, id: Long, long: Double, lati: Double) {
         Log.d("MARKER_INFO", "lati: $lati long: $long")
         Log.d("MARKER_INFO", "Restaurant id : $id")
 
-        // 마커 클릭 시 하단 네비게이션바 제거
-//        (activity as HomeActivity).hideBottomNavi(true)
 
         // 해당 마커 위치로 지도 이동
         naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(marker.position, 20.0))
@@ -698,14 +647,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (marker.icon == markerImage) {
 
             marker.icon = markerPinImage
-            ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
-            ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+            ObjectAnimator.ofInt(marker, "width", markerPinSize).start()
+            ObjectAnimator.ofInt(marker, "height", markerPinSize).start()
 
         } else if (marker.icon == markerImageEmpty) {
 
             marker.icon = markerPinImageEmpty
-            ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
-            ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+            ObjectAnimator.ofInt(marker, "width", markerPinSize).start()
+            ObjectAnimator.ofInt(marker, "height", markerPinSize).start()
 
         }
 
@@ -733,6 +682,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         lastMarker = marker
     }
 
+    // 검색결과에서 식당 클릭 시 식당정보화면 이동
     fun searchMarkerGoEvent(
         naverMap: NaverMap,
         id: Long,
@@ -764,8 +714,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         markerList[0].height = markerSize
         markerList[0].captionText = restaurant_name
 
-        // 마커 클릭 시 하단 네비게이션바 제거
-//        (activity as HomeActivity).hideBottomNavi(true)
 
         // 해당 마커 위치로 지도 이동
         naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(markerList[0].position, 20.0))
@@ -774,14 +722,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (markerList[0].icon == markerImage) {
 
             markerList[0].icon = markerPinImage
-            ObjectAnimator.ofInt(markerList[0],"width", markerPinSize).start()
-            ObjectAnimator.ofInt(markerList[0],"height", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0], "width", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0], "height", markerPinSize).start()
 
         } else if (markerList[0].icon == markerImageEmpty) {
 
             markerList[0].icon = markerPinImageEmpty
-            ObjectAnimator.ofInt(markerList[0],"width", markerPinSize).start()
-            ObjectAnimator.ofInt(markerList[0],"height", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0], "width", markerPinSize).start()
+            ObjectAnimator.ofInt(markerList[0], "height", markerPinSize).start()
 
         }
 
@@ -814,6 +762,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // 위의 markerGoEvent와 디자인패턴 이용??
     }
 
+    // 마커 클릭 시
     private fun markerClickEvent(marker: Marker, id: Long, long: Double, lati: Double) {
         marker.setOnClickListener {
             if (lastMarker != null) {
@@ -857,14 +806,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             if (marker.icon == markerImage) {
 
                 marker.icon = markerPinImage
-                ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
-                ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+                ObjectAnimator.ofInt(marker, "width", markerPinSize).start()
+                ObjectAnimator.ofInt(marker, "height", markerPinSize).start()
 
             } else if (marker.icon == markerImageEmpty) {
 
                 marker.icon = markerPinImageEmpty
-                ObjectAnimator.ofInt(marker,"width", markerPinSize).start()
-                ObjectAnimator.ofInt(marker,"height", markerPinSize).start()
+                ObjectAnimator.ofInt(marker, "width", markerPinSize).start()
+                ObjectAnimator.ofInt(marker, "height", markerPinSize).start()
 
             }
 
@@ -875,23 +824,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    // 식당 정보화면 생성
     fun createMarkerInfo(result: RestaurantInfo?) {
         Log.d("MARKER_INFO", "img_url : ${result?.img_url}")
 
-        binding.bottomMarkerInfo.removeAllViews()
-
-        binding.bottomRestaurantList.visibility = View.GONE
-        binding.bottomMarkerInfo.visibility = View.VISIBLE
-
-        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomMarkerInfo, true)
-
-        BottomSheetBehavior.from(binding.bottomMarkerInfo).state = BottomSheetBehavior.STATE_EXPANDED
-
-
+        // 뒤로가기 콜백
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (binding.bottomMarkerInfo.visibility == View.VISIBLE) {
-                    if (searchGoFlag == 1 ) {
+                    if (searchGoFlag == 1) {
                         binding.searchView.show()
                         searchGoFlag = 0
                     }
@@ -915,10 +856,27 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             callback
         )
 
+        binding.bottomMarkerInfo.removeAllViews()
+
+        binding.bottomRestaurantList.visibility = View.GONE
+        binding.bottomMarkerInfo.visibility = View.VISIBLE
+
+        layoutInflater.inflate(R.layout.bottom_marker_info, binding.bottomMarkerInfo, true)
+
+        BottomSheetBehavior.from(binding.bottomMarkerInfo).state =
+            BottomSheetBehavior.STATE_EXPANDED
+
+
         // 이미지
-        Glide.with(this)
-            .load(result?.img_url)
-            .into(binding.bottomMarkerInfo.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
+        if (result?.img_url == null)
+            binding.bottomMarkerInfo.findViewById<CardView>(R.id.markerInfoCardView).visibility =
+                View.GONE
+        else
+            Glide.with(this)
+                .load(result?.img_url)
+                .into(binding.bottomMarkerInfo.findViewById<ImageView>(R.id.bottomImageMarkerInfo))
+
+        // 파티 버튼 클릭 리스너
         binding.bottomMarkerInfo.findViewById<Button>(R.id.bottomButtonParty).setOnClickListener {
             val intent = Intent(requireContext(), RestaurantPartyActivity::class.java)
             val goToRestaurantPartyList = goToRestaurantPartyList(
@@ -927,23 +885,25 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 result?.category ?: "",
                 result?.phone ?: ""
             )
-
             intent.putExtra("restaurantInfoObject", goToRestaurantPartyList)
-
             startActivity(intent)
         }
-        // 스트링
-        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).text =
-            result?.restaurant_name
+
+        // 식당이름 클릭 시 웹 이동
         binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(result?.link)))
         }
+
+        // 스트링
+        binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextName).text =
+            result?.restaurant_name
         binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextAddress).text =
             result?.restaurant_address
         binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextPhone).text =
             result?.phone
         binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextCategory).text =
             result?.category
+        // 메뉴 3개로 축소
         Log.d("MARKER_INFO", "menu : ${result?.menu.toString()}")
         if ((result?.menu != null) && (result.menu.isNotEmpty())) {
             var text = ""
@@ -955,21 +915,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         } else {
             binding.bottomMarkerInfo.findViewById<TextView>(R.id.bottomTextMenu).text =
-                "메뉴 미제공 \n"
+                "메뉴 미제공 \n\n\n"
         }
         binding.bottomMarkerInfo.findViewById<Button>(R.id.bottomButtonParty).text =
-            "${result?.num_of_party.toString()} 파티!"
+//            "${result?.num_of_party.toString()}   파티!"
+            "파티!"
 
-        // view 부착
-//        binding.bottomSheet.addView(BottomMarkerInfoBinding.inflate(layoutInflater).root)
     }
 
-    // 위치 권한 획득 위함
+    // 위치 권한 획득
     private fun requestPermissions() {
         // 권한 리스너 선언
         val permissionlistener: PermissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
                 mapInit()
             }
 
@@ -996,16 +955,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .check()
 
 
-
     }
-
-//    override fun onBackPressed() {
-//        if (flag == "marker_info") {
-//            binding.bottomSheet.removeAllViews()
-//        } else if (flag == "search_bar") {
-//            binding.searchView.removeAllViews()
-//        }
-//    }
 
 
     //뷰바인딩 생명주기 관리
@@ -1014,7 +964,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         _binding = null
 
-//            (activity as HomeActivity).hideBottomNavi(true)
     }
 
 

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bapool.bapool.R
+import com.bapool.bapool.databinding.RestaurantpartylistItemsBinding
 import com.bapool.bapool.retrofit.data.Restaurant
 import com.bapool.bapool.ui.fragment.MapFragment
 import com.bumptech.glide.Glide
@@ -44,7 +45,10 @@ class RestaurantBottomListAdapter(
     }
 
     override fun onBindViewHolder(holder: RestaurantBottomListViewHolder, position: Int) {
-        holder.restaurant_name.text = itemList[position].restaurant_name
+        if (itemList[position].restaurant_name.length > 11)
+            holder.restaurant_name.text = itemList[position].restaurant_name.substring(0 until 11) + "..."
+        else
+            holder.restaurant_name.text = itemList[position].restaurant_name
         holder.restaurant_category.text = itemList[position].category.split(" > ").last()
         holder.restaurant_address.text = itemList[position].restaurant_address
         if (itemList[position].num_of_party > 0)
@@ -57,14 +61,17 @@ class RestaurantBottomListAdapter(
         Log.d("bottom_view_holder", "image list ${position} run")
 
 
-        Glide.with(holder.context)
-            .load(R.raw.bapool_img_loading)
-            .into(holder.restaurant_img)
+
 
         if (imageList[position] != "a") {
+            Log.d("GLIDE", "position: $position image change")
             Glide.with(holder.context)
                 .load(imageList[position])
                 .error(R.drawable.bapool)
+                .into(holder.restaurant_img)
+        } else {
+            Glide.with(holder.context)
+                .load(R.raw.bapool_img_loading)
                 .into(holder.restaurant_img)
         }
 
@@ -89,11 +96,15 @@ class RestaurantBottomListAdapter(
         }
     }
 
+    override fun getItemCount(): Int {
+        return itemList.count()
+    }
+
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<String>() {
             override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-                return oldItem == newItem
+                return oldItem === newItem
             }
 
             override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {

@@ -11,8 +11,8 @@ android {
         applicationId "com.bapool.bapool"
         minSdk 29       // 재웅이형 테스트 위해 28로 변경
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 17
+        versionName "3.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
