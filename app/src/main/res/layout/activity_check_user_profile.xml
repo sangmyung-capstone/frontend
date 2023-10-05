@@ -92,7 +92,6 @@
         android:id="@+id/ratinglayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,15 +101,15 @@
             android:id="@+id/imageView15"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginRight="3dp"
-            app:srcCompat="@drawable/star" />
+            app:srcCompat="@drawable/star"
+            android:layout_marginRight="3dp"/>
 
         <TextView
             android:id="@+id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -132,13 +131,15 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratinglayout">
+        app:layout_constraintTop_toBottomOf="@+id/ratinglayout"
+        android:layout_marginTop="15dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <ImageView
                 android:id="@+id/hashtageimage1"
@@ -157,18 +158,18 @@
                 android:id="@+id/talktext"
                 android:layout_width="100dp"
                 android:layout_height="25dp"
-                android:layout_gravity="center"
                 android:background="@drawable/background_hashtag"
+                android:layout_gravity="center"
                 android:backgroundTint="#EEEEEE"
-                android:text="대화가 많아요"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:text="대화가 많아요" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <ImageView
                 android:id="@+id/hashtageimage2"
@@ -187,18 +188,18 @@
                 android:id="@+id/kindtext"
                 android:layout_width="100dp"
                 android:layout_height="25dp"
-                android:layout_gravity="center"
                 android:background="@drawable/background_hashtag"
+                android:layout_gravity="center"
                 android:backgroundTint="#EEEEEE"
-                android:text="친절해요"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:text="친절해요" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <ImageView
                 android:id="@+id/hashtageimage3"
@@ -217,11 +218,11 @@
                 android:id="@+id/mannertext"
                 android:layout_width="100dp"
                 android:layout_height="25dp"
-                android:layout_gravity="center"
                 android:background="@drawable/background_hashtag"
+                android:layout_gravity="center"
                 android:backgroundTint="#EEEEEE"
-                android:text="예절이 좋아요"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:text="예절이 좋아요" />
         </LinearLayout>
 
         <LinearLayout
@@ -246,11 +247,11 @@
                 android:id="@+id/quiettext"
                 android:layout_width="100dp"
                 android:layout_height="25dp"
-                android:layout_gravity="center"
                 android:background="@drawable/background_hashtag"
+                android:layout_gravity="center"
                 android:backgroundTint="#EEEEEE"
-                android:text="조용해요"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:text="조용해요" />
         </LinearLayout>
     </LinearLayout>
 
